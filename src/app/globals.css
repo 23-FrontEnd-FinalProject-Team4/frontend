@@ -1,12 +1,109 @@
+@import 'pretendard/dist/web/static/pretendard.css';
 @import 'tailwindcss';
 
+@theme {
+  --font-sans: 'Pretendard', system-ui, sans-serif;
+
+  --color-brand-primary: #10b981;
+  --color-brand-secondary: #34d399;
+  --color-brand-tertiary: #a3e635;
+
+  --color-point-purple: #a855f7;
+  --color-point-cyan: #06b6d4;
+  --color-point-pink: #ec4899;
+  --color-point-rose: #f43f5e;
+  --color-point-orange: #f97316;
+  --color-point-yellow: #eab308;
+
+  --color-background-primary: #0f172a;
+  --color-background-secondary: #1e293b;
+  --color-background-tertiary: #334155;
+  --color-background-inverse: #ffffff;
+
+  --color-interaction-inactive: #94a3b8;
+  --color-interaction-hover: #059669;
+  --color-interaction-pressed: #047857;
+
+  --color-border-primary: rgb(248 250 252 / 0.5);
+
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #cbd5e1;
+  --color-text-tertiary: #e2e8f0;
+  --color-text-default: #64748b;
+  --color-text-inverse: #ffffff;
+  --color-text-disabled: #94a3b8;
+
+  --color-status-danger: #dc2626;
+
+  --color-icon-primary: #64748b;
+  --color-icon-inverse: #f8fafc;
+  --color-icon-brand: #10b981;
+
+  --text-4xl: 40px;
+  --text-4xl--line-height: 48px;
+
+  --text-3xl: 32px;
+  --text-3xl--line-height: 38px;
+
+  --text-2xl: 24px;
+  --text-2xl--line-height: 28px;
+
+  --text-xl: 20px;
+  --text-xl--line-height: 24px;
+
+  --text-2lg: 18px;
+  --text-2lg--line-height: 21px;
+
+  --text-lg: 16px;
+  --text-lg--line-height: 19px;
+
+  --text-md: 14px;
+  --text-md--line-height: 17px;
+
+  --text-sm: 13px;
+  --text-sm--line-height: 16px;
+
+  --text-xs: 12px;
+  --text-xs--line-height: 14px;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --brand-gradient: linear-gradient(90deg, #10b981 0%, #a3e635 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--color-background-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  word-break: keep-all;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
 }
