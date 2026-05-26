@@ -4,7 +4,7 @@ import type {
   RefreshTokenResponse,
   SignInRequest,
   SignupRequest,
-} from '@/apis/Auth/type';
+} from '@/apis/auth/type';
 import axiosInstance from '@/apis/axiosInstance';
 
 export const signUp = async (body: SignupRequest) => {
