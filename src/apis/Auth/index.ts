@@ -3,11 +3,11 @@ import type {
   OAuthSignInRequest,
   RefreshTokenResponse,
   SignInRequest,
-  SignupRequest,
+  SignUpRequest,
 } from '@/apis/auth/type';
 import axiosInstance from '@/apis/axiosInstance';
 
-export const signUp = async (body: SignupRequest) => {
+export const signUp = async (body: SignUpRequest) => {
   const { data } = await axiosInstance.post<AuthResponse>('/auth/signUp', body);
   return data;
 };

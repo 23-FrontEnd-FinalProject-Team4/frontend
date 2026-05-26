@@ -8,7 +8,7 @@ export interface User {
   updatedAt: string;
 }
 
-export interface SignupRequest {
+export interface SignUpRequest {
   image?: string;
   email: string;
   nickname: string;
@@ -36,4 +36,3 @@ export interface AuthResponse {
 export interface RefreshTokenResponse {
   accessToken: string;
 }
-
