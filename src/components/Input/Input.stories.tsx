@@ -23,3 +23,41 @@ export const Default: Story = {
     errorMessage: '',
   },
 };
+
+export const Large: Story = {
+  args: {
+    ...Default.args,
+    size: 'lg',
+  },
+};
+
+export const Password: Story = {
+  args: {
+    ...Default.args,
+    type: 'password',
+    placeholder: '비밀번호를 입력하세요.',
+  },
+};
+
+export const Error: Story = {
+  args: {
+    ...Default.args,
+    isError: true,
+    errorMessage: '이메일 형식이 올바르지 않습니다.',
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    ...Default.args,
+    isDisabled: true,
+    value: 'disabled@example.com',
+  },
+};
+
+export const WithValue: Story = {
+  args: {
+    ...Default.args,
+    value: 'test@example.com',
+  },
+};

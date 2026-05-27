@@ -47,10 +47,18 @@ const Input = ({
   focus:border-interaction-pressed
 `;
 
-  const errorStyle = 'border-red-500 focus:border-red-500';
+  const errorStyle = `border-status-danger focus:border-status-danger`;
 
-  const disabledStyle = 'cursor-not-allowed border-gray-200 bg-gray-100 text-gray-400';
+  const disabledStyle = `
+    pointer-events-none
+    cursor-not-allowed
 
+    border-border-primary
+    bg-background-secondary
+    text-text-disabled
+
+    placeholder:text-text-disabled
+`;
   const inputClassName = `
     ${baseStyle}
     ${sizeStyle[size]}
