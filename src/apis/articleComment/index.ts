@@ -12,17 +12,13 @@ import {
   UpdateArticleCommentResponse,
 } from './type';
 
-export const getArticleComments = async ({
-  articleId,
-  limit,
-  cursor,
-}: GetArticleCommentsParams) => {
+export const getArticleComments = async (params: GetArticleCommentsParams) => {
   const response = await axiosInstance.get<GetArticleCommentsResponse>(
-    `/articles/${articleId}/comments`,
+    `/articles/${params.articleId}/comments`,
     {
       params: {
-        limit,
-        cursor,
+        limit: params.limit,
+        cursor: params.cursor,
       },
     },
   );
