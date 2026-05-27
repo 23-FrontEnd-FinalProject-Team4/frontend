@@ -13,12 +13,13 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    size: 'lg',
+    size: 'sm',
     type: 'text',
-    value: 'test@example.com',
+    value: '',
     placeholder: '이메일을 입력하세요.',
     onChange: () => {},
     isError: false,
     isDisabled: false,
+    errorMessage: '',
   },
 };

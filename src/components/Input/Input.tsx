@@ -36,8 +36,16 @@ const Input = ({
     lg: 'h-12 px-4 py-4 text-base',
   };
 
-  const defaultStyle =
-    'border-gray-300 bg-white text-gray-900 placeholder:text-gray-400 hover:border-gray-400 focus:border-blue-500';
+  const defaultStyle = `
+  border-border-primary
+  bg-background-primary
+
+  text-text-primary
+  placeholder:text-text-default
+
+  hover:border-interaction-hover
+  focus:border-interaction-pressed
+`;
 
   const errorStyle = 'border-red-500 focus:border-red-500';
 
