@@ -53,3 +53,16 @@ export interface ResponseTaskRecurring {
   id: number;
   startDate: string;
 }
+
+export interface CreateRecurringTaskParams {
+  groupId: number;
+  taskListId: number;
+  body: RequestCreateTaskRecurring;
+}
+
+export interface UpdateRecurringTaskParams {
+  groupId: number;
+  taskListId: number;
+  recurringId: number;
+  body: RequestUpdateTaskRecurring;
+}

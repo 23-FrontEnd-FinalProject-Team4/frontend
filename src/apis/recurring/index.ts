@@ -1,15 +1,9 @@
 import axiosInstance from '../axiosInstance';
 import {
-  RequestCreateTaskRecurring,
-  RequestUpdateTaskRecurring,
+  CreateRecurringTaskParams,
   ResponseTaskRecurring,
+  UpdateRecurringTaskParams,
 } from './type';
-
-interface CreateRecurringTaskParams {
-  groupId: number;
-  taskListId: number;
-  body: RequestCreateTaskRecurring;
-}
 
 export const CreateRecurringTask = async ({
   groupId,
@@ -22,13 +16,6 @@ export const CreateRecurringTask = async ({
   );
   return data;
 };
-
-interface UpdateRecurringTaskParams {
-  groupId: number;
-  taskListId: number;
-  recurringId: number;
-  body: RequestUpdateTaskRecurring;
-}
 
 export const UpdateRecurringTask = async ({
   groupId,

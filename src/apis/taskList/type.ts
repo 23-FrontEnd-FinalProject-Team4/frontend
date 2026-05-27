@@ -66,3 +66,31 @@ export interface ResponseUpdateTaskListName {
 export interface RequestUpdateTaskListOrder {
   displayIndex: number;
 }
+
+export interface GetTaskListsParams {
+  groupId: number;
+  id: string;
+}
+
+export interface CreateTaskListParams {
+  groupId: number;
+  body: RequestCreateTaskList;
+}
+
+export interface UpdateTaskListNameParams {
+  groupId: number;
+  id: string;
+  body: RequestUpdateTaskListName;
+}
+
+export interface UpdateTaskListOrderParams {
+  groupId: number;
+  id: string;
+  body: RequestUpdateTaskListOrder;
+}
+
+export interface DeleteTaskListParams {
+  groupId: number;
+  id: string;
+}
+
