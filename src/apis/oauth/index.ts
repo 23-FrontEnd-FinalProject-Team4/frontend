@@ -1,7 +1,8 @@
 import axiosInstance from '@/apis/axiosInstance';
-import type { OAuthAppRequest, OAuthAppResponse } from '@/apis/oauth/type';
+
+import type { OAuthAppRequest, OAuthAppResponse } from './type';
 
 export const registerOAuthApp = async (body: OAuthAppRequest) => {
-  const { data } = await axiosInstance.post<OAuthAppResponse>(`/oauthApps`, body);
-  return data;
+  const response = await axiosInstance.post<OAuthAppResponse>(`/oauthApps`, body);
+  return response.data;
 };

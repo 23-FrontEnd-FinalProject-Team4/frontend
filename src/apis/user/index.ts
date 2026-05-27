@@ -1,4 +1,5 @@
 import axiosInstance from '@/apis/axiosInstance';
+
 import type {
   ChangePasswordRequest,
   Group,
@@ -9,52 +10,52 @@ import type {
   SendPasswordResetEmailRequest,
   TaskHistory,
   UpdateProfileRequest,
-} from '@/apis/user/type';
+} from './type';
 
 export const getMyProfile = async () => {
-  const { data } = await axiosInstance.get<Profile>('/user');
-  return data;
+  const response = await axiosInstance.get<Profile>('/user');
+  return response.data;
 };
 
-export const updateMyProfile = async (body: UpdateProfileRequest): Promise<MessageResponse> => {
-  const { data } = await axiosInstance.patch<MessageResponse>('/user', body);
-  return data;
+export const updateMyProfile = async (body: UpdateProfileRequest) => {
+  const response = await axiosInstance.patch<MessageResponse>('/user', body);
+  return response.data;
 };
 
 export const signOut = async () => {
-  const { data } = await axiosInstance.delete('/user');
-  return data;
+  const response = await axiosInstance.delete('/user');
+  return response.data;
 };
 
 export const getMyGroups = async () => {
-  const { data } = await axiosInstance.get<Group[]>('/user/groups');
-  return data;
+  const response = await axiosInstance.get<Group[]>('/user/groups');
+  return response.data;
 };
 
 export const getMyMemberships = async () => {
-  const { data } = await axiosInstance.get<Membership[]>('/user/memberships');
-  return data;
+  const response = await axiosInstance.get<Membership[]>('/user/memberships');
+  return response.data;
 };
 
 export const getMyTaskHistory = async () => {
-  const { data } = await axiosInstance.get<TaskHistory[]>('/user/history');
-  return data;
+  const response = await axiosInstance.get<TaskHistory[]>('/user/history');
+  return response.data;
 };
 
 export const sendResetPasswordEmail = async (body: SendPasswordResetEmailRequest) => {
-  const { data } = await axiosInstance.post<MessageResponse>(
+  const response = await axiosInstance.post<MessageResponse>(
     '/user/send-reset-password-email',
     body,
   );
-  return data;
+  return response.data;
 };
 
 export const resetPassword = async (body: ResetPasswordRequest) => {
-  const { data } = await axiosInstance.patch<MessageResponse>('/user/reset-password', body);
-  return data;
+  const response = await axiosInstance.patch<MessageResponse>('/user/reset-password', body);
+  return response.data;
 };
 
 export const changePassword = async (body: ChangePasswordRequest) => {
-  const { data } = await axiosInstance.patch<MessageResponse>('/user/password', body);
-  return data;
+  const response = await axiosInstance.patch<MessageResponse>('/user/password', body);
+  return response.data;
 };

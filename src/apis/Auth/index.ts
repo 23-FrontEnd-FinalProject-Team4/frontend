@@ -1,30 +1,31 @@
+import axiosInstance from '@/apis/axiosInstance';
+
 import type {
   AuthResponse,
   OAuthSignInRequest,
   RefreshTokenResponse,
   SignInRequest,
   SignUpRequest,
-} from '@/apis/auth/type';
-import axiosInstance from '@/apis/axiosInstance';
+} from './type';
 
 export const signUp = async (body: SignUpRequest) => {
-  const { data } = await axiosInstance.post<AuthResponse>('/auth/signUp', body);
-  return data;
+  const response = await axiosInstance.post<AuthResponse>('/auth/signUp', body);
+  return response.data;
 };
 
 export const signIn = async (body: SignInRequest) => {
-  const { data } = await axiosInstance.post<AuthResponse>('/auth/signIn', body);
-  return data;
+  const response = await axiosInstance.post<AuthResponse>('/auth/signIn', body);
+  return response.data;
 };
 
 export const signInWithOAuth = async (provider: string, body: OAuthSignInRequest) => {
-  const { data } = await axiosInstance.post<AuthResponse>(`/auth/signIn/${provider}`, body);
-  return data;
+  const response = await axiosInstance.post<AuthResponse>(`/auth/signIn/${provider}`, body);
+  return response.data;
 };
 
 export const refreshToken = async (token: string) => {
-  const { data } = await axiosInstance.post<RefreshTokenResponse>('/auth/refresh-token', {
+  const response = await axiosInstance.post<RefreshTokenResponse>('/auth/refresh-token', {
     token,
   });
-  return data;
+  return response.data;
 };
