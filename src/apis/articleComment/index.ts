@@ -18,7 +18,7 @@ export const getArticleComments = async ({
   cursor,
 }: GetArticleCommentsParams) => {
   const response = await axiosInstance.get<GetArticleCommentsResponse>(
-    `/api/articles/${articleId}/comments`,
+    `/articles/${articleId}/comments`,
     {
       params: {
         limit,
@@ -35,7 +35,7 @@ export const createArticleComment = async (
   request: CreateArticleCommentRequest,
 ) => {
   const response = await axiosInstance.post<CreateArticleCommentResponse>(
-    `/api/articles/${articleId}/comments`,
+    `/articles/${articleId}/comments`,
     request,
   );
 
@@ -48,7 +48,7 @@ export const updateArticleComment = async (
   request: UpdateArticleCommentRequest,
 ) => {
   const response = await axiosInstance.patch<UpdateArticleCommentResponse>(
-    `/api/comments/${commentId}`,
+    `/comments/${commentId}`,
     request,
   );
   return response.data;
@@ -57,7 +57,7 @@ export const updateArticleComment = async (
 // 게시글 댓글 삭제
 export const deleteArticleComment = async ({ commentId }: CommentIdParams) => {
   const response = await axiosInstance.delete<DeleteArticleCommentResponse>(
-    `/api/comments/${commentId}`,
+    `/comments/${commentId}`,
   );
   return response.data;
 };
