@@ -1,7 +1,6 @@
 export type FrequencyType = 'ONCE' | 'DAILY' | 'WEEKLY' | 'MONTHLY';
 
 export interface TaskPathParams {
-  teamId: string;
   groupId: number;
   taskListId: number;
 }

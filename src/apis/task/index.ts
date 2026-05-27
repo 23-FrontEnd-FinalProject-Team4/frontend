@@ -12,11 +12,10 @@ import type {
   UpdateTaskRequest,
 } from './type';
 
-const getTaskListBaseUrl = ({ teamId, groupId, taskListId }: TaskPathParams) =>
-  `/${teamId}/groups/${groupId}/task-lists/${taskListId}/tasks`;
+const getTaskListBaseUrl = ({ groupId, taskListId }: TaskPathParams) =>
+  `/groups/${groupId}/task-lists/${taskListId}/tasks`;
 
 export const createTask = async ({
-  teamId,
   groupId,
   taskListId,
   name,
@@ -27,7 +26,7 @@ export const createTask = async ({
   weekDays,
 }: CreateTaskRequest) => {
   const { data } = await axiosInstance.post<CreateTaskResponse>(
-    getTaskListBaseUrl({ teamId, groupId, taskListId }),
+    getTaskListBaseUrl({ groupId, taskListId }),
     {
       name,
       description,
@@ -41,9 +40,9 @@ export const createTask = async ({
   return data;
 };
 
-export const getTasks = async ({ teamId, groupId, taskListId, date }: GetTasksRequest) => {
+export const getTasks = async ({ groupId, taskListId, date }: GetTasksRequest) => {
   const { data } = await axiosInstance.get<Task[]>(
-    getTaskListBaseUrl({ teamId, groupId, taskListId }),
+    getTaskListBaseUrl({ groupId, taskListId }),
     {
       params: {
         date,
@@ -54,16 +53,15 @@ export const getTasks = async ({ teamId, groupId, taskListId, date }: GetTasksRe
   return data;
 };
 
-export const getTask = async ({ teamId, groupId, taskListId, taskId }: TaskDetailPathParams) => {
+export const getTask = async ({ groupId, taskListId, taskId }: TaskDetailPathParams) => {
   const { data } = await axiosInstance.get<Task>(
-    `${getTaskListBaseUrl({ teamId, groupId, taskListId })}/${taskId}`,
+    `${getTaskListBaseUrl({ groupId, taskListId })}/${taskId}`,
   );
 
   return data;
 };
 
 export const updateTask = async ({
-  teamId,
   groupId,
   taskListId,
   taskId,
@@ -72,7 +70,7 @@ export const updateTask = async ({
   done,
 }: UpdateTaskRequest) => {
   const { data } = await axiosInstance.patch<Task>(
-    `${getTaskListBaseUrl({ teamId, groupId, taskListId })}/${taskId}`,
+    `${getTaskListBaseUrl({ groupId, taskListId })}/${taskId}`,
     {
       name,
       description,
@@ -83,30 +81,28 @@ export const updateTask = async ({
   return data;
 };
 
-export const deleteTask = async ({ teamId, groupId, taskListId, taskId }: TaskDetailPathParams) => {
-  await axiosInstance.delete(`${getTaskListBaseUrl({ teamId, groupId, taskListId })}/${taskId}`);
+export const deleteTask = async ({ groupId, taskListId, taskId }: TaskDetailPathParams) => {
+  await axiosInstance.delete(`${getTaskListBaseUrl({ groupId, taskListId })}/${taskId}`);
 };
 
 export const updateTaskOrder = async ({
-  teamId,
   groupId,
   taskListId,
   id,
   displayIndex,
 }: UpdateTaskOrderRequest) => {
-  await axiosInstance.patch(`${getTaskListBaseUrl({ teamId, groupId, taskListId })}/${id}/order`, {
+  await axiosInstance.patch(`${getTaskListBaseUrl({ groupId, taskListId })}/${id}/order`, {
     displayIndex,
   });
 };
 
 export const deleteRecurringTask = async ({
-  teamId,
   groupId,
   taskListId,
   taskId,
   recurringId,
 }: DeleteRecurringTaskPathParams) => {
   await axiosInstance.delete(
-    `${getTaskListBaseUrl({ teamId, groupId, taskListId })}/${taskId}/recurring/${recurringId}`,
+    `${getTaskListBaseUrl({ groupId, taskListId })}/${taskId}/recurring/${recurringId}`,
   );
 };
