@@ -15,7 +15,7 @@ export const Default: Story = {
   args: {
     size: 'lg',
     type: 'text',
-    value: '',
+    value: 'test@example.com',
     placeholder: '이메일을 입력하세요.',
     onChange: () => {},
     isError: false,
