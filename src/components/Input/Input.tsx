@@ -16,6 +16,30 @@ export interface InputProps {
   isDisabled?: boolean;
 }
 
-const Input = ({ type = 'text', isError = false, isDisabled = false }: InputProps) => {};
+const Input = ({
+  size = 'lg',
+  type = 'text',
+
+  value,
+  placeholder,
+  onChange,
+
+  isError = false,
+  errorMessage,
+
+  isDisabled = false,
+}: InputProps) => {
+  return (
+    <div className="">
+      <input
+        type={type}
+        value={value}
+        placeholder={placeholder}
+        onChange={onChange}
+        disabled={isDisabled}
+      />
+    </div>
+  );
+};
 
 export default Input;
