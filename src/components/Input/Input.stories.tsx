@@ -55,9 +55,12 @@ export const Disabled: Story = {
   },
 };
 
-export const WithValue: Story = {
+export const WithRightButton: Story = {
   args: {
     ...Default.args,
-    value: 'test@example.com',
+    isDisabled: true,
+    value: 'disabled@example.com',
+    rightButtonText: '변경하기',
+    onRightButtonClick: () => {},
   },
 };

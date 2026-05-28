@@ -10,7 +10,6 @@ const config: StorybookConfig = {
     '@storybook/addon-docs',
   ],
   framework: '@storybook/nextjs-vite',
-  staticDirs: ['../public'],
 
   async viteFinal(config) {
     config.plugins = [...(config.plugins ?? []), svgr({ include: /\.svg$/ })];

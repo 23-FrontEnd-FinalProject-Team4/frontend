@@ -31,7 +31,7 @@
   --color-text-tertiary: #0f172a;
   --color-text-default: #64748b;
   --color-text-inverse: #e2e8f0;
-  --color-text-disabled: #e2e8f0;
+  --color-text-disabled: #94a3b8;
 
   --color-status-danger: #fc4b4b;
 
@@ -91,10 +91,6 @@ body {
 button,
 input,
 textarea,
-select {
-  font: inherit;
-}
-
 button {
   cursor: pointer;
 }
@@ -104,6 +100,5 @@ button:disabled {
 }
 
 a {
-  color: inherit;
   text-decoration: none;
 }

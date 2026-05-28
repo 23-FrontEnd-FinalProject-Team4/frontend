@@ -18,6 +18,9 @@ export interface InputProps {
   errorMessage?: string;
 
   isDisabled?: boolean;
+
+  rightButtonText?: string;
+  onRightButtonClick?: () => void;
 }
 
 const Input = ({
@@ -32,6 +35,9 @@ const Input = ({
   errorMessage,
 
   isDisabled = false,
+
+  rightButtonText,
+  onRightButtonClick,
 }: InputProps) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -40,7 +46,7 @@ const Input = ({
   const baseStyle = 'w-full rounded-xl border outline-none transition-colors';
 
   const sizeStyle = {
-    sm: 'h-11 px-3.5 py-4 text-sm',
+    sm: 'h-11 px-3.5 py-4 text-md',
     lg: 'h-12 px-4 py-4 text-base',
   };
 
@@ -58,13 +64,12 @@ const Input = ({
   const errorStyle = `border-status-danger hover:border-status-danger focus:border-status-danger`;
 
   const disabledStyle = `
-    cursor-not-allowed
-
     border-border-primary
     bg-background-secondary
-    text-text-disabled
+    disabled:text-text-disabled
 
-    placeholder:text-text-disabled
+    disabled:hover:border-border-primary
+    disabled:focus:border-border-primary
 `;
   const inputClassName = `
     ${baseStyle}
@@ -92,6 +97,15 @@ const Input = ({
             className="absolute top-1/2 right-4 -translate-y-1/2"
           >
             {isPasswordVisible ? <VisibilityFalseIcon /> : <VisibilityTrueIcon />}
+          </button>
+        )}
+        {rightButtonText && (
+          <button
+            type="button"
+            onClick={onRightButtonClick}
+            className={`bg-brand-primary hover:bg-interaction-hover active:bg-interaction-pressed absolute top-1/2 right-2 -translate-y-1/2 rounded-lg px-3 py-2 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50`}
+          >
+            {rightButtonText}
           </button>
         )}
       </div>
