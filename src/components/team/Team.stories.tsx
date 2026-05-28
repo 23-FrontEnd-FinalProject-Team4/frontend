@@ -1,4 +1,4 @@
-import sampleImage from '@/assets/images/landing_img1_small.png';
+import sampleImage from '@/assets/icons/sampleImage.svg';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { fn } from 'storybook/test';
 
