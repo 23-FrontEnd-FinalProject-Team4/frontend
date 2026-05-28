@@ -4,9 +4,9 @@
 @theme {
   --font-sans: 'Pretendard', system-ui, sans-serif;
 
-  --color-brand-primary: #10b981;
-  --color-brand-secondary: #34d399;
-  --color-brand-tertiary: #a3e635;
+  --color-brand-primary: #5189fa;
+  --color-brand-secondary: #eef3ff;
+  --color-brand-tertiary: #315296;
 
   --color-point-purple: #a855f7;
   --color-point-cyan: #06b6d4;
@@ -15,29 +15,29 @@
   --color-point-orange: #f97316;
   --color-point-yellow: #eab308;
 
-  --color-background-primary: #0f172a;
-  --color-background-secondary: #1e293b;
-  --color-background-tertiary: #334155;
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #f1f5f9;
+  --color-background-tertiary: #e2e8f0;
   --color-background-inverse: #ffffff;
 
   --color-interaction-inactive: #94a3b8;
-  --color-interaction-hover: #059669;
-  --color-interaction-pressed: #047857;
+  --color-interaction-hover: #416ec8;
+  --color-interaction-pressed: #3b63b5;
 
   --color-border-primary: rgb(248 250 252 / 0.5);
 
-  --color-text-primary: #f8fafc;
-  --color-text-secondary: #cbd5e1;
-  --color-text-tertiary: #e2e8f0;
+  --color-text-primary: #1e293b;
+  --color-text-secondary: #334155;
+  --color-text-tertiary: #0f172a;
   --color-text-default: #64748b;
   --color-text-inverse: #ffffff;
   --color-text-disabled: #94a3b8;
 
-  --color-status-danger: #dc2626;
+  --color-status-danger: #fc4b4b;
 
   --color-icon-primary: #64748b;
   --color-icon-inverse: #f8fafc;
-  --color-icon-brand: #10b981;
+  --color-icon-brand: #74a1fb;
 
   --text-4xl: 40px;
   --text-4xl--line-height: 48px;
@@ -104,6 +104,5 @@ button:disabled {
 }
 
 a {
-  color: inherit;
   text-decoration: none;
 }
