@@ -10,7 +10,7 @@ interface SidebarProps {
   collapsed: boolean;
 }
 
-export default function Sidebar({ isLoggedIn, selected, collapsed }: SidebarProps) {
+export default function Sidebar({ isLoggedIn, collapsed }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(collapsed);
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
@@ -18,7 +18,6 @@ export default function Sidebar({ isLoggedIn, selected, collapsed }: SidebarProp
   return (
     <SidebarView
       isLoggedIn={isLoggedIn}
-      selected={selected}
       collapsed={isCollapsed}
       onToggleCollapse={toggleCollapse}
     />
