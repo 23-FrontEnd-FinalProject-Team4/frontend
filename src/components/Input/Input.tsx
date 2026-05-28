@@ -1,4 +1,8 @@
+import { useState } from 'react';
 import type { ChangeEvent, HTMLInputTypeAttribute } from 'react';
+
+import VisibilityFalseIcon from '@/assets/icons/visibility_false.svg';
+import VisibilityTrueIcon from '@/assets/icons/visibility_true.svg';
 
 export type InputBoxSize = 'sm' | 'lg';
 
@@ -29,6 +33,10 @@ const Input = ({
 
   isDisabled = false,
 }: InputProps) => {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  const inputType = type === 'password' && isPasswordVisible ? 'text' : type;
+
   const baseStyle = 'w-full rounded-xl border outline-none transition-colors';
 
   const sizeStyle = {
@@ -37,20 +45,19 @@ const Input = ({
   };
 
   const defaultStyle = `
-  border-border-primary
-  bg-background-primary
+    border-border-primary
+    bg-background-primary
 
-  text-text-primary
-  placeholder:text-text-default
+    text-text-primary
+    placeholder:text-text-default
 
-  hover:border-interaction-hover
-  focus:border-interaction-pressed
+    hover:border-interaction-hover
+    focus:border-interaction-pressed
 `;
 
-  const errorStyle = `border-status-danger focus:border-status-danger`;
+  const errorStyle = `border-status-danger hover:border-status-danger focus:border-status-danger`;
 
   const disabledStyle = `
-    pointer-events-none
     cursor-not-allowed
 
     border-border-primary
@@ -68,17 +75,27 @@ const Input = ({
   `;
 
   return (
-    <div className="flex flex-col gap-2">
-      <input
-        type={type}
-        value={value}
-        placeholder={placeholder}
-        onChange={onChange}
-        disabled={isDisabled}
-        className={inputClassName}
-      />
-
-      {isError && errorMessage && <p className="text-xs text-red-500">{errorMessage}</p>}
+    <div className="relative flex flex-col gap-2">
+      <div className="relative">
+        <input
+          type={inputType}
+          value={value}
+          placeholder={placeholder}
+          onChange={onChange}
+          disabled={isDisabled}
+          className={inputClassName}
+        />
+        {type === 'password' && (
+          <button
+            type="button"
+            onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+            className="absolute top-1/2 right-4 -translate-y-1/2"
+          >
+            {isPasswordVisible ? <VisibilityFalseIcon /> : <VisibilityTrueIcon />}
+          </button>
+        )}
+      </div>
+      {isError && errorMessage && <p className="text-status-danger text-xs">{errorMessage}</p>}
     </div>
   );
 };
