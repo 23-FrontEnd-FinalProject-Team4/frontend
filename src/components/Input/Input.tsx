@@ -1,8 +1,9 @@
+import Image from 'next/image';
 import { useState } from 'react';
 import type { ChangeEvent, HTMLInputTypeAttribute } from 'react';
 
-import VisibilityFalseIcon from '@/assets/icons/visibility_false.svg';
-import VisibilityTrueIcon from '@/assets/icons/visibility_true.svg';
+import visibilityFalseIcon from '@/assets/icons/visibility_false.svg';
+import visibilityTrueIcon from '@/assets/icons/visibility_true.svg';
 
 export type InputBoxSize = 'sm' | 'lg';
 
@@ -95,8 +96,14 @@ const Input = ({
             type="button"
             onClick={() => setIsPasswordVisible(!isPasswordVisible)}
             className="absolute top-1/2 right-4 -translate-y-1/2"
+            aria-label={isPasswordVisible ? '비밀번호 숨기기' : '비밀번호 보기'}
           >
-            {isPasswordVisible ? <VisibilityFalseIcon /> : <VisibilityTrueIcon />}
+            <Image
+              src={isPasswordVisible ? visibilityFalseIcon : visibilityTrueIcon}
+              alt=""
+              width={24}
+              height={24}
+            />
           </button>
         )}
         {rightButtonText && (

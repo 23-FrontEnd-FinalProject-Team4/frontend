@@ -26,7 +26,6 @@
     "@storybook/addon-docs": "^10.4.0",
     "@storybook/addon-vitest": "^10.4.0",
     "@storybook/nextjs-vite": "^10.4.0",
-    "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4.3.0",
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "@types/node": "^20",
@@ -46,7 +45,6 @@
     "tailwindcss": "^4.3.0",
     "typescript": "^5",
     "vite": "^8.0.13",
-    "vite-plugin-svgr": "^5.2.0",
     "vitest": "^4.1.6"
   },
   "engines": {
