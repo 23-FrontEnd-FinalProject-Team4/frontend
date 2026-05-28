@@ -17,6 +17,7 @@ jobs:
   review:
     name: Review pull request
     runs-on: ubuntu-latest
+
     if: >
       github.event.pull_request.draft == false &&
       github.event.pull_request.head.repo.full_name == github.repository
@@ -29,32 +30,53 @@ jobs:
 
       - name: Run Gemini PR review
         uses: google-github-actions/run-gemini-cli@v0
+
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GEMINI_CLI_TRUST_WORKSPACE: "true"
+
         with:
           gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
           gemini_model: gemini-2.5-flash
+
           prompt: |
             You are reviewing pull request #${{ github.event.pull_request.number }} in ${{ github.repository }}.
 
             Review only changed files in this pull request.
+
             Use the repository style guide at .gemini/styleguide.md as the highest-priority review standard.
 
             Write review feedback in Korean.
-            Prioritize bugs, maintainability, performance, accessibility, TypeScript safety, API handling, and team conventions.
+
+            Prioritize:
+            - bugs
+            - maintainability
+            - performance
+            - accessibility
+            - TypeScript safety
+            - API handling
+            - team conventions
+
             Avoid subjective style comments unless they affect consistency or maintainability.
 
-            Use GitHub CLI to inspect the pull request diff:
+            Use GitHub CLI to inspect the PR diff:
+
             gh pr diff ${{ github.event.pull_request.number }} --repo ${{ github.repository }}
 
-            Then post one concise PR comment using:
-            gh pr comment ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --body "<review summary>"
+            Create a markdown review summary file at /tmp/gemini-review.md
 
-            The final PR comment must be written in Korean and include these sections:
-            - main findings
-            - required fixes
-            - positives
-            - test and build checks
+            Then post the review comment using:
 
-            If there are no meaningful issues, clearly say that no blocking issues were found.
+            gh pr comment ${{ github.event.pull_request.number }} \
+              --repo ${{ github.repository }} \
+              --body-file /tmp/gemini-review.md
+
+            The review must include:
+
+            ## main findings
+            ## required fixes
+            ## positives
+            ## test and build checks
+
+            If there are no meaningful issues, still post a comment saying no blocking issues were found.
