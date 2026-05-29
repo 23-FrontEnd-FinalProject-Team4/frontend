@@ -20,6 +20,7 @@ const Input = ({
 
   rightButtonText,
   onRightButtonClick,
+  ...props
 }: InputProps) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -65,6 +66,7 @@ const Input = ({
     <div className="relative flex flex-col gap-2">
       <div className="relative">
         <input
+          {...props}
           type={inputType}
           value={value}
           placeholder={placeholder}

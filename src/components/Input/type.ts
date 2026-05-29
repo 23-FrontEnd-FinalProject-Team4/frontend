@@ -1,20 +1,12 @@
-import type { ChangeEvent, HTMLInputTypeAttribute } from 'react';
+import type { InputHTMLAttributes } from 'react';
 
 export type InputBoxSize = 'sm' | 'lg';
 
-export interface InputProps {
+export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
   size?: InputBoxSize;
-  type?: HTMLInputTypeAttribute;
-
-  value: string;
-  placeholder?: string;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-
   isError?: boolean;
   errorMessage?: string;
-
   isDisabled?: boolean;
-
   rightButtonText?: string;
   onRightButtonClick?: () => void;
 }
