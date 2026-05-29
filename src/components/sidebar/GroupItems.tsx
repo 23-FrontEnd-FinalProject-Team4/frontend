@@ -6,23 +6,29 @@ import GroupIcon from '@/assets/icons/profile.svg';
 type GroupItemProps = {
   id: number;
   name: string;
+  collapsed: boolean;
   selected: boolean;
 };
 
-export default function GroupItems({ id, name, selected }: GroupItemProps) {
-  const pathname = usePathname();
+export default function GroupItems({ id, name, collapsed, selected }: GroupItemProps) {
+  const pathname = usePathname() ?? '';
+
   return (
     <Link
       href={`/groups/${id}`}
-      className={`flex items-center gap-2 rounded-xl p-3 ${
-        pathname.startsWith('/articles')
-          ? 'text-brand-primary bg-blue-50'
+      className={`flex items-center overflow-hidden rounded-xl ${
+        collapsed ? 'h-10 w-10' : 'h-14 w-full gap-2 px-4'
+      } ${
+        pathname.startsWith(`/groups/${id}`)
+          ? collapsed
+            ? 'border-brand-primary border-2'
+            : 'text-brand-primary bg-blue-50'
           : 'hover:bg-background-secondary'
       } `}
     >
-      {/* 각 팀에 해당하는 이미지 표시 필요 */}
-      <GroupIcon alt="그룹 이지" className="text-icon-primary h-7 w-7" />
-      <span>{name}</span>
+      {/* 각 팀에 해당하는 이미지 표시 */}
+      <GroupIcon className={`text-icon-primary h-7 w-7 ${collapsed ? 'h-10 w-10' : ''}`} />
+      {!collapsed && <span>{name}</span>}
     </Link>
   );
 }

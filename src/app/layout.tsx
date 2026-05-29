@@ -18,7 +18,7 @@ export default function RootLayout({
     <html lang="ko">
       <body>
         <div className="bg-background-secondary m-auto flex h-screen w-full">
-          <Sidebar />
+          <Sidebar isLoggedIn={true} selected={true} collapsed={false} />
           <main>{children}</main>
         </div>
       </body>

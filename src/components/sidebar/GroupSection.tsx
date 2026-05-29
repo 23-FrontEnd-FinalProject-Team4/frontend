@@ -1,3 +1,5 @@
+import { useParams } from 'next/navigation';
+
 import GroupItem from '@/components/sidebar/GroupItems';
 
 type Group = {
@@ -20,11 +22,25 @@ const MOCK_GROUPS: Group[] = [
   },
 ];
 
-export default function GroupSection() {
+export default function GroupSection({
+  collapsed,
+  selected,
+}: {
+  collapsed: boolean;
+  selected: boolean;
+}) {
+  const { id } = useParams();
+  const currentGroupId = Number(id);
   return (
-    <section className="flex flex-col gap-4">
+    <section className={`flex flex-col gap-4 ${collapsed ? 'justify-center' : ''}`}>
       {MOCK_GROUPS.map((group) => (
-        <GroupItem key={group.id} id={group.id} name={group.name} selected={false} />
+        <GroupItem
+          key={group.id}
+          id={group.id}
+          name={group.name}
+          selected={group.id === currentGroupId}
+          collapsed={collapsed}
+        />
       ))}
     </section>
   );
