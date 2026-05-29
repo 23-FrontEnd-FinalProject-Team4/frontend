@@ -1,5 +1,5 @@
-import ProfileIcon from '@/assets/icons/profile.svg';
-import SettingsIcon from '@/assets/icons/setting.svg';
+import ProfileIcon from '@/assets/icons/profile.svg?react';
+import SettingsIcon from '@/assets/icons/setting.svg?react';
 
 export default function LoggedInFooter({ collapsed }: { collapsed: boolean }) {
   return (

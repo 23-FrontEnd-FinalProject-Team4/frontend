@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import ProfileIcon from '@/assets/icons/profile.svg';
+import ProfileIcon from '@/assets/icons/profile.svg?react';
 
 export default function LoggedOutFooter({ collapsed }: { collapsed: boolean }) {
   return (

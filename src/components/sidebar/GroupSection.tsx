@@ -29,8 +29,8 @@ export default function GroupSection({
   collapsed: boolean;
   selected: boolean;
 }) {
-  const { id } = useParams();
-  const currentGroupId = Number(id);
+  const params = useParams<{ id: string }>();
+  const currentGroupId = Number(params?.id);
   return (
     <section className={`flex flex-col gap-4 ${collapsed ? 'justify-center' : ''}`}>
       {MOCK_GROUPS.map((group) => (

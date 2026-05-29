@@ -54,12 +54,17 @@ export default function SidebarView({
         </button>
 
         <nav className="flex flex-1 flex-col gap-2 pt-6">
-          <div className="border-border-primary border-b pb-2">
-            <GroupSection collapsed={collapsed} selected={selected} />
-            {!collapsed && <AddGroupButton />}
-          </div>
-          <ArticleMenu collapsed={collapsed} />
+          {isLoggedIn ? (
+            <>
+              <div className="border-border-primary border-b pb-2">
+                <GroupSection collapsed={collapsed} selected={selected} />
+                {!collapsed && <AddGroupButton />}
+              </div>
+              <ArticleMenu collapsed={collapsed} />
+            </>
+          ) : null}
         </nav>
+
         {/* 계정 설정 모달 출력 */}
         <SidebarFooter isLoggedIn={isLoggedIn} collapsed={collapsed} />
       </div>

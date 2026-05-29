@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
-import GroupIcon from '@/assets/icons/profile.svg';
+import GroupIcon from '@/assets/icons/profile.svg?react';
 
 type GroupItemProps = {
   id: number;
@@ -12,6 +13,8 @@ type GroupItemProps = {
 
 export default function GroupItems({ id, name, collapsed, selected }: GroupItemProps) {
   const pathname = usePathname() ?? '';
+  const params = useParams<{ id: string }>();
+  const currentGroupId = Number(params?.id);
 
   return (
     <Link
