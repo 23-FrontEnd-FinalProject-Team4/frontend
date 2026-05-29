@@ -2,6 +2,10 @@
 @import 'tailwindcss';
 
 @theme {
+  --breakpoint-mobile: 375px;
+  --breakpoint-tablet: 744px;
+  --breakpoint-desktop: 1280px;
+
   --font-sans: 'Pretendard', system-ui, sans-serif;
 
   --color-brand-primary: #5189fa;
