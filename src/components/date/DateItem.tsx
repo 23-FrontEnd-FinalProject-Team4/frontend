@@ -1,10 +1,10 @@
-interface DateProps {
+export interface DateItemProps {
   date: Date;
   isSelected: boolean;
   onClick?: (date: Date) => void;
 }
 
-export const DateItem = ({ date, isSelected, onClick }: DateProps) => {
+const DateItem = ({ date, isSelected, onClick }: DateItemProps) => {
   const day = date.getDate();
   const week = date.toLocaleDateString('ko-KR', { weekday: 'short' });
 
@@ -14,10 +14,9 @@ export const DateItem = ({ date, isSelected, onClick }: DateProps) => {
       onClick={() => onClick?.(date)}
       className={`border-border-primary flex w-full flex-col gap-0.5 rounded-lg border py-2 md:gap-1 md:rounded-2xl md:px-4 md:py-3 ${
         isSelected
-          ? 'border-point-primary text-text-inverse border-0 bg-slate-800'
+          ? 'text-text-inverse border-0 bg-slate-800'
           : 'bg-background-primary hover:bg-background-secondary text-text-default'
       }`}
-      name={week}
     >
       <span
         className={`text-center align-middle text-sm font-medium ${
@@ -36,3 +35,5 @@ export const DateItem = ({ date, isSelected, onClick }: DateProps) => {
     </button>
   );
 };
+
+export default DateItem;

@@ -1,13 +1,13 @@
-'use client';
-
-import { useState } from 'react';
-import { DateItem } from './DateItem';
+import DateItem from './DateItem';
 import { getWeekDates } from '@/utils/getWeekDates';
 
-const DateList = ({ selectedDate }: { selectedDate: Date }) => {
-  const [currentDate, setCurrentDate] = useState(selectedDate);
+interface DateListProps {
+  selectedDate: Date;
+  onChange?: (date: Date) => void;
+}
 
-  const days = getWeekDates(currentDate);
+const DateList = ({ selectedDate, onChange }: DateListProps) => {
+  const days = getWeekDates(selectedDate);
 
   return (
     <div className="flex w-full gap-3">
@@ -15,10 +15,8 @@ const DateList = ({ selectedDate }: { selectedDate: Date }) => {
         <DateItem
           key={day.toISOString()}
           date={day}
-          isSelected={day.getTime() === currentDate.getTime()}
-          onClick={() => {
-            setCurrentDate(day);
-          }}
+          isSelected={day.getTime() === selectedDate.getTime()}
+          onClick={onChange}
         />
       ))}
     </div>
