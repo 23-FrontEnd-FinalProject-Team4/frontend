@@ -1,5 +1,6 @@
 import type { Preview } from '@storybook/nextjs-vite';
 
+// @ts-expect-error CSS side-effect import is handled by Storybook/Vite.
 import '../src/app/globals.css';
 
 const preview: Preview = {
