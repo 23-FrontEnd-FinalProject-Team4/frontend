@@ -5,7 +5,9 @@ export default function LoggedInFooter({ collapsed }: { collapsed: boolean }) {
   return (
     <button
       type="button"
-      className="flex flex-row items-center justify-between border-t border-[#E2E8F0] pt-6"
+      className={`flex w-full items-center border-t border-[#E2E8F0] pt-6 ${
+        collapsed ? 'justify-center' : 'justify-between'
+      }`}
     >
       <div className="flex flex-row items-center gap-3">
         {/* 사용자 프로필 출력 */}

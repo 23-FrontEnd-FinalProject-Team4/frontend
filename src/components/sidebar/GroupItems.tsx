@@ -13,6 +13,8 @@ type GroupItemProps = {
 
 export default function GroupItems({ id, name, collapsed, selected }: GroupItemProps) {
   const pathname = usePathname() ?? '';
+
+  const isSelected = selected ?? pathname.startsWith(`/groups/${id}`);
   const params = useParams<{ id: string }>();
   const currentGroupId = Number(params?.id);
 
@@ -22,7 +24,7 @@ export default function GroupItems({ id, name, collapsed, selected }: GroupItemP
       className={`flex items-center overflow-hidden rounded-xl ${
         collapsed ? 'h-10 w-10' : 'h-14 w-full gap-2 px-4'
       } ${
-        pathname.startsWith(`/groups/${id}`)
+        isSelected
           ? collapsed
             ? 'border-brand-primary border-2'
             : 'text-brand-primary bg-blue-50'
