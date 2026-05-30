@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { usePathname } from 'next/navigation';
 
@@ -12,26 +12,31 @@ import useMediaQuery from '@/hooks/useMediaQuery';
 interface SidebarProps {
   isLoggedIn: boolean;
   selected: boolean;
-  collapsed: boolean;
 }
 
-export default function Sidebar({ isLoggedIn, selected, collapsed }: SidebarProps) {
-  const [collapsedState, setCollapsedState] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-
+export default function Sidebar({ isLoggedIn, selected }: SidebarProps) {
   const isMobile = useMediaQuery('(max-width: 743px)');
   const isDesktop = useMediaQuery('(min-width: 1280px)');
 
-  const actualCollapsed = !isDesktop ? true : collapsedState;
+  const [collapsed, setCollapsed] = useState(() => !isDesktop);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const prevIsDesktop = useRef(isDesktop);
+
+  useEffect(() => {
+    if (prevIsDesktop.current !== isDesktop) {
+      setCollapsed(!isDesktop);
+
+      prevIsDesktop.current = isDesktop;
+    }
+  }, [isDesktop]);
 
   const pathname = usePathname();
-
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
 
   const handleToggleCollapse = () => {
-    setCollapsedState((prev) => !prev);
+    setCollapsed((prev) => !prev);
   };
 
   const handleOpenMobileMenu = () => {
@@ -48,7 +53,7 @@ export default function Sidebar({ isLoggedIn, selected, collapsed }: SidebarProp
       /* 모바일 화면에서 -> 태블릿 화면으로 넘어갈 때 보였다가 들어가는 문제 */
       //모바일 분기 처리
       <>
-        <MobileHeader isLoggedIn={true} onOpenSidebar={handleOpenMobileMenu} />
+        <MobileHeader isLoggedIn={isLoggedIn} onOpenSidebar={handleOpenMobileMenu} />
         <div
           className={`fixed inset-0 z-40 bg-black/40 transition-opacity duration-300 ${
             mobileOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
@@ -63,7 +68,7 @@ export default function Sidebar({ isLoggedIn, selected, collapsed }: SidebarProp
         >
           <SidebarView
             isLoggedIn={isLoggedIn}
-            collapsed={actualCollapsed}
+            collapsed={collapsed}
             selected={selected}
             onToggleCollapse={handleCloseMobileMenu}
           />
@@ -73,10 +78,9 @@ export default function Sidebar({ isLoggedIn, selected, collapsed }: SidebarProp
   }
 
   return (
-    //데스크톱, 태블릿 분기 처리
     <SidebarView
       isLoggedIn={isLoggedIn}
-      collapsed={!isDesktop ? true : collapsed}
+      collapsed={collapsed}
       onToggleCollapse={handleToggleCollapse}
       selected={selected}
     />
