@@ -22,13 +22,7 @@ const MOCK_GROUPS: Group[] = [
   },
 ];
 
-export default function GroupSection({
-  collapsed,
-  selected,
-}: {
-  collapsed: boolean;
-  selected: boolean;
-}) {
+export default function GroupSection({ collapsed }: { collapsed: boolean }) {
   const params = useParams<{ id: string }>();
   const currentGroupId = Number(params?.id);
   return (

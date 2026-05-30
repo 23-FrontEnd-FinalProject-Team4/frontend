@@ -13,10 +13,7 @@ type GroupItemProps = {
 
 export default function GroupItems({ id, name, collapsed, selected }: GroupItemProps) {
   const pathname = usePathname() ?? '';
-
   const isSelected = selected ?? pathname.startsWith(`/groups/${id}`);
-  const params = useParams<{ id: string }>();
-  const currentGroupId = Number(params?.id);
 
   return (
     <Link

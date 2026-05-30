@@ -45,9 +45,9 @@ export default function SidebarView({
         {/* 사이드바 접기/열기 버튼 */}
         <button type="button" onClick={onToggleCollapse}>
           {collapsed ? (
-            <p className="border-brand-secondary bg-background-inverse absolute top-6 right-[-20px] z-20 flex h-8 w-8 items-center justify-center rounded-full border pl-1">
+            <span className="border-brand-secondary bg-background-inverse absolute top-6 right-[-20px] z-20 flex h-8 w-8 items-center justify-center rounded-full border pl-1">
               <FoldRightIcon className="h-6 w-6" />
-            </p>
+            </span>
           ) : (
             <FoldLeftIcon className="absolute top-6 right-4 z-20 flex h-6 w-6 items-center justify-center" />
           )}
@@ -57,7 +57,7 @@ export default function SidebarView({
           {isLoggedIn ? (
             <>
               <div className="border-border-primary border-b pb-2">
-                <GroupSection collapsed={collapsed} selected={selected} />
+                <GroupSection collapsed={collapsed} />
                 {!collapsed && <AddGroupButton />}
               </div>
               <ArticleMenu collapsed={collapsed} />

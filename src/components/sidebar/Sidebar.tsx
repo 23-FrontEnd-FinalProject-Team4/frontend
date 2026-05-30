@@ -44,7 +44,6 @@ export default function Sidebar({ isLoggedIn, selected }: SidebarProps) {
   };
 
   const handleCloseMobileMenu = () => {
-    console.log('close');
     setMobileOpen(false);
   };
 
