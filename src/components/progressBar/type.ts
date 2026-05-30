@@ -9,5 +9,5 @@ export interface ProgressBarProps {
   showTrackPattern?: boolean;
   className?: string;
   barClassName?: string;
-  label?: string;
+  label: string;
 }

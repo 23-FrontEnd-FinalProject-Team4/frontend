@@ -1,7 +1,4 @@
 import type { StorybookConfig } from '@storybook/nextjs-vite';
-import { existsSync } from 'node:fs';
-
-const staticDirs = existsSync('public') ? ['../public'] : [];
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
@@ -12,6 +9,5 @@ const config: StorybookConfig = {
     '@storybook/addon-docs',
   ],
   framework: '@storybook/nextjs-vite',
-  staticDirs,
 };
 export default config;
