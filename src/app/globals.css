@@ -28,13 +28,13 @@
   --color-interaction-hover: #416ec8;
   --color-interaction-pressed: #3b63b5;
 
-  --color-border-primary: rgb(248 250 252 / 0.5);
+  --color-border-primary: #e2e8f0;
 
   --color-text-primary: #1e293b;
   --color-text-secondary: #334155;
   --color-text-tertiary: #0f172a;
   --color-text-default: #64748b;
-  --color-text-inverse: #ffffff;
+  --color-text-inverse: #e2e8f0;
   --color-text-disabled: #94a3b8;
 
   --color-status-danger: #fc4b4b;
@@ -90,13 +90,6 @@ body {
   color: var(--color-text-primary);
   font-family: var(--font-sans);
   word-break: keep-all;
-}
-
-button,
-input,
-textarea,
-select {
-  font: inherit;
 }
 
 button {
