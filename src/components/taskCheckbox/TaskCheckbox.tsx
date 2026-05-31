@@ -26,9 +26,8 @@ export default function TaskCheckbox({
   onChange,
 }: TaskCheckboxProps) {
   const isCompleted = checked && size === 'lg';
-  const isInactive = disabled || isCompleted;
 
-  const wrapperClassName = isInactive
+  const wrapperClassName = disabled
     ? `inline-flex cursor-not-allowed items-center ${wrapperSizeStyle[size]}`
     : `inline-flex cursor-pointer items-center ${wrapperSizeStyle[size]}`;
 
@@ -36,8 +35,8 @@ export default function TaskCheckbox({
     ? 'text-text-disabled'
     : checked
       ? isCompleted
-        ? 'text-slate-400 line-through'
-        : 'text-slate-400'
+        ? 'text-text-disabled line-through'
+        : 'text-text-disabled'
       : 'text-text-primary';
 
   return (
@@ -45,7 +44,7 @@ export default function TaskCheckbox({
       <input
         type="checkbox"
         checked={checked}
-        disabled={isInactive}
+        disabled={disabled}
         onChange={(e) => onChange?.(e.target.checked)}
         className="sr-only"
       />

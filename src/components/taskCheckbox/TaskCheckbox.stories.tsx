@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import TaskCheckbox from './todo';
+import TaskCheckbox from './TaskCheckbox';
 
 const meta = {
-  title: 'Components/Todo',
+  title: 'Components/TaskCheckbox',
   component: TaskCheckbox,
 } satisfies Meta<typeof TaskCheckbox>;
 
