@@ -2,6 +2,10 @@
 @import 'tailwindcss';
 
 @theme {
+  --breakpoint-mobile: 375px;
+  --breakpoint-tablet: 744px;
+  --breakpoint-desktop: 1280px;
+
   --font-sans: 'Pretendard', system-ui, sans-serif;
 
   --color-brand-primary: #5189fa;
@@ -18,7 +22,7 @@
   --color-background-primary: #ffffff;
   --color-background-secondary: #f1f5f9;
   --color-background-tertiary: #e2e8f0;
-  --color-background-inverse: #e2e8f0;
+  --color-background-inverse: #ffffff;
 
   --color-interaction-inactive: #94a3b8;
   --color-interaction-hover: #416ec8;
