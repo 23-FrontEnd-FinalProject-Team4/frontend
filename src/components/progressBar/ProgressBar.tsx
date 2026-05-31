@@ -69,7 +69,7 @@ const ProgressBar = ({
     >
       <div
         className={cn(
-          'absolute inset-y-0 left-0 rounded-full bg-progress-primary transition-[width] duration-300 ease-out',
+          'absolute inset-y-0 left-0 rounded-full bg-brand-primary transition-[width] duration-300 ease-out',
           barClassName,
         )}
         style={{ width: `${progressPercent}%` }}

@@ -1,6 +1,5 @@
 import type { Preview } from '@storybook/nextjs-vite';
 
-// @ts-expect-error CSS side-effect import is handled by Storybook/Vite.
 import '../src/app/globals.css';
 
 const preview: Preview = {
@@ -9,6 +8,30 @@ const preview: Preview = {
       matchers: {
         color: /(background|color)$/i,
         date: /Date$/i,
+      },
+    },
+    viewport: {
+      viewports: {
+        mobile: {
+          name: 'Mobile',
+          styles: {
+            width: '375px',
+          },
+        },
+
+        tablet: {
+          name: 'Tablet',
+          styles: {
+            width: '768px',
+          },
+        },
+
+        desktop: {
+          name: 'Desktop',
+          styles: {
+            width: '1280px',
+          },
+        },
       },
     },
 
