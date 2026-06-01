@@ -7,7 +7,7 @@ const sizeStyle = {
   lg: `${sharedBoxStyle} text-lg`,
 } as const;
 
-export default function InputBox({
+const InputBox = ({
   size = 'sm',
   value,
   onChange,
@@ -15,7 +15,7 @@ export default function InputBox({
   disabled = false,
   className = '',
   ...props
-}: InputBoxProps) {
+}: InputBoxProps) => {
   const inputBoxClassName = `
     resize-none overflow-y-auto overflow-x-hidden
     rounded-xl border border-border-primary
@@ -46,4 +46,6 @@ export default function InputBox({
       {...props}
     />
   );
-}
+};
+
+export default InputBox;
