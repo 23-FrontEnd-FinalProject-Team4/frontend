@@ -4,3 +4,11 @@ export type DropdownMdProps = {
   menuOpen?: boolean;
   options: string[];
 };
+
+export type DropdownProps = {
+  size?: 'md' | 'sm';
+  options: {
+    label: string;
+    value: string;
+  }[];
+};
