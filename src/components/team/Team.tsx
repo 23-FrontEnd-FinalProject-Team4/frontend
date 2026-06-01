@@ -43,9 +43,9 @@ const ADMIN_CARD_SIZE_CLASS: Record<TeamCardSize, string> = {
 };
 
 const USER_CARD_SIZE_CLASS: Record<TeamCardSize, string> = {
-  lg: 'h-16 w-[1120px] max-w-full rounded-lg px-6',
-  md: 'h-16 w-[620px] max-w-full rounded-lg px-6',
-  sm: 'h-16 w-[375px] max-w-full rounded-none px-5',
+  lg: 'h-16 w-[1120px] max-w-full rounded-xl px-6',
+  md: 'h-16 w-[620px] max-w-full rounded-xl px-6',
+  sm: 'h-14 w-[375px] max-w-full rounded-none px-5',
 };
 
 const TEAM_IMAGE_SIZE_CLASS: Record<TeamCardSize, string> = {
@@ -70,6 +70,7 @@ const DEFAULT_TEAM_LABELS = {
 };
 
 const TEAM_CARD_BASE_CLASS = 'bg-background-inverse shadow-xl shadow-background-primary/10';
+const TEAM_FALLBACK_IMAGE_CLASS = 'bg-brand-primary text-background-inverse';
 
 const cn = (...classNames: Array<string | false | undefined>) =>
   classNames.filter(Boolean).join(' ');
@@ -97,14 +98,15 @@ const TeamImage = ({
 }: Pick<TeamProps, 'imageUrl' | 'name'> & { size: TeamCardSize }) => (
   <div
     className={cn(
-      'bg-background-secondary relative shrink-0 overflow-hidden rounded-md',
+      !imageUrl && TEAM_FALLBACK_IMAGE_CLASS,
+      'relative shrink-0 overflow-hidden rounded-md',
       TEAM_IMAGE_SIZE_CLASS[size],
     )}
   >
     {imageUrl ? (
       <Image src={imageUrl} alt="" fill className="object-cover" sizes="36px" aria-hidden />
     ) : (
-      <span className="text-text-inverse flex h-full items-center justify-center text-xs font-semibold">
+      <span className="flex h-full items-center justify-center text-xs font-semibold">
         {name.slice(0, 1)}
       </span>
     )}
@@ -112,11 +114,16 @@ const TeamImage = ({
 );
 
 const MemberAvatar = ({ member }: { member: TeamMember }) => (
-  <div className="border-background-inverse bg-background-secondary relative -ml-1 size-5 overflow-hidden rounded-full border first:ml-0">
+  <div
+    className={cn(
+      !member.imageUrl && TEAM_FALLBACK_IMAGE_CLASS,
+      'border-background-inverse relative -ml-1 size-5 overflow-hidden rounded-full border first:ml-0',
+    )}
+  >
     {member.imageUrl ? (
       <Image src={member.imageUrl} alt="" fill className="object-cover" sizes="20px" aria-hidden />
     ) : (
-      <span className="text-text-inverse flex h-full items-center justify-center text-[10px] font-semibold">
+      <span className="flex h-full items-center justify-center text-[10px] font-semibold">
         {member.name.slice(0, 1)}
       </span>
     )}
@@ -156,7 +163,7 @@ const SettingsButton = ({ label, onClick }: SettingsButtonProps) => {
     <button
       type="button"
       aria-label={label}
-      className="hover:bg-text-tertiary/40 focus:ring-brand-primary flex size-6 shrink-0 items-center justify-center rounded-sm transition-colors focus:ring-2 focus:outline-none"
+      className="hover:bg-background-secondary focus:ring-brand-primary flex size-6 shrink-0 items-center justify-center rounded-sm transition-colors focus:ring-2 focus:outline-none"
       onClick={onClick}
     >
       <Image src={settingIcon} width={16} height={16} alt="" aria-hidden />
@@ -187,7 +194,7 @@ const AdminTeamCard = ({
       <div className="flex min-w-0 items-center gap-2">
         <TeamImage imageUrl={imageUrl} name={name} size={size} />
 
-        <h3 className="text-background-primary text-md truncate font-semibold">{name}</h3>
+        <h3 className="text-text-primary text-md truncate font-semibold">{name}</h3>
 
         {size !== 'lg' && <MemberPreview members={members} memberCount={memberCount} />}
       </div>
@@ -241,7 +248,7 @@ const UserTeamCard = ({
     )}
   >
     <div className="flex min-w-0 items-center gap-3">
-      <h3 className="text-background-primary text-md truncate font-semibold">{name}</h3>
+      <h3 className="text-text-primary text-md truncate font-semibold">{name}</h3>
       <MemberPreview members={members} memberCount={memberCount} />
     </div>
 
