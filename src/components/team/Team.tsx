@@ -82,11 +82,13 @@ const getProgressValue = ({
     return Math.min(Math.max(progressValue, 0), 100);
   }
 
-  if (!totalTaskCount) {
+  if (!totalTaskCount || totalTaskCount <= 0) {
     return 0;
   }
 
-  return Math.round(((completedTaskCount ?? 0) / totalTaskCount) * 100);
+  const calculatedPercent = Math.round(((completedTaskCount ?? 0) / totalTaskCount) * 100);
+
+  return Math.min(Math.max(calculatedPercent, 0), 100);
 };
 
 const TeamImage = ({
@@ -115,7 +117,7 @@ const MemberAvatar = ({ member }: { member: TeamMember }) => (
   <div
     className={cn(
       !member.imageUrl && TEAM_FALLBACK_IMAGE_CLASS,
-      'border-background-inverse relative -ml-1 size-5 overflow-hidden rounded-full border first:ml-0',
+      'border-background-inverse relative size-5 overflow-hidden rounded-full border',
     )}
   >
     {member.imageUrl ? (
@@ -141,11 +143,25 @@ const MemberPreview = ({
 
   return (
     <div className="border-border-primary bg-background-inverse flex h-8 items-center rounded-lg border px-2">
+      <span className="sr-only">팀 멤버 {totalMemberCount}명</span>
+
       {visibleMembers.map((member) => (
-        <MemberAvatar key={member.id} member={member} />
+        <div
+          key={member.id}
+          className={cn(visibleMembers.length > 0 && '-ml-1 first:ml-0')}
+          aria-hidden="true"
+        >
+          <MemberAvatar member={member} />
+        </div>
       ))}
 
-      <span className="border-background-inverse bg-background-inverse text-text-default -ml-1 flex h-5 min-w-5 items-center justify-center rounded-full border px-1 text-[10px] font-medium">
+      <span
+        className={cn(
+          'border-background-inverse bg-background-inverse text-text-default flex h-5 min-w-5 items-center justify-center rounded-full border px-1 text-[10px] font-medium',
+          visibleMembers.length > 0 && '-ml-1',
+        )}
+        aria-hidden="true"
+      >
         {totalMemberCount}
       </span>
     </div>
