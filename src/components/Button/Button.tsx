@@ -2,7 +2,7 @@ import React from 'react';
 
 import { cn } from '@/utils/cn';
 
-import { ButtonProps } from './type';
+import { ButtonProps, ButtonVariant } from './type';
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
@@ -21,7 +21,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const baseStyles =
       'inline-flex items-center justify-center font-medium transition-all duration-200 ease-in-out focus:outline-none text-md gap-2 rounded-2xl';
 
-    const variantStyles: Record<string, string> = {
+    const variantStyles: Record<ButtonVariant, string> = {
       'primary-filled':
         'bg-brand-primary text-background-primary hover:bg-interaction-hover active:bg-interaction-pressed disabled:bg-interaction-inactive disabled:text-text-disabled px-6 py-3 min-w-[160px]',
       'primary-outline':

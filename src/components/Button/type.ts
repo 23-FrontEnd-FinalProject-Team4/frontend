@@ -7,7 +7,7 @@ export type ButtonVariant =
   | 'secondary-whiteFilled' //배경있는 하얀 버튼 (완료 취소하기)
   | 'danger-filled' // 빨간색 버튼 (생성하기)
   | 'icon-circle' // +, 하트 원형 버튼 (아이콘)
-  | 'secondary-icon-circle' // 흰색 원형 버튼 (아이콘)
+  | 'icon-circle-white' // 흰색 원형 버튼 (아이콘)
   | 'input-btn'; // 할 일 버튼(할 일)
 
 export type ButtonState = 'default' | 'hover' | 'active' | 'disabled';

@@ -78,7 +78,7 @@ export const Default: Story = {
 };
 
 export const AllVariants: Story = {
-  render: (args) => (
+  render: (args: React.ComponentProps<typeof Button>) => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', padding: '20px' }}>
       <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
         <Button {...args} variant="primary-filled">
