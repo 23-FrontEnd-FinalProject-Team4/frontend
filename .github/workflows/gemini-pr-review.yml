@@ -1,0 +1,60 @@
+name: Gemini PR Review
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: gemini-pr-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: Review pull request
+    runs-on: ubuntu-latest
+    if: >
+      github.event.pull_request.draft == false &&
+      github.event.pull_request.head.repo.full_name == github.repository
+
+    steps:
+      - name: Checkout pull request
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Gemini PR review
+        uses: google-github-actions/run-gemini-cli@v0
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GEMINI_CLI_TRUST_WORKSPACE: "true"
+        with:
+          gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
+          gemini_model: gemini-2.5-flash-lite
+          prompt: |
+            You are reviewing pull request #${{ github.event.pull_request.number }} in ${{ github.repository }}.
+
+            Review only changed files in this pull request.
+            Use the repository style guide at .gemini/styleguide.md as the highest-priority review standard.
+
+            Write review feedback in Korean.
+            Prioritize bugs, maintainability, performance, accessibility, TypeScript safety, API handling, and team conventions.
+            Avoid subjective style comments unless they affect consistency or maintainability.
+
+            Use GitHub CLI to inspect the pull request diff:
+            gh pr diff ${{ github.event.pull_request.number }} --repo ${{ github.repository }}
+
+            Then post one concise PR comment using:
+            gh pr comment ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --body "<review summary>"
+
+            The final PR comment must be written in Korean and include these sections:
+            - main findings
+            - required fixes
+            - positives
+            - test and build checks
+
+            If there are no meaningful issues, clearly say that no blocking issues were found.
