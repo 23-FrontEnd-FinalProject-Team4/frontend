@@ -49,6 +49,7 @@ const EditableProfileImage = ({
           accept="image/*"
           onChange={handleImageChange}
           className="sr-only"
+          aria-label="프로필 이미지 수정"
         />
 
         <PencilIcon
