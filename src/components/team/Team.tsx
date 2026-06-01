@@ -1,6 +1,7 @@
 import Image from 'next/image';
 
 import settingIcon from '@/assets/icons/setting.svg';
+import { cn } from '@/utils/cn';
 
 import ProgressBar from '../progressBar/ProgressBar';
 import type { TeamCardSize, TeamMember, TeamProps } from './type';
@@ -71,9 +72,6 @@ const DEFAULT_TEAM_LABELS = {
 
 const TEAM_CARD_BASE_CLASS = 'bg-background-inverse shadow-xl shadow-background-primary/10';
 const TEAM_FALLBACK_IMAGE_CLASS = 'bg-brand-primary text-background-inverse';
-
-const cn = (...classNames: Array<string | false | undefined>) =>
-  classNames.filter(Boolean).join(' ');
 
 const getProgressValue = ({
   completedTaskCount,
