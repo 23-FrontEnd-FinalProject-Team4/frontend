@@ -1,6 +1,6 @@
 import DateItem from '../DateItem/DateItem';
 import { getWeekDates } from '@/utils/getWeekDates';
-import { DateListProps } from './DateListType';
+import { DateListProps } from './type';
 
 const DateList = ({ selectedDate, onChange }: DateListProps) => {
   const days = getWeekDates(selectedDate);
