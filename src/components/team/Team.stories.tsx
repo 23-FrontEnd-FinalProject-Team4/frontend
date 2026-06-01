@@ -11,7 +11,7 @@ const MEMBERS = [
 ];
 
 const ADMIN_ARGS = {
-  name: '경영관리팀',
+  name: '최종 프로젝트 4팀',
   imageUrl: sampleImage,
   members: MEMBERS,
   memberCount: 4,
@@ -22,7 +22,7 @@ const ADMIN_ARGS = {
 };
 
 const USER_ARGS = {
-  name: '경영관리팀',
+  name: '최종 프로젝트 4팀',
   members: MEMBERS,
   memberCount: 4,
   variant: 'user' as const,
