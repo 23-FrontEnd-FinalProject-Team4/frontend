@@ -1,8 +1,4 @@
-export interface DateItemProps {
-  date: Date;
-  isSelected: boolean;
-  onClick?: (date: Date) => void;
-}
+import { DateItemProps } from './type';
 
 const DateItem = ({ date, isSelected, onClick }: DateItemProps) => {
   const day = date.getDate();
