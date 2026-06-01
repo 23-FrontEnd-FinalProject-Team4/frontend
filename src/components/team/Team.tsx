@@ -140,7 +140,7 @@ const MemberPreview = ({
   }
 
   return (
-    <div className="flex items-center">
+    <div className="border-border-primary bg-background-inverse flex h-8 items-center rounded-lg border px-2">
       {visibleMembers.map((member) => (
         <MemberAvatar key={member.id} member={member} />
       ))}
