@@ -9,12 +9,9 @@ import SidebarView from '@/components/sidebar/SidebarView';
 
 import useMediaQuery from '@/hooks/useMediaQuery';
 
-interface SidebarProps {
-  isLoggedIn: boolean;
-  selected: boolean;
-}
+import type { SidebarProps } from './type';
 
-export default function Sidebar({ isLoggedIn, selected }: SidebarProps) {
+export default function Sidebar({ isLoggedIn, groups }: SidebarProps) {
   const isMobile = useMediaQuery('(max-width: 743px)');
   const isDesktop = useMediaQuery('(min-width: 1280px)');
 
@@ -68,8 +65,8 @@ export default function Sidebar({ isLoggedIn, selected }: SidebarProps) {
           <SidebarView
             isLoggedIn={isLoggedIn}
             collapsed={collapsed}
-            selected={selected}
             onToggleCollapse={handleCloseMobileMenu}
+            groups={groups}
           />
         </div>
       </>
@@ -81,7 +78,7 @@ export default function Sidebar({ isLoggedIn, selected }: SidebarProps) {
       isLoggedIn={isLoggedIn}
       collapsed={collapsed}
       onToggleCollapse={handleToggleCollapse}
-      selected={selected}
+      groups={groups}
     />
   );
 }

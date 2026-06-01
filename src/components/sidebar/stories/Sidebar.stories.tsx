@@ -23,32 +23,28 @@ type Story = StoryObj<typeof Sidebar>;
 
 export const Default: Story = {
   args: {
-    collapsed: false,
+    groups: [],
     isLoggedIn: true,
-    selected: true,
   },
 };
 
 export const LoggedOut: Story = {
   args: {
-    collapsed: false,
+    groups: [],
     isLoggedIn: false,
-    selected: false,
   },
 };
 
 export const CollapsedLoggedIn: Story = {
   args: {
-    collapsed: true,
+    groups: [],
     isLoggedIn: true,
-    selected: true,
   },
 };
 
 export const CollapsedLoggedOut: Story = {
   args: {
-    collapsed: true,
+    groups: [],
     isLoggedIn: false,
-    selected: false,
   },
 };
