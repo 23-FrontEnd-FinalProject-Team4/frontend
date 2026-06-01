@@ -2,13 +2,16 @@
 
 import { useEffect, useId, useSyncExternalStore } from 'react';
 import type { MouseEvent } from 'react';
+import { createPortal } from 'react-dom';
 
 import Image from 'next/image';
 
 import alertIcon from '@/assets/icons/alert.svg';
 import closeIcon from '@/assets/icons/x.svg';
-import { createPortal } from 'react-dom';
+import { cn } from '@/utils/cn';
 
+import Button from '../button/Button';
+import type { ButtonVariant } from '../button/type';
 import type { ModalAction, ModalProps, ModalSize, ModalVariant } from './type';
 
 type ModalButtonVariant = 'primary' | 'secondary';
@@ -25,22 +28,16 @@ const MODAL_SIZE_CLASS: Record<ModalSize, string> = {
   lg: 'w-full max-w-[420px]',
 };
 
-const PRIMARY_BUTTON_CLASS: Record<ModalVariant, string> = {
-  default: 'bg-brand-primary text-white hover:bg-interaction-hover active:bg-interaction-pressed',
-  danger: 'bg-status-danger text-white hover:bg-red-700 active:bg-red-800',
+const PRIMARY_BUTTON_VARIANT: Record<ModalVariant, ButtonVariant> = {
+  default: 'primary-filled',
+  danger: 'danger-filled',
 };
-
-const SECONDARY_BUTTON_CLASS =
-  'border-brand-primary text-brand-primary hover:bg-slate-50 disabled:border-interaction-inactive disabled:text-interaction-inactive';
 
 const subscribeToClientStore = () => () => {};
 const getClientSnapshot = () => true;
 const getServerSnapshot = () => false;
 
-const cn = (...classNames: Array<string | false | undefined>) =>
-  classNames.filter(Boolean).join(' ');
-
-const getActionButtonLabel = ({ isLoading, label, loadingLabel = 'Loading' }: ModalAction) => {
+const getActionButtonLabel = ({ isLoading, label, loadingLabel = '처리 중' }: ModalAction) => {
   if (isLoading) {
     return loadingLabel;
   }
@@ -48,25 +45,28 @@ const getActionButtonLabel = ({ isLoading, label, loadingLabel = 'Loading' }: Mo
   return label;
 };
 
-const ModalButton = ({ action, variant, modalVariant }: ModalButtonProps) => {
-  const buttonClassName = cn(
-    'h-10 min-w-0 flex-1 rounded-md px-4 text-xs font-semibold transition-colors',
-    'focus:ring-brand-primary focus:ring-2 focus:outline-none disabled:cursor-not-allowed',
-    variant === 'primary' && 'disabled:bg-interaction-inactive',
-    variant === 'primary' && PRIMARY_BUTTON_CLASS[modalVariant],
-    variant === 'secondary' && 'border bg-white',
-    variant === 'secondary' && SECONDARY_BUTTON_CLASS,
-  );
+const getModalButtonVariant = (
+  variant: ModalButtonVariant,
+  modalVariant: ModalVariant,
+): ButtonVariant => {
+  if (variant === 'secondary') {
+    return 'secondary-whiteFilled';
+  }
 
+  return PRIMARY_BUTTON_VARIANT[modalVariant];
+};
+
+const ModalButton = ({ action, variant, modalVariant }: ModalButtonProps) => {
   return (
-    <button
+    <Button
       type={action.buttonType ?? 'button'}
-      className={buttonClassName}
+      variant={getModalButtonVariant(variant, modalVariant)}
+      className="h-10 min-w-0 flex-1 rounded-md px-4 py-0 text-xs font-semibold"
       disabled={action.disabled || action.isLoading}
       onClick={action.onClick}
     >
       {getActionButtonLabel(action)}
-    </button>
+    </Button>
   );
 };
 
@@ -80,7 +80,7 @@ const Modal = ({
   variant = 'default',
   size = 'sm',
   showCloseButton = true,
-  closeButtonLabel = 'Close modal',
+  closeButtonLabel = '모달 닫기',
   closeOnOverlayClick = true,
   className,
   contentClassName,
@@ -148,7 +148,7 @@ const Modal = ({
           <button
             type="button"
             aria-label={closeButtonLabel}
-            className="focus:ring-brand-primary absolute top-3 right-3 flex size-5 items-center justify-center rounded-sm transition-colors hover:bg-slate-100 focus:ring-2 focus:outline-none"
+            className="hover:bg-background-secondary focus:ring-brand-primary absolute top-3 right-3 flex size-5 items-center justify-center rounded-sm transition-colors focus:ring-2 focus:outline-none"
             onClick={onClose}
           >
             <Image src={closeIcon} width={14} height={14} alt="" aria-hidden />
@@ -160,7 +160,7 @@ const Modal = ({
             <Image src={alertIcon} width={24} height={24} alt="" aria-hidden className="mb-4" />
           )}
 
-          <h2 id={titleId} className="text-background-primary text-sm font-semibold">
+          <h2 id={titleId} className="text-text-primary text-sm font-semibold">
             {title}
           </h2>
 
