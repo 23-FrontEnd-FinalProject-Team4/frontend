@@ -5,10 +5,10 @@ import FoldRightIcon from '@/assets/icons/fold_right.svg?react';
 import LogoLarge from '@/assets/icons/logo_large.svg?react';
 import LogoSmall from '@/assets/icons/logo_small.svg?react';
 
-import AddGroupButton from '@/components/sidebardddd/AddGroupButton';
-import ArticleMenu from '@/components/sidebardddd/ArticleMenu';
-import GroupSection from '@/components/sidebardddd/GroupSection';
-import SidebarFooter from '@/components/sidebardddd/SidebarFooter';
+import AddGroupButton from '@/components/sideBar/AddGroupButton';
+import ArticleMenu from '@/components/sideBar/ArticleMenu';
+import GroupSection from '@/components/sideBar/GroupSection';
+import SidebarFooter from '@/components/sideBar/SideBarFooter';
 
 import type { SidebarViewProps } from './type';
 

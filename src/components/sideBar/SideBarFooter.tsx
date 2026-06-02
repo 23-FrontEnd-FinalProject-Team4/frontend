@@ -1,5 +1,5 @@
-import LoggedInFooter from '@/components/sidebardddd/LoggedInFooter';
-import LoggedOutFooter from '@/components/sidebardddd/LoggedOutFooter';
+import LoggedInFooter from '@/components/sideBar/LoggedInFooter';
+import LoggedOutFooter from '@/components/sideBar/LoggedOutFooter';
 
 export default function SidebarFooter({
   isLoggedIn,

@@ -1,6 +1,6 @@
 import { useParams } from 'next/navigation';
 
-import GroupItem from '@/components/sidebardddd/GroupItems';
+import GroupItem from '@/components/sideBar/GroupItems';
 
 import type { GroupSectionProps } from './type';
 
