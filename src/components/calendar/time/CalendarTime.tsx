@@ -35,6 +35,7 @@ const CalendarTime = ({
         {minutes.map((minute) => {
           return (
             <Button
+              type="button"
               key={minute}
               variant={selectedMinute === minute ? 'primary-filled' : 'primary-outline'}
               onClick={() => setSelectedMinute(minute)}
