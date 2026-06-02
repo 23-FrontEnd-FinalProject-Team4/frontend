@@ -37,6 +37,9 @@ const subscribeToClientStore = () => () => {};
 const getClientSnapshot = () => true;
 const getServerSnapshot = () => false;
 
+let openModalsCount = 0;
+let originalBodyOverflow = '';
+
 const getActionButtonLabel = ({ isLoading, label, loadingLabel = '처리 중' }: ModalAction) => {
   if (isLoading) {
     return loadingLabel;
@@ -106,13 +109,23 @@ const Modal = ({
       }
     };
 
-    const originalOverflow = document.body.style.overflow;
+    openModalsCount += 1;
 
-    document.body.style.overflow = 'hidden';
+    if (openModalsCount === 1) {
+      originalBodyOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+    }
+
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      document.body.style.overflow = originalOverflow;
+      openModalsCount = Math.max(openModalsCount - 1, 0);
+
+      if (openModalsCount === 0) {
+        document.body.style.overflow = originalBodyOverflow;
+        originalBodyOverflow = '';
+      }
+
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen, onClose]);
@@ -121,7 +134,7 @@ const Modal = ({
     return null;
   }
 
-  const handleOverlayMouseDown = (event: MouseEvent<HTMLDivElement>) => {
+  const handleOverlayClick = (event: MouseEvent<HTMLDivElement>) => {
     if (closeOnOverlayClick && event.target === event.currentTarget) {
       onClose();
     }
@@ -130,7 +143,7 @@ const Modal = ({
   const modal = (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-8"
-      onMouseDown={handleOverlayMouseDown}
+      onClick={handleOverlayClick}
     >
       <section
         role="dialog"
@@ -138,7 +151,7 @@ const Modal = ({
         aria-labelledby={titleId}
         aria-describedby={description ? descriptionId : undefined}
         className={cn(
-          'bg-background-inverse relative max-h-[calc(100vh-64px)] overflow-y-auto rounded-2xl px-6 py-6',
+          'bg-background-primary relative max-h-[calc(100dvh-64px)] overflow-y-auto rounded-2xl px-6 py-6',
           'shadow-[0_16px_40px_rgb(15_23_42/0.18)]',
           MODAL_SIZE_CLASS[size],
           className,
@@ -155,7 +168,7 @@ const Modal = ({
           </button>
         )}
 
-        <div className="flex flex-col items-center text-center">
+        <div className="flex flex-col items-center px-4 text-center">
           {variant === 'danger' && (
             <Image src={alertIcon} width={24} height={24} alt="" aria-hidden className="mb-4" />
           )}
