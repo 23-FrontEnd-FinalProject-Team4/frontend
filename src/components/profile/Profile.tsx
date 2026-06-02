@@ -24,24 +24,14 @@ const Profile = React.forwardRef<HTMLImageElement, ProfileProps>(
       sm: 24,
     };
 
-    if (src) {
-      return (
-        <Image
-          ref={ref}
-          src={src}
-          alt={alt}
-          width={pixelSizes[size]}
-          height={pixelSizes[size]}
-          className={cn(baseStyles, sizeStyles[size], className)}
-          {...props}
-        />
-      );
-    }
+    const imageSrc = src || ProfileDefault;
+    const imageAlt = src ? alt : '기본 프로필 이미지';
+
     return (
       <Image
         ref={ref}
-        src={ProfileDefault}
-        alt="기본 프로필 이미지"
+        src={imageSrc}
+        alt={imageAlt}
         width={pixelSizes[size]}
         height={pixelSizes[size]}
         className={cn(baseStyles, sizeStyles[size], className)}

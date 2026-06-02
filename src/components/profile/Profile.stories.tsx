@@ -15,11 +15,11 @@ const meta: Meta<typeof Profile> = {
     },
     src: {
       control: 'text',
-      description: '프로필 이미지의 URL 주소. 빈 값이면 profile.svg 기본 아이콘이 뜸',
+      description: '프로필 이미지의 URL 주소입니다. 빈 값이면 profile.svg 기본 아이콘이 뜹니다.',
     },
     alt: {
       control: 'text',
-      description: '이미지 로딩에 실패하거나 스크린 리더가 읽을 대체 텍스트',
+      description: '이미지 로딩에 실패하거나 스크린 리더가 읽을 대체 텍스트입니다.',
     },
   },
 };
@@ -40,56 +40,40 @@ export const Default: Story = {
 
 export const AllStates: Story = {
   render: (args) => (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '24px',
-        padding: '24px',
-        backgroundColor: '#333333',
-        width: 'fit-content',
-        borderRadius: '16px',
-      }}
-    >
-      <div style={{ display: 'flex', gap: '30px', alignItems: 'center' }}>
-        <div style={{ color: '#fff', width: '90px', fontWeight: 'bold', fontSize: '14px' }}>
-          상태 / 크기
-        </div>
-        <div style={{ color: '#ccc', fontSize: '12px', width: '50px', textAlign: 'center' }}>
-          Large (40)
-        </div>
-        <div style={{ color: '#ccc', fontSize: '12px', width: '50px', textAlign: 'center' }}>
-          Medium (32)
-        </div>
-        <div style={{ color: '#ccc', fontSize: '12px', width: '50px', textAlign: 'center' }}>
-          Small (24)
-        </div>
+    <div className="flex w-fit flex-col gap-6 rounded-2xl bg-[#333333] p-6">
+      <div className="flex items-center gap-[30px]">
+        <div className="w-[90px] text-sm font-bold text-white">상태 / 크기</div>
+        <div className="w-[50px] text-center text-xs text-[#ccc]">Large (40)</div>
+        <div className="w-[50px] text-center text-xs text-[#ccc]">Medium (32)</div>
+        <div className="w-[50px] text-center text-xs text-[#ccc]">Small (24)</div>
       </div>
 
-      <hr style={{ border: 'none', borderTop: '1px solid #444', margin: '0' }} />
+      <hr className="m-0 border-t border-none border-[#444]" />
 
-      <div style={{ display: 'flex', gap: '30px', alignItems: 'center' }}>
-        <div style={{ color: '#aaa', width: '90px', fontSize: '13px' }}>이미지 있음</div>
-        <div style={{ width: '50px', display: 'flex', justifyContent: 'center' }}>
+      {/* 이미지 있음 상태 */}
+      <div className="flex items-center gap-[30px]">
+        <div className="w-[90px] text-sm text-[#aaa]">이미지 있음</div>
+        <div className="flex w-[50px] justify-center">
           <Profile {...args} size="lg" src={MOCK_IMAGE} />
         </div>
-        <div style={{ width: '50px', display: 'flex', justifyContent: 'center' }}>
+        <div className="flex w-[50px] justify-center">
           <Profile {...args} size="md" src={MOCK_IMAGE} />
         </div>
-        <div style={{ width: '50px', display: 'flex', justifyContent: 'center' }}>
+        <div className="flex w-[50px] justify-center">
           <Profile {...args} size="sm" src={MOCK_IMAGE} />
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: '30px', alignItems: 'center' }}>
-        <div style={{ color: '#aaa', width: '90px', fontSize: '13px' }}>이미지 없음</div>
-        <div style={{ width: '50px', display: 'flex', justifyContent: 'center' }}>
+      {/* 이미지 없음 (기본 SVG 아이콘) 상태 */}
+      <div className="flex items-center gap-[30px]">
+        <div className="w-[90px] text-sm text-[#aaa]">이미지 없음</div>
+        <div className="flex w-[50px] justify-center">
           <Profile {...args} size="lg" src={null} />
         </div>
-        <div style={{ width: '50px', display: 'flex', justifyContent: 'center' }}>
+        <div className="flex w-[50px] justify-center">
           <Profile {...args} size="md" src={null} />
         </div>
-        <div style={{ width: '50px', display: 'flex', justifyContent: 'center' }}>
+        <div className="flex w-[50px] justify-center">
           <Profile {...args} size="sm" src={null} />
         </div>
       </div>
