@@ -46,6 +46,9 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
+const PROGRESS_BAR_PREVIEW_CLASS =
+  'flex w-180 flex-col gap-8 bg-text-default p-8 text-background-inverse';
+
 const ProgressBarPreview = ({
   value = 0,
   max = 100,
@@ -53,7 +56,7 @@ const ProgressBarPreview = ({
   showTrackPattern = true,
   label = 'Progress rate',
 }: ProgressBarProps) => (
-  <div className="flex w-180 flex-col gap-8 bg-background-secondary p-8 text-text-inverse">
+  <div className={PROGRESS_BAR_PREVIEW_CLASS}>
     <div className="flex flex-col gap-3">
       <div className="flex items-center justify-between text-lg font-semibold">
         <span>Controls</span>
@@ -76,7 +79,7 @@ export const Default: Story = {
 
 export const Sizes: Story = {
   render: () => (
-    <div className="flex w-180 flex-col gap-8 bg-background-secondary p-8 text-text-inverse">
+    <div className={PROGRESS_BAR_PREVIEW_CLASS}>
       <div className="flex flex-col gap-3">
         <span className="text-lg font-semibold">Large</span>
         <ProgressBar value={75} size="lg" label="large progress" />
@@ -95,7 +98,7 @@ export const Sizes: Story = {
 
 export const States: Story = {
   render: () => (
-    <div className="flex w-180 flex-col gap-8 bg-background-secondary p-8 text-text-inverse">
+    <div className={PROGRESS_BAR_PREVIEW_CLASS}>
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between text-lg font-semibold">
           <span>Full</span>
