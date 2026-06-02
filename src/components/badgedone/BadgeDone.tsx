@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Image, { StaticImageData } from 'next/image';
+
 import ProgressDone from '@/assets/icons/progress_done.svg';
 import ProgressNothing from '@/assets/icons/progress_nothing.svg';
 import ProgressOnDoing from '@/assets/icons/progress_ondoing.svg';
@@ -10,7 +12,7 @@ import { BadgeDoneProps, BadgeStatus } from './type';
 const BadgeDone = React.forwardRef<HTMLDivElement, BadgeDoneProps>(
   ({ className, status = 'none', current = 0, total = 0, ...props }, ref) => {
     const baseStyles =
-      'inline-flex items-center justify-center px-3 py-1.5 rounded-full bg-white border border-slate-100 shadow-sm text-md font-medium gap-1.5 select-none';
+      'inline-flex items-center justify-center px-2 py-1 rounded-full bg-white border border-slate-100 shadow-sm text-xs font-medium gap-1 select-none';
 
     const statusTextStyles: Record<BadgeStatus, string> = {
       done: 'text-brand-primary', // 완료: 파란색 글씨
@@ -18,15 +20,42 @@ const BadgeDone = React.forwardRef<HTMLDivElement, BadgeDoneProps>(
       none: 'text-text-disabled', // 없음: 회색 글씨
     };
 
-    // 상태에 따른 아이콘 매핑
     const renderIcon = () => {
+      const src = (icon: StaticImageData | string) => {
+        return typeof icon === 'object' && 'src' in icon ? icon.src : icon;
+      };
+
       switch (status) {
         case 'done':
-          return <ProgressDone className="h-5 w-5 shrink-0" />;
+          return (
+            <Image
+              src={src(ProgressDone)}
+              alt="done"
+              className="h-4 w-4 shrink-0"
+              width={16}
+              height={16}
+            />
+          );
         case 'progress':
-          return <ProgressOnDoing className="h-5 w-5 shrink-0" />;
+          return (
+            <Image
+              src={src(ProgressOnDoing)}
+              alt="progress"
+              className="h-4 w-4 shrink-0"
+              width={16}
+              height={16}
+            />
+          );
         case 'none':
-          return <ProgressNothing className="h-5 w-5 shrink-0" />;
+          return (
+            <Image
+              src={src(ProgressNothing)}
+              alt="none"
+              className="h-4 w-4 shrink-0"
+              width={16}
+              height={16}
+            />
+          );
         default:
           return null;
       }
