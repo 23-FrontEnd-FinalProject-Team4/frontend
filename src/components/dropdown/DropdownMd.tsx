@@ -10,6 +10,7 @@ export default function DropdownMd({
   size = 'md',
   menuOpen = false,
   options,
+  onSelect,
 }: DropdownMdProps) {
   const [isOpen, setIsOpen] = useState(menuOpen);
 
@@ -36,6 +37,7 @@ export default function DropdownMd({
   return (
     <div className="relative inline-block">
       <button
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={`border-border-primary bg-background-primary text-text-default inline-flex items-center justify-between rounded-xl border ${current.button} `}
       >
@@ -46,6 +48,7 @@ export default function DropdownMd({
         <Dropdown
           options={options.map((option) => ({ label: option, value: option }))}
           size={size}
+          onSelect={onSelect}
         />
       )}
     </div>

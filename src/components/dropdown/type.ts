@@ -3,6 +3,7 @@ export type DropdownMdProps = {
   size?: 'md' | 'sm';
   menuOpen?: boolean;
   options: string[];
+  onSelect?: (value: string) => void;
 };
 
 export type DropdownProps = {
@@ -11,4 +12,5 @@ export type DropdownProps = {
     label: string;
     value: string;
   }[];
+  onSelect?: (value: string) => void;
 };

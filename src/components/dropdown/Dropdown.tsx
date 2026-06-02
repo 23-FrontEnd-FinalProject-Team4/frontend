@@ -1,6 +1,6 @@
 import { DropdownProps } from './type';
 
-export default function Dropdown({ options, size = 'md' }: DropdownProps) {
+export default function Dropdown({ options, size = 'md', onSelect }: DropdownProps) {
   const sizeStyle = {
     md: {
       menu: 'min-w-[120px] text-md',
@@ -20,6 +20,7 @@ export default function Dropdown({ options, size = 'md' }: DropdownProps) {
         <button
           key={option.value}
           className="hover:bg-background-secondary w-full px-3 py-3 text-left"
+          onClick={() => onSelect?.(option.value)}
         >
           {option.label}
         </button>
