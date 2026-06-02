@@ -21,7 +21,7 @@ const CalendarDate = ({ selectedDate, setSelectedDate }: CalendarDateProps) => {
       defaultMonth={selectedDate}
       navLayout="around"
       classNames={{
-        selected: 'bg-brand-primary rounded-lg text-white',
+        selected: 'bg-brand-primary rounded-lg !text-white',
         day_button: `w-9 h-8`,
       }}
       className="border-interaction-hover z-calendar w-fit rounded-xl border p-4"
