@@ -2,11 +2,7 @@ import { DayPicker } from '@daypicker/react';
 import { ko } from '@daypicker/react/locale';
 import '@daypicker/react/style.css';
 import { useState } from 'react';
-
-interface CalendarDateProps {
-  selectedDate: Date;
-  setSelectedDate: (date: Date) => void;
-}
+import { CalendarDateProps } from './type';
 
 const CalendarDate = ({ selectedDate, setSelectedDate }: CalendarDateProps) => {
   const [month, setMonth] = useState(selectedDate);

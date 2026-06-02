@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 const meta = {
   component: CalendarDate,
-  title: 'CalendarDate',
+  title: 'Components/CalendarDate',
   tags: ['autodocs'],
 
   // 상태 변화 검증을 위해 render 함수 안에서 state 사용
