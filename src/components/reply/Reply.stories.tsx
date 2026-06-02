@@ -47,6 +47,6 @@ export const Multiline: Story = {
 export const Large: Story = {
   args: {
     ...baseArgs,
-    size: 'lg',
+    size: 'sm',
   },
 };

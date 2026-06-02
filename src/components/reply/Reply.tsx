@@ -3,9 +3,19 @@ import { cn } from '@/utils/cn';
 
 import type { ReplyProps, ReplySize } from './type';
 
+const textSizeClass: Record<ReplySize, string> = {
+  sm: 'text-sm',
+  lg: 'text-md',
+};
+
 const dateSizeClass: Record<ReplySize, string> = {
   sm: 'text-xs',
   lg: 'text-md',
+};
+
+const authorWeightClass: Record<ReplySize, string> = {
+  sm: 'font-medium',
+  lg: 'font-semibold',
 };
 
 const Reply = ({ size = 'sm', author, avatar, children, menu }: ReplyProps) => {
@@ -14,9 +24,13 @@ const Reply = ({ size = 'sm', author, avatar, children, menu }: ReplyProps) => {
       <div className="shrink-0">{avatar}</div>
 
       <div className="-mt-0.5 min-w-0 flex-1">
-        <strong className="text-text-primary text-sm font-semibold">{author}</strong>
+        <strong className={cn('text-text-primary', textSizeClass[size], authorWeightClass[size])}>
+          {author}
+        </strong>
 
-        <div className="text-text-primary mt-1 text-sm whitespace-pre-line">{children}</div>
+        <div className={cn('text-text-primary mt-1 whitespace-pre-line', textSizeClass[size])}>
+          {children}
+        </div>
 
         <p className={cn('mt-2 text-slate-400', dateSizeClass[size])}>{menu.date}</p>
       </div>
