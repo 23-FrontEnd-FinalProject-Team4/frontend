@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 import '@/app/globals.css';
 
-import Sidebar from '@/components/sidebar/Sidebar';
+import Sidebar from '@/components/sidebardddd/Sidebar';
 
 export const metadata: Metadata = {
   title: 'Coworkers',

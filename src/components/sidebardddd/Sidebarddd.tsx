@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 
 import { usePathname } from 'next/navigation';
 
-import MobileHeader from '@/components/sidebar/MobileHeader';
-import SidebarView from '@/components/sidebar/SidebarView';
+import MobileHeader from '@/components/sidebardddd/MobileHeader';
+import SidebarView from '@/components/sidebardddd/SidebarView';
 
 import useMediaQuery from '@/hooks/useMediaQuery';
 
