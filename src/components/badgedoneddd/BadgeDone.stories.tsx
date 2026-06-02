@@ -1,6 +1,6 @@
 import React from 'react';
 
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 import BadgeDone from './BadgeDone';
 
@@ -27,7 +27,6 @@ const meta: Meta<typeof BadgeDone> = {
 export default meta;
 type Story = StoryObj<typeof BadgeDone>;
 
-// 1. 기본 상태 스토리 (Default)
 export const Default: Story = {
   args: {
     status: 'progress',
@@ -36,7 +35,6 @@ export const Default: Story = {
   },
 };
 
-// 2. 피그마 시안의 모든 상태를 한눈에 보는 스토리 (AllStates)
 export const AllStates: Story = {
   render: (args) => (
     <div
@@ -50,17 +48,14 @@ export const AllStates: Story = {
         borderRadius: '12px',
       }}
     >
-      {/* 완료 상태 (5/5) */}
       <div>
         <BadgeDone {...args} status="done" current={5} total={5} />
       </div>
 
-      {/* 진행 중 상태 (3/5) */}
       <div>
         <BadgeDone {...args} status="progress" current={3} total={5} />
       </div>
 
-      {/* 목표 없음 / 시작 전 상태 (0/0) */}
       <div>
         <BadgeDone {...args} status="none" current={0} total={0} />
       </div>
@@ -68,7 +63,6 @@ export const AllStates: Story = {
   ),
 };
 
-// 3. 각각의 단일 상태 확인용 스토리들
 export const Done: Story = {
   args: {
     status: 'done',
