@@ -11,6 +11,10 @@ const baseArgs = {
   author: '이차현',
   avatar,
   children: '안녕하세요, 댓글입니다.',
+  menu: {
+    date: '2026.06.02',
+    onMenuClick: fn(),
+  },
 };
 
 const meta = {
@@ -40,42 +44,9 @@ export const Multiline: Story = {
   },
 };
 
-export const WithDate: Story = {
-  args: {
-    ...baseArgs,
-    date: '2026.06.02',
-    children:
-      '안녕하세요, 댓글입니다.안녕하세요, 댓글입니다.안녕하세요, 댓글입니다.안녕하세요, 댓글입니다.안녕하세요, 댓글입니다.안녕하세요, 댓글입니다.안녕하세요, 댓글입니다.안녕하세요, 댓글입니다.',
-  },
-};
-
-export const WithMenu: Story = {
-  args: {
-    ...baseArgs,
-    onMenuClick: fn(),
-  },
-};
-
-export const Highlighted: Story = {
-  args: {
-    ...baseArgs,
-    highlighted: true,
-  },
-};
-
 export const Large: Story = {
   args: {
     ...baseArgs,
     size: 'lg',
-    date: '2026.06.02',
-  },
-};
-
-export const Full: Story = {
-  args: {
-    ...baseArgs,
-    date: '2026.06.02',
-    highlighted: true,
-    onMenuClick: fn(),
   },
 };
