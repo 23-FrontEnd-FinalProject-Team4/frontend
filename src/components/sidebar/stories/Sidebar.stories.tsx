@@ -24,44 +24,23 @@ type Story = StoryObj<typeof Sidebar>;
 
 export const Default: Story = {
   args: {
+    groups: [],
     isLoggedIn: true,
-    selected: true,
   },
-  render: (args) => (
-    <div className="w-[272px]">
-      <Sidebar {...args} />
-    </div>
-  ),
-};
-
-export const LoggedIn: Story = {
-  args: {
-    isLoggedIn: true,
-    selected: false,
-  },
-  render: (args) => (
-    <div className="w-[272px]">
-      <Sidebar {...args} />
-    </div>
-  ),
 };
 
 export const LoggedOut: Story = {
   args: {
+    groups: [],
     isLoggedIn: false,
-    selected: false,
   },
-  render: (args) => (
-    <div className="w-[272px]">
-      <Sidebar {...args} />
-    </div>
-  ),
 };
+
 
 export const CollapsedLoggedIn: Story = {
   render: () => (
     <div className="w-[72px]">
-      <SidebarView isLoggedIn={true} collapsed={true} selected={true} onToggleCollapse={() => {}} />
+      <SidebarView isLoggedIn={true} collapsed={true} onToggleCollapse={() => {}} groups={[]} />
     </div>
   ),
 };
@@ -72,8 +51,8 @@ export const CollapsedLoggedOut: Story = {
       <SidebarView
         isLoggedIn={false}
         collapsed={true}
-        selected={false}
         onToggleCollapse={() => {}}
+        groups={[]}
       />
     </div>
   ),

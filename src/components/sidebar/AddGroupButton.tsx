@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import PlusIcon from '@/assets/icons/plus.svg?react';
+import PlusIcon from '@/assets/icons/plus_white.svg?react';
 
 export default function AddGroupButton() {
   return (
