@@ -7,10 +7,7 @@ import LogoLarge from '@/assets/icons/logo_large.svg?react';
 import LogoSmall from '@/assets/icons/logo_small.svg?react';
 import ProfileIcon from '@/assets/icons/profile.svg?react';
 
-interface MobileHeaderProps {
-  isLoggedIn: boolean;
-  onOpenSidebar: () => void;
-}
+import type { MobileHeaderProps } from './type';
 
 export default function MobileHeader({ isLoggedIn, onOpenSidebar }: MobileHeaderProps) {
   return (
