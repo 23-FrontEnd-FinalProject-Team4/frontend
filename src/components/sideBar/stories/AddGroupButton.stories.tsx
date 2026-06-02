@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import AddGroupButton from '@/components/sidebar/AddGroupButton';
+import AddGroupButton from '@/components/sidebardddd/AddGroupButton';
 
 const meta: Meta<typeof AddGroupButton> = {
   title: 'components/Sidebar/AddGroupButton',
