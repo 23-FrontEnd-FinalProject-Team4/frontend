@@ -1,6 +1,8 @@
 import { generateHoursByInterval, generateMinutesByInterval } from '@/utils/date/date';
 import Button from '@/components/button/Button';
 import { CalendarTimeProps } from './type';
+const hours = generateHoursByInterval();
+const minutes = generateMinutesByInterval(30);
 
 const CalendarTime = ({
   selectedHour = 0,
@@ -8,8 +10,6 @@ const CalendarTime = ({
   selectedMinute = 0,
   setSelectedMinute,
 }: CalendarTimeProps) => {
-  const hours = generateHoursByInterval();
-  const minutes = generateMinutesByInterval(30);
 
   return (
     <div className="border-interaction-hover text-text-default flex w-full gap-3.5 rounded-xl border p-4">
