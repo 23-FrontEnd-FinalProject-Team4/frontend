@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { usePathname } from 'next/navigation';
 
@@ -27,19 +27,13 @@ const mockGroups = [
 ];
 
 export default function Sidebar({ isLoggedIn, groups = mockGroups }: SidebarProps) {
-  const isMobile = useMediaQuery('(max-width: 743px)');
   const isDesktop = useMediaQuery('(min-width: 1280px)');
 
-  const [collapsed, setCollapsed] = useState(() => !isDesktop);
+  const [collapsed, setCollapsed] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const prevIsDesktop = useRef(isDesktop);
 
   useEffect(() => {
-    if (prevIsDesktop.current !== isDesktop) {
-      setCollapsed(!isDesktop);
-
-      prevIsDesktop.current = isDesktop;
-    }
+    setCollapsed(!isDesktop);
   }, [isDesktop]);
 
   const pathname = usePathname();
@@ -58,28 +52,25 @@ export default function Sidebar({ isLoggedIn, groups = mockGroups }: SidebarProp
   const handleCloseMobileMenu = () => {
     setMobileOpen(false);
   };
-
-  if (isMobile) {
-    return (
-      /* 모바일 화면에서 -> 태블릿 화면으로 넘어갈 때 보였다가 들어가는 문제 */
-      //모바일 분기 처리
-      <>
+  return (
+    <>
+      <div className="md:hidden">
         <MobileHeader isLoggedIn={isLoggedIn} onOpenSidebar={handleOpenMobileMenu} />
         <MobileSideBar
           mobileOpen={mobileOpen}
           groups={mockGroups}
           onCloseMobileMenu={handleCloseMobileMenu}
         />
-      </>
-    );
-  }
+      </div>
 
-  return (
-    <SidebarView
-      isLoggedIn={isLoggedIn}
-      collapsed={collapsed}
-      onToggleCollapse={handleToggleCollapse}
-      groups={mockGroups}
-    />
+      <div className="hidden md:block">
+        <SidebarView
+          isLoggedIn={isLoggedIn}
+          collapsed={collapsed}
+          onToggleCollapse={handleToggleCollapse}
+          groups={mockGroups}
+        />
+      </div>
+    </>
   );
 }
