@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 import Sidebar from '@/components/sidebar/Sidebar';
+import SidebarView from '@/components/sidebar/SidebarView';
 
 const meta: Meta<typeof Sidebar> = {
-  title: 'Layout/Sidebar',
+  title: 'components/Sidebar',
   component: Sidebar,
   parameters: {
     layout: 'fullscreen',
@@ -35,16 +36,24 @@ export const LoggedOut: Story = {
   },
 };
 
+
 export const CollapsedLoggedIn: Story = {
-  args: {
-    groups: [],
-    isLoggedIn: true,
-  },
+  render: () => (
+    <div className="w-[72px]">
+      <SidebarView isLoggedIn={true} collapsed={true} onToggleCollapse={() => {}} groups={[]} />
+    </div>
+  ),
 };
 
 export const CollapsedLoggedOut: Story = {
-  args: {
-    groups: [],
-    isLoggedIn: false,
-  },
+  render: () => (
+    <div className="w-[72px]">
+      <SidebarView
+        isLoggedIn={false}
+        collapsed={true}
+        onToggleCollapse={() => {}}
+        groups={[]}
+      />
+    </div>
+  ),
 };
