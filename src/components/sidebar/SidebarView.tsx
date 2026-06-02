@@ -10,18 +10,13 @@ import ArticleMenu from '@/components/sidebar/ArticleMenu';
 import GroupSection from '@/components/sidebar/GroupSection';
 import SidebarFooter from '@/components/sidebar/SidebarFooter';
 
-interface SidebarViewProps {
-  isLoggedIn: boolean;
-  collapsed: boolean;
-  onToggleCollapse: () => void;
-  selected: boolean;
-}
+import type { SidebarViewProps } from './type';
 
 export default function SidebarView({
   isLoggedIn,
   collapsed,
+  groups,
   onToggleCollapse,
-  selected,
 }: SidebarViewProps) {
   return (
     <aside
@@ -57,7 +52,7 @@ export default function SidebarView({
           {isLoggedIn ? (
             <>
               <div className="border-border-primary border-b pb-2">
-                <GroupSection collapsed={collapsed} />
+                <GroupSection collapsed={collapsed} groups={groups} />
                 {!collapsed && <AddGroupButton />}
               </div>
               <ArticleMenu collapsed={collapsed} />
