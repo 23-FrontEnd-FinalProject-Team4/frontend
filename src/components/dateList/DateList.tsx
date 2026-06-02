@@ -1,4 +1,4 @@
-import DateItem from '../dateItem1/DateItem';
+import DateItem from '../dateItem/DateItem';
 import { getWeekDates } from '@/utils/date/getWeekDates';
 import { DateListProps } from './type';
 
