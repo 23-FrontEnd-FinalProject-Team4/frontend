@@ -1,3 +1,5 @@
+import { cn } from '@/utils/cn';
+
 import type { ProgressBarProps, ProgressBarSize } from './type';
 
 const PROGRESS_BAR_SIZE_CLASS: Record<ProgressBarSize, string> = {
@@ -8,9 +10,6 @@ const PROGRESS_BAR_SIZE_CLASS: Record<ProgressBarSize, string> = {
 
 const TRACK_PATTERN_CLASS =
   'bg-[repeating-linear-gradient(135deg,#f8fafc_0,#f8fafc_28px,#eef3f9_28px,#eef3f9_56px)]';
-
-const cn = (...classNames: Array<string | false | undefined>) =>
-  classNames.filter(Boolean).join(' ');
 
 const getProgressValues = ({
   value,
