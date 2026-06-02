@@ -14,7 +14,7 @@ const CalendarDate = ({ selectedDate, setSelectedDate }: CalendarDateProps) => {
     <DayPicker
       mode="single"
       selected={selectedDate}
-      onSelect={setSelectedDate}
+      onSelect={(date) => date && setSelectedDate(date)}
       required
       locale={ko}
       showOutsideDays
