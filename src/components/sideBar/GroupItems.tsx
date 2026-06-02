@@ -3,7 +3,7 @@ import { usePathname } from 'next/navigation';
 
 import GroupIcon from '@/assets/icons/profile.svg?react';
 
-import type { GroupItemProps } from './type';
+import type { GroupItemProps } from '@/components/sideBar/type';
 
 export default function GroupItems({ id, name, collapsed, selected }: GroupItemProps) {
   const pathname = usePathname() ?? '';

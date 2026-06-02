@@ -5,13 +5,28 @@ import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 import MobileHeader from '@/components/sideBar/MobileHeader';
+import MobileSideBar from '@/components/sideBar/MobileSideBar';
 import SidebarView from '@/components/sideBar/SideBarView';
+import type { SidebarProps } from '@/components/sideBar/type';
 
 import useMediaQuery from '@/hooks/useMediaQuery';
 
-import type { SidebarProps } from './type';
+const mockGroups = [
+  {
+    id: 1,
+    name: '프론트엔드',
+  },
+  {
+    id: 2,
+    name: '백엔드',
+  },
+  {
+    id: 3,
+    name: '디자인',
+  },
+];
 
-export default function Sidebar({ isLoggedIn, groups }: SidebarProps) {
+export default function Sidebar({ isLoggedIn, groups = mockGroups }: SidebarProps) {
   const isMobile = useMediaQuery('(max-width: 743px)');
   const isDesktop = useMediaQuery('(min-width: 1280px)');
 
@@ -50,25 +65,11 @@ export default function Sidebar({ isLoggedIn, groups }: SidebarProps) {
       //모바일 분기 처리
       <>
         <MobileHeader isLoggedIn={isLoggedIn} onOpenSidebar={handleOpenMobileMenu} />
-        <div
-          className={`fixed inset-0 z-40 bg-black/40 transition-opacity duration-300 ${
-            mobileOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
-          } `}
-          onClick={handleCloseMobileMenu}
+        <MobileSideBar
+          mobileOpen={mobileOpen}
+          groups={mockGroups}
+          onCloseMobileMenu={handleCloseMobileMenu}
         />
-
-        <div
-          className={`fixed top-0 left-0 z-50 transition-transform duration-300 ease-in-out ${
-            mobileOpen ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'
-          } `}
-        >
-          <SidebarView
-            isLoggedIn={isLoggedIn}
-            collapsed={collapsed}
-            onToggleCollapse={handleCloseMobileMenu}
-            groups={groups}
-          />
-        </div>
       </>
     );
   }
@@ -78,7 +79,7 @@ export default function Sidebar({ isLoggedIn, groups }: SidebarProps) {
       isLoggedIn={isLoggedIn}
       collapsed={collapsed}
       onToggleCollapse={handleToggleCollapse}
-      groups={groups}
+      groups={mockGroups}
     />
   );
 }
