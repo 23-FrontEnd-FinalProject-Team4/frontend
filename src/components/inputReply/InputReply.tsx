@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import SendArrowIcon from '@/assets/icons/send-arrow.svg?react';
+import SendArrowIcon from '@/assets/icons/send_arrow.svg?react';
 import { cn } from '@/utils/cn';
 
 import type { InputReplyProps } from './type';
