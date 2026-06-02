@@ -11,10 +11,7 @@ const baseArgs = {
   author: '이차현',
   avatar,
   children: '안녕하세요, 댓글입니다.',
-  menu: {
-    date: '2026.06.02',
-    onMenuClick: fn(),
-  },
+  date: '2026.06.02',
 };
 
 const meta = {
@@ -34,12 +31,20 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  args: {
+    ...baseArgs,
+    onMenuClick: fn(),
+  },
+};
+
+export const OthersComment: Story = {
   args: baseArgs,
 };
 
 export const Multiline: Story = {
   args: {
     ...baseArgs,
+    onMenuClick: fn(),
     children: '첫 번째 줄입니다.\n두 번째 줄입니다.',
   },
 };
@@ -47,6 +52,7 @@ export const Multiline: Story = {
 export const Large: Story = {
   args: {
     ...baseArgs,
-    size: 'sm',
+    size: 'lg',
+    onMenuClick: fn(),
   },
 };

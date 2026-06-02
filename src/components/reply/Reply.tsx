@@ -18,9 +18,14 @@ const authorWeightClass: Record<ReplySize, string> = {
   lg: 'font-semibold',
 };
 
-const Reply = ({ size = 'sm', author, avatar, children, menu }: ReplyProps) => {
+const Reply = ({ size = 'sm', author, avatar, children, date, onMenuClick }: ReplyProps) => {
   return (
-    <div className="relative flex items-start gap-3 px-5 py-6 pr-11">
+    <div
+      className={cn(
+        'relative flex items-start gap-3 px-5 py-6',
+        onMenuClick && 'pr-11',
+      )}
+    >
       <div className="shrink-0">{avatar}</div>
 
       <div className="-mt-0.5 min-w-0 flex-1">
@@ -32,17 +37,19 @@ const Reply = ({ size = 'sm', author, avatar, children, menu }: ReplyProps) => {
           {children}
         </div>
 
-        <p className={cn('mt-2 text-slate-400', dateSizeClass[size])}>{menu.date}</p>
+        <p className={cn('mt-2 text-slate-400', dateSizeClass[size])}>{date}</p>
       </div>
 
-      <button
-        type="button"
-        aria-label="메뉴"
-        onClick={menu.onMenuClick}
-        className="absolute top-6 right-5"
-      >
-        <KebabIcon aria-hidden />
-      </button>
+      {onMenuClick && (
+        <button
+          type="button"
+          aria-label="메뉴"
+          onClick={onMenuClick}
+          className="absolute top-6 right-5"
+        >
+          <KebabIcon aria-hidden />
+        </button>
+      )}
     </div>
   );
 };

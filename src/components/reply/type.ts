@@ -2,17 +2,13 @@ import type { ReactNode } from 'react';
 
 export type ReplySize = 'sm' | 'lg';
 
-export interface ReplyMenu {
-  date: string;
-  onMenuClick: () => void;
-}
-
 export interface ReplyProps {
   size?: ReplySize;
   author: string;
   avatar: ReactNode;
   children: ReactNode;
-  menu: ReplyMenu;
+  date: string;
+  onMenuClick?: () => void;
 }
 
 export interface ReplyEditProps {
