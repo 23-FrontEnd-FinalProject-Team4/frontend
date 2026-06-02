@@ -14,8 +14,9 @@ const ReplyEdit = ({ author, avatar, value, onChange, onCancel, onSubmit }: Repl
           <textarea
             value={value}
             rows={1}
+            aria-label="댓글 수정"
             onChange={(event) => onChange(event.target.value)}
-            className="border-border-primary text-text-primary [field-sizing:content] w-full resize-none py-1 text-sm outline-none"
+            className="text-text-primary [field-sizing:content] w-full resize-none py-1 text-sm outline-none"
           />
 
           <div className="mt-2 flex justify-end gap-6">

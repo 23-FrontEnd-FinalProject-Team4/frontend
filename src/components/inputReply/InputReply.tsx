@@ -1,6 +1,6 @@
 'use client';
 
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import SendArrowIcon from '@/assets/icons/send-arrow.svg?react';
 import { cn } from '@/utils/cn';
@@ -37,7 +37,7 @@ const InputReply = ({
   const isDisabled = !value.trim();
   const isSmallSize = size === 'sm';
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const textarea = textareaRef.current;
 
     if (!textarea || !isSmallSize) {
