@@ -1,14 +1,18 @@
 import { useParams } from 'next/navigation';
 
-import GroupItem from '@/components/sideBar/GroupItems';
+import { cn } from '@/utils/cn';
 
-import type { GroupSectionProps } from './type';
+import GroupItem from '@/components/sideBar/GroupItems';
+import type { GroupSectionProps } from '@/components/sideBar/type';
 
 export default function GroupSection({ groups, collapsed }: GroupSectionProps) {
   const params = useParams<{ id: string }>();
   const currentGroupId = Number(params?.id);
+
   return (
-    <section className={`flex flex-col gap-4 ${collapsed ? 'justify-center' : ''}`}>
+    <section
+      className={cn('flex flex-col gap-2 md:gap-4', collapsed ? 'items-center' : 'items-stretch')}
+    >
       {groups.map((group) => (
         <GroupItem
           key={group.id}

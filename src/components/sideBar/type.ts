@@ -34,3 +34,9 @@ export type MobileHeaderProps = {
   isLoggedIn: boolean;
   onOpenSideBar: () => void;
 };
+
+export type MobileSidebarProps = {
+  mobileOpen: boolean;
+  groups: Group[];
+  onCloseMobileMenu: () => void;
+};
