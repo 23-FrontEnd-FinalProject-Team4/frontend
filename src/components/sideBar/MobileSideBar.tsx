@@ -15,6 +15,7 @@ export default function MobileSidebar({
     <>
       {/* Overlay */}
       <div
+        role="presentation"
         className={cn(
           'fixed inset-0 z-40 bg-black/50 transition-opacity',
           mobileOpen ? 'opacity-100' : 'pointer-events-none opacity-0',
