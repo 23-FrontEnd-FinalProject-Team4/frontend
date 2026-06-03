@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import GroupItem from '@/components/sidebar/GroupItems';
+import GroupItem from '@/components/sidebardddd/GroupItems';
 
 const meta: Meta<typeof GroupItem> = {
-  title: 'Layout/Sidebar/GroupMenu',
+  title: 'components/Sidebar/GroupMenu',
   component: GroupItem,
   parameters: {
     layout: 'centered',

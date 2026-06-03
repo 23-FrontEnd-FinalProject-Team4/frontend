@@ -1,9 +1,8 @@
 import { useParams } from 'next/navigation';
 
-import GroupItem from '@/components/sidebar/GroupItems';
+import GroupItem from '@/components/sideBar/GroupItems';
 
 import type { GroupSectionProps } from './type';
-
 
 export default function GroupSection({ groups, collapsed }: GroupSectionProps) {
   const params = useParams<{ id: string }>();

@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import SidebarFooter from '@/components/sidebar/SidebarFooter';
+import SidebarFooter from '@/components/sidebardddd/SidebarFooter';
 
 const meta: Meta<typeof SidebarFooter> = {
-  title: 'Layout/Sidebar/SidebarFooter',
+  title: 'components/Sidebar/SidebarFooter',
   component: SidebarFooter,
   parameters: {
     layout: 'centered',

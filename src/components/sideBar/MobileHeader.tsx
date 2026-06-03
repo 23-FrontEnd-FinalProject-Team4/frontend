@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 
-import MenuIcon from '@/assets/icons/gnb-menu.svg?react';
+import MenuIcon from '@/assets/icons/gnb_menu.svg?react';
 import LogoLarge from '@/assets/icons/logo_large.svg?react';
 import LogoSmall from '@/assets/icons/logo_small.svg?react';
 import ProfileIcon from '@/assets/icons/profile.svg?react';
