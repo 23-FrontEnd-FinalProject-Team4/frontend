@@ -5,13 +5,13 @@ import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 import MobileHeader from '@/components/sideBar/MobileHeader';
-import SidebarView from '@/components/sideBar/SideBarView';
+import SideBarView from '@/components/sideBar/SideBarView';
 
 import useMediaQuery from '@/hooks/useMediaQuery';
 
-import type { SidebarProps } from './type';
+import type { SideBarProps } from './type';
 
-export default function Sidebar({ isLoggedIn, groups }: SidebarProps) {
+export default function SideBar({ isLoggedIn, groups }: SideBarProps) {
   const isMobile = useMediaQuery('(max-width: 743px)');
   const isDesktop = useMediaQuery('(min-width: 1280px)');
 
@@ -49,7 +49,7 @@ export default function Sidebar({ isLoggedIn, groups }: SidebarProps) {
       /* 모바일 화면에서 -> 태블릿 화면으로 넘어갈 때 보였다가 들어가는 문제 */
       //모바일 분기 처리
       <>
-        <MobileHeader isLoggedIn={isLoggedIn} onOpenSidebar={handleOpenMobileMenu} />
+        <MobileHeader isLoggedIn={isLoggedIn} onOpenSideBar={handleOpenMobileMenu} />
         <div
           className={`fixed inset-0 z-40 bg-black/40 transition-opacity duration-300 ${
             mobileOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
@@ -62,7 +62,7 @@ export default function Sidebar({ isLoggedIn, groups }: SidebarProps) {
             mobileOpen ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'
           } `}
         >
-          <SidebarView
+          <SideBarView
             isLoggedIn={isLoggedIn}
             collapsed={collapsed}
             onToggleCollapse={handleCloseMobileMenu}
@@ -74,7 +74,7 @@ export default function Sidebar({ isLoggedIn, groups }: SidebarProps) {
   }
 
   return (
-    <SidebarView
+    <SideBarView
       isLoggedIn={isLoggedIn}
       collapsed={collapsed}
       onToggleCollapse={handleToggleCollapse}

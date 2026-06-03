@@ -9,12 +9,12 @@ import ProfileIcon from '@/assets/icons/profile.svg?react';
 
 import type { MobileHeaderProps } from './type';
 
-export default function MobileHeader({ isLoggedIn, onOpenSidebar }: MobileHeaderProps) {
+export default function MobileHeader({ isLoggedIn, onOpenSideBar }: MobileHeaderProps) {
   return (
     <header className="bg-background-primary border-brand-secondary fixed flex h-16 w-full items-center justify-between border px-5 md:hidden">
       <div className="flex items-center gap-4">
         {isLoggedIn ? (
-          <button type="button" onClick={onOpenSidebar}>
+          <button type="button" onClick={onOpenSideBar}>
             <MenuIcon className="h-6 w-6" />
           </button>
         ) : (

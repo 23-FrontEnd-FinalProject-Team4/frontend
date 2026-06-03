@@ -10,14 +10,14 @@ import ArticleMenu from '@/components/sideBar/ArticleMenu';
 import GroupSection from '@/components/sideBar/GroupSection';
 import SidebarFooter from '@/components/sideBar/SideBarFooter';
 
-import type { SidebarViewProps } from './type';
+import type { SideBarViewProps } from './type';
 
 export default function SidebarView({
   isLoggedIn,
   collapsed,
   groups,
   onToggleCollapse,
-}: SidebarViewProps) {
+}: SideBarViewProps) {
   return (
     <aside
       className={`bg-background-primary relative flex h-screen flex-col px-4 py-6 transition-[width] duration-300 ${collapsed ? 'w-[72px] justify-center px-2' : 'w-[272px] px-4'}`}
