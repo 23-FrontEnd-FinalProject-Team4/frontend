@@ -1,30 +1,39 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { usePathname } from 'next/navigation';
 
 import MobileHeader from '@/components/sideBar/MobileHeader';
+import MobileSideBar from '@/components/sideBar/MobileSideBar';
 import SidebarView from '@/components/sideBar/SideBarView';
+import type { SidebarProps } from '@/components/sideBar/type';
 
 import useMediaQuery from '@/hooks/useMediaQuery';
 
-import type { SidebarProps } from './type';
+const mockGroups = [
+  {
+    id: 1,
+    name: '프론트엔드',
+  },
+  {
+    id: 2,
+    name: '백엔드',
+  },
+  {
+    id: 3,
+    name: '디자인',
+  },
+];
 
-export default function Sidebar({ isLoggedIn, groups }: SidebarProps) {
-  const isMobile = useMediaQuery('(max-width: 743px)');
+export default function Sidebar({ isLoggedIn, groups = mockGroups }: SidebarProps) {
   const isDesktop = useMediaQuery('(min-width: 1280px)');
 
-  const [collapsed, setCollapsed] = useState(() => !isDesktop);
+  const [collapsed, setCollapsed] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const prevIsDesktop = useRef(isDesktop);
 
   useEffect(() => {
-    if (prevIsDesktop.current !== isDesktop) {
-      setCollapsed(!isDesktop);
-
-      prevIsDesktop.current = isDesktop;
-    }
+    setCollapsed(!isDesktop);
   }, [isDesktop]);
 
   const pathname = usePathname();
@@ -43,42 +52,25 @@ export default function Sidebar({ isLoggedIn, groups }: SidebarProps) {
   const handleCloseMobileMenu = () => {
     setMobileOpen(false);
   };
-
-  if (isMobile) {
-    return (
-      /* 모바일 화면에서 -> 태블릿 화면으로 넘어갈 때 보였다가 들어가는 문제 */
-      //모바일 분기 처리
-      <>
-        <MobileHeader isLoggedIn={isLoggedIn} onOpenSidebar={handleOpenMobileMenu} />
-        <div
-          className={`fixed inset-0 z-40 bg-black/40 transition-opacity duration-300 ${
-            mobileOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
-          } `}
-          onClick={handleCloseMobileMenu}
-        />
-
-        <div
-          className={`fixed top-0 left-0 z-50 transition-transform duration-300 ease-in-out ${
-            mobileOpen ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'
-          } `}
-        >
-          <SidebarView
-            isLoggedIn={isLoggedIn}
-            collapsed={collapsed}
-            onToggleCollapse={handleCloseMobileMenu}
-            groups={groups}
-          />
-        </div>
-      </>
-    );
-  }
-
   return (
-    <SidebarView
-      isLoggedIn={isLoggedIn}
-      collapsed={collapsed}
-      onToggleCollapse={handleToggleCollapse}
-      groups={groups}
-    />
+    <>
+      <div className="md:hidden">
+        <MobileHeader isLoggedIn={isLoggedIn} onOpenSidebar={handleOpenMobileMenu} />
+        <MobileSideBar
+          mobileOpen={mobileOpen}
+          groups={mockGroups}
+          onCloseMobileMenu={handleCloseMobileMenu}
+        />
+      </div>
+
+      <div className="hidden md:block">
+        <SidebarView
+          isLoggedIn={isLoggedIn}
+          collapsed={collapsed}
+          onToggleCollapse={handleToggleCollapse}
+          groups={mockGroups}
+        />
+      </div>
+    </>
   );
 }
