@@ -14,11 +14,6 @@ export default function DropdownMd({
 }: DropdownMdProps) {
   const [isOpen, setIsOpen] = useState(menuOpen);
 
-  // storybook 동작 때문에 필요
-  useEffect(() => {
-    setIsOpen(menuOpen);
-  }, [menuOpen]);
-
   const sizeStyle = {
     md: {
       button: 'h-11 min-w-[120px] px-3.5 text-md',
