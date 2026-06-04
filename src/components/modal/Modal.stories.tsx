@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { fn } from 'storybook/test';
 
-import Input from '../Input/Input';
+import Input from '../input/Input';
 import Modal from './Modal';
 
 const meta = {
