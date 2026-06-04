@@ -1,9 +1,9 @@
-import React from 'react';
-import { ListItemInfoProps, OPTIONS } from './type';
+import { ListItemInfoProps } from './type';
 import TaskCheckbox from '../taskCheckbox/TaskCheckbox';
 import CommentIcon from '@/assets/icons/comment.svg?react';
 import Dropdown from '../dropdown/Dropdown';
 import KebabIcon from '@/assets/icons/kebab.svg?react';
+import { OPTIONS } from '@/constants/listItem';
 
 const ListItemInfo = ({
   name,
