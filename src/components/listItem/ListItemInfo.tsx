@@ -1,0 +1,40 @@
+import React from 'react';
+import { ListItemInfoProps, OPTIONS } from './type';
+import TaskCheckbox from '../taskCheckbox/TaskCheckbox';
+import CommentIcon from '@/assets/icons/comment.svg?react';
+import Dropdown from '../dropdown/Dropdown';
+import KebabIcon from '@/assets/icons/kebab.svg?react';
+
+const ListItemInfo = ({
+  name,
+  isDone,
+  commentCount,
+  isDropdownOpen,
+  handleToggleDropdown,
+  handleSelect,
+  onToggle,
+}: ListItemInfoProps) => {
+  return (
+    <div className="relative flex items-center justify-between">
+      <div className="flex gap-3.5">
+        <TaskCheckbox task={name} checked={isDone} size="lg" onChange={onToggle} />
+        {commentCount > 0 && (
+          <div className="flex items-center gap-1">
+            <CommentIcon width={16} height={16} />
+            <span>{commentCount}</span>
+          </div>
+        )}
+      </div>
+      <button onClick={handleToggleDropdown} type="button" aria-label="할 일 메뉴 열기">
+        <KebabIcon width={16} height={16} />
+      </button>
+      {isDropdownOpen && (
+        <div className="absolute right-10">
+          <Dropdown options={OPTIONS} onSelect={handleSelect} />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ListItemInfo;
