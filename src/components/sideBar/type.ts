@@ -13,26 +13,26 @@ export type GroupSectionProps = {
   collapsed: boolean;
 };
 
-export type SidebarProps = {
+export type SideBarProps = {
   isLoggedIn: boolean;
   groups: Group[];
 };
 
-export type SidebarViewProps = {
+export type SideBarViewProps = {
   isLoggedIn: boolean;
   collapsed: boolean;
   groups: Group[];
   onToggleCollapse: () => void;
 };
 
-export type SidebarFooterProps = {
+export type SideBarFooterProps = {
   isLoggedIn: boolean;
   collapsed: boolean;
 };
 
 export type MobileHeaderProps = {
   isLoggedIn: boolean;
-  onOpenSidebar: () => void;
+  onOpenSideBar: () => void;
 };
 
 export type MobileSidebarProps = {

@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 import MobileHeader from '@/components/sideBar/MobileHeader';
 import MobileSideBar from '@/components/sideBar/MobileSideBar';
 import SidebarView from '@/components/sideBar/SideBarView';
-import type { SidebarProps } from '@/components/sideBar/type';
+import type { SideBarProps } from '@/components/sideBar/type';
 
 import useMediaQuery from '@/hooks/useMediaQuery';
 
@@ -26,7 +26,7 @@ const mockGroups = [
   },
 ];
 
-export default function Sidebar({ isLoggedIn, groups = mockGroups }: SidebarProps) {
+export default function Sidebar({ isLoggedIn, groups = mockGroups }: SideBarProps) {
   const isDesktop = useMediaQuery('(min-width: 1280px)');
 
   const [collapsed, setCollapsed] = useState(true);
@@ -52,10 +52,11 @@ export default function Sidebar({ isLoggedIn, groups = mockGroups }: SidebarProp
   const handleCloseMobileMenu = () => {
     setMobileOpen(false);
   };
+
   return (
     <>
       <div className="md:hidden">
-        <MobileHeader isLoggedIn={isLoggedIn} onOpenSidebar={handleOpenMobileMenu} />
+        <MobileHeader isLoggedIn={isLoggedIn} onOpenSideBar={handleOpenMobileMenu} />
         <MobileSideBar
           mobileOpen={mobileOpen}
           groups={mockGroups}

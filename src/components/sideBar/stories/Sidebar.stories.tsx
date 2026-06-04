@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import Sidebar from '@/components/sidebardddd/Sidebar';
-import SidebarView from '@/components/sidebardddd/SidebarView';
+import SideBar from '@/components/sideBar/SideBar';
+import SideBarView from '@/components/sideBar/SideBarView';
 
-const meta: Meta<typeof Sidebar> = {
-  title: 'components/Sidebar',
-  component: Sidebar,
+const meta: Meta<typeof SideBar> = {
+  title: 'components/SideBar',
+  component: SideBar,
   parameters: {
     layout: 'fullscreen',
   },
@@ -20,7 +20,7 @@ const meta: Meta<typeof Sidebar> = {
 
 export default meta;
 
-type Story = StoryObj<typeof Sidebar>;
+type Story = StoryObj<typeof SideBar>;
 
 export const Default: Story = {
   args: {
@@ -39,7 +39,7 @@ export const LoggedOut: Story = {
 export const CollapsedLoggedIn: Story = {
   render: () => (
     <div className="w-[72px]">
-      <SidebarView isLoggedIn={true} collapsed={true} onToggleCollapse={() => {}} groups={[]} />
+      <SideBarView isLoggedIn={true} collapsed={true} onToggleCollapse={() => {}} groups={[]} />
     </div>
   ),
 };
@@ -47,7 +47,7 @@ export const CollapsedLoggedIn: Story = {
 export const CollapsedLoggedOut: Story = {
   render: () => (
     <div className="w-[72px]">
-      <SidebarView isLoggedIn={false} collapsed={true} onToggleCollapse={() => {}} groups={[]} />
+      <SideBarView isLoggedIn={false} collapsed={true} onToggleCollapse={() => {}} groups={[]} />
     </div>
   ),
 };

@@ -10,7 +10,7 @@ import { cn } from '@/utils/cn';
 
 import type { MobileHeaderProps } from '@/components/sideBar/type';
 
-export default function MobileHeader({ isLoggedIn, onOpenSidebar }: MobileHeaderProps) {
+export default function MobileHeader({ isLoggedIn, onOpenSideBar }: MobileHeaderProps) {
   return (
     <header
       className={cn(
@@ -19,7 +19,7 @@ export default function MobileHeader({ isLoggedIn, onOpenSidebar }: MobileHeader
     >
       <div className={cn('flex items-center gap-4')}>
         {isLoggedIn ? (
-          <button type="button" onClick={onOpenSidebar}>
+          <button type="button" onClick={onOpenSideBar}>
             <MenuIcon className="h-6 w-6" />
           </button>
         ) : (
