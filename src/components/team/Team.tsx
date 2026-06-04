@@ -1,6 +1,7 @@
 import Image from 'next/image';
 
 import settingIcon from '@/assets/icons/setting.svg';
+import Profile from '@/components/profile/Profile';
 import { cn } from '@/utils/cn';
 
 import ProgressBar from '../progressBar/ProgressBar';
@@ -73,6 +74,9 @@ const DEFAULT_TEAM_LABELS = {
 const TEAM_CARD_BASE_CLASS = 'bg-background-inverse shadow-xl shadow-background-primary/10';
 const TEAM_FALLBACK_IMAGE_CLASS = 'bg-brand-primary text-background-inverse';
 
+const getProfileSrc = (imageUrl: TeamMember['imageUrl']) =>
+  typeof imageUrl === 'string' ? imageUrl : (imageUrl?.src ?? null);
+
 const getProgressValue = ({
   completedTaskCount,
   totalTaskCount,
@@ -114,20 +118,12 @@ const TeamImage = ({
 );
 
 const MemberAvatar = ({ member }: { member: TeamMember }) => (
-  <div
-    className={cn(
-      !member.imageUrl && TEAM_FALLBACK_IMAGE_CLASS,
-      'border-background-inverse relative size-5 overflow-hidden rounded-full border',
-    )}
-  >
-    {member.imageUrl ? (
-      <Image src={member.imageUrl} alt="" fill className="object-cover" sizes="20px" aria-hidden />
-    ) : (
-      <span className="flex h-full items-center justify-center text-[10px] font-semibold">
-        {member.name.slice(0, 1)}
-      </span>
-    )}
-  </div>
+  <Profile
+    src={getProfileSrc(member.imageUrl)}
+    size="sm"
+    alt={`${member.name} 프로필`}
+    className="border-background-inverse size-5 rounded-full border"
+  />
 );
 
 const MemberPreview = ({
