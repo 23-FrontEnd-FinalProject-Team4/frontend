@@ -8,7 +8,7 @@ import Input from '@/components/input/Input';
 export default function LoginFormSection() {
   return (
     <>
-      <form className="flex flex-col gap-4">
+      <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-4">
         <div className="flex flex-col gap-1.5">
           <label htmlFor="email">이메일</label>
 
@@ -23,7 +23,7 @@ export default function LoginFormSection() {
 
         <button
           type="button"
-          className="text-md mb-4 text-right text-[#5189FA] underline"
+          className="text-md text-brand-primary mb-4 text-right underline"
           onClick={() => {}}
         >
           비밀번호를 잊으셨나요?
@@ -35,7 +35,7 @@ export default function LoginFormSection() {
       <div className="text-md m-7 flex justify-center gap-2">
         <span>아직 계정이 없으신가요?</span>
 
-        <Link href="/signup" className="text-[#5189FA] !underline">
+        <Link href="/signup" className="text-brand-primary !underline">
           가입하기
         </Link>
       </div>
