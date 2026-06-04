@@ -32,8 +32,8 @@ const MOCK_ADMIN_MEMBER: MemberData = {
 const MOCK_REGULAR_MEMBER: MemberData = {
   userId: 3003,
   groupId: 4079,
-  userName: '우지은',
-  userEmail: 'jieun@codeit.com',
+  userName: '최일우',
+  userEmail: 'ilwoo@codeit.com',
   userImage:
     'https://crowdticket0.s3.ap-northeast-1.amazonaws.com/real/files/user/437745/1700398803264_thumb_img.jpg',
   role: 'MEMBER',

@@ -1,8 +1,12 @@
 import React from 'react';
 
+import Image from 'next/image';
+
+import kebab from '@/assets/icons/kebab.svg';
 import { cn } from '@/utils/cn';
 
-import Profile from '../Profile/Profile';
+import Profile from '@/components/profile/Profile';
+
 import { ProfileMemberProps } from './type';
 
 const ProfileMember = React.forwardRef<HTMLDivElement, ProfileMemberProps>(
@@ -18,26 +22,23 @@ const ProfileMember = React.forwardRef<HTMLDivElement, ProfileMemberProps>(
         <Profile src={userImage} size="md" alt={`${userName}의 프로필`} />
 
         <div className="flex min-w-0 flex-1 flex-col justify-center">
-          <span className="truncate text-sm leading-tight font-medium text-slate-800">
+          <span className="text-text-primary truncate text-sm leading-tight font-medium">
             {userName}
           </span>
-          <span className="truncate text-xs leading-tight text-slate-400">{userEmail}</span>
+          <span className="text-text-secondary truncate text-xs leading-tight">{userEmail}</span>
         </div>
-
         <button
           type="button"
           onClick={() => onKebabClick?.(member)}
-          className="shrink-0 rounded-md p-1 text-slate-400 transition-colors hover:bg-slate-50 focus:outline-none active:bg-slate-100"
-          aria-label={`${userName} 관리 메뉴`}
+          className="text-icon-primary hover:bg-background-secondary active:bg-background-tertiary shrink-0 rounded-md p-1 transition-colors focus:outline-none"
         >
-          <svg
-            className="h-5 w-5"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
-          </svg>
+          <Image
+            src={kebab}
+            alt="프로필 메뉴 버튼"
+            height={16}
+            width={16}
+            className="block h-4 w-4"
+          />
         </button>
       </div>
     );
