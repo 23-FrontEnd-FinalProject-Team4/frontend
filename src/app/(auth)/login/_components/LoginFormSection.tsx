@@ -35,7 +35,7 @@ export default function LoginFormSection() {
       <div className="text-md m-7 flex justify-center gap-2">
         <span>아직 계정이 없으신가요?</span>
 
-        <Link href="/" className="text-[#5189FA] !underline">
+        <Link href="/signup" className="text-[#5189FA] !underline">
           가입하기
         </Link>
       </div>
