@@ -8,7 +8,7 @@ const CalendarDate = ({ selectedDate, setSelectedDate }: CalendarDateProps) => {
   const [month, setMonth] = useState(selectedDate);
   const [prevSelectedDate, setPrevSelectedDate] = useState(selectedDate);
 
-  if (selectedDate.getTime() !== prevSelectedDate.getTime()) {
+  if (!Object.is(selectedDate.getTime(), prevSelectedDate.getTime())) {
     setPrevSelectedDate(selectedDate);
     setMonth(selectedDate);
   }
@@ -24,7 +24,7 @@ const CalendarDate = ({ selectedDate, setSelectedDate }: CalendarDateProps) => {
       required
       locale={ko}
       showOutsideDays
-      defaultMonth={selectedDate}
+      month={month}
       navLayout="around"
       classNames={{
         selected: 'bg-brand-primary rounded-lg !text-white',
@@ -38,6 +38,6 @@ const CalendarDate = ({ selectedDate, setSelectedDate }: CalendarDateProps) => {
       onMonthChange={setMonth}
     />
   );
-};;
+};
 
 export default CalendarDate;
