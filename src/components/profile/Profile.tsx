@@ -2,12 +2,12 @@ import React from 'react';
 
 import Image from 'next/image';
 
-import ProfileDefault from '@/assets/icons/profile.svg';
+import ProfileDefaultIcon from '@/assets/icons/profile.svg?react';
 import { cn } from '@/utils/cn';
 
-import { ProfileProps, ProfileSize } from './type';
+import { ProfileElement, ProfileProps, ProfileSize } from './type';
 
-const Profile = React.forwardRef<HTMLImageElement, ProfileProps>(
+const Profile = React.forwardRef<ProfileElement, ProfileProps>(
   ({ className, src, size = 'md', alt = '프로필 이미지', ...props }, ref) => {
     const baseStyles =
       'inline-flex items-center justify-center overflow-hidden object-cover select-none shrink-0';
@@ -24,14 +24,24 @@ const Profile = React.forwardRef<HTMLImageElement, ProfileProps>(
       sm: 24,
     };
 
-    const imageSrc = src || ProfileDefault;
-    const imageAlt = src ? alt : '기본 프로필 이미지';
+    if (!src) {
+      return (
+        <span
+          ref={ref as React.Ref<HTMLSpanElement>}
+          role="img"
+          aria-label="기본 프로필 이미지"
+          className={cn(baseStyles, sizeStyles[size], className)}
+        >
+          <ProfileDefaultIcon className="h-full w-full" aria-hidden="true" />
+        </span>
+      );
+    }
 
     return (
       <Image
-        ref={ref}
-        src={imageSrc}
-        alt={imageAlt}
+        ref={ref as React.Ref<HTMLImageElement>}
+        src={src}
+        alt={alt}
         width={pixelSizes[size]}
         height={pixelSizes[size]}
         className={cn(baseStyles, sizeStyles[size], className)}
