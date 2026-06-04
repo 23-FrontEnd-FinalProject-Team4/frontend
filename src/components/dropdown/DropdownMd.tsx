@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import DownArrowIcon from '@/assets/icons/down_arrow.svg?react';
 
