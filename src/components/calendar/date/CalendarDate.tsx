@@ -1,15 +1,17 @@
 import { DayPicker } from '@daypicker/react';
 import { ko } from '@daypicker/react/locale';
 import '@daypicker/react/style.css';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { CalendarDateProps } from './type';
 
 const CalendarDate = ({ selectedDate, setSelectedDate }: CalendarDateProps) => {
   const [month, setMonth] = useState(selectedDate);
+  const [prevSelectedDate, setPrevSelectedDate] = useState(selectedDate);
 
-  useEffect(() => {
+  if (selectedDate.getTime() !== prevSelectedDate.getTime()) {
+    setPrevSelectedDate(selectedDate);
     setMonth(selectedDate);
-  }, [selectedDate]);
+  }
 
   const firstDay = new Date(month.getFullYear(), month.getMonth(), 1);
   const lastDay = new Date(month.getFullYear(), month.getMonth() + 1, 0);
@@ -36,6 +38,6 @@ const CalendarDate = ({ selectedDate, setSelectedDate }: CalendarDateProps) => {
       onMonthChange={setMonth}
     />
   );
-};
+};;
 
 export default CalendarDate;
