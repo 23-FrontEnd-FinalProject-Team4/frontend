@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import DownArrowIcon from '@/assets/icons/down_arrow.svg?react';
 
@@ -8,11 +8,23 @@ import type { DropdownMdProps } from './type';
 export default function DropdownMd({
   children,
   size = 'md',
-  menuOpen = false,
+  isMenuOpen = false,
   options,
   onSelect,
 }: DropdownMdProps) {
-  const [isOpen, setIsOpen] = useState(menuOpen);
+  const [isOpen, setIsOpen] = useState(isMenuOpen);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const sizeStyle = {
     md: {
@@ -30,7 +42,7 @@ export default function DropdownMd({
   const current = sizeStyle[size];
 
   return (
-    <div className="relative inline-block">
+    <div ref={wrapperRef} className="relative inline-block">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
@@ -44,6 +56,7 @@ export default function DropdownMd({
           options={options.map((option) => ({ label: option, value: option }))}
           size={size}
           onSelect={onSelect}
+          onClose={() => setIsOpen(false)}
         />
       )}
     </div>

@@ -20,7 +20,7 @@ export const Medium: Story = {
 };
 
 export const MediumOpen: Story = {
-  render: (args) => <DropdownMd {...args} menuOpen={true} />,
+  render: (args) => <DropdownMd {...args} isMenuOpen={true} />,
   args: {
     children: '최신순',
     size: 'md',
@@ -37,7 +37,7 @@ export const Small: Story = {
 };
 
 export const SmallOpen: Story = {
-  render: (args) => <DropdownMd {...args} menuOpen={true} />,
+  render: (args) => <DropdownMd {...args} isMenuOpen={true} />,
   args: {
     children: '최신순',
     size: 'sm',
