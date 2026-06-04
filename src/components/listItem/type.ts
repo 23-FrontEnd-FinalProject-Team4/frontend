@@ -11,10 +11,9 @@ export interface ListItemInfoProps {
   name: Task['name'];
   isDone: boolean;
   commentCount: Task['commentCount'];
-  isDropdownOpen: boolean;
-  handleToggleDropdown: () => void;
-  handleSelect: (value: string) => void;
   onToggle: (checked: boolean) => void;
+  onEdit: () => void;
+  onDelete: () => void;
 }
 
 export interface ListItemDateProps {

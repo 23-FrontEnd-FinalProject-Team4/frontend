@@ -1,19 +1,44 @@
+"use client"
+
 import { ListItemInfoProps } from './type';
 import TaskCheckbox from '../taskCheckbox/TaskCheckbox';
 import CommentIcon from '@/assets/icons/comment.svg?react';
 import Dropdown from '../dropdown/Dropdown';
 import KebabIcon from '@/assets/icons/kebab.svg?react';
 import { OPTIONS } from '@/constants/listItem';
+import { useRef, useState } from 'react';
+import { useOutsideClick } from '@/hooks/useOutsideClick';
 
 const ListItemInfo = ({
   name,
   isDone,
   commentCount,
-  isDropdownOpen,
-  handleToggleDropdown,
-  handleSelect,
   onToggle,
+  onEdit,
+  onDelete
 }: ListItemInfoProps) => {
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  const handleToggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  useOutsideClick(dropdownRef, () => {
+    setIsDropdownOpen(false);
+  });
+
+  const handleSelect = (value: string) => {
+    if (value === 'EDIT') {
+      onEdit();
+    }
+    if (value === 'DELETE') {
+      onDelete();
+    }
+    setIsDropdownOpen(false);
+  };
+
   return (
     <div className="relative flex items-center justify-between">
       <div className="flex gap-3.5">
@@ -29,7 +54,7 @@ const ListItemInfo = ({
         <KebabIcon width={16} height={16} />
       </button>
       {isDropdownOpen && (
-        <div className="absolute right-10">
+        <div className="absolute right-10" ref={dropdownRef}>
           <Dropdown options={OPTIONS} onSelect={handleSelect} />
         </div>
       )}
