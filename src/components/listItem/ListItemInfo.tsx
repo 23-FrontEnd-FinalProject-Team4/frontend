@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import { ListItemInfoProps } from './type';
 import TaskCheckbox from '../taskCheckbox/TaskCheckbox';
@@ -15,9 +15,8 @@ const ListItemInfo = ({
   commentCount,
   onToggle,
   onEdit,
-  onDelete
+  onDelete,
 }: ListItemInfoProps) => {
-
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -50,7 +49,12 @@ const ListItemInfo = ({
           </div>
         )}
       </div>
-      <button onClick={handleToggleDropdown} type="button" aria-label="할 일 메뉴 열기">
+      <button
+        onClick={handleToggleDropdown}
+        type="button"
+        aria-label="할 일 메뉴 열기"
+        aria-expanded={isDropdownOpen}
+      >
         <KebabIcon width={16} height={16} />
       </button>
       {isDropdownOpen && (

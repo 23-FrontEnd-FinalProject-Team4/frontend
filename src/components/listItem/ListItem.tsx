@@ -3,10 +3,10 @@ import ListItemInfo from './ListItemInfo';
 import ListItemDate from './ListItemDate';
 
 const ListItem = ({
-  task: { name, frequency, date, doneAt, commentCount = 0 },
+  task: { name, frequency, date, doneAt, commentCount },
   onEdit,
   onDelete,
-  onToggle
+  onToggle,
 }: ListItemProps) => {
   const isDone = Boolean(doneAt);
   return (
