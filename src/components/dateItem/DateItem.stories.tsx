@@ -5,7 +5,7 @@ import { DateItemProps } from './type';
 
 const meta = {
   component: DateItem,
-  title: 'DateItem',
+  title: 'Components/DateItem',
   tags: ['autodocs'],
   argTypes: {
     date: { control: 'date' },

@@ -4,7 +4,7 @@ import { expect, fn, userEvent, within } from 'storybook/test';
 
 const meta = {
   component: DateList,
-  title: 'DateList',
+  title: 'Components/DateList',
   tags: ['autodocs'],
 } satisfies Meta<typeof DateList>;
 export default meta;
