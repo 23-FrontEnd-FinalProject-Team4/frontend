@@ -12,7 +12,7 @@ import GroupSection from '@/components/sideBar/GroupSection';
 import SidebarFooter from '@/components/sideBar/SideBarFooter';
 import type { SideBarViewProps } from '@/components/sideBar/type';
 
-export default function SidebarView({
+export default function SideBarView({
   isLoggedIn,
   collapsed,
   groups,

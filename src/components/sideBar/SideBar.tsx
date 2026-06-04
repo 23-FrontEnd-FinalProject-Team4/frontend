@@ -6,43 +6,30 @@ import { usePathname } from 'next/navigation';
 
 import MobileHeader from '@/components/sideBar/MobileHeader';
 import MobileSideBar from '@/components/sideBar/MobileSideBar';
-import SidebarView from '@/components/sideBar/SideBarView';
+import SideBarView from '@/components/sideBar/SideBarView';
 import type { SideBarProps } from '@/components/sideBar/type';
 
 import useMediaQuery from '@/hooks/useMediaQuery';
 
-const mockGroups = [
-  {
-    id: 1,
-    name: '프론트엔드',
-  },
-  {
-    id: 2,
-    name: '백엔드',
-  },
-  {
-    id: 3,
-    name: '디자인',
-  },
-];
-
-export default function Sidebar({ isLoggedIn, groups = mockGroups }: SideBarProps) {
-  const isDesktop = useMediaQuery('(min-width: 1280px)');
-
-  const [collapsed, setCollapsed] = useState(true);
+export default function Sidebar({ isLoggedIn, groups }: SideBarProps) {
+  const isTablet = useMediaQuery('(min-width: 768px)');
+  const [userCollapsed, setUserCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  useEffect(() => {
-    setCollapsed(!isDesktop);
-  }, [isDesktop]);
-
   const pathname = usePathname();
+
+  // Mobile에서는 항상 접힌 상태를 사용하고,
+  // Tablet/Desktop에서는 사용자가 선택한 상태를 유지
+  const collapsed = isTablet ? userCollapsed : true;
+
   useEffect(() => {
+    // 페이지 이동 시 모바일 사이드바를 닫음
+    // ESlint 예외처리
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMobileOpen(false);
   }, [pathname]);
 
   const handleToggleCollapse = () => {
-    setCollapsed((prev) => !prev);
+    setUserCollapsed((prev) => !prev);
   };
 
   const handleOpenMobileMenu = () => {
@@ -59,17 +46,17 @@ export default function Sidebar({ isLoggedIn, groups = mockGroups }: SideBarProp
         <MobileHeader isLoggedIn={isLoggedIn} onOpenSideBar={handleOpenMobileMenu} />
         <MobileSideBar
           mobileOpen={mobileOpen}
-          groups={mockGroups}
+          groups={groups}
           onCloseMobileMenu={handleCloseMobileMenu}
         />
       </div>
 
       <div className="hidden md:block">
-        <SidebarView
+        <SideBarView
           isLoggedIn={isLoggedIn}
           collapsed={collapsed}
           onToggleCollapse={handleToggleCollapse}
-          groups={mockGroups}
+          groups={groups}
         />
       </div>
     </>
