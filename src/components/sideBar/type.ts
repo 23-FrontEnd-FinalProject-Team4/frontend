@@ -1,6 +1,7 @@
 export type Group = {
   id: number;
   name: string;
+  route?: string;
 };
 
 export type GroupItemProps = Group & {
