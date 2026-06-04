@@ -4,13 +4,13 @@ import LoginFormSection from './_components/LoginFormSection';
 
 export default function LoginPage() {
   return (
-    <div className="flex h-screen items-center justify-center">
-      <main className="bg-background-primary flex h-[720px] w-[550px] flex-col rounded-2xl p-18">
+    <div className="flex min-h-screen items-center justify-center p-4">
+      <main className="bg-background-primary tablet:p-12 desktop:p-18 flex max-h-[720px] w-full max-w-[550px] flex-col rounded-2xl p-8">
         <h1 className="mb-12 text-center text-xl font-semibold">로그인</h1>
 
         <LoginFormSection />
 
-        <div className="mb-4 flex items-center gap-8">
+        <div className="mt-6 mb-4 flex items-center gap-8">
           <div className="bg-border-primary h-px flex-1" />
           <span className="text-text-default text-md font-light">OR</span>
           <div className="bg-border-primary h-px flex-1" />
