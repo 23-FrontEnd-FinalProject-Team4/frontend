@@ -2,7 +2,7 @@ import SearchIcon from '@/assets/icons/search.svg?react';
 
 import type { SearchInputProps } from './SearchInput.type';
 
-export default function SearchInput({ value, onChange, placeholder }: SearchInputProps) {
+const SearchInput = ({ value, onChange, placeholder }: SearchInputProps) => {
   return (
     <div className="relative">
       <SearchIcon className="absolute top-1/2 left-4 -translate-y-1/2" />
@@ -14,4 +14,6 @@ export default function SearchInput({ value, onChange, placeholder }: SearchInpu
       />
     </div>
   );
-}
+};
+
+export default SearchInput;

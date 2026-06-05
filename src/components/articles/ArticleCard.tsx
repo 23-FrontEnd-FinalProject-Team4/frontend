@@ -11,7 +11,7 @@ import type { ArticleCardProps } from './ArticleCard.type';
 export const ArticleCard = ({ article, variant = 'normal' }: ArticleCardProps) => {
   const isBest = variant === 'best';
 
-  const { id, title, content, image, writer, createdAt, likeCount, isLiked } = article;
+  const { id, title, content, image, writer, createdAt, isLiked } = article;
 
   return (
     <Link
@@ -19,7 +19,7 @@ export const ArticleCard = ({ article, variant = 'normal' }: ArticleCardProps) =
       className="border-border-primary bg-background-primary hover:shadow-brand-tertiary-20 flex flex-col gap-4 rounded-2xl border px-6 py-4 transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
     >
       {isBest && (
-        <span className="bg-background-secondary text-brand-primary flex w-18 flex-row items-center justify-center gap-1 rounded-full py-1.5 text-[14px] font-bold">
+        <span className="bg-background-secondary text-brand-primary flex w-18 flex-row items-center justify-center gap-1 rounded-full py-1.5 text-sm font-bold">
           <BestIcon className="h-6 w-4" />
           인기
         </span>
@@ -69,3 +69,5 @@ export const ArticleCard = ({ article, variant = 'normal' }: ArticleCardProps) =
     </Link>
   );
 };
+
+export default ArticleCard;

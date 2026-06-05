@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import WrightIcon from '@/assets/icons/pencil.svg';
+import WriteIcon from '@/assets/icons/pencil.svg';
 
 import ArticleListSection from '@/components/articles/ArticleListSection';
 import BestArticleSection from '@/components/articles/BestArticleSection';
@@ -11,7 +11,7 @@ import Button from '@/components/button/Button';
 
 import { mockArticles } from './mockArticles';
 
-export default function ArticlesPage({}) {
+const ArticlesPage = () => {
   const [searchValue, setSearchValue] = useState('');
   return (
     <div className="bg-background-primary tablet:pt-22 mx-auto flex min-h-screen p-0 lg:p-22">
@@ -23,6 +23,7 @@ export default function ArticlesPage({}) {
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             placeholder="검색어를 입력해주세요."
+            aria-label="검색"
           />
         </div>
         {/* 베스트 게시글  */}
@@ -33,9 +34,11 @@ export default function ArticlesPage({}) {
         <Button
           className="shadow-brand-tertiary-30 fixed right-10 bottom-10 shadow-md md:right-20 md:bottom-20"
           variant="icon-circle"
-          icon={<WrightIcon />}
+          icon={<WriteIcon />}
         ></Button>
       </main>
     </div>
   );
-}
+};
+
+export default ArticlesPage;

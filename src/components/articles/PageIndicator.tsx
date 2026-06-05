@@ -3,7 +3,7 @@ type PageIndicatorProps = {
   totalPages: number;
 };
 
-export default function PageIndicator({ currentPage, totalPages }: PageIndicatorProps) {
+const PageIndicator = ({ currentPage, totalPages }: PageIndicatorProps) => {
   return (
     <div className="flex items-center gap-1.5">
       {Array.from({ length: totalPages }, (_, index) => {
@@ -21,4 +21,6 @@ export default function PageIndicator({ currentPage, totalPages }: PageIndicator
       })}
     </div>
   );
-}
+};
+
+export default PageIndicator;
