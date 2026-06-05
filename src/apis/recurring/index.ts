@@ -5,7 +5,7 @@ import {
   UpdateRecurringTaskParams,
 } from './type';
 
-export const CreateRecurringTask = async ({
+export const createRecurringTask = async ({
   groupId,
   taskListId,
   body,
@@ -17,7 +17,7 @@ export const CreateRecurringTask = async ({
   return data;
 };
 
-export const UpdateRecurringTask = async ({
+export const updateRecurringTask = async ({
   groupId,
   taskListId,
   recurringId,
