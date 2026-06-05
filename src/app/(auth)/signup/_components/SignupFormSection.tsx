@@ -27,9 +27,13 @@ export default function SignupFormSection() {
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="password">비밀번호 확인</label>
+          <label htmlFor="confirmPassword">비밀번호 확인</label>
 
-          <Input id="password" type="password" placeholder="비밀번호를 다시 한 번 입력해주세요." />
+          <Input
+            id="confirmPassword"
+            type="password"
+            placeholder="비밀번호를 다시 한 번 입력해주세요."
+          />
         </div>
 
         <Button className="my-4">회원가입</Button>
