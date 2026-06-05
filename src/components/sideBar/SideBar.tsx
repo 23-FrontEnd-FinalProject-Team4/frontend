@@ -12,14 +12,14 @@ import type { SideBarProps } from '@/components/sideBar/type';
 import useMediaQuery from '@/hooks/useMediaQuery';
 
 export default function Sidebar({ isLoggedIn, groups }: SideBarProps) {
-  const isTablet = useMediaQuery('(min-width: 768px)');
+  const isDesktop = useMediaQuery('(min-width: 1024px)');
   const [userCollapsed, setUserCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
 
-  // Mobile에서는 항상 접힌 상태를 사용하고,
-  // Tablet/Desktop에서는 사용자가 선택한 상태를 유지
-  const collapsed = isTablet ? userCollapsed : true;
+  // Mobile/Tablet 에서는 항상 접힌 상태를 사용하고,
+  // Desktop 에서는 사용자가 선택한 상태를 유지
+  const collapsed = isDesktop ? userCollapsed : true;
 
   useEffect(() => {
     // 페이지 이동 시 모바일 사이드바를 닫음
