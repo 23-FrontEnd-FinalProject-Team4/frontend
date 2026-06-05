@@ -23,7 +23,13 @@ const AddTeamForm = () => {
   const handleImageChange = (file: File) => {
     setImageFile(file);
     const previewUrl = URL.createObjectURL(file);
-    setImagePreview(previewUrl);
+
+    setImagePreview((prev) => {
+      if (prev.startsWith('blob:')) {
+        URL.revokeObjectURL(prev);
+      }
+      return previewUrl;
+    });
   };
 
   const handleTeamNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
