@@ -1,3 +1,9 @@
+export type ArticleWrither = {
+  id: number;
+  name: string;
+  profileImage?: string;
+};
+
 export type Article = {
   id: number;
   title: string;
@@ -10,7 +16,11 @@ export type Article = {
   updatedAt: string;
 };
 
+export type ArticleWithLike = Article & {
+  isLiked: boolean;
+};
+
 export type ArticleCardProps = {
-  article: Article;
-  variant?: 'best' | 'normal';
+  article: ArticleWithLike;
+  variant: 'best' | 'normal';
 };

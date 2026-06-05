@@ -4,12 +4,15 @@ import Link from 'next/link';
 import BestIcon from '@/assets/icons/best.svg?react';
 import HeartEmptyIcon from '@/assets/icons/heart_empty.svg';
 import HeartFillIcon from '@/assets/icons/heart_fill.svg';
+import { cn } from '@/utils/cn';
 
 import type { ArticleCardProps } from './ArticleCard.type';
 
 export default function ArticleCard({ article, variant = 'normal' }: ArticleCardProps) {
-  const { id, title, content, image, writer, createdAt, likeCount } = article;
   const isBest = variant === 'best';
+
+  const { id, title, content, image, writer, createdAt, likeCount, isLiked } = article;
+
   return (
     <Link
       href={`/articles/${id}`}
@@ -48,8 +51,18 @@ export default function ArticleCard({ article, variant = 'normal' }: ArticleCard
             <div className="bg-text-default h-3 w-px" />
             <span className="text-text-disabled text-md">{createdAt}</span>
           </div>
-          <span className="text-text-disabled text-md flex flex-row items-center gap-1 font-light">
-            <HeartEmptyIcon className="h-6 w-4" /> {likeCount}
+          <span
+            className={cn(
+              'text-md flex flex-row items-center gap-1 font-light',
+              isLiked ? 'text-brand-primary' : 'text-text-disabled',
+            )}
+          >
+            {isLiked ? (
+              <HeartFillIcon className="h-6 w-4" />
+            ) : (
+              <HeartEmptyIcon className="h-6 w-4" />
+            )}
+            {article.likeCount}
           </span>
         </div>
       </div>

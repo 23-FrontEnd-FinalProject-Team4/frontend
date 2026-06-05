@@ -1,8 +1,8 @@
 import ArticleCard from '@/components/articles/ArticleCard';
-import type { Article } from '@/components/articles/ArticleCard.type';
+import type { ArticleWithLike } from '@/components/articles/ArticleCard.type';
 import DropdownMd from '@/components/dropdown/DropdownMd';
 
-export default function ArticleListSection({ articles }: { articles: Article[] }) {
+export default function ArticleListSection({ articles }: { articles: ArticleWithLike[] }) {
   return (
     <div className="flex flex-col gap-5 p-7 lg:p-0">
       <div className="flex flex-row justify-between">

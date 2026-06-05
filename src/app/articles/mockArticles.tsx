@@ -1,8 +1,8 @@
 import sampleImage from '@/assets/images/sample.png';
 
-import type { Article } from '@/components/articles/ArticleCard.type';
+import type { ArticleWithLike } from '@/components/articles/ArticleCard.type';
 
-export const mockArticles: Article[] = [
+export const mockArticles: ArticleWithLike[] = [
   {
     id: 1,
     title: '커피믹스 털이범 신고1',
@@ -14,6 +14,7 @@ export const mockArticles: Article[] = [
     likeCount: 999,
     commentCount: 10,
     updatedAt: '2026. 06. 04',
+    isLiked: true,
   },
   {
     id: 2,
@@ -26,6 +27,7 @@ export const mockArticles: Article[] = [
     likeCount: 52,
     commentCount: 10,
     updatedAt: '2026. 06. 03',
+    isLiked: false,
   },
   {
     id: 3,
@@ -38,5 +40,6 @@ export const mockArticles: Article[] = [
     likeCount: 3,
     commentCount: 10,
     updatedAt: '2026. 06. 02',
+    isLiked: false,
   },
 ];
