@@ -1,4 +1,6 @@
 @import 'pretendard/dist/web/static/pretendard.css';
+@import '@daypicker/react/style.css';
+
 @import 'tailwindcss';
 
 @theme {
