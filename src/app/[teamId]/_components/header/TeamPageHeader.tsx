@@ -4,7 +4,7 @@ import { cn } from '@/utils/cn';
 import Team from '@/components/team/Team';
 import type { TeamCardSize, TeamMember } from '@/components/team/type';
 
-import type { TeamPageRole } from './types';
+import type { TeamPageRole } from '../../type';
 
 interface TeamPageHeaderProps {
   role: TeamPageRole;

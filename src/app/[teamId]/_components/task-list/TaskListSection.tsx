@@ -1,5 +1,5 @@
+import type { TaskListItem, TaskStatus, TaskStatusSection } from '../../type';
 import TaskListCard from './TaskListCard';
-import type { TaskListItem, TaskStatus, TaskStatusSection } from './types';
 
 const TASK_SECTION_HEADER_STYLE: Record<TaskStatus, string> = {
   today: 'bg-brand-secondary',

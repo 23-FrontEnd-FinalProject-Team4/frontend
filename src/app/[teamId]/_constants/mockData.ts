@@ -1,4 +1,4 @@
-import type { TaskListItem, TaskStatus, TaskStatusSection, TeamPageMember } from './types';
+import type { TaskListItem, TaskStatus, TaskStatusSection, TeamPageMember } from '../type';
 
 export const TEAM_PAGE_MEMBERS: TeamPageMember[] = [
   { id: 1, name: '최일우', email: 'test@codeit.com' },

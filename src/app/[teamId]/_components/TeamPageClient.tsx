@@ -7,11 +7,11 @@ import type { TeamCardSize } from '@/components/team/type';
 
 import useMediaQuery from '@/hooks/useMediaQuery';
 
-import MemberSection from './MemberSection';
-import TaskListSection from './TaskListSection';
-import TeamPageHeader from './TeamPageHeader';
-import { TASK_LISTS, TASK_STATUS_SECTIONS, TEAM_PAGE_MEMBERS } from './mockData';
-import type { TeamPageRole } from './types';
+import { TASK_LISTS, TASK_STATUS_SECTIONS, TEAM_PAGE_MEMBERS } from '../_constants/mockData';
+import type { TeamPageRole } from '../type';
+import TeamPageHeader from './header/TeamPageHeader';
+import MemberSection from './member/MemberSection';
+import TaskListSection from './task-list/TaskListSection';
 
 interface TeamPageClientProps {
   teamId: string;
