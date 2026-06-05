@@ -19,13 +19,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref,
   ) => {
     const baseStyles =
-      'inline-flex items-center justify-center font-medium transition-all duration-200 ease-in-out focus:outline-none text-md gap-2 rounded-2xl';
+      'inline-flex items-center justify-center font-medium transition-all duration-200 ease-in-out focus:outline-none text-lg gap-2 rounded-xl';
 
     const variantStyles: Record<ButtonVariant, string> = {
       'primary-filled':
-        'bg-brand-primary text-background-primary hover:bg-interaction-hover active:bg-interaction-pressed disabled:bg-interaction-inactive disabled:text-text-disabled px-6 py-3 min-w-[160px]',
+        'rounded-xl bg-brand-primary text-background-primary hover:bg-interaction-hover active:bg-interaction-pressed disabled:bg-interaction-inactive disabled:text-text-disabled px-6 py-3 min-w-[160px]',
       'primary-outline':
-        'border border-brand-primary text-brand-primary bg-transparent hover:bg-brand-secondary active:bg-brand-secondary/50 disabled:border-interaction-inactive disabled:text-interaction-inactive px-6 py-3 min-w-[160px]',
+        'rounded-xl border border-brand-primary text-brand-primary bg-transparent hover:bg-brand-secondary active:bg-brand-secondary/50 disabled:border-interaction-inactive disabled:text-interaction-inactive px-6 py-3 min-w-[160px]',
       'secondary-filled':
         'bg-brand-primary text-background-primary hover:bg-interaction-hover active:bg-interaction-pressed disabled:bg-interaction-inactive px-5 py-2.5 rounded-full',
       'secondary-whiteFilled':
