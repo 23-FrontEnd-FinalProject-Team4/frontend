@@ -5,7 +5,7 @@ import LoginFormSection from './_components/LoginFormSection';
 export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
-      <main className="bg-background-primary tablet:p-12 desktop:p-20 flex max-h-[720px] w-full max-w-[550px] flex-col rounded-2xl p-8">
+      <main className="bg-background-primary flex max-h-[720px] w-full max-w-[550px] flex-col rounded-2xl p-8 md:p-18">
         <h1 className="mb-12 text-center text-xl font-semibold">로그인</h1>
 
         <LoginFormSection />
