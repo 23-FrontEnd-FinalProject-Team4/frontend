@@ -10,14 +10,14 @@ import {
   UpdateTaskListOrderParams,
 } from './type';
 
-export const GetTaskLists = async ({ groupId, id }: GetTaskListsParams) => {
+export const getTaskLists = async ({ groupId, id }: GetTaskListsParams) => {
   const { data } = await axiosInstance.get<ResponseGetTaskLists>(
     `/groups/${groupId}/task-lists/${id}`,
   );
   return data;
 };
 
-export const CreateTaskList = async ({ groupId, body }: CreateTaskListParams) => {
+export const createTaskList = async ({ groupId, body }: CreateTaskListParams) => {
   const { data } = await axiosInstance.post<ResponseCreateTaskList>(
     `/groups/${groupId}/task-lists`,
     body,
@@ -25,7 +25,7 @@ export const CreateTaskList = async ({ groupId, body }: CreateTaskListParams) =>
   return data;
 };
 
-export const UpdateTaskListName = async ({ groupId, id, body }: UpdateTaskListNameParams) => {
+export const updateTaskListName = async ({ groupId, id, body }: UpdateTaskListNameParams) => {
   const { data } = await axiosInstance.patch<ResponseUpdateTaskListName>(
     `/groups/${groupId}/task-lists/${id}`,
     body,
@@ -33,10 +33,10 @@ export const UpdateTaskListName = async ({ groupId, id, body }: UpdateTaskListNa
   return data;
 };
 
-export const UpdateTaskListOrder = async ({ groupId, id, body }: UpdateTaskListOrderParams) => {
+export const updateTaskListOrder = async ({ groupId, id, body }: UpdateTaskListOrderParams) => {
   await axiosInstance.patch(`/groups/${groupId}/task-lists/${id}/order`, body);
 };
 
-export const DeleteTaskList = async ({ groupId, id }: DeleteTaskListParams) => {
+export const deleteTaskList = async ({ groupId, id }: DeleteTaskListParams) => {
   await axiosInstance.delete(`/groups/${groupId}/task-lists/${id}`);
 };
