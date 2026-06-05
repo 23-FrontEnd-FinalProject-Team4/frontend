@@ -25,18 +25,18 @@ export default function TaskListCard({ item, teamId }: TaskListCardProps) {
       />
 
       <div className="pointer-events-none relative z-10 flex items-start justify-between gap-3">
-        <h3 className="text-text-primary text-sm font-semibold">{item.title}</h3>
+        <h3 className="text-text-primary min-w-0 truncate text-sm font-semibold">{item.title}</h3>
 
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1.5">
           <BadgeDone
             status={badgeStatus}
             current={item.doneCount}
             total={item.totalCount}
-            className="border-0 bg-transparent p-0 shadow-none"
+            className="min-w-10 overflow-visible border-0 bg-transparent p-0 shadow-none [&_svg]:size-4.5 [&_svg]:overflow-visible"
           />
           <button
             type="button"
-            className="text-icon-primary hover:bg-background-secondary hover:text-brand-primary focus-visible:ring-brand-primary pointer-events-auto -mr-1 flex size-5 items-center justify-center rounded transition-colors focus-visible:ring-2 focus-visible:outline-none active:scale-95"
+            className="text-icon-primary hover:bg-background-secondary hover:text-brand-primary focus-visible:ring-brand-primary pointer-events-auto flex size-5 items-center justify-center rounded transition-colors focus-visible:ring-2 focus-visible:outline-none active:scale-95"
             aria-label={`${item.title} 메뉴 열기`}
           >
             <KebabIcon className="size-4" aria-hidden="true" />
@@ -44,7 +44,7 @@ export default function TaskListCard({ item, teamId }: TaskListCardProps) {
         </div>
       </div>
 
-      <div className="pointer-events-none relative z-10 mt-4 flex flex-col gap-1.5 [&_label]:min-w-0 [&_span]:block [&_span]:truncate [&_span]:text-xs">
+      <div className="pointer-events-none relative z-10 mt-5 flex flex-col gap-2 [&_label]:min-w-0 [&_span]:block [&_span]:truncate [&_span]:text-xs">
         {item.tasks.map((task) => (
           <TaskCheckbox key={task.id} task={task.title} checked={task.done} disabled />
         ))}
