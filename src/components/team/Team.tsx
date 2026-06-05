@@ -1,7 +1,9 @@
 import Image from 'next/image';
 
-import settingIcon from '@/assets/icons/setting.svg';
+import SettingIcon from '@/assets/icons/setting.svg?react';
 import { cn } from '@/utils/cn';
+
+import Profile from '@/components/profile/Profile';
 
 import ProgressBar from '../progressBar/ProgressBar';
 import type { TeamCardSize, TeamMember, TeamProps } from './type';
@@ -38,15 +40,15 @@ interface UserTeamCardProps extends Pick<
 }
 
 const ADMIN_CARD_SIZE_CLASS: Record<TeamCardSize, string> = {
-  lg: 'w-[1120px] max-w-full min-h-[239px] gap-6 rounded-[20px] p-8',
-  md: 'w-[620px] max-w-full min-h-[239px] gap-6 rounded-[20px] p-6',
-  sm: 'w-[375px] max-w-full min-h-[196px] gap-4 rounded-none p-6',
+  lg: 'w-280 max-w-full min-h-59.75 gap-6 rounded-5 p-8',
+  md: 'w-155 max-w-full min-h-59.75 gap-6 rounded-5 p-6',
+  sm: 'w-93.75 max-w-full min-h-49 gap-4 rounded-none p-6',
 };
 
 const USER_CARD_SIZE_CLASS: Record<TeamCardSize, string> = {
-  lg: 'h-16 w-[1120px] max-w-full rounded-xl px-6',
-  md: 'h-16 w-[620px] max-w-full rounded-xl px-6',
-  sm: 'h-14 w-[375px] max-w-full rounded-none px-5',
+  lg: 'h-16 w-280 max-w-full rounded-xl px-6',
+  md: 'h-16 w-155 max-w-full rounded-xl px-6',
+  sm: 'h-14 w-93.75 max-w-full rounded-none px-5',
 };
 
 const TEAM_IMAGE_SIZE_CLASS: Record<TeamCardSize, string> = {
@@ -72,6 +74,9 @@ const DEFAULT_TEAM_LABELS = {
 
 const TEAM_CARD_BASE_CLASS = 'bg-background-inverse shadow-xl shadow-background-primary/10';
 const TEAM_FALLBACK_IMAGE_CLASS = 'bg-brand-primary text-background-inverse';
+
+const getProfileSrc = (imageUrl: TeamMember['imageUrl']) =>
+  typeof imageUrl === 'string' ? imageUrl : (imageUrl?.src ?? null);
 
 const getProgressValue = ({
   completedTaskCount,
@@ -114,20 +119,12 @@ const TeamImage = ({
 );
 
 const MemberAvatar = ({ member }: { member: TeamMember }) => (
-  <div
-    className={cn(
-      !member.imageUrl && TEAM_FALLBACK_IMAGE_CLASS,
-      'border-background-inverse relative size-5 overflow-hidden rounded-full border',
-    )}
-  >
-    {member.imageUrl ? (
-      <Image src={member.imageUrl} alt="" fill className="object-cover" sizes="20px" aria-hidden />
-    ) : (
-      <span className="flex h-full items-center justify-center text-[10px] font-semibold">
-        {member.name.slice(0, 1)}
-      </span>
-    )}
-  </div>
+  <Profile
+    src={getProfileSrc(member.imageUrl)}
+    size="sm"
+    alt={`${member.name} 프로필`}
+    className="border-background-inverse size-5 rounded-full border"
+  />
 );
 
 const MemberPreview = ({
@@ -180,7 +177,7 @@ const SettingsButton = ({ label, onClick }: SettingsButtonProps) => {
       className="hover:bg-background-secondary focus:ring-brand-primary flex size-6 shrink-0 items-center justify-center rounded-sm transition-colors focus:ring-2 focus:outline-none"
       onClick={onClick}
     >
-      <Image src={settingIcon} width={16} height={16} alt="" aria-hidden />
+      <SettingIcon className="size-4" aria-hidden="true" />
     </button>
   );
 };

@@ -21,8 +21,8 @@ export default function SideBarView({
   return (
     <aside
       className={cn(
-        'bg-background-primary border-border-primary sticky top-0 flex h-screen shrink-0 flex-col border-r py-6 transition-[width] duration-300',
-        collapsed ? 'w-[72px] justify-center px-2' : 'w-[272px] px-4',
+        'bg-background-primary border-border-primary sticky top-0 z-30 flex h-screen shrink-0 flex-col overflow-visible border-r py-6 transition-[width] duration-300',
+        collapsed ? 'w-18 justify-center px-2' : 'w-68 px-4',
       )}
     >
       <div className="flex h-full flex-col">
@@ -44,20 +44,17 @@ export default function SideBarView({
           )}
         </Link>
         {/* 사이드바 접기/열기 버튼 */}
-        <button type="button" onClick={onToggleCollapse}>
-          {collapsed ? (
-            <span
-              className={cn(
-                'border-brand-secondary bg-background-inverse absolute top-6 right-[-20px] z-20 flex h-8 w-8 items-center justify-center rounded-full border pl-1',
-              )}
-            >
-              <FoldRightIcon className="h-6 w-6" />
-            </span>
-          ) : (
-            <FoldLeftIcon
-              className={cn('absolute top-6 right-4 z-20 flex h-6 w-6 items-center justify-center')}
-            />
+        <button
+          type="button"
+          className={cn(
+            'focus-visible:ring-brand-primary absolute top-6 z-40 flex items-center justify-center transition-transform focus-visible:ring-2 focus-visible:outline-none active:scale-95',
+            collapsed
+              ? 'border-brand-secondary bg-background-inverse -right-4 h-8 w-8 rounded-full border pl-1'
+              : 'right-4 h-6 w-6',
           )}
+          onClick={onToggleCollapse}
+        >
+          {collapsed ? <FoldRightIcon className="h-6 w-6" /> : <FoldLeftIcon className="h-6 w-6" />}
         </button>
 
         <nav className={cn('flex w-full flex-1 flex-col gap-2 pt-6')}>

@@ -4,10 +4,7 @@ import { useEffect, useId, useSyncExternalStore } from 'react';
 import type { MouseEvent } from 'react';
 import { createPortal } from 'react-dom';
 
-import Image from 'next/image';
-
-import alertIcon from '@/assets/icons/alert.svg';
-import closeIcon from '@/assets/icons/x.svg';
+import AlertIcon from '@/assets/icons/alert.svg?react';
 import { cn } from '@/utils/cn';
 
 import Button from '../button/Button';
@@ -72,6 +69,18 @@ const ModalButton = ({ action, variant, modalVariant }: ModalButtonProps) => {
     </Button>
   );
 };
+
+const CloseIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <path
+      d="M4 4L12 12M12 4L4 12"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
 
 const Modal = ({
   isOpen,
@@ -164,13 +173,13 @@ const Modal = ({
             className="hover:bg-background-secondary focus:ring-brand-primary absolute top-3 right-3 flex size-5 items-center justify-center rounded-sm transition-colors focus:ring-2 focus:outline-none"
             onClick={onClose}
           >
-            <Image src={closeIcon} width={14} height={14} alt="" aria-hidden />
+            <CloseIcon />
           </button>
         )}
 
         <div className="flex flex-col items-center px-4 text-center">
           {variant === 'danger' && (
-            <Image src={alertIcon} width={24} height={24} alt="" aria-hidden className="mb-4" />
+            <AlertIcon className="mb-4 size-6" aria-hidden="true" />
           )}
 
           <h2 id={titleId} className="text-text-primary text-sm font-semibold">

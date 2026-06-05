@@ -5,21 +5,22 @@ import GroupIcon from '@/assets/icons/profile.svg?react';
 
 import type { GroupItemProps } from '@/components/sideBar/type';
 
-export default function GroupItems({ id, name, collapsed, selected }: GroupItemProps) {
+export default function GroupItems({ id, name, route, collapsed, selected }: GroupItemProps) {
   const pathname = usePathname() ?? '';
-  const isSelected = selected ?? pathname.startsWith(`/groups/${id}`);
+  const href = route ?? `/groups/${id}`;
+  const isSelected = selected ?? pathname.startsWith(href);
 
   return (
     <Link
-      href={`/groups/${id}`}
-      className={`flex items-center overflow-hidden rounded-xl ${
+      href={href}
+      className={`focus-visible:ring-brand-primary flex items-center overflow-hidden rounded-xl transition-all duration-200 focus-visible:ring-2 focus-visible:outline-none active:scale-[0.98] ${
         collapsed ? 'h-10 w-10' : 'h-14 w-full gap-2 px-4'
       } ${
         isSelected
           ? collapsed
             ? 'border-brand-primary border-2'
-            : 'text-brand-primary bg-blue-50'
-          : 'hover:bg-background-secondary'
+            : 'text-brand-primary bg-brand-secondary'
+          : 'hover:bg-background-secondary hover:text-brand-primary'
       } `}
     >
       {/* 각 팀에 해당하는 이미지 표시 */}

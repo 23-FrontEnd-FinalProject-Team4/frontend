@@ -1,4 +1,4 @@
-import { useParams } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 
 import { cn } from '@/utils/cn';
 
@@ -7,6 +7,7 @@ import type { GroupSectionProps } from '@/components/sideBar/type';
 
 export default function GroupSection({ groups, collapsed }: GroupSectionProps) {
   const params = useParams<{ id: string }>();
+  const pathname = usePathname() ?? '';
   const currentGroupId = Number(params?.id);
 
   return (
@@ -18,7 +19,8 @@ export default function GroupSection({ groups, collapsed }: GroupSectionProps) {
           key={group.id}
           id={group.id}
           name={group.name}
-          selected={group.id === currentGroupId}
+          route={group.route}
+          selected={group.route ? pathname.startsWith(group.route) : group.id === currentGroupId}
           collapsed={collapsed}
         />
       ))}
