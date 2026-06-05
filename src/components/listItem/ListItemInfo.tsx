@@ -1,0 +1,69 @@
+'use client';
+
+import { ListItemInfoProps } from './type';
+import TaskCheckbox from '../taskCheckbox/TaskCheckbox';
+import CommentIcon from '@/assets/icons/comment.svg?react';
+import Dropdown from '../dropdown/Dropdown';
+import KebabIcon from '@/assets/icons/kebab.svg?react';
+import { OPTIONS } from '@/constants/listItem';
+import { useRef, useState } from 'react';
+import { useOutsideClick } from '@/hooks/useOutsideClick';
+
+const ListItemInfo = ({
+  name,
+  isDone,
+  commentCount,
+  onToggle,
+  onEdit,
+  onDelete,
+}: ListItemInfoProps) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  const handleToggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  useOutsideClick(dropdownRef, () => {
+    setIsDropdownOpen(false);
+  });
+
+  const handleSelect = (value: string) => {
+    if (value === 'EDIT') {
+      onEdit();
+    }
+    if (value === 'DELETE') {
+      onDelete();
+    }
+    setIsDropdownOpen(false);
+  };
+
+  return (
+    <div className="relative flex items-center justify-between">
+      <div className="flex gap-3.5">
+        <TaskCheckbox task={name} checked={isDone} size="lg" onChange={onToggle} />
+        {commentCount > 0 && (
+          <div className="flex items-center gap-1">
+            <CommentIcon width={16} height={16} />
+            <span>{commentCount}</span>
+          </div>
+        )}
+      </div>
+      <button
+        onClick={handleToggleDropdown}
+        type="button"
+        aria-label="할 일 메뉴 열기"
+        aria-expanded={isDropdownOpen}
+      >
+        <KebabIcon width={16} height={16} />
+      </button>
+      {isDropdownOpen && (
+        <div className="absolute right-10" ref={dropdownRef}>
+          <Dropdown options={OPTIONS} onSelect={handleSelect} />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ListItemInfo;
