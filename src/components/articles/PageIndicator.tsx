@@ -9,12 +9,12 @@ export default function PageIndicator({ currentPage, totalPages }: PageIndicator
       {Array.from({ length: totalPages }, (_, index) => {
         const isActive = index + 1 === currentPage;
         return (
-          <span
+          <button
             key={index}
             className={
               isActive
-                ? 'bg-brand-primary h-2 w-4 rounded-full'
-                : 'bg-text-disabled h-2 w-2 rounded-full'
+                ? 'bg-brand-primary hover:bg-brand-tertiary h-2 w-4 rounded-full'
+                : 'bg-text-disabled hover:bg-brand-tertiary h-2 w-2 rounded-full'
             }
           />
         );
