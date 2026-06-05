@@ -10,7 +10,7 @@ import {
   UpdateTaskListOrderParams,
 } from './type';
 
-export const getTaskLists = async ({ groupId, id }: GetTaskListsParams) => {
+export const getTaskList = async ({ groupId, id }: GetTaskListsParams) => {
   const { data } = await axiosInstance.get<ResponseGetTaskLists>(
     `/groups/${groupId}/task-lists/${id}`,
   );
