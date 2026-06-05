@@ -11,7 +11,7 @@ interface MemberSectionProps {
 
 export default function MemberSection({ members, onInviteClick }: MemberSectionProps) {
   return (
-    <section className="border-border-primary bg-background-primary desktop:h-31.25 desktop:px-6 rounded-xl border px-5 py-5 shadow-sm">
+    <section className="border-border-primary bg-background-primary rounded-xl border px-5 py-5 shadow-sm xl:h-31.25 xl:px-6">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-text-primary text-md font-semibold">
           멤버 <span className="text-text-default font-medium">({members.length}명)</span>
@@ -26,7 +26,7 @@ export default function MemberSection({ members, onInviteClick }: MemberSectionP
         </button>
       </div>
 
-      <div className="tablet:grid-cols-2 desktop:grid-cols-4 grid gap-4">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {members.map((member) => (
           <div key={member.id} className="flex min-w-0 items-center gap-3">
             <Profile src={member.imageUrl?.src ?? null} size="md" alt={`${member.name} 프로필`} />

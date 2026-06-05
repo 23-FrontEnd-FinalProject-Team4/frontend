@@ -29,7 +29,7 @@ const copyInviteLink = async () => {
 
 export default function TeamPageClient({ teamId }: TeamPageClientProps) {
   const isDesktop = useMediaQuery('(min-width: 1280px)');
-  const isTablet = useMediaQuery('(min-width: 744px)');
+  const isTablet = useMediaQuery('(min-width: 768px)');
 
   const [isTeamMenuOpen, setIsTeamMenuOpen] = useState(false);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
@@ -48,8 +48,8 @@ export default function TeamPageClient({ teamId }: TeamPageClientProps) {
   );
 
   return (
-    <div className="bg-background-secondary tablet:px-6 desktop:px-16 desktop:py-15.75 relative min-h-full overflow-y-auto px-4 py-6">
-      <div className="tablet:max-w-155 desktop:mx-0 desktop:max-w-280 mx-auto flex w-full max-w-85.75 flex-col gap-8">
+    <div className="bg-background-secondary relative min-h-full overflow-y-auto px-4 py-6 md:px-6 xl:px-16 xl:py-15.75">
+      <div className="mx-auto flex w-full max-w-85.75 flex-col gap-8 md:max-w-155 xl:mx-0 xl:max-w-280">
         <TeamPageHeader
           role={role}
           size={teamCardSize}

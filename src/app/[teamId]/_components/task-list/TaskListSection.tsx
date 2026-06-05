@@ -33,7 +33,7 @@ export default function TaskListSection({
 
         <button
           type="button"
-          className="text-brand-primary hover:text-interaction-hover focus-visible:ring-brand-primary desktop:block hidden rounded-sm text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:outline-none"
+          className="text-brand-primary hover:text-interaction-hover focus-visible:ring-brand-primary hidden rounded-sm text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:outline-none xl:block"
           onClick={onCreateTaskList}
         >
           할일 추가하기 +
@@ -49,7 +49,7 @@ export default function TaskListSection({
               <h3 className="text-text-primary text-xs font-semibold">{section.label}</h3>
             </div>
 
-            <div className="tablet:grid-cols-1 desktop:grid-cols-4 grid gap-3">
+            <div className="grid gap-3 md:grid-cols-1 xl:grid-cols-4">
               {section.items.map((item) => (
                 <TaskListCard key={item.id} item={item} teamId={teamId} />
               ))}
