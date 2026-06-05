@@ -1,7 +1,9 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 import BestIcon from '@/assets/icons/best.svg?react';
-import HeartEmptyIcon from '@/assets/icons/heart_empty.svg?react';
+import HeartEmptyIcon from '@/assets/icons/heart_empty.svg';
+import HeartFillIcon from '@/assets/icons/heart_fill.svg';
 
 import type { ArticleCardProps } from './ArticleCard.type';
 
@@ -9,7 +11,10 @@ export default function ArticleCard({ article, variant = 'normal' }: ArticleCard
   const { id, title, content, image, writer, createdAt, likeCount } = article;
   const isBest = variant === 'best';
   return (
-    <div className="border-border-primary bg-background-primary flex flex-col gap-4 rounded-2xl border px-6 py-4">
+    <Link
+      href={`/articles/${id}`}
+      className="border-border-primary bg-background-primary hover:shadow-brand-tertiary-20 flex flex-col gap-4 rounded-2xl border px-6 py-4 transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
+    >
       {isBest && (
         <span className="bg-background-secondary text-brand-primary flex w-18 flex-row items-center justify-center gap-1 rounded-full py-1.5 text-[14px] font-bold">
           <BestIcon className="h-6 w-4" />
@@ -19,7 +24,9 @@ export default function ArticleCard({ article, variant = 'normal' }: ArticleCard
       <div className="flex flex-col gap-4">
         <div className="flex flex-row items-center gap-4">
           <div className="flex min-w-0 flex-1 flex-col gap-2">
-            <span className="text-text-primary text-2lg--line-height-24 font-bold">{title}</span>
+            <span className="text-text-primary text-2lg--line-height-24 line-clamp-1 font-bold">
+              {title}
+            </span>
             <p className="text-text-disabled text-md--line-height-17 line-clamp-2 font-light">
               {content}
             </p>
@@ -46,6 +53,6 @@ export default function ArticleCard({ article, variant = 'normal' }: ArticleCard
           </span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
