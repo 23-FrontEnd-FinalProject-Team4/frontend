@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import settingIcon from '@/assets/icons/setting.svg';
+import SettingIcon from '@/assets/icons/setting.svg?react';
 import { cn } from '@/utils/cn';
 
 import Profile from '@/components/profile/Profile';
@@ -177,7 +177,7 @@ const SettingsButton = ({ label, onClick }: SettingsButtonProps) => {
       className="hover:bg-background-secondary focus:ring-brand-primary flex size-6 shrink-0 items-center justify-center rounded-sm transition-colors focus:ring-2 focus:outline-none"
       onClick={onClick}
     >
-      <Image src={settingIcon} width={16} height={16} alt="" aria-hidden />
+      <SettingIcon className="size-4" aria-hidden="true" />
     </button>
   );
 };
