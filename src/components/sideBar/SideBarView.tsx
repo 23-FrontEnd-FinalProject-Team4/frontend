@@ -21,7 +21,7 @@ export default function SideBarView({
   return (
     <aside
       className={cn(
-        'bg-background-primary sticky top-0 flex h-screen shrink-0 flex-col py-6 transition-[width] duration-300',
+        'bg-background-primary border-border-primary sticky top-0 flex h-screen shrink-0 flex-col border-r py-6 transition-[width] duration-300',
         collapsed ? 'w-[72px] justify-center px-2' : 'w-[272px] px-4',
       )}
     >

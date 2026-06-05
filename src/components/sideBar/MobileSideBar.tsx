@@ -26,7 +26,7 @@ export default function MobileSidebar({
       {/* Drawer */}
       <aside
         className={cn(
-          'bg-background-primary fixed top-0 left-0 z-50 flex h-screen w-[204px] flex-col px-4 py-6 transition-transform duration-300',
+          'bg-background-primary border-border-primary fixed top-0 left-0 z-50 flex h-screen w-[204px] flex-col border-b px-4 py-6 transition-transform duration-300',
           mobileOpen ? 'translate-x-0' : '-translate-x-full',
         )}
       >

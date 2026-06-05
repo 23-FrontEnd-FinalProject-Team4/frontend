@@ -1,7 +1,7 @@
 export type DropdownMdProps = {
   children: React.ReactNode;
   size?: 'md' | 'sm';
-  menuOpen?: boolean;
+  isMenuOpen?: boolean;
   options: string[];
   onSelect?: (value: string) => void;
 };
@@ -13,4 +13,5 @@ export type DropdownProps = {
     value: string;
   }[];
   onSelect?: (value: string) => void;
+  onClose?: () => void;
 };
