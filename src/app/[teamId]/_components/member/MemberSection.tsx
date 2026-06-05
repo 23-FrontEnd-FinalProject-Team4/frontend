@@ -11,7 +11,7 @@ interface MemberSectionProps {
 
 export default function MemberSection({ members, onInviteClick }: MemberSectionProps) {
   return (
-    <section className="border-border-primary bg-background-primary desktop:h-[125px] desktop:px-6 rounded-xl border px-5 py-5 shadow-sm">
+    <section className="border-border-primary bg-background-primary desktop:h-31.25 desktop:px-6 rounded-xl border px-5 py-5 shadow-sm">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-text-primary text-md font-semibold">
           멤버 <span className="text-text-default font-medium">({members.length}명)</span>
