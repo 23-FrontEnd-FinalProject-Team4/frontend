@@ -8,7 +8,7 @@ import { cn } from '@/utils/cn';
 
 import type { ArticleCardProps } from './ArticleCard.type';
 
-export default function ArticleCard({ article, variant = 'normal' }: ArticleCardProps) {
+export const ArticleCard = ({ article, variant = 'normal' }: ArticleCardProps) => {
   const isBest = variant === 'best';
 
   const { id, title, content, image, writer, createdAt, likeCount, isLiked } = article;
@@ -68,4 +68,4 @@ export default function ArticleCard({ article, variant = 'normal' }: ArticleCard
       </div>
     </Link>
   );
-}
+};
