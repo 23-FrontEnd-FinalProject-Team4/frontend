@@ -19,7 +19,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref,
   ) => {
     const baseStyles =
-      'inline-flex items-center justify-center font-medium transition-all duration-200 ease-in-out focus:outline-none text-md gap-2 rounded-2xl';
+      'inline-flex items-center justify-center font-medium transition-all duration-200 ease-in-out focus:outline-none text-lg gap-2 rounded-xl';
 
     const variantStyles: Record<ButtonVariant, string> = {
       'primary-filled':
