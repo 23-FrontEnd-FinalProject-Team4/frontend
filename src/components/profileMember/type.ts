@@ -6,7 +6,7 @@ export interface MemberData {
   userName: string;
   userEmail: string;
   userImage: string | null;
-  role: 'ADMIN' | 'MEMBER'; // 기획에 맞게 수정
+  role: 'ADMIN' | 'MEMBER';
 }
 
 export interface ProfileMemberProps extends HTMLAttributes<HTMLDivElement> {
