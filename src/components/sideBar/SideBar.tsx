@@ -17,8 +17,8 @@ export default function Sidebar({ isLoggedIn, groups }: SideBarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
 
-  // Mobile에서는 항상 접힌 상태를 사용하고,
-  // Tablet/Desktop에서는 사용자가 선택한 상태를 유지
+  // Mobile/Tablet 에서는 항상 접힌 상태를 사용하고,
+  // Desktop 에서는 사용자가 선택한 상태를 유지
   const collapsed = isDesktop ? userCollapsed : true;
 
   useEffect(() => {
