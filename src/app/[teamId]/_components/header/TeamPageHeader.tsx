@@ -24,6 +24,7 @@ export default function TeamPageHeader({
   onSettingsClick,
 }: TeamPageHeaderProps) {
   const isAdmin = role === 'ADMIN';
+  const isAdminLayout = isAdmin || size === 'lg';
 
   return (
     <div className="relative">
@@ -34,11 +35,11 @@ export default function TeamPageHeader({
         completedTaskCount={5}
         totalTaskCount={20}
         progressValue={25}
-        variant={isAdmin ? 'admin' : 'user'}
+        variant={isAdminLayout ? 'admin' : 'user'}
         size={size}
         className={cn(
           'w-full',
-          isAdmin
+          isAdminLayout
             ? 'xl:rounded-5 min-h-37.75 gap-4 rounded-xl p-5 md:min-h-37.75 xl:min-h-59.75 xl:gap-6 xl:p-8 xl:[&_[role=progressbar]]:w-[calc(100%-32px)]'
             : 'h-14 rounded-xl px-4 md:h-16 xl:h-16 xl:px-6',
         )}
