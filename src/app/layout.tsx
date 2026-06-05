@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import '@/app/globals.css';
+import ToastProvider from '@/providers/ToastProvider';
 
 import AppShell from '@/components/AppShell';
 
@@ -13,7 +14,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko">
       <body>
-        <AppShell>{children}</AppShell>
+        <ToastProvider>
+          <AppShell>{children}</AppShell>
+        </ToastProvider>
       </body>
     </html>
   );
