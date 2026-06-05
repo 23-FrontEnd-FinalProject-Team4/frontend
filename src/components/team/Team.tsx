@@ -1,8 +1,9 @@
 import Image from 'next/image';
 
 import settingIcon from '@/assets/icons/setting.svg';
-import Profile from '@/components/profile/Profile';
 import { cn } from '@/utils/cn';
+
+import Profile from '@/components/profile/Profile';
 
 import ProgressBar from '../progressBar/ProgressBar';
 import type { TeamCardSize, TeamMember, TeamProps } from './type';
@@ -39,15 +40,15 @@ interface UserTeamCardProps extends Pick<
 }
 
 const ADMIN_CARD_SIZE_CLASS: Record<TeamCardSize, string> = {
-  lg: 'w-[1120px] max-w-full min-h-[239px] gap-6 rounded-[20px] p-8',
-  md: 'w-[620px] max-w-full min-h-[239px] gap-6 rounded-[20px] p-6',
-  sm: 'w-[375px] max-w-full min-h-[196px] gap-4 rounded-none p-6',
+  lg: 'w-280 max-w-full min-h-59.75 gap-6 rounded-5 p-8',
+  md: 'w-155 max-w-full min-h-59.75 gap-6 rounded-5 p-6',
+  sm: 'w-93.75 max-w-full min-h-49 gap-4 rounded-none p-6',
 };
 
 const USER_CARD_SIZE_CLASS: Record<TeamCardSize, string> = {
-  lg: 'h-16 w-[1120px] max-w-full rounded-xl px-6',
-  md: 'h-16 w-[620px] max-w-full rounded-xl px-6',
-  sm: 'h-14 w-[375px] max-w-full rounded-none px-5',
+  lg: 'h-16 w-280 max-w-full rounded-xl px-6',
+  md: 'h-16 w-155 max-w-full rounded-xl px-6',
+  sm: 'h-14 w-93.75 max-w-full rounded-none px-5',
 };
 
 const TEAM_IMAGE_SIZE_CLASS: Record<TeamCardSize, string> = {
