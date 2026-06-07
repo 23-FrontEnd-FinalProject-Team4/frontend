@@ -1,3 +1,5 @@
+import { Task } from '../task/type';
+
 export interface Member {
   userId: number;
   groupId: number;
@@ -14,7 +16,7 @@ export interface TaskList {
   updatedAt: string;
   groupId: number;
   displayIndex: number;
-  tasks: unknown[]; //추후 tasks 발견하면 수정
+  tasks: Task[]; //추후 tasks 발견하면 수정
 }
 
 export interface GroupDetail {
