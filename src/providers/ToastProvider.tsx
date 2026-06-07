@@ -2,7 +2,11 @@
 
 import { Toaster } from 'react-hot-toast';
 
-export default function ToastProvider({ children }: { children: React.ReactNode }) {
+interface ToastProviderProps {
+  children: React.ReactNode;
+}
+
+const ToastProvider = ({ children }: ToastProviderProps) => {
   return (
     <>
       {children}
@@ -10,27 +14,24 @@ export default function ToastProvider({ children }: { children: React.ReactNode 
         position="bottom-center"
         toastOptions={{
           duration: 3000,
-          style: {
-            background: '#fff',
-            color: '#000',
-            fontSize: '16px',
-            borderRadius: '12px',
-            padding: '12px 24px',
-          },
+          className:
+            'bg-background-primary text-text-primary text-md rounded-xl px-6 py-3 font-medium border border-border-primary shadow-lg md:text-lg',
           success: {
             iconTheme: {
-              primary: '#4ade80',
-              secondary: '#fff',
+              primary: '#10b981',
+              secondary: 'var(--color-background-primary)',
             },
           },
           error: {
             iconTheme: {
-              primary: '#f87171',
-              secondary: '#fff',
+              primary: '#fc4b4b',
+              secondary: 'var(--color-background-primary)',
             },
           },
         }}
       />
     </>
   );
-}
+};
+
+export default ToastProvider;
