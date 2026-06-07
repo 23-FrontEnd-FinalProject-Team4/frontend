@@ -1,12 +1,13 @@
+import { getWeekDatesAround } from '@/utils/date';
+
 import DateItem from '../dateItem/DateItem';
-import { getWeekDates } from '@/utils/date/getWeekDates';
 import { DateListProps } from './type';
 
 const DateList = ({ selectedDate, onChange }: DateListProps) => {
-  const days = getWeekDates(selectedDate);
+  const days = getWeekDatesAround(selectedDate);
 
   return (
-    <div className="flex w-full gap-3">
+    <div className="flex w-full gap-1 md:gap-2 xl:gap-3">
       {days.map((day) => (
         <DateItem
           key={day.toISOString()}
