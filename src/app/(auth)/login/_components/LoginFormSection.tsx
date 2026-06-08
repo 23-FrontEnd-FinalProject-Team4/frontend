@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Button from '@/components/button/Button';
 import Input from '@/components/input/Input';
 
-export default function LoginFormSection() {
+const LoginFormSection = () => {
   return (
     <>
       <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-4">
@@ -38,4 +38,6 @@ export default function LoginFormSection() {
       </div>
     </>
   );
-}
+};
+
+export default LoginFormSection;

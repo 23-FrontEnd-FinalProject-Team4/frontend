@@ -3,7 +3,7 @@ import SecessionIcon from '@/assets/icons/secession.svg';
 import EditableProfileImage from '@/components/editableProfileImage/EditableProfileImage';
 import Input from '@/components/input/Input';
 
-export default function SettingProfileFormSection() {
+const SettingProfileFormSection = () => {
   return (
     <main className="bg-background-primary flex max-h-[800px] w-full max-w-[780px] flex-col rounded-2xl p-8 md:p-18">
       <h1 className="text-medium font-semibold">계정 설정</h1>
@@ -35,4 +35,6 @@ export default function SettingProfileFormSection() {
       </form>
     </main>
   );
-}
+};
+
+export default SettingProfileFormSection;

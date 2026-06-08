@@ -1,6 +1,6 @@
 import AlertIcon from '@/assets/icons/alert.svg';
 
-export default function SettingSaveBar() {
+const SettingSaveBar = () => {
   return (
     <div className="bg-brand-primary text-md mx-6 flex items-center justify-between rounded-xl px-4 py-3 text-white">
       <div className="flex items-center gap-2">
@@ -12,4 +12,6 @@ export default function SettingSaveBar() {
       </button>
     </div>
   );
-}
+};
+
+export default SettingSaveBar;

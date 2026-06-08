@@ -3,7 +3,7 @@
 import Button from '@/components/button/Button';
 import Input from '@/components/input/Input';
 
-export default function SignupFormSection() {
+const SignupFormSection = () => {
   return (
     <>
       <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-5">
@@ -35,4 +35,6 @@ export default function SignupFormSection() {
       </form>
     </>
   );
-}
+};
+
+export default SignupFormSection;
