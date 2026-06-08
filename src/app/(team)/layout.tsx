@@ -1,6 +1,10 @@
-import { AddTeamLayoutProps } from './type';
+import type { ReactNode } from 'react';
 
-const AddTeamLayout = ({ children }: AddTeamLayoutProps) => {
+interface TeamLayoutProps {
+  children: ReactNode;
+}
+
+const TeamLayout = ({ children }: TeamLayoutProps) => {
   return (
     <div className="flex min-h-[calc(100vh-60px)] w-full items-center justify-center p-4">
       <div className="w-full max-w-[550px]">{children}</div>
@@ -8,4 +12,4 @@ const AddTeamLayout = ({ children }: AddTeamLayoutProps) => {
   );
 };
 
-export default AddTeamLayout;
+export default TeamLayout;
