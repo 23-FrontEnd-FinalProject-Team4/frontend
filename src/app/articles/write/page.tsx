@@ -60,6 +60,14 @@ const WriteArticlePage = () => {
             등록
           </Button>
         </div>
+        <div className="flex w-full justify-center pt-8">
+          <Link
+            href="/articles"
+            className="text-text-secondary text-md hover:text-brand-primary px-3"
+          >
+            목록으로
+          </Link>
+        </div>
       </main>
     </div>
   );
