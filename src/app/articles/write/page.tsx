@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 
+import Link from 'next/link';
+
 import UploadIcon from '@/assets/icons/img.svg';
 
 import Button from '@/components/button/Button';
@@ -54,9 +56,8 @@ const WriteArticlePage = () => {
               <span className="text-text-disabled text-md">0 / 1</span>
             </button>
           </div>
-
-          <Button variant="primary-filled" onClick={() => {}}>
-            등록하기
+          <Button variant="primary-filled" className="w-full" onClick={() => {}}>
+            등록
           </Button>
         </div>
       </main>

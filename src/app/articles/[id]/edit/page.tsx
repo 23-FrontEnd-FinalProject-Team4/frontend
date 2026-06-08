@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 
+import Link from 'next/link';
+
 import UploadIcon from '@/assets/icons/img.svg';
 
 import Button from '@/components/button/Button';
@@ -58,6 +60,15 @@ const EditArticlePage = () => {
           <Button variant="primary-filled" onClick={() => {}}>
             수정하기
           </Button>
+        </div>
+        <div className="flex w-full justify-center pt-8">
+          {/* TODO : 수정 전 글로 이동 */}
+          <Link
+            href="/articles"
+            className="text-text-secondary text-md hover:text-brand-primary px-3"
+          >
+            목록으로
+          </Link>
         </div>
       </main>
     </div>
