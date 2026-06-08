@@ -11,4 +11,12 @@ const clientFetcher = axios.create({
   },
 });
 
+clientFetcher.interceptors.request.use((config) => {
+  if (config.data instanceof FormData) {
+    delete config.headers['Content-Type'];
+  }
+
+  return config;
+});
+
 export default clientFetcher;
