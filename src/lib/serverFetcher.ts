@@ -38,17 +38,7 @@ const createServerHeaders = async (optionsHeaders?: HeadersInit, body?: RequestI
   return headers;
 };
 
-export const serverFetcher = async <T>(path: string, options: RequestInit = {}): Promise<T> => {
-  const response = await fetch(createRequestUrl(path), {
-    ...options,
-    headers: await createServerHeaders(options.headers, options.body),
-    cache: options.cache ?? 'no-store',
-  });
-
-  if (!response.ok) {
-    throw new Error(`API request failed with status ${response.status}`);
-  }
-
+const parseResponse = async <T>(response: Response): Promise<T> => {
   if (response.status === 204) {
     return undefined as T;
   }
@@ -60,4 +50,18 @@ export const serverFetcher = async <T>(path: string, options: RequestInit = {}):
   }
 
   return response.text() as Promise<T>;
+};
+
+export const serverFetcher = async <T>(path: string, options: RequestInit = {}): Promise<T> => {
+  const response = await fetch(createRequestUrl(path), {
+    ...options,
+    headers: await createServerHeaders(options.headers, options.body),
+    cache: options.cache ?? 'no-store',
+  });
+
+  if (!response.ok) {
+    throw new Error(`API request failed with status ${response.status}`);
+  }
+
+  return parseResponse<T>(response);
 };
