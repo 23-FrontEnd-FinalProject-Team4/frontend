@@ -1,7 +1,9 @@
 import sampleImage from '@/assets/images/sample.png';
 
 import type { ArticleWithLike } from '@/components/articles/ArticleCard.type';
+import type { Comment } from '@/components/articlesDetail/Comment.type';
 
+//본문
 export const mockArticles: ArticleWithLike[] = [
   {
     id: 1,
@@ -41,5 +43,29 @@ export const mockArticles: ArticleWithLike[] = [
     commentCount: 10,
     updatedAt: '2026. 06. 02',
     isLiked: false,
+  },
+];
+
+//댓글
+export const mockComments: Comment[] = [
+  {
+    id: 1,
+    content: '커피믹스 괴도를 찾습니다.',
+    createdAt: '2026. 06. 04',
+    writer: {
+      id: 1,
+      nickname: '김믹스',
+      image: null,
+    },
+  },
+  {
+    id: 2,
+    content: '커피믹스 괴도를 찾습니다.',
+    createdAt: '2026. 06. 04',
+    writer: {
+      id: 2,
+      nickname: '이믹스',
+      image: null,
+    },
   },
 ];

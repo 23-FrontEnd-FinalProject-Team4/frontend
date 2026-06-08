@@ -1,10 +1,33 @@
-export default function ArticleDetailPage() {
+import { mockArticles } from '@/app/articles/mockArticles';
+
+import ArticleContent from '@/components/articlesDetail/ArticleContent';
+import ArticleHeader from '@/components/articlesDetail/ArticleHeader';
+import CommentSection from '@/components/articlesDetail/CommentSection';
+import LikeButton from '@/components/articlesDetail/LikeButton';
+
+const ArticleDetailPage = () => {
+  const articles = mockArticles[0];
+
   return (
-    <div className="flex h-screen">
-      <main>
-        <div>제목 영역</div>
-        <div>작성자</div>
+    <div className="mx-auto flex min-h-screen px-4 pt-5 md:p-22">
+      <main className="min-h-screen w-full">
+        <div className="bg-background-primary mx-auto flex w-full flex-col gap-4 rounded-2xl px-5 py-10 md:px-10 md:py-14">
+          <ArticleHeader
+            writer={articles.writer}
+            createdAt={articles.createdAt}
+            title={articles.title}
+          />
+          <ArticleContent content={articles.content} image={articles.image} />
+          <LikeButton isLiked={articles.isLiked} likeCount={articles.likeCount} />
+          <CommentSection
+            writer={articles.writer}
+            createdAt={articles.createdAt}
+            content={articles.content}
+          />
+        </div>
       </main>
     </div>
   );
-}
+};
+
+export default ArticleDetailPage;
