@@ -52,6 +52,7 @@ export const mockComments: Comment[] = [
     id: 1,
     content: '커피믹스 괴도를 찾습니다.',
     createdAt: '2026. 06. 04',
+    updatedAt: '2026. 06. 04',
     writer: {
       id: 1,
       nickname: '김믹스',
@@ -62,6 +63,7 @@ export const mockComments: Comment[] = [
     id: 2,
     content: '커피믹스 괴도를 찾습니다.',
     createdAt: '2026. 06. 04',
+    updatedAt: '2026. 06. 04',
     writer: {
       id: 2,
       nickname: '이믹스',

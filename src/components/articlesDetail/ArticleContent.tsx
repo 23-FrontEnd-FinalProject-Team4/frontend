@@ -6,12 +6,13 @@ export default function ArticleContent({ content, image }: ArticleContentProps) 
   return (
     <div className="text-text-primary text-md">
       {content}
+      {/* api 연동 시 수정 필요 */}
       {image && (
         <div className="mt-4 flex justify-start">
           <Image
             src={image}
             alt="article image"
-            className="mt-4 h-auto max-h-[400px] w-auto object-contain"
+            className="h-auto max-h-[400px] w-auto object-contain"
             width={500}
             height={500}
           />
