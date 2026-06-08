@@ -4,7 +4,7 @@ import type { ArticleContentProps } from '@/components/articlesDetail/ArticleDet
 
 export default function ArticleContent({ content, image }: ArticleContentProps) {
   return (
-    <div className="text-text-primary text-md">
+    <div className="text-text-primary text-md leading-7 md:text-lg">
       {content}
       {/* api 연동 시 수정 필요 */}
       {image && (

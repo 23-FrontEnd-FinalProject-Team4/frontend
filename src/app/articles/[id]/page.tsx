@@ -19,6 +19,7 @@ const ArticleDetailPage = () => {
             createdAt={articles.createdAt}
           />
           <ArticleContent content={articles.content} image={articles.image} />
+          {/* 좋아요 클릭 핸들러 구현 */}
           <LikeButton isLiked={articles.isLiked} likeCount={articles.likeCount} />
           <CommentSection comments={comments} />
         </div>
