@@ -19,7 +19,14 @@ const createRequestUrl = (path: string) => {
   return `${baseUrl}${requestPath}`;
 };
 
-const createServerHeaders = async (optionsHeaders?: HeadersInit) => {
+const isFormDataBody = (body: RequestInit['body']) => {
+  return typeof FormData !== 'undefined' && body instanceof FormData;
+};
+
+const createServerHeaders = async (
+  optionsHeaders?: HeadersInit,
+  body?: RequestInit['body'],
+) => {
   const headers = new Headers(optionsHeaders);
   const cookieHeader = (await cookies()).toString();
 
@@ -27,7 +34,7 @@ const createServerHeaders = async (optionsHeaders?: HeadersInit) => {
     headers.set('Cookie', cookieHeader);
   }
 
-  if (!headers.has('Content-Type')) {
+  if (body != null && !isFormDataBody(body) && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json');
   }
 
@@ -37,7 +44,7 @@ const createServerHeaders = async (optionsHeaders?: HeadersInit) => {
 export const serverFetcher = async <T>(path: string, options: RequestInit = {}): Promise<T> => {
   const response = await fetch(createRequestUrl(path), {
     ...options,
-    headers: await createServerHeaders(options.headers),
+    headers: await createServerHeaders(options.headers, options.body),
     cache: options.cache ?? 'no-store',
   });
 
