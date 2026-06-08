@@ -6,7 +6,7 @@ import type { Comment } from '@/components/articlesDetail/Comment.type';
 import InputReply from '@/components/inputReply/InputReply';
 import Reply from '@/components/reply/Reply';
 
-export default function CommentSection({ comments }: { comments: Comment[] | null }) {
+const CommentSection = ({ comments }: { comments: Comment[] | null }) => {
   const [replyValue, setReplyValue] = useState('');
 
   return (
@@ -44,4 +44,6 @@ export default function CommentSection({ comments }: { comments: Comment[] | nul
       </div>
     </>
   );
-}
+};
+
+export default CommentSection;

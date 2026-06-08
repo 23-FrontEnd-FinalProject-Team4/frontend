@@ -4,7 +4,7 @@ import { cn } from '@/utils/cn';
 
 import type { LikeButtonProps } from '@/components/articlesDetail/ArticleDetail.type';
 
-export default function LikeButton({ isLiked, likeCount }: LikeButtonProps) {
+const LikeButton = ({ isLiked, likeCount }: LikeButtonProps) => {
   return (
     <div className="flex w-full justify-end px-4">
       <button
@@ -18,4 +18,6 @@ export default function LikeButton({ isLiked, likeCount }: LikeButtonProps) {
       </button>
     </div>
   );
-}
+};
+
+export default LikeButton;

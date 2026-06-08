@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 import type { ArticleContentProps } from '@/components/articlesDetail/ArticleDetail.type';
 
-export default function ArticleContent({ content, image }: ArticleContentProps) {
+const ArticleContent = ({ content, image }: ArticleContentProps) => {
   return (
     <div className="text-text-primary text-md leading-7 md:text-lg">
       {content}
@@ -20,4 +20,6 @@ export default function ArticleContent({ content, image }: ArticleContentProps) 
       )}
     </div>
   );
-}
+};
+
+export default ArticleContent;

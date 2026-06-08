@@ -2,7 +2,7 @@ import KebabIcon from '@/assets/icons/kebab.svg';
 
 import Profile from '@/components/profile/Profile';
 
-export default function ArticleHeader({
+const ArticleHeader = ({
   writer,
   createdAt,
   title,
@@ -10,7 +10,7 @@ export default function ArticleHeader({
   writer: string;
   createdAt: string;
   title: string;
-}) {
+}) => {
   return (
     <header className="border-border-primary mb-4 flex w-full items-start justify-between border-b pb-3">
       <div className="flex flex-col gap-2">
@@ -27,4 +27,6 @@ export default function ArticleHeader({
       </button>
     </header>
   );
-}
+};
+
+export default ArticleHeader;
