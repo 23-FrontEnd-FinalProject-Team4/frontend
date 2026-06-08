@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import Link from 'next/link';
 
-import UploadIcon from '@/assets/icons/img.svg';
+import UploadIcon from '@/assets/icons/img.svg?react';
 
 import Button from '@/components/button/Button';
 import Input from '@/components/input/Input';
@@ -16,7 +16,7 @@ const EditArticlePage = () => {
   const [image, setImage] = useState<File | null>(null);
 
   return (
-    <div className="mx-auto flex min-h-screen px-4 pt-5 md:p-22">
+    <div className="mx-auto flex min-h-screen px-4 pt-5 md:p-20">
       <main className="min-h-screen w-full">
         <div className="bg-background-primary mx-auto flex w-full flex-col gap-4 rounded-2xl px-5 py-10 md:px-10 md:py-14 lg:max-w-[900px]">
           <h1 className="mb-8 text-xl font-bold md:text-2xl">게시글 수정</h1>
@@ -50,6 +50,7 @@ const EditArticlePage = () => {
             <span className="text-md flex gap-1 font-bold md:text-lg">이미지</span>
             <button
               type="button"
+              aria-label="업로드 이미지 수정"
               className="border-border-primary flex h-20 w-20 flex-col items-center justify-center gap-1 rounded-xl border"
             >
               <UploadIcon className="size-6" />
