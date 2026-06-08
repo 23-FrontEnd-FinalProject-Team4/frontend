@@ -26,7 +26,13 @@ const SettingProfileFormSection = () => {
         </div>
         <div className="flex flex-col gap-1.5">
           <label htmlFor="settings-password">비밀번호</label>
-          <Input id="settings-password" value="dddd" isDisabled rightButtonText="변경하기" />
+          <Input
+            id="settings-password"
+            type="password"
+            defaultValue="dddd"
+            isDisabled
+            rightButtonText="변경하기"
+          />
         </div>
         <button type="button" className="text-status-danger mt-2 flex items-center gap-1">
           <SecessionIcon />
