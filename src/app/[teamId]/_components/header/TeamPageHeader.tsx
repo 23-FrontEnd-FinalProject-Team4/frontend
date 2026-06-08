@@ -38,7 +38,7 @@ export default function TeamPageHeader({
         variant={isAdminLayout ? 'admin' : 'user'}
         size={size}
         className={cn(
-          'w-full',
+          'w-full transition-[box-shadow,transform] duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_24px_60px_rgb(15_23_42/0.08)]',
           isAdminLayout
             ? 'xl:rounded-5 min-h-37.75 gap-4 rounded-xl p-5 md:min-h-37.75 xl:min-h-59.75 xl:gap-6 xl:p-8 xl:[&_[role=progressbar]]:w-[calc(100%-32px)]'
             : 'h-14 rounded-xl px-4 md:h-16 xl:h-16 xl:px-6',
@@ -50,7 +50,7 @@ export default function TeamPageHeader({
           type="button"
           aria-label="팀 설정"
           aria-expanded={isSettingsOpen}
-          className="hover:bg-background-secondary hover:text-brand-primary focus-visible:ring-brand-primary text-icon-primary absolute top-5 right-5 z-10 flex size-7 items-center justify-center rounded-md transition-all duration-200 focus-visible:ring-2 focus-visible:outline-none active:scale-95 xl:top-auto xl:right-6 xl:bottom-12.5"
+          className="text-icon-primary hover:bg-background-primary/80 hover:text-brand-primary hover:shadow-[0_8px_24px_rgb(15_23_42/0.10)] focus-visible:ring-brand-primary absolute top-5 right-5 z-10 flex size-7 items-center justify-center rounded-full backdrop-blur-sm transition-[background-color,box-shadow,color,transform] duration-300 ease-out focus-visible:ring-2 focus-visible:outline-none active:scale-95 xl:top-auto xl:right-6 xl:bottom-12.5"
           onClick={onSettingsClick}
         >
           <SettingsIcon className="size-6" aria-hidden="true" />
