@@ -1,5 +1,4 @@
 export interface CommentPathParams {
-  teamId: string;
   taskId: number;
 }
 

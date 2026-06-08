@@ -1,4 +1,4 @@
-import KakaoIcon from '@/assets/images/kakaotalk.svg';
+import KakaoIcon from '@/assets/icons/kakaotalk.svg';
 
 import LoginFormSection from './_components/LoginFormSection';
 
