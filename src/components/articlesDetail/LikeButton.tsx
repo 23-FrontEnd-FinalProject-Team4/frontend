@@ -14,7 +14,7 @@ export default function LikeButton({ isLiked, likeCount }: LikeButtonProps) {
         )}
       >
         {isLiked ? <HeartFillIcon className="h-6 w-4" /> : <HeartEmptyIcon className="h-6 w-4" />}
-        {likeCount}
+        {(likeCount || 0) > 999 ? '999+' : likeCount || 0}
       </button>
     </div>
   );

@@ -13,7 +13,7 @@ export const mockArticles: ArticleWithLike[] = [
     image: sampleImage.src,
     writer: '김믹스',
     createdAt: '2026. 06. 04',
-    likeCount: 999,
+    likeCount: 12036,
     commentCount: 10,
     updatedAt: '2026. 06. 04',
     isLiked: true,
