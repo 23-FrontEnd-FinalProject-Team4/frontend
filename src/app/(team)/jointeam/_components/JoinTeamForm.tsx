@@ -45,8 +45,11 @@ const JoinTeamForm = ({ onSuccess }: JoinTeamFormProps) => {
 
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-2 md:gap-3">
-            <label className="text-md text-text-primary font-medium">팀 링크</label>
+            <label htmlFor="teamLink" className="text-md text-text-primary font-medium">
+              팀 링크
+            </label>
             <Input
+              id="teamLink"
               type="text"
               size="sm"
               value={teamLink}
@@ -67,7 +70,7 @@ const JoinTeamForm = ({ onSuccess }: JoinTeamFormProps) => {
             참여하기
           </Button>
 
-          <p className="text-text-default font-regular flex justify-center text-lg break-all">
+          <p className="text-text-default flex justify-center text-lg break-all">
             공유받은 팀 링크를 입력해 참여할 수 있어요.
           </p>
         </div>
