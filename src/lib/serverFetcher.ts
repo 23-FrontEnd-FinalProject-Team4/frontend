@@ -1,6 +1,6 @@
-import 'server-only';
-
 import { cookies } from 'next/headers';
+
+import 'server-only';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -23,10 +23,7 @@ const isFormDataBody = (body: RequestInit['body']) => {
   return typeof FormData !== 'undefined' && body instanceof FormData;
 };
 
-const createServerHeaders = async (
-  optionsHeaders?: HeadersInit,
-  body?: RequestInit['body'],
-) => {
+const createServerHeaders = async (optionsHeaders?: HeadersInit, body?: RequestInit['body']) => {
   const headers = new Headers(optionsHeaders);
   const cookieHeader = (await cookies()).toString();
 

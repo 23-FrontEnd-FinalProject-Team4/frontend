@@ -41,14 +41,11 @@ export const createTask = async ({
 };
 
 export const getTasks = async ({ groupId, taskListId, date }: GetTasksRequest) => {
-  const { data } = await clientFetcher.get<Task[]>(
-    getTaskListBaseUrl({ groupId, taskListId }),
-    {
-      params: {
-        date,
-      },
+  const { data } = await clientFetcher.get<Task[]>(getTaskListBaseUrl({ groupId, taskListId }), {
+    params: {
+      date,
     },
-  );
+  });
 
   return data;
 };
