@@ -2,7 +2,7 @@ import KakaoIcon from '@/assets/images/kakaotalk.svg';
 
 import SignupFormSection from './_components/SignupFormSection';
 
-export default function SignupPage() {
+const SignupPage = () => {
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
       <main className="bg-background-primary flex max-h-[780px] w-full max-w-[550px] flex-col rounded-2xl p-8 md:p-18">
@@ -23,4 +23,6 @@ export default function SignupPage() {
       </main>
     </div>
   );
-}
+};
+
+export default SignupPage;
