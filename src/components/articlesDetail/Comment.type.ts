@@ -1,5 +1,5 @@
 export type CommentSectionProps = {
-  comments: Comment[];
+  comments: Comment[] | null;
 };
 
 export type Comment = {
