@@ -10,7 +10,7 @@ const SettingProfileFormSection = () => {
       <div className="my-8 flex justify-center">
         <EditableProfileImage src="/images/default-profile.png" size="lg" />
       </div>
-      <form className="flex flex-col gap-4 pb-6">
+      <form id="settings-profile-form" className="flex flex-col gap-4 pb-6">
         <div className="flex flex-col gap-1.5">
           <label htmlFor="settings-name">이름</label>
           <Input id="settings-name" defaultValue="안해나" placeholder="이름을 입력해주세요." />
