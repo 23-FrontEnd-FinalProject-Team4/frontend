@@ -1,4 +1,4 @@
-import axiosInstance from '../axiosInstance';
+import clientFetcher from '@/lib/clientFetcher';
 import {
   CreateRecurringTaskParams,
   ResponseTaskRecurring,
@@ -10,7 +10,7 @@ export const createRecurringTask = async ({
   taskListId,
   body,
 }: CreateRecurringTaskParams) => {
-  const { data } = await axiosInstance.post<ResponseTaskRecurring>(
+  const { data } = await clientFetcher.post<ResponseTaskRecurring>(
     `/groups/${groupId}/task-lists/${taskListId}/recurring`,
     body,
   );
@@ -23,7 +23,7 @@ export const updateRecurringTask = async ({
   recurringId,
   body,
 }: UpdateRecurringTaskParams) => {
-  const { data } = await axiosInstance.patch<ResponseTaskRecurring>(
+  const { data } = await clientFetcher.patch<ResponseTaskRecurring>(
     `/groups/${groupId}/task-lists/${taskListId}/recurring/${recurringId}`,
     body,
   );

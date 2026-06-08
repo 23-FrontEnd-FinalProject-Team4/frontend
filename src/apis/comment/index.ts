@@ -1,4 +1,4 @@
-import axiosInstance from '@/apis/axiosInstance';
+import clientFetcher from '@/lib/clientFetcher';
 
 import type {
   Comment,
@@ -12,13 +12,13 @@ const getCommentBaseUrl = ({ teamId, taskId }: CommentPathParams) =>
   `/${teamId}/tasks/${taskId}/comments`;
 
 export const getComments = async ({ teamId, taskId }: CommentPathParams) => {
-  const { data } = await axiosInstance.get<Comment[]>(getCommentBaseUrl({ teamId, taskId }));
+  const { data } = await clientFetcher.get<Comment[]>(getCommentBaseUrl({ teamId, taskId }));
 
   return data;
 };
 
 export const createComment = async ({ teamId, taskId, content }: CreateCommentRequest) => {
-  const { data } = await axiosInstance.post<Comment>(getCommentBaseUrl({ teamId, taskId }), {
+  const { data } = await clientFetcher.post<Comment>(getCommentBaseUrl({ teamId, taskId }), {
     content,
   });
 
@@ -31,7 +31,7 @@ export const updateComment = async ({
   commentId,
   content,
 }: UpdateCommentRequest) => {
-  const { data } = await axiosInstance.patch<Comment>(
+  const { data } = await clientFetcher.patch<Comment>(
     `${getCommentBaseUrl({ teamId, taskId })}/${commentId}`,
     {
       content,
@@ -42,5 +42,5 @@ export const updateComment = async ({
 };
 
 export const deleteComment = async ({ teamId, taskId, commentId }: CommentDetailPathParams) => {
-  await axiosInstance.delete(`${getCommentBaseUrl({ teamId, taskId })}/${commentId}`);
+  await clientFetcher.delete(`${getCommentBaseUrl({ teamId, taskId })}/${commentId}`);
 };
