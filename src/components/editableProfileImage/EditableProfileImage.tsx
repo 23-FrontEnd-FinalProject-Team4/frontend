@@ -1,3 +1,5 @@
+'use client';
+
 import type { ChangeEvent } from 'react';
 
 import PencilIcon from '@/assets/icons/pencil.svg?react';
