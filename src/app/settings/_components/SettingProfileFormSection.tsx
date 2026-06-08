@@ -12,21 +12,21 @@ const SettingProfileFormSection = () => {
       </div>
       <form className="flex flex-col gap-4 pb-6">
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="name">이름</label>
-          <Input id="name" defaultValue="안해나" placeholder="이름을 입력해주세요." />
+          <label htmlFor="settings-name">이름</label>
+          <Input id="settings-name" defaultValue="안해나" placeholder="이름을 입력해주세요." />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="email">이메일</label>
+          <label htmlFor="settings-email">이메일</label>
           <Input
-            id="email"
+            id="settings-email"
             defaultValue="codeit@codeit.com"
             placeholder="이메일을 입력해주세요."
             isDisabled
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="password">비밀번호</label>
-          <Input id="password" value="dddd" isDisabled rightButtonText="변경하기" />
+          <label htmlFor="settings-password">비밀번호</label>
+          <Input id="settings-password" value="dddd" isDisabled rightButtonText="변경하기" />
         </div>
         <button type="button" className="text-status-danger mt-2 flex items-center gap-1">
           <SecessionIcon />

@@ -10,13 +10,13 @@ const LoginFormSection = () => {
     <>
       <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-4">
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="email">이메일</label>
-          <Input id="email" placeholder="이메일을 입력해주세요." />
+          <label htmlFor="login-email">이메일</label>
+          <Input id="login-email" placeholder="이메일을 입력해주세요." />
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="password">비밀번호</label>
-          <Input id="password" type="password" placeholder="비밀번호를 입력해주세요." />
+          <label htmlFor="login-password">비밀번호</label>
+          <Input id="login-password" type="password" placeholder="비밀번호를 입력해주세요." />
         </div>
 
         <button
