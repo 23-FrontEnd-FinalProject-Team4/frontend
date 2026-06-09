@@ -1,4 +1,4 @@
-import axiosInstance from '@/apis/axiosInstance';
+import clientFetcher from '@/lib/clientFetcher';
 
 import {
   ArticleIdParams,
@@ -13,7 +13,7 @@ import {
 } from './type';
 
 export const getArticleComments = async (params: GetArticleCommentsParams) => {
-  const response = await axiosInstance.get<GetArticleCommentsResponse>(
+  const response = await clientFetcher.get<GetArticleCommentsResponse>(
     `/articles/${params.articleId}/comments`,
     {
       params: {
@@ -30,7 +30,7 @@ export const createArticleComment = async (
   { articleId }: ArticleIdParams,
   request: CreateArticleCommentRequest,
 ) => {
-  const response = await axiosInstance.post<CreateArticleCommentResponse>(
+  const response = await clientFetcher.post<CreateArticleCommentResponse>(
     `/articles/${articleId}/comments`,
     request,
   );
@@ -43,7 +43,7 @@ export const updateArticleComment = async (
   { commentId }: CommentIdParams,
   request: UpdateArticleCommentRequest,
 ) => {
-  const response = await axiosInstance.patch<UpdateArticleCommentResponse>(
+  const response = await clientFetcher.patch<UpdateArticleCommentResponse>(
     `/comments/${commentId}`,
     request,
   );
@@ -52,7 +52,7 @@ export const updateArticleComment = async (
 
 // 게시글 댓글 삭제
 export const deleteArticleComment = async ({ commentId }: CommentIdParams) => {
-  const response = await axiosInstance.delete<DeleteArticleCommentResponse>(
+  const response = await clientFetcher.delete<DeleteArticleCommentResponse>(
     `/comments/${commentId}`,
   );
   return response.data;

@@ -1,4 +1,4 @@
-import axiosInstance from '@/apis/axiosInstance';
+import clientFetcher from '@/lib/clientFetcher';
 
 import type {
   CreateTaskRequest,
@@ -25,7 +25,7 @@ export const createTask = async ({
   monthDay,
   weekDays,
 }: CreateTaskRequest) => {
-  const { data } = await axiosInstance.post<CreateTaskResponse>(
+  const { data } = await clientFetcher.post<CreateTaskResponse>(
     getTaskListBaseUrl({ groupId, taskListId }),
     {
       name,
@@ -41,20 +41,17 @@ export const createTask = async ({
 };
 
 export const getTasks = async ({ groupId, taskListId, date }: GetTasksRequest) => {
-  const { data } = await axiosInstance.get<Task[]>(
-    getTaskListBaseUrl({ groupId, taskListId }),
-    {
-      params: {
-        date,
-      },
+  const { data } = await clientFetcher.get<Task[]>(getTaskListBaseUrl({ groupId, taskListId }), {
+    params: {
+      date,
     },
-  );
+  });
 
   return data;
 };
 
 export const getTask = async ({ groupId, taskListId, taskId }: TaskDetailPathParams) => {
-  const { data } = await axiosInstance.get<Task>(
+  const { data } = await clientFetcher.get<Task>(
     `${getTaskListBaseUrl({ groupId, taskListId })}/${taskId}`,
   );
 
@@ -69,7 +66,7 @@ export const updateTask = async ({
   description,
   done,
 }: UpdateTaskRequest) => {
-  const { data } = await axiosInstance.patch<Task>(
+  const { data } = await clientFetcher.patch<Task>(
     `${getTaskListBaseUrl({ groupId, taskListId })}/${taskId}`,
     {
       name,
@@ -82,7 +79,7 @@ export const updateTask = async ({
 };
 
 export const deleteTask = async ({ groupId, taskListId, taskId }: TaskDetailPathParams) => {
-  await axiosInstance.delete(`${getTaskListBaseUrl({ groupId, taskListId })}/${taskId}`);
+  await clientFetcher.delete(`${getTaskListBaseUrl({ groupId, taskListId })}/${taskId}`);
 };
 
 export const updateTaskOrder = async ({
@@ -91,7 +88,7 @@ export const updateTaskOrder = async ({
   id,
   displayIndex,
 }: UpdateTaskOrderRequest) => {
-  await axiosInstance.patch(`${getTaskListBaseUrl({ groupId, taskListId })}/${id}/order`, {
+  await clientFetcher.patch(`${getTaskListBaseUrl({ groupId, taskListId })}/${id}/order`, {
     displayIndex,
   });
 };
@@ -102,7 +99,7 @@ export const deleteRecurringTask = async ({
   taskId,
   recurringId,
 }: DeleteRecurringTaskPathParams) => {
-  await axiosInstance.delete(
+  await clientFetcher.delete(
     `${getTaskListBaseUrl({ groupId, taskListId })}/${taskId}/recurring/${recurringId}`,
   );
 };

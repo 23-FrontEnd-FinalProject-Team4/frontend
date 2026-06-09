@@ -1,38 +1,34 @@
 'use client';
 
 import Button from '@/components/button/Button';
-import Input from '@/components/input/Input';
+import FormField from '@/components/formField/FormField';
 
-export default function SignupFormSection() {
+const SignupFormSection = () => {
   return (
-    <>
-      <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-5">
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="name">이름</label>
-          <Input id="name" placeholder="이름을 입력해주세요." />
-        </div>
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+      }}
+      className="flex flex-col gap-5"
+    >
+      <FormField id="signup-name" label="이름" placeholder="이름을 입력해주세요." />
+      <FormField id="signup-email" label="이메일" placeholder="이메일을 입력해주세요." />
 
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="email">이메일</label>
-          <Input id="email" placeholder="이메일을 입력해주세요." />
-        </div>
-
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="password">비밀번호</label>
-          <Input id="password" type="password" placeholder="비밀번호를 입력해주세요." />
-        </div>
-
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="confirmPassword">비밀번호 확인</label>
-          <Input
-            id="confirmPassword"
-            type="password"
-            placeholder="비밀번호를 다시 한 번 입력해주세요."
-          />
-        </div>
-
-        <Button className="my-4">회원가입</Button>
-      </form>
-    </>
+      <FormField
+        id="signup-password"
+        label="비밀번호"
+        type="password"
+        placeholder="비밀번호를 입력해주세요."
+      />
+      <FormField
+        id="signup-confirm-password"
+        label="비밀번호 확인"
+        type="password"
+        placeholder="비밀번호를 다시 한 번 입력해주세요."
+      />
+      <Button className="my-4">회원가입</Button>
+    </form>
   );
-}
+};
+
+export default SignupFormSection;

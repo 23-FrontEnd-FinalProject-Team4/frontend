@@ -1,5 +1,6 @@
 import Sidebar from '@/components/sideBar/SideBar';
 
+// 리스트를 보여주기 위한 데이터
 const SIDEBAR_GROUPS = [
   { id: 1, name: '경영관리팀', route: '/management' },
   { id: 2, name: '프로덕트팀', route: '/product' },

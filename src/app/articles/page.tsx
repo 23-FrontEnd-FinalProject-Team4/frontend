@@ -14,10 +14,10 @@ import { mockArticles } from './mockArticles';
 const ArticlesPage = () => {
   const [searchValue, setSearchValue] = useState('');
   return (
-    <div className="bg-background-primary tablet:pt-22 mx-auto flex min-h-screen p-0 lg:p-22">
+    <div className="bg-background-primary mx-auto flex min-h-screen p-0 md:pt-22 lg:p-22">
       <main className="min-h-screen">
         {/* 자유게시판 헤더 */}
-        <div className="tablet:flex-row mb-7 flex flex-col gap-4 p-5 px-6 md:justify-between lg:px-0">
+        <div className="mb-7 flex flex-col gap-4 p-5 px-6 md:flex-row md:justify-between lg:px-0">
           <h1 className="text-text-primary text-2xl font-bold">자유게시판</h1>
           <SearchInput
             value={searchValue}

@@ -1,3 +1,5 @@
+'use client';
+
 import type { ChangeEvent } from 'react';
 
 import PencilIcon from '@/assets/icons/pencil.svg?react';
@@ -15,7 +17,7 @@ const sizeStyle = {
     image: 'h-25 w-25 rounded-4xl',
     button:
       'absolute left-18 top-18 flex h-8 w-8 items-center justify-center rounded-full border-background-primary bg-background-tertiary',
-    icon: 20,
+    icon: 21,
   },
 } as const;
 
