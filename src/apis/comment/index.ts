@@ -1,4 +1,4 @@
-import axiosInstance from '@/apis/axiosInstance';
+import clientFetcher from '@/lib/clientFetcher';
 
 import type {
   Comment,
@@ -8,31 +8,25 @@ import type {
   UpdateCommentRequest,
 } from './type';
 
-const getCommentBaseUrl = ({ teamId, taskId }: CommentPathParams) =>
-  `/${teamId}/tasks/${taskId}/comments`;
+const getCommentBaseUrl = ({ taskId }: CommentPathParams) => `/tasks/${taskId}/comments`;
 
-export const getComments = async ({ teamId, taskId }: CommentPathParams) => {
-  const { data } = await axiosInstance.get<Comment[]>(getCommentBaseUrl({ teamId, taskId }));
+export const getComments = async ({ taskId }: CommentPathParams) => {
+  const { data } = await clientFetcher.get<Comment[]>(getCommentBaseUrl({ taskId }));
 
   return data;
 };
 
-export const createComment = async ({ teamId, taskId, content }: CreateCommentRequest) => {
-  const { data } = await axiosInstance.post<Comment>(getCommentBaseUrl({ teamId, taskId }), {
+export const createComment = async ({ taskId, content }: CreateCommentRequest) => {
+  const { data } = await clientFetcher.post<Comment>(getCommentBaseUrl({ taskId }), {
     content,
   });
 
   return data;
 };
 
-export const updateComment = async ({
-  teamId,
-  taskId,
-  commentId,
-  content,
-}: UpdateCommentRequest) => {
-  const { data } = await axiosInstance.patch<Comment>(
-    `${getCommentBaseUrl({ teamId, taskId })}/${commentId}`,
+export const updateComment = async ({ taskId, commentId, content }: UpdateCommentRequest) => {
+  const { data } = await clientFetcher.patch<Comment>(
+    `${getCommentBaseUrl({ taskId })}/${commentId}`,
     {
       content,
     },
@@ -41,6 +35,6 @@ export const updateComment = async ({
   return data;
 };
 
-export const deleteComment = async ({ teamId, taskId, commentId }: CommentDetailPathParams) => {
-  await axiosInstance.delete(`${getCommentBaseUrl({ teamId, taskId })}/${commentId}`);
+export const deleteComment = async ({ taskId, commentId }: CommentDetailPathParams) => {
+  await clientFetcher.delete(`${getCommentBaseUrl({ taskId })}/${commentId}`);
 };

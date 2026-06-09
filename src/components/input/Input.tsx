@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 
 import VisibilityFalseIcon from '@/assets/icons/visibility_false.svg?react';
