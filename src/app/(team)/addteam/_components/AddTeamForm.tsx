@@ -6,19 +6,12 @@ import Button from '@/components/button/Button';
 import EditableProfileImage from '@/components/editableProfileImage/EditableProfileImage';
 import Input from '@/components/input/Input';
 
-import useMediaQuery from '@/hooks/useMediaQuery';
-
 const AddTeamForm = () => {
   const [imagePreview, setImagePreview] = useState<string>('/profile.svg');
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [teamName, setTeamName] = useState<string>('');
 
   const [teamNameError, setTeamNameError] = useState<string | null>(null);
-
-  const isTablet = useMediaQuery('(min-width: 768px)');
-  const isDesktop = useMediaQuery('(min-width: 1280px)');
-
-  const showLargeImage = isTablet || isDesktop;
 
   const handleImageChange = (file: File) => {
     setImageFile(file);
@@ -72,7 +65,6 @@ const AddTeamForm = () => {
           <div className="flex justify-center">
             <EditableProfileImage
               src={imagePreview}
-              size={showLargeImage ? 'lg' : 'sm'}
               alt="팀 프로필 이미지"
               onChange={handleImageChange}
             />
