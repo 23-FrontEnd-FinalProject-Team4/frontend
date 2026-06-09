@@ -1,11 +1,12 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import Modal from '@/components/modal/Modal';
 import type { TeamCardSize } from '@/components/team/type';
 
 import useMediaQuery from '@/hooks/useMediaQuery';
+import useOverlay from '@/hooks/useOverlay';
 
 import { TASK_LISTS, TASK_STATUS_SECTIONS, TEAM_PAGE_MEMBERS } from '../_constants/mockData';
 import type { TeamPageRole } from '../type';
@@ -31,9 +32,8 @@ export default function TeamPageClient({ teamId }: TeamPageClientProps) {
   const isDesktop = useMediaQuery('(min-width: 1280px)');
   const isTablet = useMediaQuery('(min-width: 768px)');
 
+  const { open, overlay } = useOverlay();
   const [isTeamMenuOpen, setIsTeamMenuOpen] = useState(false);
-  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
-  const [isCreateListModalOpen, setIsCreateListModalOpen] = useState(false);
 
   const role: TeamPageRole = isMemberView(teamId) ? 'MEMBER' : 'ADMIN';
   const teamCardSize: TeamCardSize = isDesktop ? 'lg' : isTablet ? 'md' : 'sm';
@@ -46,6 +46,46 @@ export default function TeamPageClient({ teamId }: TeamPageClientProps) {
       })),
     [],
   );
+
+  const openInviteModal = useCallback(() => {
+    open(({ isOpen, close }) => (
+      <Modal
+        isOpen={isOpen}
+        title="멤버 초대"
+        description="그룹에 참여할 수 있는 링크를 복사합니다."
+        primaryAction={{
+          label: '링크 복사하기',
+          onClick: () => {
+            void copyInviteLink();
+            close();
+          },
+        }}
+        size="md"
+        onClose={close}
+      />
+    ));
+  }, [open]);
+
+  const openCreateListModal = useCallback(() => {
+    open(({ isOpen, close }) => (
+      <Modal
+        isOpen={isOpen}
+        title="할 일 목록"
+        primaryAction={{
+          label: '만들기',
+          onClick: close,
+        }}
+        size="md"
+        onClose={close}
+      >
+        <input
+          type="text"
+          placeholder="목록 명을 입력해주세요."
+          className="border-border-primary text-text-primary placeholder:text-text-disabled focus:border-brand-primary focus:ring-brand-primary h-11 w-full rounded-lg border px-4 text-sm transition-colors outline-none focus:ring-2"
+        />
+      </Modal>
+    ));
+  }, [open]);
 
   return (
     <div className="bg-background-secondary relative min-h-full overflow-y-auto px-4 py-6 md:px-6 xl:px-16 xl:py-15.75">
@@ -63,46 +103,13 @@ export default function TeamPageClient({ teamId }: TeamPageClientProps) {
           teamId={teamId}
           taskListsCount={TASK_LISTS.length}
           sections={groupedTaskLists}
-          onCreateTaskList={() => setIsCreateListModalOpen(true)}
+          onCreateTaskList={openCreateListModal}
         />
 
-        <MemberSection
-          members={TEAM_PAGE_MEMBERS}
-          onInviteClick={() => setIsInviteModalOpen(true)}
-        />
+        <MemberSection members={TEAM_PAGE_MEMBERS} onInviteClick={openInviteModal} />
       </div>
 
-      <Modal
-        isOpen={isInviteModalOpen}
-        title="멤버 초대"
-        description="그룹에 참여할 수 있는 링크를 복사합니다."
-        primaryAction={{
-          label: '링크 복사하기',
-          onClick: () => {
-            void copyInviteLink();
-            setIsInviteModalOpen(false);
-          },
-        }}
-        size="md"
-        onClose={() => setIsInviteModalOpen(false)}
-      />
-
-      <Modal
-        isOpen={isCreateListModalOpen}
-        title="할 일 목록"
-        primaryAction={{
-          label: '만들기',
-          onClick: () => setIsCreateListModalOpen(false),
-        }}
-        size="md"
-        onClose={() => setIsCreateListModalOpen(false)}
-      >
-        <input
-          type="text"
-          placeholder="목록 명을 입력해주세요."
-          className="border-border-primary text-text-primary placeholder:text-text-disabled focus:border-brand-primary focus:ring-brand-primary h-11 w-full rounded-lg border px-4 text-sm transition-colors outline-none focus:ring-2"
-        />
-      </Modal>
+      {overlay}
     </div>
   );
 }
