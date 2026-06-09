@@ -1,7 +1,8 @@
 import Link from 'next/link';
 
+import SocialAuthSection from '@/components/socialAuthSection/SocialAuthSection';
+
 import LoginFormSection from './_components/LoginFormSection';
-import SocialLoginSection from './_components/SocialLoginSection';
 
 const SignupPromptSection = () => {
   return (
@@ -21,7 +22,7 @@ const LoginPage = () => {
         <h1 className="mb-12 text-center text-xl font-semibold">로그인</h1>
         <LoginFormSection />
         <SignupPromptSection />
-        <SocialLoginSection />
+        <SocialAuthSection label="간편 로그인하기" />
       </section>
     </main>
   );
