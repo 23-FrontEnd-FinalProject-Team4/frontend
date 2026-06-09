@@ -14,6 +14,9 @@ const dirname =
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
   test: {
+    alias: {
+      'server-only': path.join(dirname, 'tests/mocks/server-only.ts'),
+    },
     projects: [
       {
         extends: true,
@@ -34,6 +37,11 @@ export default defineConfig({
       },
       {
         plugins: [react()],
+        resolve: {
+          alias: {
+            'server-only': path.join(dirname, 'tests/mocks/server-only.ts'),
+          },
+        },
         test: {
           name: 'unit',
           environment: 'jsdom',
