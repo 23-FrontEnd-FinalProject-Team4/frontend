@@ -10,7 +10,11 @@
     "test": "vitest",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "prepare": "husky install"
+    "prepare": "husky install || true"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": "eslint --fix",
+    "*.{js,jsx,ts,tsx,css,md}": "prettier --write"
   },
   "dependencies": {
     "@daypicker/react": "^10.0.1",
@@ -50,7 +54,9 @@
     "eslint-config-next": "16.2.6",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-storybook": "^10.4.1",
+    "husky": "^8.0.0",
     "jsdom": "^29.1.1",
+    "lint-staged": "^17.0.7",
     "playwright": "^1.60.0",
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "^0.8.0",
@@ -59,8 +65,7 @@
     "typescript": "^5",
     "vite": "^8.0.13",
     "vite-plugin-svgr": "^5.2.0",
-    "vitest": "^4.1.7",
-    "husky": "^8.0.0"
+    "vitest": "^4.1.7"
   },
   "engines": {
     "node": ">=24.0.0",
