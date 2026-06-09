@@ -1,32 +1,30 @@
-'use client';
+import Link from 'next/link';
 
-import { useRouter } from 'next/navigation';
+import { cn } from '@/utils/cn';
 
-import Button from '@/components/button/Button';
+const buttonBaseClass =
+  'md:text-md inline-flex h-12 w-full min-w-0 items-center justify-center rounded-lg px-0 py-0 text-xs font-medium transition-all duration-200 ease-in-out focus:outline-none';
+
+const teamCreateLinkClass = cn(
+  buttonBaseClass,
+  'bg-brand-primary text-background-primary hover:bg-interaction-hover active:bg-interaction-pressed',
+);
+
+const teamJoinLinkClass = cn(
+  buttonBaseClass,
+  'border border-brand-primary bg-transparent text-brand-primary hover:bg-brand-secondary active:bg-brand-secondary/50',
+);
 
 export default function NoTeamActions() {
-  const router = useRouter();
-
   return (
     <div className="mt-8 flex w-full max-w-46.5 flex-col gap-2.5 md:mt-12">
-      <Button
-        type="button"
-        variant="primary-filled"
-        fullWidth
-        className="md:text-md h-12 min-w-0 rounded-lg px-0 py-0 text-xs"
-        onClick={() => router.push('/addteam')}
-      >
+      <Link href="/addteam" className={teamCreateLinkClass}>
         팀 생성하기
-      </Button>
-      <Button
-        type="button"
-        variant="primary-outline"
-        fullWidth
-        className="md:text-md h-12 min-w-0 rounded-lg px-0 py-0 text-xs"
-        onClick={() => router.push('/jointeam')}
-      >
+      </Link>
+
+      <Link href="/jointeam" className={teamJoinLinkClass}>
         팀 참여하기
-      </Button>
+      </Link>
     </div>
   );
 }
