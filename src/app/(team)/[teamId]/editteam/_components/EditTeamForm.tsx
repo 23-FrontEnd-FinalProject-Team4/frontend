@@ -2,15 +2,19 @@
 
 import { useState } from 'react';
 
+import { useParams } from 'next/navigation';
+
 import Button from '@/components/button/Button';
 import EditableProfileImage from '@/components/editableProfileImage/EditableProfileImage';
 import Input from '@/components/input/Input';
 
-const AddTeamForm = () => {
+const EditTeamForm = () => {
+  const { teamId } = useParams<{ teamId: string }>();
+
   const [imagePreview, setImagePreview] = useState<string>('/profile.svg');
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [teamName, setTeamName] = useState<string>('');
 
+  const [teamName, setTeamName] = useState<string>('경영관리');
   const [teamNameError, setTeamNameError] = useState<string | null>(null);
 
   const handleImageChange = (file: File) => {
@@ -38,7 +42,7 @@ const AddTeamForm = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!teamName.trim()) {
@@ -46,21 +50,25 @@ const AddTeamForm = () => {
       return;
     }
 
-    if (teamName.trim() === '경영관리팀') {
+    if (teamName.trim() === '이미존재하는다른팀이름') {
       setTeamNameError('이미 존재하는 이름입니다.');
       return;
     }
 
-    console.log('서버로 보낼 데이터:', {
+    const requestBody = {
       name: teamName,
-      image: imageFile,
-    });
+      image: imagePreview,
+    };
+
+    console.log(`PATCH 요청 보낼 주소: /${teamId}/groups/{id}`);
+    console.log('서버로 보낼 데이터(Body):', requestBody);
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <div className="flex flex-col gap-8 md:gap-10">
-        <span className="text-text-primary text-xl font-bold md:text-2xl">팀 생성하기</span>
+        <span className="text-text-primary text-xl font-bold md:text-2xl">팀 수정하기</span>
+
         <div className="flex flex-col gap-6">
           <div className="flex justify-center">
             <EditableProfileImage
@@ -83,8 +91,9 @@ const AddTeamForm = () => {
             />
           </div>
         </div>
+
         <div className="flex flex-col gap-5">
-          <Button type="submit">생성하기</Button>
+          <Button type="submit">수정하기</Button>
           <p className="text-text-default flex justify-center text-xs break-all md:text-lg">
             팀 이름은 회사명이나 모임 이름 등으로 설정하면 좋아요.
           </p>
@@ -94,4 +103,4 @@ const AddTeamForm = () => {
   );
 };
 
-export default AddTeamForm;
+export default EditTeamForm;
