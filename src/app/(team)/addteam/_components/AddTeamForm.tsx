@@ -7,6 +7,7 @@ import EditableProfileImage from '@/components/editableProfileImage/EditableProf
 import Input from '@/components/input/Input';
 
 import useMediaQuery from '@/hooks/useMediaQuery';
+import { MEDIA_QUERY } from '@/hooks/useMediaQuery';
 
 const AddTeamForm = () => {
   const [imagePreview, setImagePreview] = useState<string>('/profile.svg');
@@ -15,8 +16,8 @@ const AddTeamForm = () => {
 
   const [teamNameError, setTeamNameError] = useState<string | null>(null);
 
-  const isTablet = useMediaQuery('(min-width: 768px)');
-  const isDesktop = useMediaQuery('(min-width: 1280px)');
+  const isTablet = useMediaQuery(MEDIA_QUERY.tablet);
+  const isDesktop = useMediaQuery(MEDIA_QUERY.desktop);
 
   const showLargeImage = isTablet || isDesktop;
 
