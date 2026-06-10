@@ -18,6 +18,6 @@ export interface ListItemInfoProps {
 }
 
 export interface ListItemDateProps {
-  date: Task['date']
-  frequency: Task['frequency']
+  date: Task['date'];
+  frequency: Task['frequency'];
 }
