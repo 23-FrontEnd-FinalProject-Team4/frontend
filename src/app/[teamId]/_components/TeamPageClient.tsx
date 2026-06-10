@@ -60,10 +60,11 @@ const mapMembers = (members: Member[]): TeamPageMember[] =>
     imageUrl: member.userImage ?? undefined,
   }));
 
-const mapTaskLists = (taskLists: TaskList[]): TaskListItem[] =>
+const mapTaskLists = (taskLists: TaskList[] = []): TaskListItem[] =>
   taskLists.map((taskList) => {
-    const doneCount = taskList.tasks.filter(isTaskDone).length;
-    const totalCount = taskList.tasks.length;
+    const tasks = taskList.tasks ?? [];
+    const doneCount = tasks.filter(isTaskDone).length;
+    const totalCount = tasks.length;
 
     return {
       id: taskList.id,
@@ -71,7 +72,7 @@ const mapTaskLists = (taskLists: TaskList[]): TaskListItem[] =>
       status: totalCount > 0 && doneCount === totalCount ? 'done' : 'today',
       doneCount,
       totalCount,
-      tasks: taskList.tasks.slice(0, 3).map((task) => ({
+      tasks: tasks.slice(0, 3).map((task) => ({
         id: task.id,
         title: task.name,
         done: isTaskDone(task),
@@ -130,11 +131,17 @@ export default function TeamPageClient({ teamId }: TeamPageClientProps) {
 
   const fallbackRole: TeamPageRole = isMemberView(teamId) ? 'MEMBER' : 'ADMIN';
   const role =
-    myProfile?.memberships.find((membership) => membership.groupId === selectedGroupId)?.role ??
+    myProfile?.memberships?.find((membership) => membership.groupId === selectedGroupId)?.role ??
     fallbackRole;
   const teamCardSize: TeamCardSize = isDesktop ? 'lg' : isTablet ? 'md' : 'sm';
-  const members = useMemo(() => (group ? mapMembers(group.members) : TEAM_PAGE_MEMBERS), [group]);
-  const taskLists = useMemo(() => (group ? mapTaskLists(group.taskLists) : TASK_LISTS), [group]);
+  const members = useMemo(
+    () => (group?.members ? mapMembers(group.members) : TEAM_PAGE_MEMBERS),
+    [group],
+  );
+  const taskLists = useMemo(
+    () => (group?.taskLists ? mapTaskLists(group.taskLists) : TASK_LISTS),
+    [group],
+  );
   const totalTaskCount =
     todayTasks?.length ?? taskLists.reduce((total, taskList) => total + taskList.totalCount, 0);
   const completedTaskCount =
