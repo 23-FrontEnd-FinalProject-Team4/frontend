@@ -13,7 +13,6 @@ const TaskListPage = async ({ params, searchParams }: TaskListPageProps) => {
   // 추후에 API를 통해 받아올 예정
 
   const { taskListId } = await searchParams;
-  // taskListId가 없으면 첫 번째 목록을 기본값으로 사용
   const selectedId = taskListId ? Number(taskListId) : MOCK_TASKLISTS[0].id;
   const selectedTaskList = MOCK_TASKLISTS.find((taskList) => taskList.id === selectedId);
 
@@ -25,7 +24,7 @@ const TaskListPage = async ({ params, searchParams }: TaskListPageProps) => {
     <div className="flex flex-col gap-5 p-4 md:gap-7 md:px-6 md:py-17.5 xl:px-30 xl:py-30">
       <TaskListHeader name={selectedTaskList.name} />
       <div className="flex flex-col gap-6 xl:flex-row">
-        <TaskListSet taskLists={MOCK_TASKLISTS} />
+        <TaskListSet taskLists={MOCK_TASKLISTS} selectedId={selectedId} />
         <div className="flex-1">
           <TaskListMain taskList={selectedTaskList} />
         </div>
