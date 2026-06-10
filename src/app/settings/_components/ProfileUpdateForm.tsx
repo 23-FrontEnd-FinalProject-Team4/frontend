@@ -32,6 +32,9 @@ const ProfileUpdateForm = () => {
   const profileErrors = profileUpdateForm.formState.errors;
 
   const handleProfileImageChange = (file: File) => {
+    if (profileImage.startsWith('blob:')) {
+      URL.revokeObjectURL(profileImage);
+    }
     const previewUrl = URL.createObjectURL(file);
     profileUpdateForm.setValue('image', previewUrl, { shouldDirty: true, shouldValidate: true });
     setProfileImage(previewUrl);
