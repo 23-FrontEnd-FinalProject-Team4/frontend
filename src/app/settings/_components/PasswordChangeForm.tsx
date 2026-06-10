@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
@@ -11,14 +13,12 @@ import {
 } from '../_schemas/password-change.schema';
 
 const PasswordChangeForm = () => {
+  const [isPasswordEditing, setIsPasswordEditing] = useState(false);
+
   const passwordChangeForm = useForm<PasswordChangeFormValues>({
     resolver: zodResolver(passwordChangeSchema),
     mode: 'onBlur',
     reValidateMode: 'onChange',
-    defaultValues: {
-      password: '',
-      passwordConfirmation: '',
-    },
   });
 
   const onSubmitPassword = (data: PasswordChangeFormValues) => {
@@ -38,6 +38,9 @@ const PasswordChangeForm = () => {
         label="비밀번호"
         type="password"
         placeholder="새 비밀번호를 입력해주세요."
+        disabled={!isPasswordEditing}
+        rightButtonText={!isPasswordEditing ? '변경하기' : undefined}
+        onRightButtonClick={() => setIsPasswordEditing(true)}
         isError={!!passwordErrors.password}
         errorMessage={passwordErrors.password?.message}
         {...passwordChangeForm.register('password')}
@@ -48,6 +51,7 @@ const PasswordChangeForm = () => {
         label="비밀번호 확인"
         type="password"
         placeholder="비밀번호를 다시 입력해주세요."
+        disabled={!isPasswordEditing}
         isError={!!passwordErrors.passwordConfirmation}
         errorMessage={passwordErrors.passwordConfirmation?.message}
         {...passwordChangeForm.register('passwordConfirmation')}

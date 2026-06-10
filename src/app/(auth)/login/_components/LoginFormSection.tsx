@@ -15,10 +15,6 @@ const LoginFormSection = () => {
     resolver: zodResolver(loginSchema),
     mode: 'onBlur',
     reValidateMode: 'onChange',
-    defaultValues: {
-      email: '',
-      password: '',
-    },
   });
 
   const errors = loginForm.formState.errors;

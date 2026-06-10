@@ -12,13 +12,7 @@ const SignupFormSection = () => {
   const signupForm = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
     mode: 'onBlur',
-    reValidateMode: 'onBlur',
-    defaultValues: {
-      nickname: '',
-      email: '',
-      password: '',
-      passwordConfirmation: '',
-    },
+    reValidateMode: 'onChange',
   });
   const errors = signupForm.formState.errors;
 
