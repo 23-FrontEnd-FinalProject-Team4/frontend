@@ -13,6 +13,8 @@ const handleForgotPasswordClick = () => {};
 const LoginFormSection = () => {
   const loginForm = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
+    mode: 'onBlur',
+    reValidateMode: 'onChange',
     defaultValues: {
       email: '',
       password: '',
