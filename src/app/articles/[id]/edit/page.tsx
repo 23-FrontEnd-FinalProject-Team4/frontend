@@ -1,3 +1,4 @@
+'use client';
 import Link from 'next/link';
 
 import { SubmitHandler } from 'react-hook-form';
@@ -5,7 +6,7 @@ import { SubmitHandler } from 'react-hook-form';
 import { ArticleEditor } from '@/components/articleEditor/ArticleEditor';
 import { ArticleFormValues } from '@/components/articleForm/type';
 
-const EditArticlePage = async () => {
+const EditArticlePage = () => {
   const onSubmit: SubmitHandler<ArticleFormValues> = async (data) => {
     console.log('submit', data);
   };
