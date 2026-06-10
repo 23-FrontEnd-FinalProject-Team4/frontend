@@ -1,6 +1,7 @@
 import { Meta, StoryObj } from '@storybook/nextjs-vite';
-import TaskListSet from './TaskListSet';
+
 import { MOCK_TASKLISTS } from '../_constants/mockData';
+import TaskListSet from './TaskListSet';
 
 const meta = {
   component: TaskListSet,
@@ -28,6 +29,7 @@ type Story = StoryObj<typeof meta>;
 export const Mobile: Story = {
   args: {
     taskLists: MOCK_TASKLISTS,
+    selectedId: 0,
   },
   globals: {
     viewport: {
