@@ -16,6 +16,12 @@ const eslintConfig = defineConfig([
     'next-env.d.ts',
   ]),
   ...storybook.configs['flat/recommended'],
+
+  {
+    rules: {
+      'react/no-unescaped-entities': 'off', // JSX 내부 따옴표 에러 끄기
+    },
+  },
 ]);
 
 export default eslintConfig;
