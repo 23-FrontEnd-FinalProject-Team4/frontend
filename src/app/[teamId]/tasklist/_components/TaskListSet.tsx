@@ -5,19 +5,26 @@ import DropdownMd from '@/components/dropdown/DropdownMd';
 import PlusIcon from '@/assets/icons/plus.svg?react';
 import KebabIcon from '@/assets/icons/kebab.svg?react';
 import BadgeDone from '@/components/badgeDone/BadgeDone';
-import { TaskListSetProps } from './type';
+import { TaskList } from '@/apis/group/type';
+import useCustomSearchParams from '@/hooks/useCustomSearchParams';
 
-const TaskListSet = ({
-  selectedTaskList,
-  onSelectedTaskListId: handleSelectedTaskListId,
-  taskLists,
-}: TaskListSetProps) => {
+interface TaskListSetProps {
+  taskLists: TaskList[];
+}
+
+const TaskListSet = ({ taskLists }: TaskListSetProps) => {
+  const { searchParams, setSearchParams } = useCustomSearchParams();
+
+  const selectedId = Number(searchParams.get('taskListId'));
+  const selectedTaskList = taskLists.find((taskList) => taskList.id === selectedId);
+
   const options = taskLists.map((taskList) => taskList.name);
 
   const handleSelect = (name: string) => {
     const taskList = taskLists.find((taskList) => taskList.name === name);
+
     if (taskList) {
-      handleSelectedTaskListId(taskList.id);
+      setSearchParams({ taskListId: [taskList.id.toString()] });
     }
   };
 

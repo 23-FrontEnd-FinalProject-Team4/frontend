@@ -1,5 +1,9 @@
-import { TaskListHeaderProps } from './type';
 import SettingIcon from '@/assets/icons/setting.svg?react';
+
+interface TaskListHeaderProps {
+  name: string;
+}
+
 
 const TaskListHeader = ({ name }: TaskListHeaderProps) => {
   return (

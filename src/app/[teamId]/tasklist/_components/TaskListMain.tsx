@@ -2,34 +2,36 @@
 
 import { TaskList } from '@/apis/group/type';
 import TaskListTitle from './TaskListTitle';
-import { useState } from 'react';
 import ListItem from '@/components/listItem/ListItem';
 import Button from '@/components/button/Button';
 import PlusIcon from '@/assets/icons/plus_white.svg?react';
+import useCustomSearchParams from '@/hooks/useCustomSearchParams';
+import { addDays, formatISODate } from '@/utils/date';
 
-const TaskListMain = ({ taskList }: { taskList: TaskList }) => {
+interface TaskListMainProps {
+  taskList: TaskList;
+}
+
+const TaskListMain = ({ taskList }: TaskListMainProps) => {
   // TODO: 해당 위치에서 task들에 대한 CRUD 진행
-  // 동시에 selectedDate 상태 제거 (URLSearchParams로 이동하여 관리하도록 변경)
-
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const { searchParams, setSearchParams } = useCustomSearchParams();
+  const date = searchParams.get('date') || new Date().toISOString().split('T')[0];
 
   const handleNextWeek = () => {
-    setSelectedDate((prevDate) => new Date(prevDate.getTime() + 7 * 24 * 60 * 60 * 1000));
+    setSearchParams({ date: [addDays(date, 7)] });
   };
 
   const handlePrevWeek = () => {
-    setSelectedDate((prevDate) => new Date(prevDate.getTime() - 7 * 24 * 60 * 60 * 1000));
+    setSearchParams({ date: [addDays(date, -7)] });
   };
 
   const handleToday = () => {
-    setSelectedDate(new Date());
+    setSearchParams({ date: [formatISODate(new Date())] });
   };
 
   return (
     <div className="relative flex flex-col gap-10 rounded-[20px] bg-white p-4 md:p-7.5 xl:p-10">
       <TaskListTitle
-        selectedDate={selectedDate}
-        onChangeDate={setSelectedDate}
         onNextWeek={handleNextWeek}
         onPrevWeek={handlePrevWeek}
         onToday={handleToday}

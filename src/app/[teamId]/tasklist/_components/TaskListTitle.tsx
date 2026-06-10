@@ -1,17 +1,32 @@
 'use client';
 
 import DateList from '@/components/dateList/DateList';
-import { TaskListTitleProps } from './type';
 import CalendarControl from './CalendarControl';
+import { formatISODate } from '@/utils/date';
+import useCustomSearchParams from '@/hooks/useCustomSearchParams';
+
+interface TaskListTitleProps {
+  taskName: string;
+  onToday: () => void;
+  onPrevWeek: () => void;
+  onNextWeek: () => void;
+}
 
 const TaskListTitle = ({
   taskName,
-  selectedDate,
   onToday: handleToday,
   onPrevWeek: handlePrevWeek,
   onNextWeek: handleNextWeek,
-  onChangeDate: handleChangeDate,
 }: TaskListTitleProps) => {
+  const { searchParams, setSearchParams } = useCustomSearchParams();
+
+  const dateParams = searchParams.get('date');
+  const selectedDate = dateParams ? new Date(dateParams) : new Date();
+
+  const handleChangeDate = (newDate: Date) => {
+    setSearchParams({ date: [formatISODate(newDate)] });
+  };
+
   return (
     <div className="flex flex-col gap-6 md:gap-8">
       <div className="relative flex items-center justify-between">

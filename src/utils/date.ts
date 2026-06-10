@@ -17,6 +17,16 @@ export const formatYearMonth = (date: Date) => {
   return `${year}년 ${month}월`;
 };
 
+export const formatISODate = (date: Date) => {
+  return date.toISOString().split('T')[0];
+};
+
+export const addDays = (date: string, days: number) => {
+  const dateObj = new Date(date);
+  dateObj.setDate(dateObj.getDate() + days);
+  return formatISODate(dateObj);
+};
+
 export const getWeekDatesAround = (selectedDate: Date) => {
   return Array.from({ length: 7 }, (_, i) => {
     const date = new Date(selectedDate);
