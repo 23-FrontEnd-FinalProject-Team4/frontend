@@ -9,7 +9,14 @@ declare module '*.svg?react' {
 declare module '*.svg' {
   import * as React from 'react';
 
-  const SVG: React.FC<React.SVGProps<SVGSVGElement>> & { src?: string };
+  type SvgStaticData = {
+    src: string;
+    height: number;
+    width: number;
+    blurDataURL?: string;
+  };
+
+  const SVG: React.FC<React.SVGProps<SVGSVGElement>> & SvgStaticData;
 
   export default SVG;
 }
