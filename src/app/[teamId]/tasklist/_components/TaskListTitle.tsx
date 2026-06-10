@@ -1,9 +1,10 @@
 'use client';
 
 import DateList from '@/components/dateList/DateList';
+
+import { useTaskDate } from '@/hooks/useTaskDate';
+
 import CalendarControl from './CalendarControl';
-import { formatISODate } from '@/utils/date';
-import useCustomSearchParams from '@/hooks/useCustomSearchParams';
 
 interface TaskListTitleProps {
   taskName: string;
@@ -18,14 +19,7 @@ const TaskListTitle = ({
   onPrevWeek: handlePrevWeek,
   onNextWeek: handleNextWeek,
 }: TaskListTitleProps) => {
-  const { searchParams, setSearchParams } = useCustomSearchParams();
-
-  const dateParams = searchParams.get('date');
-  const selectedDate = dateParams ? new Date(dateParams) : new Date();
-
-  const handleChangeDate = (newDate: Date) => {
-    setSearchParams({ date: [formatISODate(newDate)] });
-  };
+  const { selectedDate, setDate: handleChangeDate } = useTaskDate();
 
   return (
     <div className="flex flex-col gap-6 md:gap-8">

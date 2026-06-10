@@ -8,7 +8,7 @@ import BadgeDone from '@/components/badgeDone/BadgeDone';
 import Button from '@/components/button/Button';
 import DropdownMd from '@/components/dropdown/DropdownMd';
 
-import useCustomSearchParams from '@/hooks/useCustomSearchParams';
+import { useCustomSearchParams } from '@/hooks/useCustomSearchParams';
 
 interface TaskListSetProps {
   taskLists: TaskList[];

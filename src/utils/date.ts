@@ -10,21 +10,31 @@ export const generateHoursByInterval = (interval: HourInterval = 1) => {
 };
 
 export const formatYearMonth = (date: Date) => {
-  // '2026년 6월' 형식으로 변환
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1);
 
   return `${year}년 ${month}월`;
 };
 
-export const formatISODate = (date: Date) => {
-  return date.toISOString().split('T')[0];
+export const formatYearMonthDay = (date: Date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1);
+  const day = String(date.getDate());
+
+  return `${year}년 ${month}월 ${day}일`;
 };
 
-export const addDays = (date: string, days: number) => {
+export const formatISODate = (date: Date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+export const addDays = (date: Date, days: number) => {
   const dateObj = new Date(date);
   dateObj.setDate(dateObj.getDate() + days);
-  return formatISODate(dateObj);
+  return dateObj;
 };
 
 export const getWeekDatesAround = (selectedDate: Date) => {

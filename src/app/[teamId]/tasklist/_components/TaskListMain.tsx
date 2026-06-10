@@ -1,14 +1,17 @@
 'use client';
 
 import { TaskList } from '@/apis/group/type';
-import TaskListTitle from './TaskListTitle';
-import ListItem from '@/components/listItem/ListItem';
-import Button from '@/components/button/Button';
 import PlusIcon from '@/assets/icons/plus_white.svg?react';
-import useCustomSearchParams from '@/hooks/useCustomSearchParams';
-import { addDays, formatISODate } from '@/utils/date';
+import { addDays } from '@/utils/date';
 import { overlay } from 'overlay-kit';
+
+import Button from '@/components/button/Button';
+import ListItem from '@/components/listItem/ListItem';
+
+import { useTaskDate } from '@/hooks/useTaskDate';
+
 import InfoOverlay from './InfoOverlay';
+import TaskListTitle from './TaskListTitle';
 
 interface TaskListMainProps {
   taskList: TaskList;
@@ -16,19 +19,18 @@ interface TaskListMainProps {
 
 const TaskListMain = ({ taskList }: TaskListMainProps) => {
   // TODO: 해당 위치에서 task들에 대한 CRUD 진행
-  const { searchParams, setSearchParams } = useCustomSearchParams();
-  const date = searchParams.get('date') || new Date().toISOString().split('T')[0];
+  const { selectedDate, setDate } = useTaskDate();
 
   const handleNextWeek = () => {
-    setSearchParams({ date: [addDays(date, 7)] });
+    setDate(addDays(selectedDate, 7));
   };
 
   const handlePrevWeek = () => {
-    setSearchParams({ date: [addDays(date, -7)] });
+    setDate(addDays(selectedDate, -7));
   };
 
   const handleToday = () => {
-    setSearchParams({ date: [formatISODate(new Date())] });
+    setDate(new Date());
   };
 
   const handleOpenOverlay = (task: TaskList['tasks'][0]) => {
