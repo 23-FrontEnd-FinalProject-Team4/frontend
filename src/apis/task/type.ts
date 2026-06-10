@@ -41,7 +41,7 @@ export interface UpdateTaskOrderRequest extends UpdateTaskOrderPathParams {
 }
 
 export interface TaskUser {
-  image: string;
+  image: string | null;
   nickname: string;
   id: number;
 }

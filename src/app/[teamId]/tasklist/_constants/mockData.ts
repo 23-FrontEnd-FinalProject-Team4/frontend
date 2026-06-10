@@ -1,4 +1,5 @@
-import { TaskList } from "@/apis/group/type";
+import { Comment } from '@/apis/comment/type';
+import { TaskList } from '@/apis/group/type';
 
 export const MOCK_TASKLISTS: TaskList[] = [
   {
@@ -19,8 +20,8 @@ export const MOCK_TASKLISTS: TaskList[] = [
         startDate: '2026-06-01',
         writer: {
           id: 0,
-          image: '',
-          nickname: '',
+          image: null,
+          nickname: 'nickname',
         },
       },
       {
@@ -32,11 +33,11 @@ export const MOCK_TASKLISTS: TaskList[] = [
         commentCount: 3,
         deletedAt: null,
         description: '설명',
-        doneAt: '2026-06-01',
+        doneAt: null,
         doneBy: {
           user: {
             id: 0,
-            image: '',
+            image: null,
             nickname: '',
           },
         },
@@ -45,7 +46,7 @@ export const MOCK_TASKLISTS: TaskList[] = [
         startDate: '2026-06-01',
         writer: {
           id: 0,
-          image: '',
+          image: null,
           nickname: '',
         },
       },
@@ -65,7 +66,7 @@ export const MOCK_TASKLISTS: TaskList[] = [
         startDate: '2026-06-01',
         writer: {
           id: 0,
-          image: '',
+          image: null,
           nickname: '',
         },
       },
@@ -85,5 +86,47 @@ export const MOCK_TASKLISTS: TaskList[] = [
     id: 1,
     name: '빈 할 일 목록',
     updatedAt: '2026-06-01',
+  },
+];
+
+export const MOCK_COMMENTS: Comment[] = [
+  {
+    id: 0,
+    content: '댓글 내용 1',
+    taskId: 0,
+    updatedAt: '2026-06-01',
+    createdAt: '2026-06-01',
+    user: {
+      id: 0,
+      image: null,
+      nickname: 'nickname',
+    },
+    userId: 0,
+  },
+  {
+    id: 1,
+    content: '댓글 내용 2',
+    taskId: 0,
+    updatedAt: '2026-06-01',
+    createdAt: '2026-06-01',
+    user: {
+      id: 1,
+      image: null,
+      nickname: 'nickname',
+    },
+    userId: 0,
+  },
+  {
+    id: 2,
+    content: '댓글 내용 3',
+    taskId: 0,
+    updatedAt: '2026-06-01',
+    createdAt: '2026-06-01',
+    user: {
+      id: 2,
+      image: null,
+      nickname: 'nickname',
+    },
+    userId: 0,
   },
 ];
