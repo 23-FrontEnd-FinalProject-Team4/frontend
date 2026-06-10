@@ -1,10 +1,25 @@
 import UploadIcon from '@/assets/icons/img.svg?react';
+import { FieldErrors, UseFormRegister } from 'react-hook-form';
 
 import Button from '@/components/button/Button';
 
-import { ArticleFormProps } from './type';
+import { ArticleFormValues } from './type';
 
-const ArticleForm = ({ register, errors, image, submitText, onImageChange }: ArticleFormProps) => {
+export type ArticleFormProps = {
+  register: UseFormRegister<ArticleFormValues>;
+  errors: FieldErrors<ArticleFormValues>;
+  image: File | null;
+  submitText: string;
+  onImageChange: (file: File | null) => void;
+};
+
+export const ArticleForm = ({
+  register,
+  errors,
+  image,
+  submitText,
+  onImageChange,
+}: ArticleFormProps) => {
   return (
     <>
       <div className="mb-8 flex flex-col gap-2">
@@ -58,6 +73,7 @@ const ArticleForm = ({ register, errors, image, submitText, onImageChange }: Art
             }}
           />
         </label>
+        {image && <p className="text-text-secondary text-sm">{image.name}</p>}
       </div>
 
       <Button variant="primary-filled" className="w-full" type="submit">
