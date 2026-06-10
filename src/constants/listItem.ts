@@ -1,5 +1,5 @@
 export const FREQUENCY_TEXT = {
-  ONCE: '일회성',
+  ONCE: '반복 안함',
   DAILY: '매일 반복',
   WEEKLY: '매주 반복',
   MONTHLY: '매달 반복',

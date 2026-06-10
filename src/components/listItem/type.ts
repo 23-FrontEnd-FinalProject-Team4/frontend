@@ -5,6 +5,7 @@ export interface ListItemProps {
   onEdit: () => void;
   onDelete: () => void;
   onToggle: (checked: boolean) => void;
+  onClick?: () => void;
 }
 
 export interface ListItemInfoProps {

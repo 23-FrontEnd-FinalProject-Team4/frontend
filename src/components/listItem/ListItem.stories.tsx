@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import ListItem from './ListItem';
 import { expect, fn, userEvent, within } from 'storybook/test';
+import { MOCK_TASKLISTS } from '../../app/[teamId]/tasklist/_constants/mockData';
 
 const meta = {
   title: 'Components/ListItem',
@@ -20,26 +21,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    task: {
-      name: 'Task 1',
-      frequency: 'DAILY',
-      commentCount: 1,
-      date: '2026년 6월 2일',
-      id: 1,
-      doneBy: null,
-      writer: {
-        image: '',
-        nickname: 'John Doe',
-        id: 1,
-      },
-      displayIndex: 1,
-      deletedAt: null,
-      recurringId: 1,
-      updatedAt: new Date().toISOString(),
-      doneAt: null,
-      description: 'Description',
-      startDate: new Date().toISOString(),
-    },
+    task: MOCK_TASKLISTS[0].tasks[0],
     onEdit: fn(),
     onDelete: fn(),
     onToggle: fn(),
@@ -92,17 +74,17 @@ export const DropdownTest: Story = {
     const kebabButton = canvas.getByRole('button', { name: '할 일 메뉴 열기' });
 
     // Assert 1: 열리기 전에는 dropdown button들이 없어야 함
-    expect(canvas.queryByRole('button', { name: '수정' })).not.toBeInTheDocument();
-    expect(canvas.queryByRole('button', { name: '삭제' })).not.toBeInTheDocument();
+    expect(canvas.queryByRole('button', { name: '수정하기' })).not.toBeInTheDocument();
+    expect(canvas.queryByRole('button', { name: '삭제하기' })).not.toBeInTheDocument();
 
     // Act 1: kebab button 클릭
     await userEvent.click(kebabButton);
 
     // ---------------------------------------------------------------------------------
-    // Arrange 2: 클릭 후에는 드롭다운 메뉴('수정', '삭제' 버튼)가 화면에 보여야 함
-    const editButton = canvas.getByRole('button', { name: '수정' });
+    // Arrange 2: 클릭 후에는 드롭다운 메뉴('수정하기', '삭제하기' 버튼)가 화면에 보여야 함
+    const editButton = canvas.getByRole('button', { name: '수정하기' });
 
-    // Assert 2: 클릭 후에는 드롭다운 메뉴('수정', '삭제' 버튼)가 화면에 보여야 함
+    // Assert 2: 클릭 후에는 드롭다운 메뉴('수정하기', '삭제하기' 버튼)가 화면에 보여야 함
     expect(editButton).toBeInTheDocument();
 
     // ---------------------------------------------------------------------------------
@@ -116,7 +98,7 @@ export const DropdownTest: Story = {
     // ---------------------------------------------------------------------------------
     // Act 3: delete button 클릭
     await userEvent.click(kebabButton);
-    const deleteButton = canvas.getByRole('button', { name: '삭제' });
+    const deleteButton = canvas.getByRole('button', { name: '삭제하기' });
 
     expect(deleteButton).toBeInTheDocument();
 
