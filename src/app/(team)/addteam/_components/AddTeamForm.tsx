@@ -6,12 +6,20 @@ import Button from '@/components/button/Button';
 import EditableProfileImage from '@/components/editableProfileImage/EditableProfileImage';
 import Input from '@/components/input/Input';
 
+import useMediaQuery from '@/hooks/useMediaQuery';
+import { MEDIA_QUERY } from '@/hooks/useMediaQuery';
+
 const AddTeamForm = () => {
   const [imagePreview, setImagePreview] = useState<string>('/profile.svg');
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [teamName, setTeamName] = useState<string>('');
 
   const [teamNameError, setTeamNameError] = useState<string | null>(null);
+
+  const isTablet = useMediaQuery(MEDIA_QUERY.tablet);
+  const isDesktop = useMediaQuery(MEDIA_QUERY.desktop);
+
+  const showLargeImage = isTablet || isDesktop;
 
   const handleImageChange = (file: File) => {
     setImageFile(file);
