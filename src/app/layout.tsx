@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import '@/app/globals.css';
+import OverlayProvider from '@/providers/OverlayProvider';
 import QueryProvider from '@/providers/QueryProvider';
 import ToastProvider from '@/providers/ToastProvider';
 
@@ -16,9 +17,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ko">
       <body>
         <QueryProvider>
-          <ToastProvider>
-            <AppShell>{children}</AppShell>
-          </ToastProvider>
+          <OverlayProvider>
+            <ToastProvider>
+              <AppShell>{children}</AppShell>
+            </ToastProvider>
+          </OverlayProvider>
         </QueryProvider>
       </body>
     </html>
