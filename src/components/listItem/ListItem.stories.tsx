@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import ListItem from './ListItem';
 import { expect, fn, userEvent, within } from 'storybook/test';
+
 import { MOCK_TASKLISTS } from '../../app/[teamId]/tasklist/_constants/mockData';
+import ListItem from './ListItem';
 
 const meta = {
   title: 'Components/ListItem',
