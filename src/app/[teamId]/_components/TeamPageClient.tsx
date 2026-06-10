@@ -2,11 +2,12 @@
 
 import { useCallback, useMemo, useState } from 'react';
 
+import { overlay } from 'overlay-kit';
+
 import Modal from '@/components/modal/Modal';
 import type { TeamCardSize } from '@/components/team/type';
 
 import useMediaQuery, { MEDIA_QUERY } from '@/hooks/useMediaQuery';
-import useOverlay from '@/hooks/useOverlay';
 
 import { TASK_LISTS, TASK_STATUS_SECTIONS, TEAM_PAGE_MEMBERS } from '../_constants/mockData';
 import type { TeamPageRole } from '../type';
@@ -28,11 +29,15 @@ const copyInviteLink = async () => {
   await navigator.clipboard.writeText('https://coworkers.example.com/invite/management');
 };
 
+const closeOverlay = (close: () => void, unmount: () => void) => {
+  close();
+  unmount();
+};
+
 export default function TeamPageClient({ teamId }: TeamPageClientProps) {
   const isDesktop = useMediaQuery(MEDIA_QUERY.desktop);
   const isTablet = useMediaQuery(MEDIA_QUERY.tablet);
 
-  const { open, overlay } = useOverlay();
   const [isTeamMenuOpen, setIsTeamMenuOpen] = useState(false);
 
   const role: TeamPageRole = isMemberView(teamId) ? 'MEMBER' : 'ADMIN';
@@ -48,44 +53,52 @@ export default function TeamPageClient({ teamId }: TeamPageClientProps) {
   );
 
   const openInviteModal = useCallback(() => {
-    open(({ isOpen, close }) => (
-      <Modal
-        isOpen={isOpen}
-        title="멤버 초대"
-        description="그룹에 참여할 수 있는 링크를 복사합니다."
-        primaryAction={{
-          label: '링크 복사하기',
-          onClick: () => {
-            void copyInviteLink();
-            close();
-          },
-        }}
-        size="md"
-        onClose={close}
-      />
-    ));
-  }, [open]);
+    overlay.open(({ isOpen, close, unmount }) => {
+      const closeModal = () => closeOverlay(close, unmount);
+
+      return (
+        <Modal
+          isOpen={isOpen}
+          title="멤버 초대"
+          description="그룹에 참여할 수 있는 링크를 복사합니다."
+          primaryAction={{
+            label: '링크 복사하기',
+            onClick: () => {
+              void copyInviteLink();
+              closeModal();
+            },
+          }}
+          size="md"
+          onClose={closeModal}
+        />
+      );
+    });
+  }, []);
 
   const openCreateListModal = useCallback(() => {
-    open(({ isOpen, close }) => (
-      <Modal
-        isOpen={isOpen}
-        title="할 일 목록"
-        primaryAction={{
-          label: '만들기',
-          onClick: close,
-        }}
-        size="md"
-        onClose={close}
-      >
-        <input
-          type="text"
-          placeholder="목록 명을 입력해주세요."
-          className="border-border-primary text-text-primary placeholder:text-text-disabled focus:border-brand-primary focus:ring-brand-primary h-11 w-full rounded-lg border px-4 text-sm transition-colors outline-none focus:ring-2"
-        />
-      </Modal>
-    ));
-  }, [open]);
+    overlay.open(({ isOpen, close, unmount }) => {
+      const closeModal = () => closeOverlay(close, unmount);
+
+      return (
+        <Modal
+          isOpen={isOpen}
+          title="할 일 목록"
+          primaryAction={{
+            label: '만들기',
+            onClick: closeModal,
+          }}
+          size="md"
+          onClose={closeModal}
+        >
+          <input
+            type="text"
+            placeholder="목록 명을 입력해주세요."
+            className="border-border-primary text-text-primary placeholder:text-text-disabled focus:border-brand-primary focus:ring-brand-primary h-11 w-full rounded-lg border px-4 text-sm transition-colors outline-none focus:ring-2"
+          />
+        </Modal>
+      );
+    });
+  }, []);
 
   return (
     <div className="bg-background-secondary relative min-h-full overflow-y-auto px-4 py-6 md:px-6 xl:px-16 xl:py-15.75">
@@ -108,8 +121,6 @@ export default function TeamPageClient({ teamId }: TeamPageClientProps) {
 
         <MemberSection members={TEAM_PAGE_MEMBERS} onInviteClick={openInviteModal} />
       </div>
-
-      {overlay}
     </div>
   );
 }
