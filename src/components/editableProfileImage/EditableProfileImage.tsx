@@ -2,6 +2,8 @@
 
 import type { ChangeEvent } from 'react';
 
+import Image from 'next/image';
+
 import PencilIcon from '@/assets/icons/pencil.svg?react';
 
 import type { EditableProfileImageProps } from './type';
@@ -9,12 +11,14 @@ import type { EditableProfileImageProps } from './type';
 const sizeStyle = {
   sm: {
     image: 'h-16 w-16 rounded-[20px]',
+    imageSize: 64,
     button:
       'absolute left-11 top-11 flex h-6 w-6 items-center justify-center rounded-full border-background-primary bg-background-tertiary',
     icon: 15,
   },
   lg: {
     image: 'h-25 w-25 rounded-4xl',
+    imageSize: 100,
     button:
       'absolute left-18 top-18 flex h-8 w-8 items-center justify-center rounded-full border-background-primary bg-background-tertiary',
     icon: 21,
@@ -39,9 +43,12 @@ const EditableProfileImage = ({
 
   return (
     <div className="relative inline-block">
-      <img
+      <Image
         src={src}
         alt={alt}
+        width={style.imageSize}
+        height={style.imageSize}
+        unoptimized
         className={`${style.image} border-background-primary border-2 object-cover`}
       />
 
