@@ -25,4 +25,5 @@ export type ArticleContentProps = {
 export type LikeButtonProps = {
   isLiked: boolean;
   likeCount: number;
+  onLikeClick: () => void;
 };
