@@ -1,5 +1,4 @@
-import { cookies } from 'next/headers';
-
+import { getAccessToken } from '@/utils/auth/token';
 import 'server-only';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -25,10 +24,10 @@ const isFormDataBody = (body: RequestInit['body']) => {
 
 const createServerHeaders = async (optionsHeaders?: HeadersInit, body?: RequestInit['body']) => {
   const headers = new Headers(optionsHeaders);
-  const cookieHeader = (await cookies()).toString();
+  const accessToken = await getAccessToken();
 
-  if (cookieHeader && !headers.has('Cookie')) {
-    headers.set('Cookie', cookieHeader);
+  if (accessToken && !headers.has('Authorization')) {
+    headers.set('Authorization', `Bearer ${accessToken}`);
   }
 
   if (body != null && !isFormDataBody(body) && !headers.has('Content-Type')) {
