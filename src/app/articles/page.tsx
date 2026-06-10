@@ -15,6 +15,8 @@ import { mockArticles } from './mockArticles';
 
 const ArticlesPage = () => {
   const [searchValue, setSearchValue] = useState('');
+  const [sortOption, setSortOption] = useState('latest');
+  const [page, setPage] = useState(1);
   const router = useRouter();
   return (
     <div className="bg-background-primary mx-auto flex min-h-screen p-0 md:pt-22 lg:p-22">
