@@ -5,7 +5,7 @@ import { useCallback, useMemo, useState } from 'react';
 import Modal from '@/components/modal/Modal';
 import type { TeamCardSize } from '@/components/team/type';
 
-import useMediaQuery from '@/hooks/useMediaQuery';
+import useMediaQuery, { MEDIA_QUERY } from '@/hooks/useMediaQuery';
 import useOverlay from '@/hooks/useOverlay';
 
 import { TASK_LISTS, TASK_STATUS_SECTIONS, TEAM_PAGE_MEMBERS } from '../_constants/mockData';
@@ -29,8 +29,8 @@ const copyInviteLink = async () => {
 };
 
 export default function TeamPageClient({ teamId }: TeamPageClientProps) {
-  const isDesktop = useMediaQuery('(min-width: 1280px)');
-  const isTablet = useMediaQuery('(min-width: 768px)');
+  const isDesktop = useMediaQuery(MEDIA_QUERY.desktop);
+  const isTablet = useMediaQuery(MEDIA_QUERY.tablet);
 
   const { open, overlay } = useOverlay();
   const [isTeamMenuOpen, setIsTeamMenuOpen] = useState(false);

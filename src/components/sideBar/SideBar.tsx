@@ -10,9 +10,10 @@ import SideBarView from '@/components/sideBar/SideBarView';
 import type { SideBarProps } from '@/components/sideBar/type';
 
 import useMediaQuery from '@/hooks/useMediaQuery';
+import { MEDIA_QUERY } from '@/hooks/useMediaQuery';
 
 export default function Sidebar({ isLoggedIn, groups }: SideBarProps) {
-  const isDesktop = useMediaQuery('(min-width: 1024px)');
+  const isDesktop = useMediaQuery(MEDIA_QUERY.desktop);
   const [userCollapsed, setUserCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
