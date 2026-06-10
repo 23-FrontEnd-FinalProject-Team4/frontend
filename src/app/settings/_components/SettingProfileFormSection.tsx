@@ -24,15 +24,22 @@ const SettingProfileFormSection = () => {
           label="이메일"
           defaultValue="codeit@codeit.com"
           placeholder="이메일을 입력해주세요."
-          isDisabled
+          disabled
         />
         <FormField
           id="settings-password"
           label="비밀번호"
           type="password"
           defaultValue="dddd"
-          isDisabled
+          disabled
           rightButtonText="변경하기"
+        />
+        <FormField
+          id="settings-confirm-password"
+          label="비밀번호 확인"
+          type="password"
+          defaultValue="dddd"
+          disabled
         />
 
         <button type="button" className="text-status-danger mt-2 flex items-center gap-1">

@@ -72,7 +72,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             disabled={disabled}
             className={inputClassName}
           />
-          {type === 'password' && (
+          {type === 'password' && !disabled && (
             <button
               type="button"
               onClick={() => setIsPasswordVisible(!isPasswordVisible)}
