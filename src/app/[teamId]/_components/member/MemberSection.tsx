@@ -9,6 +9,9 @@ interface MemberSectionProps {
   onInviteClick: () => void;
 }
 
+const getProfileSrc = (imageUrl: TeamPageMember['imageUrl']) =>
+  typeof imageUrl === 'string' ? imageUrl : (imageUrl?.src ?? null);
+
 export default function MemberSection({ members, onInviteClick }: MemberSectionProps) {
   return (
     <section className="border-border-primary bg-background-primary rounded-xl border px-5 py-5 shadow-sm xl:h-31.25 xl:px-6">
@@ -29,7 +32,7 @@ export default function MemberSection({ members, onInviteClick }: MemberSectionP
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {members.map((member) => (
           <div key={member.id} className="flex min-w-0 items-center gap-3">
-            <Profile src={member.imageUrl?.src ?? null} size="md" alt={`${member.name} 프로필`} />
+            <Profile src={getProfileSrc(member.imageUrl)} size="md" alt={`${member.name} 프로필`} />
 
             <div className="min-w-0">
               <p className="text-text-primary truncate text-sm font-semibold">{member.name}</p>
