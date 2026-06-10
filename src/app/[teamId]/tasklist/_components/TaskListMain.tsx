@@ -7,6 +7,8 @@ import Button from '@/components/button/Button';
 import PlusIcon from '@/assets/icons/plus_white.svg?react';
 import useCustomSearchParams from '@/hooks/useCustomSearchParams';
 import { addDays, formatISODate } from '@/utils/date';
+import { overlay } from 'overlay-kit';
+import InfoOverlay from './InfoOverlay';
 
 interface TaskListMainProps {
   taskList: TaskList;
@@ -29,6 +31,12 @@ const TaskListMain = ({ taskList }: TaskListMainProps) => {
     setSearchParams({ date: [formatISODate(new Date())] });
   };
 
+  const handleOpenOverlay = (task: TaskList['tasks'][0]) => {
+    overlay.open(({ isOpen, close }) => (
+      <InfoOverlay task={task} isOpen={isOpen} onClose={close} />
+    ));
+  };
+
   return (
     <div className="relative flex flex-col gap-10 rounded-[20px] bg-white p-4 md:p-7.5 xl:p-10">
       <TaskListTitle
@@ -42,6 +50,7 @@ const TaskListMain = ({ taskList }: TaskListMainProps) => {
           <ListItem
             task={task}
             key={task.id}
+            onClick={() => handleOpenOverlay(task)}
             // TODO: API 연결 시 함수 연결
             onToggle={() => {}}
             onDelete={() => {}}
