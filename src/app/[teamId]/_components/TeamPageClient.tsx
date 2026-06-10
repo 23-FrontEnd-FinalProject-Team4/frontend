@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useMemo, useState } from 'react';
+import { toast } from 'react-hot-toast';
 
 import { overlay } from 'overlay-kit';
 
@@ -13,6 +14,7 @@ import { TASK_LISTS, TASK_STATUS_SECTIONS, TEAM_PAGE_MEMBERS } from '../_constan
 import type { TeamPageRole } from '../type';
 import TeamPageHeader from './header/TeamPageHeader';
 import MemberSection from './member/MemberSection';
+import CreateTaskListModal from './task-list/CreateTaskListModal';
 import TaskListSection from './task-list/TaskListSection';
 
 interface TeamPageClientProps {
@@ -31,7 +33,7 @@ const copyInviteLink = async () => {
 
 const closeOverlay = (close: () => void, unmount: () => void) => {
   close();
-  unmount();
+  setTimeout(unmount, 200);
 };
 
 export default function TeamPageClient({ teamId }: TeamPageClientProps) {
@@ -64,7 +66,9 @@ export default function TeamPageClient({ teamId }: TeamPageClientProps) {
           primaryAction={{
             label: '링크 복사하기',
             onClick: () => {
-              void copyInviteLink();
+              void copyInviteLink().then(() => {
+                toast.success('초대 링크가 클립보드에 복사되었습니다.');
+              });
               closeModal();
             },
           }}
@@ -80,22 +84,10 @@ export default function TeamPageClient({ teamId }: TeamPageClientProps) {
       const closeModal = () => closeOverlay(close, unmount);
 
       return (
-        <Modal
+        <CreateTaskListModal
           isOpen={isOpen}
-          title="할 일 목록"
-          primaryAction={{
-            label: '만들기',
-            onClick: closeModal,
-          }}
-          size="md"
           onClose={closeModal}
-        >
-          <input
-            type="text"
-            placeholder="목록 명을 입력해주세요."
-            className="border-border-primary text-text-primary placeholder:text-text-disabled focus:border-brand-primary focus:ring-brand-primary h-11 w-full rounded-lg border px-4 text-sm transition-colors outline-none focus:ring-2"
-          />
-        </Modal>
+        />
       );
     });
   }, []);
