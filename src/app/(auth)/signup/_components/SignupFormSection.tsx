@@ -6,8 +6,8 @@ import Button from '@/components/button/Button';
 import FormField from '@/components/formField/FormField';
 
 type SignupFormValues = {
-  name: string;
   email: string;
+  nickname: string;
   password: string;
   passwordConfirmation: string;
 };
@@ -22,12 +22,12 @@ const SignupFormSection = () => {
   return (
     <form onSubmit={signupForm.handleSubmit(onSubmit)} className="flex flex-col gap-5">
       <FormField
-        id="signup-name"
+        id="signup-nickname"
         label="이름"
         placeholder="이름을 입력해주세요."
-        isError={!!errors.name}
-        errorMessage={errors.name?.message}
-        {...signupForm.register('name', {
+        isError={!!errors.nickname}
+        errorMessage={errors.nickname?.message}
+        {...signupForm.register('nickname', {
           required: '이름을 입력해주세요.',
         })}
       />
