@@ -1,3 +1,4 @@
+'use client';
 import Link from 'next/link';
 
 import { mockArticles, mockComments } from '@/app/articles/mockArticles';
