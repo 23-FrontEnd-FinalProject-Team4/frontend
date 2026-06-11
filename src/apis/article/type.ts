@@ -24,24 +24,24 @@ export interface ArticleDetail extends Article {
 
 export type ArticleOrder = 'recent' | 'like';
 
-export interface GetArticlesParams {
+export type GetArticlesParams = {
   page: number;
   pageSize: number;
   orderBy: ArticleOrder;
-}
+};
 
-export interface ArticleForm {
+export type ArticleForm = {
   title: string;
   content: string;
   image: string;
-}
+};
 
 export type CreateArticleRequest = ArticleForm;
 
 export type UpdateArticleRequest = ArticleForm;
 
 // 서버에서 클라이언트
-export interface GetArticlesResponse {
+export type GetArticlesResponse = {
   totalCount: number;
   list: Article[];
-}
+};
