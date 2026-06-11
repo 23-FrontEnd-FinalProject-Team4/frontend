@@ -1,19 +1,21 @@
 'use client';
 
-import { Task } from '@/apis/task/type';
-import KebabIcon from '@/assets/icons/kebab.svg?react';
-import CalendarIcon from '@/assets/icons/calendar.svg?react';
-import RepeatIcon from '@/assets/icons/repeat.svg?react';
-import Profile from '@/components/profile/Profile';
-import { FREQUENCY_TEXT } from '@/constants/listItem';
-import CommentForm from './CommentForm';
-import { MOCK_COMMENTS } from '../_constants/mockData';
-import Reply from '@/components/reply/Reply';
-import XIcon from '@/assets/icons/x.svg?react';
-import CheckIcon from '@/assets/icons/check_blue.svg?react';
-import Button from '@/components/button/Button';
-import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { useRef } from 'react';
+
+import { Task } from '@/apis/task/type';
+import CalendarIcon from '@/assets/icons/calendar.svg?react';
+import CheckIcon from '@/assets/icons/check_blue.svg?react';
+import KebabIcon from '@/assets/icons/kebab.svg?react';
+import RepeatIcon from '@/assets/icons/repeat.svg?react';
+import XIcon from '@/assets/icons/x.svg?react';
+import Button from '@/components/button/Button';
+import Profile from '@/components/profile/Profile';
+import Reply from '@/components/reply/Reply';
+import { FREQUENCY_TEXT } from '@/constants/listItem';
+import { useOutsideClick } from '@/hooks/useOutsideClick';
+
+import { MOCK_COMMENTS } from '../_constants/mockData';
+import CommentForm from './CommentForm';
 
 interface InfoOverlayProps {
   task: Task;
@@ -32,14 +34,12 @@ const InfoOverlay = ({ task, isOpen, onClose }: InfoOverlayProps) => {
   useOutsideClick(overlayRef, onClose);
 
   // TODO: 기능 추가 예정
-  const handleMenuClick = () => {
-
-  }
+  const handleMenuClick = () => {};
 
   if (!isOpen) return null;
   return (
     <div
-      className="fixed inset-0 top-16 z-200 overflow-y-auto bg-white px-4 py-3 md:top-0 md:left-1/2 md:px-7 md:py-10 xl:px-10 shadow-xl"
+      className="fixed inset-0 top-16 z-200 overflow-y-auto bg-white px-4 py-3 shadow-xl md:top-0 md:left-1/2 md:px-7 md:py-10 xl:px-10"
       ref={overlayRef}
     >
       <div className="mb-10 md:mb-14 xl:mb-17">

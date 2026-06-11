@@ -1,13 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+
 import { TaskUser } from '@/apis/task/type';
 import InputReply from '@/components/inputReply/InputReply';
 import Profile from '@/components/profile/Profile';
 
 interface CommentFormProps {
-  writer: TaskUser
-};
+  writer: TaskUser;
+}
 
 const CommentForm = ({ writer }: CommentFormProps) => {
   const [comment, setComment] = useState('');

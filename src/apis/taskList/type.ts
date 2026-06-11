@@ -93,4 +93,3 @@ export interface DeleteTaskListParams {
   groupId: number;
   id: string;
 }
-

@@ -1,13 +1,14 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import Button from '@/components/button/Button';
+
 import PrevIcon from '@/assets/icons/arrow_left.svg?react';
 import NextIcon from '@/assets/icons/arrow_right.svg?react';
 import CalendarIcon from '@/assets/icons/calendar.svg?react';
+import Button from '@/components/button/Button';
 import CalendarDate from '@/components/calendar/date/CalendarDate';
-import { formatYearMonth } from '@/utils/date';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
+import { formatYearMonth } from '@/utils/date';
 
 interface CalendarControlProps {
   handleToday: () => void;
@@ -75,7 +76,7 @@ const CalendarControl = ({
         onClick={handleCalendarOpen}
       />
       {isCalendarOpen && (
-        <div className="z-calendar absolute top-10 right-[-20px] bg-white" ref={ref}>
+        <div className="z-calendar absolute top-10 right-[-12px] bg-white" ref={ref}>
           <CalendarDate selectedDate={selectedDate} setSelectedDate={handleChangeDate} />
         </div>
       )}
