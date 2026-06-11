@@ -1,12 +1,119 @@
+@import 'pretendard/dist/web/static/pretendard.css';
+@import '@daypicker/react/style.css';
+
 @import 'tailwindcss';
 
+@theme {
+  --breakpoint-mobile: 375px;
+
+  --font-sans: 'Pretendard', system-ui, sans-serif;
+
+  --color-brand-primary: #5189fa;
+  --color-brand-secondary: #eef3ff;
+  --color-brand-tertiary: #315296;
+
+  --color-point-purple: #a855f7;
+  --color-point-cyan: #06b6d4;
+  --color-point-pink: #ec4899;
+  --color-point-rose: #f43f5e;
+  --color-point-orange: #f97316;
+  --color-point-yellow: #eab308;
+
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #f1f5f9;
+  --color-background-tertiary: #e2e8f0;
+  --color-background-inverse: #ffffff;
+
+  --color-interaction-inactive: #94a3b8;
+  --color-interaction-hover: #416ec8;
+  --color-interaction-pressed: #3b63b5;
+
+  --color-border-primary: #e2e8f0;
+
+  --color-text-primary: #1e293b;
+  --color-text-secondary: #334155;
+  --color-text-tertiary: #0f172a;
+  --color-text-default: #64748b;
+  --color-text-inverse: #e2e8f0;
+  --color-text-disabled: #94a3b8;
+
+  --color-status-danger: #fc4b4b;
+
+  --color-icon-primary: #64748b;
+  --color-icon-inverse: #f8fafc;
+  --color-icon-brand: #74a1fb;
+
+  --text-4xl: 40px;
+  --text-4xl--line-height: 48px;
+
+  --text-3xl: 32px;
+  --text-3xl--line-height: 38px;
+
+  --text-2xl: 24px;
+  --text-2xl--line-height: 28px;
+
+  --text-xl: 20px;
+  --text-xl--line-height: 24px;
+
+  --text-2lg: 18px;
+  --text-2lg--line-height: 21px;
+
+  --text-lg: 16px;
+  --text-lg--line-height: 19px;
+
+  --text-md: 14px;
+  --text-md--line-height: 17px;
+
+  --text-sm: 13px;
+  --text-sm--line-height: 16px;
+
+  --text-xs: 12px;
+  --text-xs--line-height: 14px;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --brand-gradient: linear-gradient(90deg, #10b981 0%, #a3e635 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--color-background-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  word-break: keep-all;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+a {
+  text-decoration: none;
+}
+
+@utility custom-scrollbar {
+  scrollbar-gutter: stable;
+  &::-webkit-scrollbar {
+    width: 0.375rem;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 9999px;
+    background-color: var(--color-slate-300);
+  }
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
 }
