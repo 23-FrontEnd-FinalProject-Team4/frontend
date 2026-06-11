@@ -1,28 +1,31 @@
-import UploadIcon from '@/assets/icons/img.svg?react';
+import { ArticleFormData } from '@/app/articles/write/_components/schema';
+import UploadIcon from '@/assets/icons/img.svg';
 import { FieldErrors, UseFormRegister } from 'react-hook-form';
-import { z } from 'zod';
 
 import Button from '@/components/button/Button';
 
-import { articleSchema } from './schema';
-
-export type ArticleFormProps = {
-  register: UseFormRegister<z.infer<typeof articleSchema>>;
-  errors: FieldErrors<z.infer<typeof articleSchema>>;
-  image: File | null;
+type ArticleFormProps = {
+  id?: number;
+  register: UseFormRegister<ArticleFormData>;
+  errors: FieldErrors<ArticleFormData>;
+  image?: File | string | null;
+  onImageChange: (file: File | string | null) => void;
   submitText: string;
-  onImageChange: (file: File | null) => void;
+  onSubmit: () => void;
 };
 
-export const ArticleForm = ({
+const ArticleForm = ({
+  id,
   register,
   errors,
   image,
-  submitText,
   onImageChange,
+  submitText,
+  onSubmit,
 }: ArticleFormProps) => {
   return (
-    <>
+    <form onSubmit={onSubmit}>
+      {id && <input type="hidden" name="id" value={id} />}
       <div className="mb-8 flex flex-col gap-2">
         <label className="flex gap-1">
           <span className="text-md font-bold md:text-lg">제목</span>
@@ -56,7 +59,6 @@ export const ArticleForm = ({
       <div className="mb-8 flex flex-col gap-2">
         <label className="flex gap-1" htmlFor="article-image">
           <span className="text-md font-bold md:text-lg">이미지</span>
-          <span className="text-point-rose">*</span>
         </label>
 
         <div className="border-border-primary flex h-20 w-20 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border">
@@ -74,13 +76,12 @@ export const ArticleForm = ({
             }}
           />
         </div>
-        {image && <p className="text-text-secondary text-sm">{image.name}</p>}
       </div>
 
       <Button variant="primary-filled" className="w-full" type="submit">
         {submitText}
       </Button>
-    </>
+    </form>
   );
 };
 

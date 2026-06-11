@@ -1,19 +1,18 @@
-'use client';
 import Link from 'next/link';
 
+import { getArticleDetail } from '@/apis/article';
+import type { ArticleComment } from '@/apis/articleComment/type';
 import CommentSection from '@/app/articles/_components/articlesDetail/CommentSection';
 import ArticleContent from '@/app/articles/_components/articlesDetail/Content';
 import ArticleHeader from '@/app/articles/_components/articlesDetail/Header';
 import LikeButton from '@/app/articles/_components/articlesDetail/LikeButton';
-import { mockArticles, mockComments } from '@/app/articles/mockArticles';
 import ArrowLeft from '@/assets/icons/arrow_left.svg';
 
-const ArticleDetailPage = () => {
-  const article = mockArticles[0];
-  const comments = mockComments;
-  const handleLikeClick = () => {
-    console.log('like button clicked');
-  };
+const ArticleDetailPage = async ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = await params;
+  const article = await getArticleDetail(Number(id));
+  const comments: ArticleComment[] = [];
+  const formattedDate = new Date(article.createdAt).toISOString().slice(0, 10).replace(/-/g, '. ');
   return (
     <div className="mx-auto flex min-h-screen px-4 pt-5 md:p-22">
       <main className="min-h-screen w-full">
@@ -25,16 +24,11 @@ const ArticleDetailPage = () => {
         <div className="bg-background-primary mx-auto flex w-full flex-col gap-4 rounded-2xl px-5 py-10 md:px-10 md:py-14">
           <ArticleHeader
             title={article.title}
-            writer={article.writer}
-            createdAt={article.createdAt}
+            writer={article.writer.nickname}
+            createdAt={formattedDate}
           />
           <ArticleContent content={article.content} image={article.image} />
-          {/* 좋아요 클릭 핸들러 구현 */}
-          <LikeButton
-            isLiked={article.isLiked}
-            likeCount={article.likeCount}
-            onLikeClick={handleLikeClick}
-          />
+          <LikeButton isLiked={article.isLiked} likeCount={article.likeCount} />
           <CommentSection comments={comments} />
         </div>
       </main>
