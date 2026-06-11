@@ -6,7 +6,6 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
   size?: InputBoxSize;
   isError?: boolean;
   errorMessage?: string;
-  isDisabled?: boolean;
   rightButtonText?: string;
   onRightButtonClick?: () => void;
 }
