@@ -8,6 +8,7 @@ import Reply from '@/components/reply/Reply';
 
 const CommentSection = ({ comments }: { comments: Comment[] | null }) => {
   const [replyValue, setReplyValue] = useState('');
+  const hasComments = comments && comments.length > 0;
 
   return (
     <>
@@ -24,7 +25,7 @@ const CommentSection = ({ comments }: { comments: Comment[] | null }) => {
       />
       {/* api 연동 시 수정 필요 */}
       <div className="divide-border-primary divide-y">
-        {comments && comments.length > 0 ? (
+        {hasComments ? (
           comments.map((comment: Comment) => (
             <Reply
               key={comment.id}

@@ -9,6 +9,7 @@
     "^react$",
     "^next",
     "<THIRD_PARTY_MODULES>",
+    "^@/schemas/(.*)$",
     "^@/components/(.*)$",
     "^@/hooks/(.*)$",
     "^@/states/(.*)$",

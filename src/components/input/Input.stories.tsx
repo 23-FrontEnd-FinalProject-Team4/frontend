@@ -19,7 +19,7 @@ export const Default: Story = {
     placeholder: '이메일을 입력하세요.',
     onChange: () => {},
     isError: false,
-    isDisabled: false,
+
     errorMessage: '',
   },
 };
@@ -50,7 +50,7 @@ export const Error: Story = {
 export const Disabled: Story = {
   args: {
     ...Default.args,
-    isDisabled: true,
+    disabled: true,
     value: 'disabled@example.com',
   },
 };
@@ -58,7 +58,7 @@ export const Disabled: Story = {
 export const WithRightButton: Story = {
   args: {
     ...Default.args,
-    isDisabled: true,
+    disabled: true,
     value: 'disabled@example.com',
     rightButtonText: '변경하기',
     onRightButtonClick: () => {},

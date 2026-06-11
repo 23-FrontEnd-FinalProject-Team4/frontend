@@ -5,6 +5,7 @@ export interface ListItemProps {
   onEdit: () => void;
   onDelete: () => void;
   onToggle: (checked: boolean) => void;
+  onClick?: () => void;
 }
 
 export interface ListItemInfoProps {
@@ -17,6 +18,6 @@ export interface ListItemInfoProps {
 }
 
 export interface ListItemDateProps {
-  date: Task['date']
-  frequency: Task['frequency']
+  date: Task['date'];
+  frequency: Task['frequency'];
 }

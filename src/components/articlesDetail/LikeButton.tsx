@@ -4,7 +4,7 @@ import { cn } from '@/utils/cn';
 
 import type { LikeButtonProps } from '@/components/articlesDetail/ArticleDetail.type';
 
-const LikeButton = ({ isLiked, likeCount }: LikeButtonProps) => {
+const LikeButton = ({ isLiked, likeCount, onLikeClick }: LikeButtonProps) => {
   return (
     <div className="flex w-full justify-end px-4">
       <button
@@ -12,6 +12,7 @@ const LikeButton = ({ isLiked, likeCount }: LikeButtonProps) => {
           'text-md flex flex-row items-center gap-1 font-light',
           isLiked ? 'text-brand-primary' : 'text-text-disabled',
         )}
+        onClick={onLikeClick}
       >
         {isLiked ? <HeartFillIcon className="h-6 w-4" /> : <HeartEmptyIcon className="h-6 w-4" />}
         {(likeCount || 0) > 999 ? '999+' : likeCount || 0}

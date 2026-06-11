@@ -1,6 +1,9 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
+
+import { overlay } from 'overlay-kit';
+import { toast } from 'react-hot-toast';
 
 import { useQuery } from '@tanstack/react-query';
 
@@ -12,13 +15,13 @@ import { getMyGroups, getMyProfile } from '@/apis/user';
 import Modal from '@/components/modal/Modal';
 import type { TeamCardSize } from '@/components/team/type';
 
-import useMediaQuery from '@/hooks/useMediaQuery';
-import { MEDIA_QUERY } from '@/hooks/useMediaQuery';
+import useMediaQuery, { MEDIA_QUERY } from '@/hooks/useMediaQuery';
 
 import { TASK_LISTS, TASK_STATUS_SECTIONS, TEAM_PAGE_MEMBERS } from '../_constants/mockData';
 import type { TaskListItem, TeamPageMember, TeamPageRole } from '../type';
 import TeamPageHeader from './header/TeamPageHeader';
 import MemberSection from './member/MemberSection';
+import CreateTaskListModal from './task-list/CreateTaskListModal';
 import TaskListSection from './task-list/TaskListSection';
 
 interface TeamPageClientProps {
@@ -90,14 +93,17 @@ const copyInviteLink = async (groupId?: number) => {
   await navigator.clipboard.writeText(inviteLink);
 };
 
+const closeOverlay = (close: () => void, unmount: () => void) => {
+  close();
+  setTimeout(unmount, 200);
+};
+
 export default function TeamPageClient({ teamId }: TeamPageClientProps) {
   const isDesktop = useMediaQuery(MEDIA_QUERY.desktop);
   const isTablet = useMediaQuery(MEDIA_QUERY.tablet);
   const today = useMemo(() => new Date().toISOString(), []);
 
   const [isTeamMenuOpen, setIsTeamMenuOpen] = useState(false);
-  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
-  const [isCreateListModalOpen, setIsCreateListModalOpen] = useState(false);
 
   const routeGroupId = getRouteGroupId(teamId);
 
@@ -158,6 +164,39 @@ export default function TeamPageClient({ teamId }: TeamPageClientProps) {
     [taskLists],
   );
 
+  const openInviteModal = useCallback(() => {
+    overlay.open(({ isOpen, close, unmount }) => {
+      const closeModal = () => closeOverlay(close, unmount);
+
+      return (
+        <Modal
+          isOpen={isOpen}
+          title="멤버 초대"
+          description="그룹에 참여할 수 있는 링크를 복사합니다."
+          primaryAction={{
+            label: '링크 복사하기',
+            onClick: () => {
+              void copyInviteLink(selectedGroupId).then(() => {
+                toast.success('초대 링크가 클립보드에 복사되었습니다.');
+              });
+              closeModal();
+            },
+          }}
+          size="md"
+          onClose={closeModal}
+        />
+      );
+    });
+  }, [selectedGroupId]);
+
+  const openCreateListModal = useCallback(() => {
+    overlay.open(({ isOpen, close, unmount }) => {
+      const closeModal = () => closeOverlay(close, unmount);
+
+      return <CreateTaskListModal isOpen={isOpen} onClose={closeModal} />;
+    });
+  }, []);
+
   return (
     <div className="bg-background-secondary relative min-h-full overflow-y-auto px-4 py-6 md:px-6 xl:px-16 xl:py-15.75">
       <div className="mx-auto flex w-full max-w-85.75 flex-col gap-8 md:max-w-155 xl:mx-0 xl:max-w-280">
@@ -179,43 +218,11 @@ export default function TeamPageClient({ teamId }: TeamPageClientProps) {
           teamId={String(selectedGroupId ?? teamId)}
           taskListsCount={taskLists.length}
           sections={groupedTaskLists}
-          onCreateTaskList={() => setIsCreateListModalOpen(true)}
+          onCreateTaskList={openCreateListModal}
         />
 
-        <MemberSection members={members} onInviteClick={() => setIsInviteModalOpen(true)} />
+        <MemberSection members={members} onInviteClick={openInviteModal} />
       </div>
-
-      <Modal
-        isOpen={isInviteModalOpen}
-        title="멤버 초대"
-        description="그룹에 참여할 수 있는 링크를 복사합니다."
-        primaryAction={{
-          label: '링크 복사하기',
-          onClick: () => {
-            void copyInviteLink(selectedGroupId);
-            setIsInviteModalOpen(false);
-          },
-        }}
-        size="md"
-        onClose={() => setIsInviteModalOpen(false)}
-      />
-
-      <Modal
-        isOpen={isCreateListModalOpen}
-        title="할 일 목록"
-        primaryAction={{
-          label: '만들기',
-          onClick: () => setIsCreateListModalOpen(false),
-        }}
-        size="md"
-        onClose={() => setIsCreateListModalOpen(false)}
-      >
-        <input
-          type="text"
-          placeholder="목록 명을 입력해주세요."
-          className="border-border-primary text-text-primary placeholder:text-text-disabled focus:border-brand-primary focus:ring-brand-primary h-11 w-full rounded-lg border px-4 text-sm transition-colors outline-none focus:ring-2"
-        />
-      </Modal>
     </div>
   );
 }
