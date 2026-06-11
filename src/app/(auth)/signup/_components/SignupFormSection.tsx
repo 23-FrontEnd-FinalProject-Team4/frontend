@@ -1,16 +1,30 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
 
 import Button from '@/components/button/Button';
 import FormField from '@/components/formField/FormField';
+import { getAxiosErrorMessage } from '@/lib/error';
 import { useSignupMutation } from '@/queries/auth/queries';
 
 import { type SignupFormValues, signupSchema } from '../_schemas/signup.schema';
 
 const SignupFormSection = () => {
-  const signupMutation = useSignupMutation();
+  const router = useRouter();
+
+  const signupMutation = useSignupMutation({
+    onSuccess: () => {
+      toast.success('회원가입이 완료되었어요.');
+      router.push('/login');
+    },
+    onError: (error) => {
+      toast.error(getAxiosErrorMessage(error, '회원가입 중 오류가 발생했어요.'));
+    },
+  });
 
   const signupForm = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
@@ -28,6 +42,7 @@ const SignupFormSection = () => {
         id="signup-nickname"
         label="이름"
         placeholder="이름을 입력해주세요."
+        disabled={signupMutation.isPending}
         isError={!!errors.nickname}
         errorMessage={errors.nickname?.message}
         {...signupForm.register('nickname')}
@@ -36,6 +51,7 @@ const SignupFormSection = () => {
         id="signup-email"
         label="이메일"
         placeholder="이메일을 입력해주세요."
+        disabled={signupMutation.isPending}
         isError={!!errors.email}
         errorMessage={errors.email?.message}
         {...signupForm.register('email')}
@@ -46,6 +62,7 @@ const SignupFormSection = () => {
         label="비밀번호"
         type="password"
         placeholder="비밀번호를 입력해주세요."
+        disabled={signupMutation.isPending}
         isError={!!errors.password}
         errorMessage={errors.password?.message}
         {...signupForm.register('password')}
@@ -56,6 +73,7 @@ const SignupFormSection = () => {
         label="비밀번호 확인"
         type="password"
         placeholder="비밀번호를 다시 한 번 입력해주세요."
+        disabled={signupMutation.isPending}
         isError={!!errors.passwordConfirmation}
         errorMessage={errors.passwordConfirmation?.message}
         {...signupForm.register('passwordConfirmation')}
