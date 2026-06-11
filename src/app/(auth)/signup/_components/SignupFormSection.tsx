@@ -4,12 +4,16 @@ import { useForm } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import { useSignupMutation } from '@/queries/auth/queries';
+
 import Button from '@/components/button/Button';
 import FormField from '@/components/formField/FormField';
 
 import { type SignupFormValues, signupSchema } from '../_schemas/signup.schema';
 
 const SignupFormSection = () => {
+  const signupMutation = useSignupMutation();
+
   const signupForm = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
     mode: 'onBlur',
@@ -17,8 +21,8 @@ const SignupFormSection = () => {
   });
   const errors = signupForm.formState.errors;
 
-  const onSubmit = (data: SignupFormValues) => {
-    console.log(data); //TODO: 콘솔 삭제
+  const onSubmit = (values: SignupFormValues) => {
+    signupMutation.mutate(values);
   };
   return (
     <form onSubmit={signupForm.handleSubmit(onSubmit)} className="flex flex-col gap-1">
@@ -48,6 +52,7 @@ const SignupFormSection = () => {
         errorMessage={errors.password?.message}
         {...signupForm.register('password')}
       />
+
       <FormField
         id="signup-password-confirm"
         label="비밀번호 확인"
@@ -57,8 +62,19 @@ const SignupFormSection = () => {
         errorMessage={errors.passwordConfirmation?.message}
         {...signupForm.register('passwordConfirmation')}
       />
-      <Button type="submit" className="my-4">
-        회원가입
+
+      <Button
+        type="submit"
+        className="my-4"
+        disabled={signupMutation.isPending || !signupForm.formState.isValid}
+      >
+        {signupMutation.isPending ? (
+          <span className="flex items-center gap-2">
+            <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+          </span>
+        ) : (
+          '회원가입'
+        )}
       </Button>
     </form>
   );
