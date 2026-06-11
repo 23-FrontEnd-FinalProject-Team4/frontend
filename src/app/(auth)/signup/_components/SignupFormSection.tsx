@@ -28,7 +28,7 @@ const SignupFormSection = () => {
 
   const signupForm = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
-    mode: 'onBlur',
+    mode: 'onChange',
     reValidateMode: 'onChange',
   });
   const errors = signupForm.formState.errors;

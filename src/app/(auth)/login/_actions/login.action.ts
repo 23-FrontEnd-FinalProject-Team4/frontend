@@ -5,7 +5,9 @@ import type { SignInRequest } from '@/apis/Auth/type';
 import { getAxiosErrorMessage } from '@/lib/error';
 import { setAuthTokens } from '@/utils/auth/token';
 
-export const loginAction = async (payload: SignInRequest) => {
+export type LoginActionResult = { success: true } | { success: false; error: string };
+
+export const loginAction = async (payload: SignInRequest): Promise<LoginActionResult> => {
   try {
     const { accessToken, refreshToken } = await signIn(payload);
 
@@ -16,6 +18,9 @@ export const loginAction = async (payload: SignInRequest) => {
 
     return { success: true };
   } catch (error) {
-    throw new Error(getAxiosErrorMessage(error, '로그인 중 오류가 발생했어요.'));
+    return {
+      success: false,
+      error: getAxiosErrorMessage(error, '로그인 중 오류가 발생했어요.'),
+    };
   }
 };

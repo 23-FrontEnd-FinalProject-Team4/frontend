@@ -100,7 +100,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           className={`text-xs ${isError && errorMessage ? 'text-status-danger' : 'text-transparent'}`}
           aria-live="polite"
         >
-          {errorMessage ?? '\u00A0'}
+          {isError && errorMessage ? errorMessage : '\u00A0'}
         </p>
       </div>
     );
