@@ -15,7 +15,6 @@ import { mockArticles } from './mockArticles';
 
 const ArticlesPage = () => {
   const [searchValue, setSearchValue] = useState('');
-  const [sortOption, setSortOption] = useState('latest');
   const [page, setPage] = useState(1);
   const router = useRouter();
   return (
@@ -30,7 +29,12 @@ const ArticlesPage = () => {
             aria-label="검색"
           />
         </div>
-        <BestArticleSection articles={mockArticles} />
+        <BestArticleSection
+          articles={mockArticles}
+          currentPage={page}
+          totalPages={10}
+          onPageChange={(page) => setPage(page)}
+        />
         <ArticleListSection articles={mockArticles} />
         <Button
           className="shadow-brand-tertiary-30 fixed right-10 bottom-10 shadow-md md:right-20 md:bottom-20"
