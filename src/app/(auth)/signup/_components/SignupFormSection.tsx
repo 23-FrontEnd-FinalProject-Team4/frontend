@@ -1,7 +1,8 @@
 'use client';
 
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import Button from '@/components/button/Button';
 import FormField from '@/components/formField/FormField';
@@ -20,7 +21,7 @@ const SignupFormSection = () => {
     console.log(data); //TODO: 콘솔 삭제
   };
   return (
-    <form onSubmit={signupForm.handleSubmit(onSubmit)} className="flex flex-col gap-5">
+    <form onSubmit={signupForm.handleSubmit(onSubmit)} className="flex flex-col gap-1">
       <FormField
         id="signup-nickname"
         label="이름"

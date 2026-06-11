@@ -8,6 +8,9 @@
   "importOrder": [
     "^react$",
     "^next",
+    "^@tanstack/react-query$",
+    "^react-hook-form$",
+    "^@hookform/resolvers/(.*)$",
     "<THIRD_PARTY_MODULES>",
     "^@/schemas/(.*)$",
     "^@/components/(.*)$",

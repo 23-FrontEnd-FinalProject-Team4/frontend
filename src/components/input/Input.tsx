@@ -96,7 +96,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             </button>
           )}
         </div>
-        {isError && errorMessage && <p className="text-status-danger text-xs">{errorMessage}</p>}
+        <p
+          className={`text-xs ${isError && errorMessage ? 'text-status-danger' : 'text-transparent'}`}
+          aria-live="polite"
+        >
+          {errorMessage ?? '\u00A0'}
+        </p>
       </div>
     );
   },

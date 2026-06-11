@@ -1,7 +1,10 @@
 'use client';
 
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+
+import { useLoginMutation } from '@/queries/auth/queries';
 
 import Button from '@/components/button/Button';
 import FormField from '@/components/formField/FormField';
@@ -11,20 +14,22 @@ import { type LoginFormValues, loginSchema } from '../_schemas/login.schema';
 const handleForgotPasswordClick = () => {};
 
 const LoginFormSection = () => {
+  const loginMutation = useLoginMutation();
+
   const loginForm = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
-    mode: 'onBlur',
+    mode: 'onChange',
     reValidateMode: 'onChange',
   });
 
   const errors = loginForm.formState.errors;
 
-  const onSubmit = (data: LoginFormValues) => {
-    console.log(data); //TODO: 콘솔 삭제
+  const onSubmit = (values: LoginFormValues) => {
+    loginMutation.mutate(values);
   };
 
   return (
-    <form onSubmit={loginForm.handleSubmit(onSubmit)} className="flex flex-col gap-4">
+    <form onSubmit={loginForm.handleSubmit(onSubmit)} className="flex flex-col gap-1">
       <FormField
         id="login-email"
         label="이메일"
@@ -52,7 +57,15 @@ const LoginFormSection = () => {
         비밀번호를 잊으셨나요?
       </button>
 
-      <Button type="submit">로그인</Button>
+      <Button type="submit" disabled={loginMutation.isPending || !loginForm.formState.isValid}>
+        {loginMutation.isPending ? (
+          <span className="flex items-center gap-2">
+            <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+          </span>
+        ) : (
+          '로그인'
+        )}
+      </Button>
     </form>
   );
 };
