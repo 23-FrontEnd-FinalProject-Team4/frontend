@@ -2,15 +2,13 @@ import KebabIcon from '@/assets/icons/kebab.svg';
 
 import Profile from '@/components/profile/Profile';
 
-const ArticleHeader = ({
-  writer,
-  createdAt,
-  title,
-}: {
+export type ArticleHeaderProps = {
   writer: string;
   createdAt: string;
   title: string;
-}) => {
+};
+
+const ArticleHeader = ({ writer, createdAt, title }: ArticleHeaderProps) => {
   return (
     <header className="border-border-primary mb-4 flex w-full items-start justify-between border-b pb-3">
       <div className="flex flex-col gap-2">

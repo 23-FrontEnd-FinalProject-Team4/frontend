@@ -1,3 +1,4 @@
+'use client';
 import Link from 'next/link';
 
 import { mockArticles, mockComments } from '@/app/articles/mockArticles';
@@ -11,6 +12,9 @@ import LikeButton from '@/components/articlesDetail/LikeButton';
 const ArticleDetailPage = () => {
   const article = mockArticles[0];
   const comments = mockComments;
+  const handleLikeClick = () => {
+    console.log('like button clicked');
+  };
   return (
     <div className="mx-auto flex min-h-screen px-4 pt-5 md:p-22">
       <main className="min-h-screen w-full">
@@ -27,7 +31,11 @@ const ArticleDetailPage = () => {
           />
           <ArticleContent content={article.content} image={article.image} />
           {/* 좋아요 클릭 핸들러 구현 */}
-          <LikeButton isLiked={article.isLiked} likeCount={article.likeCount} />
+          <LikeButton
+            isLiked={article.isLiked}
+            likeCount={article.likeCount}
+            onLikeClick={handleLikeClick}
+          />
           <CommentSection comments={comments} />
         </div>
       </main>
