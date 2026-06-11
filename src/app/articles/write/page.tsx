@@ -1,11 +1,10 @@
 'use client';
 import Link from 'next/link';
 
+import { ArticleEditor } from '@/app/articles/write/_components/ArticleEditor';
+import { articleSchema } from '@/app/articles/write/_components/schema';
 import { SubmitHandler } from 'react-hook-form';
 import { z } from 'zod';
-
-import { ArticleEditor } from '@/components/articleEditor/ArticleEditor';
-import { articleSchema } from '@/components/articleForm/schema';
 
 const WriteArticlePage = () => {
   const onSubmit: SubmitHandler<z.infer<typeof articleSchema>> = async (data) => {

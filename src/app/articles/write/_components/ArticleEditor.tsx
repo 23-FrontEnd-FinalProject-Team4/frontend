@@ -1,11 +1,10 @@
 'use client';
 
+import { ArticleForm } from '@/app/articles/write/_components/ArticleForm';
+import { articleSchema } from '@/app/articles/write/_components/schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
-
-import { ArticleForm } from '@/components/articleForm/ArticleForm';
-import { articleSchema } from '@/components/articleForm/schema';
 
 type ArticleEditorProps = {
   mode: 'write' | 'edit';

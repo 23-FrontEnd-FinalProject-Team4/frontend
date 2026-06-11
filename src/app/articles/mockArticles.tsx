@@ -1,7 +1,6 @@
+import type { ArticleWithLike } from '@/app/articles/_components/Card.type';
+import type { Comment } from '@/app/articles/_components/articlesDetail/Comment.type';
 import sampleImage from '@/assets/images/sample.png';
-
-import type { ArticleWithLike } from '@/components/articles/ArticleCard.type';
-import type { Comment } from '@/components/articlesDetail/Comment.type';
 
 //본문
 export const mockArticles: ArticleWithLike[] = [

@@ -1,13 +1,12 @@
 'use client';
 import Link from 'next/link';
 
+import CommentSection from '@/app/articles/_components/articlesDetail/CommentSection';
+import ArticleContent from '@/app/articles/_components/articlesDetail/Content';
+import ArticleHeader from '@/app/articles/_components/articlesDetail/Header';
+import LikeButton from '@/app/articles/_components/articlesDetail/LikeButton';
 import { mockArticles, mockComments } from '@/app/articles/mockArticles';
 import ArrowLeft from '@/assets/icons/arrow_left.svg';
-
-import ArticleContent from '@/components/articlesDetail/ArticleContent';
-import ArticleHeader from '@/components/articlesDetail/ArticleHeader';
-import CommentSection from '@/components/articlesDetail/CommentSection';
-import LikeButton from '@/components/articlesDetail/LikeButton';
 
 const ArticleDetailPage = () => {
   const article = mockArticles[0];

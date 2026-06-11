@@ -6,7 +6,7 @@ import HeartEmptyIcon from '@/assets/icons/heart_empty.svg';
 import HeartFillIcon from '@/assets/icons/heart_fill.svg';
 import { cn } from '@/utils/cn';
 
-import type { ArticleCardProps } from './ArticleCard.type';
+import type { ArticleCardProps } from './Card.type';
 
 export const ArticleCard = ({ article, variant = 'normal' }: ArticleCardProps) => {
   const isBest = variant === 'best';

@@ -4,11 +4,11 @@ import { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
+import BestArticleSection from '@/app/articles/_components/BestSection';
+import ArticleListSection from '@/app/articles/_components/ListSection';
+import SearchInput from '@/app/articles/_components/SearchInput';
 import WriteIcon from '@/assets/icons/pencil.svg?react';
 
-import ArticleListSection from '@/components/articles/ArticleListSection';
-import BestArticleSection from '@/components/articles/BestArticleSection';
-import SearchInput from '@/components/articles/SearchInput';
 import Button from '@/components/button/Button';
 
 import { mockArticles } from './mockArticles';

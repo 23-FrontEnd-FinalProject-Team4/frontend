@@ -2,8 +2,8 @@ import ArrowLeftIcon from '@/assets/icons/arrow_left.svg?react';
 import ArrowRightIcon from '@/assets/icons/arrow_right.svg?react';
 import { cn } from '@/utils/cn';
 
-import ArticleCard from './ArticleCard';
-import type { ArticleWithLike } from './ArticleCard.type';
+import ArticleCard from './Card';
+import type { ArticleWithLike } from './Card.type';
 import PageIndicator from './PageIndicator';
 
 type BestArticleSectionProps = {
