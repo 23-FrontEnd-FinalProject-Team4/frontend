@@ -1,20 +1,36 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-
-import { useLoginMutation } from '@/queries/auth/queries';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
 
 import Button from '@/components/button/Button';
 import FormField from '@/components/formField/FormField';
+import { useLoginMutation } from '@/queries/auth/queries';
 
 import { type LoginFormValues, loginSchema } from '../_schemas/login.schema';
 
 const handleForgotPasswordClick = () => {};
 
 const LoginFormSection = () => {
-  const loginMutation = useLoginMutation();
+  const router = useRouter();
+
+  const loginMutation = useLoginMutation({
+    onSuccess: () => {
+      toast.success('로그인에 성공했어요.');
+      router.push('/');
+    },
+    onError: (error) => {
+      if (error instanceof Error) {
+        toast.error(error.message);
+        return;
+      }
+
+      toast.error('로그인 중 오류가 발생했어요.');
+    },
+  });
 
   const loginForm = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -34,6 +50,7 @@ const LoginFormSection = () => {
         id="login-email"
         label="이메일"
         placeholder="이메일을 입력해주세요."
+        disabled={loginMutation.isPending}
         isError={!!errors.email}
         errorMessage={errors.email?.message}
         {...loginForm.register('email')}
@@ -44,6 +61,7 @@ const LoginFormSection = () => {
         label="비밀번호"
         type="password"
         placeholder="비밀번호를 입력해주세요."
+        disabled={loginMutation.isPending}
         isError={!!errors.password}
         errorMessage={errors.password?.message}
         {...loginForm.register('password')}

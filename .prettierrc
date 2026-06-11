@@ -5,20 +5,7 @@
   "trailingComma": "all",
   "printWidth": 100,
   "plugins": ["@trivago/prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"],
-  "importOrder": [
-    "^react$",
-    "^next",
-    "^@tanstack/react-query$",
-    "^react-hook-form$",
-    "^@hookform/resolvers/(.*)$",
-    "<THIRD_PARTY_MODULES>",
-    "^@/schemas/(.*)$",
-    "^@/components/(.*)$",
-    "^@/hooks/(.*)$",
-    "^@/states/(.*)$",
-    "^@/styles/(.*)$",
-    "^[./]"
-  ],
+  "importOrder": ["^react$", "^next/(.*)$", "<THIRD_PARTY_MODULES>", "^@/(.*)$", "^[./]"],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true
 }

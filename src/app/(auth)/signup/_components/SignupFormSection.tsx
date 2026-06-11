@@ -1,13 +1,11 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
-
 import { zodResolver } from '@hookform/resolvers/zod';
-
-import { useSignupMutation } from '@/queries/auth/queries';
+import { useForm } from 'react-hook-form';
 
 import Button from '@/components/button/Button';
 import FormField from '@/components/formField/FormField';
+import { useSignupMutation } from '@/queries/auth/queries';
 
 import { type SignupFormValues, signupSchema } from '../_schemas/signup.schema';
 
