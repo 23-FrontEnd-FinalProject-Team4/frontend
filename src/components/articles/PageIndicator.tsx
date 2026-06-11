@@ -11,6 +11,7 @@ const PageIndicator = ({ currentPage, totalPages, onPageChange }: PageIndicatorP
         const isActive = index + 1 === currentPage;
         return (
           <button
+            type="button"
             key={index + 1}
             className={
               isActive

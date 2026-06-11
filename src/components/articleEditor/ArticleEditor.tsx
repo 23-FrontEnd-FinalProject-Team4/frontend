@@ -1,16 +1,14 @@
-'use client';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SubmitHandler, useForm, useWatch } from 'react-hook-form';
+import { z } from 'zod';
 
-import { useState } from 'react';
-
-import { SubmitHandler, useForm } from 'react-hook-form';
-
-import { ArticleForm } from '../articleForm/ArticleForm';
-import { ArticleFormValues } from '../articleForm/type';
+import { ArticleForm } from '@/components/articleForm/ArticleForm';
+import { articleSchema } from '@/components/articleForm/schema';
 
 type ArticleEditorProps = {
   mode: 'write' | 'edit';
-  defaultValues: ArticleFormValues;
-  onSubmit: SubmitHandler<ArticleFormValues>;
+  defaultValues: z.infer<typeof articleSchema>;
+  onSubmit: SubmitHandler<z.infer<typeof articleSchema>>;
 };
 const submitText = {
   write: '등록하기',
@@ -18,12 +16,18 @@ const submitText = {
 };
 
 export const ArticleEditor = ({ mode, defaultValues, onSubmit }: ArticleEditorProps) => {
-  const [image, setImage] = useState<File | null>(defaultValues.image ?? null);
   const {
     register,
     handleSubmit,
+    control,
+    setValue,
     formState: { errors },
-  } = useForm<ArticleFormValues>({ defaultValues });
+  } = useForm<z.infer<typeof articleSchema>>({
+    defaultValues,
+    resolver: zodResolver(articleSchema),
+  });
+  const image = useWatch({ control, name: 'image' });
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <ArticleForm
@@ -31,7 +35,7 @@ export const ArticleEditor = ({ mode, defaultValues, onSubmit }: ArticleEditorPr
         errors={errors}
         image={image}
         submitText={submitText[mode]}
-        onImageChange={setImage}
+        onImageChange={(file) => setValue('image', file)}
       />
     </form>
   );

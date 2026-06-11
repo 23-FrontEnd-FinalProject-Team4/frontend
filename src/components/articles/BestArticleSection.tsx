@@ -6,7 +6,19 @@ import ArticleCard from './ArticleCard';
 import type { ArticleWithLike } from './ArticleCard.type';
 import PageIndicator from './PageIndicator';
 
-const BestArticleSection = ({ articles }: { articles: ArticleWithLike[] }) => {
+type BestArticleSectionProps = {
+  articles: ArticleWithLike[];
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+};
+
+const BestArticleSection = ({
+  articles,
+  currentPage,
+  totalPages,
+  onPageChange,
+}: BestArticleSectionProps) => {
   return (
     <div className="bg-background-secondary flex w-full flex-col items-center gap-6 px-6 py-10 lg:mb-10 lg:rounded-2xl">
       <h1 className="text-text-primary text-xl font-bold">베스트 게시글</h1>
@@ -16,7 +28,11 @@ const BestArticleSection = ({ articles }: { articles: ArticleWithLike[] }) => {
         ))}
       </div>
       <div className={cn('relative flex w-full flex-col items-center gap-4')}>
-        <PageIndicator currentPage={1} totalPages={10} />
+        <PageIndicator
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={onPageChange}
+        />
         <div className="absolute right-0 -bottom-3 flex flex-row items-center gap-1">
           <button
             type="button"

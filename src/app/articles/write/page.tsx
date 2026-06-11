@@ -1,12 +1,13 @@
 import Link from 'next/link';
 
 import { SubmitHandler } from 'react-hook-form';
+import { z } from 'zod';
 
 import { ArticleEditor } from '@/components/articleEditor/ArticleEditor';
-import { ArticleFormValues } from '@/components/articleForm/type';
+import { articleSchema } from '@/components/articleForm/schema';
 
 const WriteArticlePage = () => {
-  const onSubmit: SubmitHandler<ArticleFormValues> = async (data) => {
+  const onSubmit: SubmitHandler<z.infer<typeof articleSchema>> = async (data) => {
     console.log('submit', data);
   };
   return (
@@ -17,13 +18,11 @@ const WriteArticlePage = () => {
           <ArticleEditor
             mode="write"
             onSubmit={onSubmit}
-            defaultValues={
-              {
-                title: '',
-                content: '',
-                image: null,
-              } as ArticleFormValues
-            }
+            defaultValues={{
+              title: '',
+              content: '',
+              image: null,
+            }}
           />
         </div>
         <div className="flex w-full justify-center pt-8">

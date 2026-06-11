@@ -33,9 +33,7 @@ const ArticleDetailPage = () => {
           <LikeButton
             isLiked={article.isLiked}
             likeCount={article.likeCount}
-            onLikeClick={() => {
-              handleLikeClick();
-            }}
+            onLikeClick={handleLikeClick}
           />
           <CommentSection comments={comments} />
         </div>

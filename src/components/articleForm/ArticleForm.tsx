@@ -1,13 +1,14 @@
 import UploadIcon from '@/assets/icons/img.svg?react';
 import { FieldErrors, UseFormRegister } from 'react-hook-form';
+import { z } from 'zod';
 
 import Button from '@/components/button/Button';
 
-import { ArticleFormValues } from './type';
+import { articleSchema } from './schema';
 
 export type ArticleFormProps = {
-  register: UseFormRegister<ArticleFormValues>;
-  errors: FieldErrors<ArticleFormValues>;
+  register: UseFormRegister<z.infer<typeof articleSchema>>;
+  errors: FieldErrors<z.infer<typeof articleSchema>>;
   image: File | null;
   submitText: string;
   onImageChange: (file: File | null) => void;
@@ -23,10 +24,10 @@ export const ArticleForm = ({
   return (
     <>
       <div className="mb-8 flex flex-col gap-2">
-        <div className="flex gap-1">
+        <label className="flex gap-1">
           <span className="text-md font-bold md:text-lg">제목</span>
           <span className="text-point-rose">*</span>
-        </div>
+        </label>
 
         <input
           {...register('title')}
@@ -38,10 +39,10 @@ export const ArticleForm = ({
       </div>
 
       <div className="mb-8 flex flex-col gap-2">
-        <div className="flex gap-1">
+        <label className="flex gap-1">
           <span className="text-md font-bold md:text-lg">내용</span>
           <span className="text-point-rose">*</span>
-        </div>
+        </label>
 
         <textarea
           {...register('content')}
@@ -53,12 +54,12 @@ export const ArticleForm = ({
       </div>
 
       <div className="mb-8 flex flex-col gap-2">
-        <span className="text-md font-bold md:text-lg">이미지</span>
+        <label className="flex gap-1" htmlFor="article-image">
+          <span className="text-md font-bold md:text-lg">이미지</span>
+          <span className="text-point-rose">*</span>
+        </label>
 
-        <label
-          htmlFor="article-image"
-          className="border-border-primary flex h-20 w-20 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border"
-        >
+        <div className="border-border-primary flex h-20 w-20 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border">
           <UploadIcon className="size-6" />
           <span className="text-text-disabled text-md">{image ? '1 / 1' : '0 / 1'}</span>
 
@@ -72,7 +73,7 @@ export const ArticleForm = ({
               onImageChange(file);
             }}
           />
-        </label>
+        </div>
         {image && <p className="text-text-secondary text-sm">{image.name}</p>}
       </div>
 
