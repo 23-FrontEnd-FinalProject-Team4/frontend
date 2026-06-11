@@ -1,9 +1,9 @@
 'use client';
 
 import { useCallback, useMemo, useState } from 'react';
-import { toast } from 'react-hot-toast';
 
 import { overlay } from 'overlay-kit';
+import { toast } from 'react-hot-toast';
 
 import Modal from '@/components/modal/Modal';
 import type { TeamCardSize } from '@/components/team/type';
@@ -83,12 +83,7 @@ export default function TeamPageClient({ teamId }: TeamPageClientProps) {
     overlay.open(({ isOpen, close, unmount }) => {
       const closeModal = () => closeOverlay(close, unmount);
 
-      return (
-        <CreateTaskListModal
-          isOpen={isOpen}
-          onClose={closeModal}
-        />
-      );
+      return <CreateTaskListModal isOpen={isOpen} onClose={closeModal} />;
     });
   }, []);
 

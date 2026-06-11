@@ -1,6 +1,9 @@
 import { RefObject, useEffect } from 'react';
 
-export function useOutsideClick(ref: RefObject<HTMLElement | null>, handler: (event: MouseEvent) => void) {
+export const useOutsideClick = (
+  ref: RefObject<HTMLElement | null>,
+  handler: (event: MouseEvent) => void,
+) => {
   useEffect(() => {
     // 마우스 이벤트 발생시, 클릭한 타겟이 ref가 아니면 handler 호출
     const listener = (event: MouseEvent) => {
@@ -15,4 +18,4 @@ export function useOutsideClick(ref: RefObject<HTMLElement | null>, handler: (ev
       document.removeEventListener('mousedown', listener);
     };
   }, [ref, handler]);
-}
+};

@@ -1,6 +1,7 @@
 import { Meta, StoryObj } from '@storybook/nextjs-vite';
-import DateList from './DateList';
 import { expect, fn, userEvent, within } from 'storybook/test';
+
+import DateList from './DateList';
 
 const meta = {
   component: DateList,
@@ -31,9 +32,8 @@ export const Date20260101To20260102: Story = {
     onChange: fn(),
   },
   play: async ({ canvasElement, args }) => {
-    const buttons = within(canvasElement).getAllByRole('button');
-    // [29 / 30 / 31 / 1 / 2 / 3 / 4] 순서에서 5번 (2일) 클릭
-    await userEvent.click(buttons[4]);
+    const button = within(canvasElement).getByRole('button', { name: '1월 2일' });
+    await userEvent.click(button);
     expect(args.onChange).toHaveBeenCalledWith(new Date('2026-01-02'));
   },
 };

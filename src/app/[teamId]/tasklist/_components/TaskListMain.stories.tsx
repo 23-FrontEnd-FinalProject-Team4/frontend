@@ -1,0 +1,30 @@
+import { Meta, StoryObj } from '@storybook/nextjs-vite';
+
+import { MOCK_TASKLISTS } from '../_constants/mockData';
+import TaskListMain from './TaskListMain';
+
+const meta = {
+  component: TaskListMain,
+  title: 'TaskList/Main',
+  tags: ['autodocs'],
+  parameters: {
+    nextjs: {
+      appDirectory: true,
+      navigation: {
+        pathname: '0/tasklist',
+        query: {
+          date: '2026-06-06',
+        },
+      },
+    },
+  },
+} satisfies Meta<typeof TaskListMain>;
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  args: {
+    taskList: MOCK_TASKLISTS[0],
+  },
+};
