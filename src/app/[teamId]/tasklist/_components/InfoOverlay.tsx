@@ -1,19 +1,21 @@
 'use client';
 
-import { Task } from '@/apis/task/type';
-import KebabIcon from '@/assets/icons/kebab.svg?react';
-import CalendarIcon from '@/assets/icons/calendar.svg?react';
-import RepeatIcon from '@/assets/icons/repeat.svg?react';
-import Profile from '@/components/profile/Profile';
-import { FREQUENCY_TEXT } from '@/constants/listItem';
-import CommentForm from './CommentForm';
-import { MOCK_COMMENTS } from '../_constants/mockData';
-import Reply from '@/components/reply/Reply';
-import XIcon from '@/assets/icons/x.svg?react';
-import CheckIcon from '@/assets/icons/check_blue.svg?react';
-import Button from '@/components/button/Button';
-import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { useRef } from 'react';
+
+import { Task } from '@/apis/task/type';
+import CalendarIcon from '@/assets/icons/calendar.svg?react';
+import CheckIcon from '@/assets/icons/check_blue.svg?react';
+import KebabIcon from '@/assets/icons/kebab.svg?react';
+import RepeatIcon from '@/assets/icons/repeat.svg?react';
+import XIcon from '@/assets/icons/x.svg?react';
+import Button from '@/components/button/Button';
+import Profile from '@/components/profile/Profile';
+import Reply from '@/components/reply/Reply';
+import { FREQUENCY_TEXT } from '@/constants/listItem';
+import { useOutsideClick } from '@/hooks/useOutsideClick';
+
+import { MOCK_COMMENTS } from '../_constants/mockData';
+import CommentForm from './CommentForm';
 
 interface InfoOverlayProps {
   task: Task;
@@ -24,6 +26,8 @@ interface InfoOverlayProps {
 const InfoOverlay = ({ task, isOpen, onClose }: InfoOverlayProps) => {
   // TODO: API를 통해 Comment 받아오기
   const comments = MOCK_COMMENTS;
+  const writerName = task.writer?.nickname ?? '알 수 없음';
+  const writerImage = task.writer?.image ?? null;
 
   const isDone = Boolean(task.doneAt);
 
@@ -32,14 +36,12 @@ const InfoOverlay = ({ task, isOpen, onClose }: InfoOverlayProps) => {
   useOutsideClick(overlayRef, onClose);
 
   // TODO: 기능 추가 예정
-  const handleMenuClick = () => {
-
-  }
+  const handleMenuClick = () => {};
 
   if (!isOpen) return null;
   return (
     <div
-      className="fixed inset-0 top-16 z-200 overflow-y-auto bg-white px-4 py-3 md:top-0 md:left-1/2 md:px-7 md:py-10 xl:px-10 shadow-xl"
+      className="fixed inset-0 top-16 z-200 overflow-y-auto bg-white px-4 py-3 shadow-xl md:top-0 md:left-1/2 md:px-7 md:py-10 xl:px-10"
       ref={overlayRef}
     >
       <div className="mb-10 md:mb-14 xl:mb-17">
@@ -68,8 +70,8 @@ const InfoOverlay = ({ task, isOpen, onClose }: InfoOverlayProps) => {
         </div>
 
         <div className="flex items-center gap-2 pb-4">
-          <Profile src={task.writer.image} alt={task.writer.nickname} />
-          <span className="text-md font-medium">{task.writer.nickname}</span>
+          <Profile src={writerImage} alt={writerName} />
+          <span className="text-md font-medium">{writerName}</span>
         </div>
 
         <div className="flex items-center justify-between">
