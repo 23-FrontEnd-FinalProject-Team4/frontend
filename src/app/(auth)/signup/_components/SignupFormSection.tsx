@@ -8,11 +8,9 @@ import { toast } from 'react-hot-toast';
 
 import Button from '@/components/button/Button';
 import FormField from '@/components/formField/FormField';
+import { getErrorMessage } from '@/lib/error';
 import { useSignupMutation } from '@/queries/auth/queries';
 import { type SignupFormValues, signupSchema } from '@/schemas/auth.schema';
-
-const getErrorMessage = (error: unknown) =>
-  error instanceof Error ? error.message : '회원가입 중 오류가 발생했어요.';
 
 const SignupFormSection = () => {
   const router = useRouter();
@@ -33,7 +31,7 @@ const SignupFormSection = () => {
       toast.success('회원가입이 완료되었어요.');
       router.push('/login');
     } catch (error) {
-      toast.error(getErrorMessage(error));
+      toast.error(getErrorMessage(error, '회원가입 중 오류가 발생했어요.'));
     }
   };
 

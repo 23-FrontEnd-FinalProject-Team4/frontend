@@ -8,13 +8,11 @@ import { toast } from 'react-hot-toast';
 
 import Button from '@/components/button/Button';
 import FormField from '@/components/formField/FormField';
+import { getErrorMessage } from '@/lib/error';
 import { useLoginMutation } from '@/queries/auth/queries';
 import { type LoginFormValues, loginSchema } from '@/schemas/auth.schema';
 
 const handleForgotPasswordClick = () => {};
-
-const getErrorMessage = (error: unknown) =>
-  error instanceof Error ? error.message : '로그인 중 오류가 발생했어요.';
 
 const LoginFormSection = () => {
   const router = useRouter();
@@ -36,7 +34,7 @@ const LoginFormSection = () => {
       toast.success('로그인에 성공했어요.');
       router.push('/');
     } catch (error) {
-      toast.error(getErrorMessage(error));
+      toast.error(getErrorMessage(error, '로그인 중 오류가 발생했어요.'));
     }
   };
 
