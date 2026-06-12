@@ -109,6 +109,12 @@ export default function useHorizontalScroll<T extends HTMLElement>() {
       isDraggingRef.current = false;
       setScrollState((prev) => ({ ...prev, isDragging: false }));
       updateScrollState();
+
+      if (hasDraggedRef.current) {
+        window.setTimeout(() => {
+          hasDraggedRef.current = false;
+        }, 0);
+      }
     },
     [updateScrollState],
   );
