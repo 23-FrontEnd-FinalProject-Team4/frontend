@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { overlay } from 'overlay-kit';
 import { toast } from 'react-hot-toast';
@@ -93,11 +93,6 @@ const copyInviteLink = async (groupId?: number) => {
   await navigator.clipboard.writeText(inviteLink);
 };
 
-const closeOverlay = (close: () => void, unmount: () => void) => {
-  close();
-  setTimeout(unmount, 200);
-};
-
 export default function TeamPageClient({ teamId }: TeamPageClientProps) {
   const isDesktop = useMediaQuery(MEDIA_QUERY.desktop);
   const isTablet = useMediaQuery(MEDIA_QUERY.tablet);
@@ -164,10 +159,8 @@ export default function TeamPageClient({ teamId }: TeamPageClientProps) {
     [taskLists],
   );
 
-  const openInviteModal = useCallback(() => {
-    overlay.open(({ isOpen, close, unmount }) => {
-      const closeModal = () => closeOverlay(close, unmount);
-
+  const openInviteModal = () => {
+    overlay.open(({ isOpen, close }) => {
       return (
         <Modal
           isOpen={isOpen}
@@ -179,23 +172,21 @@ export default function TeamPageClient({ teamId }: TeamPageClientProps) {
               void copyInviteLink(selectedGroupId).then(() => {
                 toast.success('초대 링크가 클립보드에 복사되었습니다.');
               });
-              closeModal();
+              close();
             },
           }}
           size="md"
-          onClose={closeModal}
+          onClose={close}
         />
       );
     });
-  }, [selectedGroupId]);
+  };
 
-  const openCreateListModal = useCallback(() => {
-    overlay.open(({ isOpen, close, unmount }) => {
-      const closeModal = () => closeOverlay(close, unmount);
-
-      return <CreateTaskListModal isOpen={isOpen} onClose={closeModal} />;
+  const openCreateListModal = () => {
+    overlay.open(({ isOpen, close }) => {
+      return <CreateTaskListModal isOpen={isOpen} onClose={close} />;
     });
-  }, []);
+  };
 
   return (
     <div className="bg-background-secondary relative min-h-full overflow-y-auto px-4 py-6 md:px-6 xl:px-16 xl:py-15.75">
