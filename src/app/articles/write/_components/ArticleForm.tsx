@@ -5,13 +5,14 @@ import { FieldErrors, UseFormRegister } from 'react-hook-form';
 import Button from '@/components/button/Button';
 
 type ArticleFormProps = {
-  id?: number;
+  id?: string;
   register: UseFormRegister<ArticleFormData>;
   errors: FieldErrors<ArticleFormData>;
   image?: File | string | null;
   onImageChange: (file: File | string | null) => void;
   submitText: string;
   onSubmit: () => void;
+  isloading: boolean;
 };
 
 const ArticleForm = ({
@@ -22,6 +23,7 @@ const ArticleForm = ({
   onImageChange,
   submitText,
   onSubmit,
+  isloading,
 }: ArticleFormProps) => {
   return (
     <form onSubmit={onSubmit}>
@@ -78,8 +80,8 @@ const ArticleForm = ({
         </div>
       </div>
 
-      <Button variant="primary-filled" className="w-full" type="submit">
-        {submitText}
+      <Button variant="primary-filled" className="w-full" type="submit" disabled={isloading}>
+        {isloading ? '저장 중...' : submitText}
       </Button>
     </form>
   );

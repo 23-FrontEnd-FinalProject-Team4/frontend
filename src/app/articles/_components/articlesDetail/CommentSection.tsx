@@ -10,6 +10,7 @@ import {
   updateArticleComment,
 } from '@/apis/articleComment';
 import type { ArticleComment } from '@/apis/articleComment/type';
+import { formatDate } from '@/utils/formatDate';
 
 import Dropdown from '@/components/dropdown/Dropdown';
 import InputReply from '@/components/inputReply/InputReply';
@@ -34,7 +35,6 @@ const CommentSection = ({
   const router = useRouter();
 
   const handleSubmit = async () => {
-    console.log(comments);
     if (!replyValue.trim()) return;
 
     try {
@@ -105,7 +105,7 @@ const CommentSection = ({
                   size="lg"
                   author={comment.writer.nickname}
                   avatar={comment.writer.image}
-                  date={new Date(comment.createdAt).toISOString().slice(0, 10).replace(/-/g, '. ')}
+                  date={formatDate(comment.createdAt)}
                   onMenuClick={() =>
                     setOpenedCommentId(openedCommentId === comment.id ? null : comment.id)
                   }

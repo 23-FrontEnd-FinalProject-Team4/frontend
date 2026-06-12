@@ -5,6 +5,7 @@ import BestIcon from '@/assets/icons/best.svg?react';
 import HeartEmptyIcon from '@/assets/icons/heart_empty.svg';
 import HeartFillIcon from '@/assets/icons/heart_fill.svg';
 import { cn } from '@/utils/cn';
+import { formatDate } from '@/utils/formatDate';
 
 import type { ArticleCardProps } from './Card.type';
 
@@ -12,7 +13,7 @@ export const ArticleCard = ({ article, variant = 'normal' }: ArticleCardProps) =
   const isBest = variant === 'best';
 
   const { id, title, content, image, writer, createdAt, isLiked } = article;
-  const formattedDate = new Date(createdAt).toISOString().slice(0, 10).replace(/-/g, '. ');
+  const formattedDate = formatDate(createdAt);
 
   return (
     <Link

@@ -18,12 +18,13 @@ import Profile from '@/components/profile/Profile';
 
 export type ArticleHeaderProps = {
   writer: string;
+  writerImage?: string | null;
   createdAt: string;
   title: string;
   id: string;
 };
 
-const ArticleHeader = ({ writer, createdAt, title, id }: ArticleHeaderProps) => {
+const ArticleHeader = ({ writer, writerImage, createdAt, title, id }: ArticleHeaderProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const router = useRouter();
@@ -42,7 +43,7 @@ const ArticleHeader = ({ writer, createdAt, title, id }: ArticleHeaderProps) => 
       <div className="flex flex-col gap-2">
         <h1 className="text-text-primary text-2lg font-bold md:text-xl">{title} </h1>
         <div className="flex items-center gap-2">
-          <Profile alt="작성자 프로필" size="md" src={null} />
+          <Profile alt="작성자 프로필" size="md" src={writerImage ?? null} />
           <span className="text-text-primary md:text-md text-xs">{writer}</span>
           <div className="bg-text-default h-3 w-px" />
           <span className="text-text-disabled md:text-md text-xs">{createdAt}</span>

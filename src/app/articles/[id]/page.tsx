@@ -7,12 +7,13 @@ import ArticleContent from '@/app/articles/_components/articlesDetail/Content';
 import ArticleHeader from '@/app/articles/_components/articlesDetail/Header';
 import LikeButton from '@/app/articles/_components/articlesDetail/LikeButton';
 import ArrowLeft from '@/assets/icons/arrow_left.svg';
+import { formatDate } from '@/utils/formatDate';
 
 const ArticleDetailPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
   const article = await getArticleDetail(`${id}`);
   const comments = await getArticleComments({ articleId: `${id}`, limit: 10, cursor: 0 });
-  const formattedDate = new Date(article.createdAt).toISOString().slice(0, 10).replace(/-/g, '. ');
+  const formattedDate = formatDate(article.createdAt);
   return (
     <div className="mx-auto flex min-h-screen px-4 pt-5 md:p-22">
       <main className="min-h-screen w-full">
