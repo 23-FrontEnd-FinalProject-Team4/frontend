@@ -24,7 +24,7 @@ export default function EditorClient({ mode, defaultValues }: EditorClientProps)
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<ArticleFormData>({
     resolver: zodResolver(articleSchema),
     defaultValues,
@@ -37,7 +37,7 @@ export default function EditorClient({ mode, defaultValues }: EditorClientProps)
   });
 
   const updateArticleMutation = useMutation({
-    mutationFn: ({ id, payload }: { id: number; payload: UpdateArticleRequest }) =>
+    mutationFn: ({ id, payload }: { id: string; payload: UpdateArticleRequest }) =>
       updateArticle(id, payload),
   });
 
@@ -81,6 +81,7 @@ export default function EditorClient({ mode, defaultValues }: EditorClientProps)
       errors={errors}
       image={image}
       onImageChange={setImage}
+      isloading={isSubmitting}
       submitText={mode === 'edit' ? '수정하기' : '등록하기'}
       onSubmit={handleSubmit(handleFormSubmit)}
     />
