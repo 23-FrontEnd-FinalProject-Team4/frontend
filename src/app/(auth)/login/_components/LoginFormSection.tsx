@@ -13,24 +13,12 @@ import { useLoginMutation } from '@/queries/auth/queries';
 import { type LoginFormValues, loginSchema } from '../_schemas/login.schema';
 
 const handleForgotPasswordClick = () => {};
+const getErrorMessage = (error: unknown) =>
+  error instanceof Error ? error.message : '로그인 중 오류가 발생했어요.';
 
 const LoginFormSection = () => {
   const router = useRouter();
-
-  const loginMutation = useLoginMutation({
-    onSuccess: () => {
-      toast.success('로그인에 성공했어요.');
-      router.push('/');
-    },
-    onError: (error) => {
-      if (error instanceof Error) {
-        toast.error(error.message);
-        return;
-      }
-
-      toast.error('로그인 중 오류가 발생했어요.');
-    },
-  });
+  const { mutateAsync, isPending } = useLoginMutation();
 
   const loginForm = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -40,8 +28,16 @@ const LoginFormSection = () => {
 
   const errors = loginForm.formState.errors;
 
-  const onSubmit = (values: LoginFormValues) => {
-    loginMutation.mutate(values);
+  const onSubmit = async (data: LoginFormValues) => {
+    if (isPending) return;
+
+    try {
+      await mutateAsync(data);
+      toast.success('로그인에 성공했어요.');
+      router.push('/');
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+    }
   };
 
   return (
@@ -50,7 +46,7 @@ const LoginFormSection = () => {
         id="login-email"
         label="이메일"
         placeholder="이메일을 입력해주세요."
-        disabled={loginMutation.isPending}
+        disabled={isPending}
         isError={!!errors.email}
         errorMessage={errors.email?.message}
         {...loginForm.register('email')}
@@ -61,7 +57,7 @@ const LoginFormSection = () => {
         label="비밀번호"
         type="password"
         placeholder="비밀번호를 입력해주세요."
-        disabled={loginMutation.isPending}
+        disabled={isPending}
         isError={!!errors.password}
         errorMessage={errors.password?.message}
         {...loginForm.register('password')}
@@ -75,8 +71,8 @@ const LoginFormSection = () => {
         비밀번호를 잊으셨나요?
       </button>
 
-      <Button type="submit" disabled={loginMutation.isPending || !loginForm.formState.isValid}>
-        {loginMutation.isPending ? (
+      <Button type="submit" disabled={isPending || !loginForm.formState.isValid}>
+        {isPending ? (
           <span className="flex items-center gap-2">
             <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
           </span>

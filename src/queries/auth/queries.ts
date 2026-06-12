@@ -4,15 +4,10 @@ import { signUp } from '@/apis/Auth';
 import type { AuthResponse, SignInRequest, SignUpRequest } from '@/apis/Auth/type';
 import { type LoginActionResult, loginAction } from '@/app/(auth)/login/_actions/login.action';
 
-interface MutationOptions {
-  onSuccess?: () => void;
-  onError?: (error: unknown) => void;
-}
-
-export const useLoginMutation = ({ onSuccess, onError }: MutationOptions = {}) => {
+export const useLoginMutation = () => {
   return useMutation<LoginActionResult, Error, SignInRequest>({
-    mutationFn: async (payload) => {
-      const result = await loginAction(payload);
+    mutationFn: async (data) => {
+      const result = await loginAction(data);
 
       if (!result.success) {
         throw new Error(result.error);
@@ -21,16 +16,12 @@ export const useLoginMutation = ({ onSuccess, onError }: MutationOptions = {}) =
       return result;
     },
     retry: false,
-    onSuccess,
-    onError,
   });
 };
 
-export const useSignupMutation = ({ onSuccess, onError }: MutationOptions = {}) => {
+export const useSignupMutation = () => {
   return useMutation<AuthResponse, Error, SignUpRequest>({
     mutationFn: signUp,
     retry: false,
-    onSuccess,
-    onError,
   });
 };
