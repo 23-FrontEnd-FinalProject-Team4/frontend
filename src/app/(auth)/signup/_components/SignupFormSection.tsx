@@ -9,8 +9,7 @@ import { toast } from 'react-hot-toast';
 import Button from '@/components/button/Button';
 import FormField from '@/components/formField/FormField';
 import { useSignupMutation } from '@/queries/auth/queries';
-
-import { type SignupFormValues, signupSchema } from '../_schemas/signup.schema';
+import { type SignupFormValues, signupSchema } from '@/schemas/auth.schema';
 
 const getErrorMessage = (error: unknown) =>
   error instanceof Error ? error.message : '회원가입 중 오류가 발생했어요.';

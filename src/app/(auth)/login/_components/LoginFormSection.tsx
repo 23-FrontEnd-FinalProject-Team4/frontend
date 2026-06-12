@@ -9,10 +9,10 @@ import { toast } from 'react-hot-toast';
 import Button from '@/components/button/Button';
 import FormField from '@/components/formField/FormField';
 import { useLoginMutation } from '@/queries/auth/queries';
-
-import { type LoginFormValues, loginSchema } from '../_schemas/login.schema';
+import { type LoginFormValues, loginSchema } from '@/schemas/auth.schema';
 
 const handleForgotPasswordClick = () => {};
+
 const getErrorMessage = (error: unknown) =>
   error instanceof Error ? error.message : '로그인 중 오류가 발생했어요.';
 
