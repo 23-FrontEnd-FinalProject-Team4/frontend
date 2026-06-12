@@ -10,7 +10,7 @@ import ArrowLeft from '@/assets/icons/arrow_left.svg';
 
 const ArticleDetailPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
-  const article = await getArticleDetail(Number(id));
+  const article = await getArticleDetail(`${id}`);
   const comments: ArticleComment[] = [];
   const formattedDate = new Date(article.createdAt).toISOString().slice(0, 10).replace(/-/g, '. ');
   return (
@@ -23,6 +23,7 @@ const ArticleDetailPage = async ({ params }: { params: Promise<{ id: string }> }
         </Link>
         <div className="bg-background-primary mx-auto flex w-full flex-col gap-4 rounded-2xl px-5 py-10 md:px-10 md:py-14">
           <ArticleHeader
+            id={`${article.id}`}
             title={article.title}
             writer={article.writer.nickname}
             createdAt={formattedDate}
