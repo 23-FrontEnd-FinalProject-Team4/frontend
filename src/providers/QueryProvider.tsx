@@ -1,6 +1,7 @@
 'use client';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { toast } from 'react-hot-toast';
 
 interface QueryProviderProps {
   children: React.ReactNode;
@@ -8,12 +9,19 @@ interface QueryProviderProps {
 
 const makeQueryClient = () => {
   return new QueryClient({
+    queryCache: new QueryCache({
+      onError: (error, query) => {
+        if (query.state.data !== undefined) {
+          toast.error(error instanceof Error ? error.message : '요청 중 오류가 발생했어요.');
+        }
+      },
+    }),
     defaultOptions: {
       queries: {
-        staleTime: 60 * 1000, // 1분 동안은 데이터가 '신선함' 상태라고 판단해 중복 호출 방지
-        gcTime: 5 * 60 * 1000, // 쓰이지 않는 캐시 데이터는 5분 뒤 메모리에서 자동 정리
-        retry: 1, // API 실패 시 딱 1번만 재시도
-        refetchOnWindowFocus: false, // 사용자가 브라우저 창을 다시 포커스했을 때 자동 리패칭 끄기
+        staleTime: 60 * 1000,
+        gcTime: 5 * 60 * 1000,
+        retry: 1,
+        refetchOnWindowFocus: false,
       },
     },
   });
