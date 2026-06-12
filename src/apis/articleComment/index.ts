@@ -1,7 +1,6 @@
 import clientFetcher from '@/lib/clientFetcher';
 
 import {
-  ArticleIdParams,
   CommentIdParams,
   CreateArticleCommentRequest,
   CreateArticleCommentResponse,
@@ -27,17 +26,15 @@ export const getArticleComments = async (params: GetArticleCommentsParams) => {
 
 // 게시글 댓글 작성
 export const createArticleComment = async (
-  { articleId }: ArticleIdParams,
+  articleId: string,
   request: CreateArticleCommentRequest,
 ) => {
   const response = await clientFetcher.post<CreateArticleCommentResponse>(
     `/articles/${articleId}/comments`,
     request,
   );
-
   return response.data;
 };
-
 // 게시글 댓글 수정
 export const updateArticleComment = async (
   { commentId }: CommentIdParams,

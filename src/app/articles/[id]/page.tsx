@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import { getArticleDetail } from '@/apis/article';
-import type { ArticleComment } from '@/apis/articleComment/type';
+import { getArticleComments } from '@/apis/articleComment';
 import CommentSection from '@/app/articles/_components/articlesDetail/CommentSection';
 import ArticleContent from '@/app/articles/_components/articlesDetail/Content';
 import ArticleHeader from '@/app/articles/_components/articlesDetail/Header';
@@ -11,7 +11,7 @@ import ArrowLeft from '@/assets/icons/arrow_left.svg';
 const ArticleDetailPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
   const article = await getArticleDetail(`${id}`);
-  const comments: ArticleComment[] = [];
+  const comments = await getArticleComments({ articleId: `${id}`, limit: 10, cursor: 0 });
   const formattedDate = new Date(article.createdAt).toISOString().slice(0, 10).replace(/-/g, '. ');
   return (
     <div className="mx-auto flex min-h-screen px-4 pt-5 md:p-22">
@@ -30,7 +30,7 @@ const ArticleDetailPage = async ({ params }: { params: Promise<{ id: string }> }
           />
           <ArticleContent content={article.content} image={article.image} />
           <LikeButton isLiked={article.isLiked} likeCount={article.likeCount} />
-          <CommentSection comments={comments} />
+          <CommentSection articleId={`${article.id}`} comments={comments.list} />
         </div>
       </main>
     </div>
