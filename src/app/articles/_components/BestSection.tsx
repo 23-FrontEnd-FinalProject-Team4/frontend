@@ -18,13 +18,8 @@ const BestSection = ({ articles, currentPage, totalPages, onPageChange }: BestSe
     <div className="bg-background-secondary mb-10 flex w-full flex-col items-center gap-6 px-6 py-10 xl:rounded-2xl">
       <h1 className="text-text-primary text-xl font-bold">베스트 게시글</h1>
       <div className="grid w-full grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
-        {articles.slice(0, 3).map((article, index) => (
-          <div
-            key={article.id}
-            className={cn(index === 1 && 'hidden md:block', index === 2 && 'hidden xl:block')}
-          >
-            <ArticleCard key={article.id} article={article} variant="best" />
-          </div>
+        {articles.map((article) => (
+          <ArticleCard key={article.id} article={article} variant="best" />
         ))}
       </div>
       <div className={cn('relative flex w-full flex-col items-center gap-4')}>

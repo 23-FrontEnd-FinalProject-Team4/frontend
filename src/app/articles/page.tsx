@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
@@ -15,8 +15,26 @@ import Button from '@/components/button/Button';
 
 const ArticlesPage = () => {
   const [page, setPage] = useState(1);
+  const [bestPage, setBestPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(3);
   const [searchValue, setSearchValue] = useState('');
   const router = useRouter();
+  useEffect(() => {
+    const updateItemsPerPage = () => {
+      if (window.innerWidth >= 1280) {
+        setItemsPerPage(3);
+      } else if (window.innerWidth >= 768) {
+        setItemsPerPage(2);
+      } else {
+        setItemsPerPage(1);
+      }
+    };
+
+    updateItemsPerPage();
+    window.addEventListener('resize', updateItemsPerPage);
+
+    return () => window.removeEventListener('resize', updateItemsPerPage);
+  }, []);
   const { data } = useQuery({
     queryKey: ['articles', page, searchValue],
     queryFn: () =>
@@ -27,18 +45,18 @@ const ArticlesPage = () => {
         keyword: searchValue || undefined,
       }),
   });
-  console.log('data', data);
-
-  console.log('list', data?.list);
-
-  console.log('count', data?.list?.length);
 
   const articleCards =
     data?.list.map((article) => ({
       ...article,
       writer: article.writer.nickname,
       isLiked: false,
+      id: `${article.id}`,
     })) ?? [];
+
+  const bestArticles = articleCards.slice((bestPage - 1) * itemsPerPage, bestPage * itemsPerPage);
+
+  const bestTotalPages = Math.max(1, Math.ceil(articleCards.length / itemsPerPage));
 
   const totalPages = Math.max(1, Math.ceil((data?.totalCount ?? 0) / 10));
 
@@ -55,10 +73,10 @@ const ArticlesPage = () => {
           />
         </div>
         <BestSection
-          articles={articleCards}
-          currentPage={page}
-          totalPages={totalPages}
-          onPageChange={(page) => setPage(page)}
+          articles={bestArticles}
+          currentPage={bestPage}
+          totalPages={bestTotalPages}
+          onPageChange={(page) => setBestPage(page)}
         />
         <ListSection articles={articleCards} />
         <Button
