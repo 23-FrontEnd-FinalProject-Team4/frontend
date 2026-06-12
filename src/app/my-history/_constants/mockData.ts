@@ -1,0 +1,132 @@
+import { Comment } from '@/apis/comment/type';
+import { TaskList } from '@/apis/group/type';
+
+export const MOCK_TASKLISTS: TaskList[] = [
+  {
+    tasks: [
+      {
+        id: 0,
+        name: '할 일 목록 1',
+        updatedAt: '2026-06-01T19:12:11.572Z',
+        displayIndex: 0,
+        date: '2026-06-01T19:12:11.572Z',
+        commentCount: 0,
+        deletedAt: null,
+        description: '설명',
+        doneAt: null,
+        doneBy: null,
+        frequency: 'ONCE',
+        recurringId: 1,
+        startDate: '2026-06-01T19:12:11.572Z',
+        writer: {
+          id: 0,
+          image: null,
+          nickname: 'nickname',
+        },
+      },
+      {
+        id: 1,
+        name: '할 일 목록 2',
+        updatedAt: '2026-06-01T19:12:11.572Z',
+        displayIndex: 1,
+        date: '2026-06-01T19:12:11.572Z',
+        commentCount: 3,
+        deletedAt: null,
+        description: '설명',
+        doneAt: '2026-06-01T19:12:11.572Z',
+        doneBy: {
+          user: {
+            id: 0,
+            image: null,
+            nickname: '',
+          },
+        },
+        frequency: 'ONCE',
+        recurringId: 1,
+        startDate: '2026-06-01T19:12:11.572Z',
+        writer: {
+          id: 0,
+          image: null,
+          nickname: '',
+        },
+      },
+      {
+        id: 2,
+        name: '할 일 목록 3',
+        updatedAt: '2026-06-01T19:12:11.572Z',
+        displayIndex: 2,
+        date: '2026-06-01T19:12:11.572Z',
+        commentCount: 3,
+        deletedAt: null,
+        description: '설명',
+        doneAt: null,
+        doneBy: null,
+        frequency: 'ONCE',
+        recurringId: 1,
+        startDate: '2026-06-01T19:12:11.572Z',
+        writer: {
+          id: 0,
+          image: null,
+          nickname: '',
+        },
+      },
+    ],
+    createdAt: '2026-06-01T19:12:11.572Z',
+    displayIndex: 0,
+    groupId: 0,
+    id: 0,
+    name: '할 일 목록 1',
+    updatedAt: '2026-06-01T19:12:11.572Z',
+  },
+  {
+    tasks: [],
+    createdAt: '2026-06-01T19:12:11.572Z',
+    displayIndex: 1,
+    groupId: 1,
+    id: 1,
+    name: '빈 할 일 목록',
+    updatedAt: '2026-06-01T19:12:11.572Z',
+  },
+];
+
+export const MOCK_COMMENTS: Comment[] = [
+  {
+    id: 0,
+    content: '댓글 내용 1',
+    taskId: 0,
+    updatedAt: '2026-06-01T19:12:11.572Z',
+    createdAt: '2026-06-01T19:12:11.572Z',
+    user: {
+      id: 0,
+      image: null,
+      nickname: 'nickname',
+    },
+    userId: 0,
+  },
+  {
+    id: 1,
+    content: '댓글 내용 2',
+    taskId: 0,
+    updatedAt: '2026-06-01T19:12:11.572Z',
+    createdAt: '2026-06-01T19:12:11.572Z',
+    user: {
+      id: 1,
+      image: null,
+      nickname: 'nickname',
+    },
+    userId: 0,
+  },
+  {
+    id: 2,
+    content: '댓글 내용 3',
+    taskId: 0,
+    updatedAt: '2026-06-01T19:12:11.572Z',
+    createdAt: '2026-06-01T19:12:11.572Z',
+    user: {
+      id: 2,
+      image: null,
+      nickname: 'nickname',
+    },
+    userId: 0,
+  },
+];

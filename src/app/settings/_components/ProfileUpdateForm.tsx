@@ -7,11 +7,7 @@ import { useForm } from 'react-hook-form';
 
 import EditableProfileImage from '@/components/editableProfileImage/EditableProfileImage';
 import FormField from '@/components/formField/FormField';
-
-import {
-  type ProfileUpdateFormValues,
-  profileUpdateSchema,
-} from '../_schemas/profile-update.schema';
+import { type ProfileUpdateFormValues, profileUpdateSchema } from '@/schemas/auth.schema';
 
 const ProfileUpdateForm = () => {
   const profileUpdateForm = useForm<ProfileUpdateFormValues>({
