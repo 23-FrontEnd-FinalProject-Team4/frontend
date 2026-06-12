@@ -21,6 +21,8 @@ export default function TaskListCard({ item, teamId }: TaskListCardProps) {
       <Link
         href={`/${teamId}/tasklist?taskListId=${item.id}`}
         className="absolute inset-0 z-0 rounded-xl focus:outline-none"
+        draggable={false}
+        onDragStart={(event) => event.preventDefault()}
         aria-label={`${item.title} 할 일 목록으로 이동`}
       />
 
