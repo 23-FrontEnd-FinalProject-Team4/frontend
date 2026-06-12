@@ -23,7 +23,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variantStyles: Record<ButtonVariant, string> = {
       'primary-filled':
-        'rounded-xl bg-brand-primary text-background-primary hover:bg-interaction-hover active:bg-interaction-pressed disabled:bg-interaction-inactive disabled:text-text-disabled px-6 py-3 min-w-[160px]',
+        'rounded-xl bg-brand-primary text-background-primary hover:bg-interaction-hover active:bg-interaction-pressed disabled:bg-interaction-inactive disabled:text-background-primary px-6 py-3 min-w-[160px]',
       'primary-outline':
         'rounded-xl border border-brand-primary text-brand-primary bg-transparent hover:bg-brand-secondary active:bg-brand-secondary/50 disabled:border-interaction-inactive disabled:text-interaction-inactive px-6 py-3 min-w-[160px]',
       'secondary-filled':
@@ -34,10 +34,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         'bg-status-danger text-background-primary hover:opacity-90 active:opacity-80 px-6 py-3 min-w-[160px]',
 
       'icon-circle':
-        'w-12 h-12 rounded-full flex items-center justify-center p-0 bg-brand-primary text-background-primary hover:bg-interaction-hover active:bg-interaction-pressed disabled:bg-interaction-inactive disabled:text-text-disabled shadow-sm',
+        'w-12 h-12 rounded-full flex items-center justify-center p-0 bg-brand-primary text-background-primary hover:bg-interaction-hover active:bg-interaction-pressed disabled:bg-interaction-inactive disabled:text-background-primary shadow-sm',
 
       'icon-circle-white':
-        'w-12 h-12 rounded-full flex items-center justify-center p-0 bg-white text-background-primary hover:bg-interaction-hover active:bg-interaction-pressed disabled:bg-interaction-inactive disabled:text-text-disabled shadow-sm',
+        'w-12 h-12 rounded-full flex items-center justify-center p-0 bg-white text-background-primary hover:bg-interaction-hover active:bg-interaction-pressed disabled:bg-interaction-inactive disabled:text-background-primary shadow-sm',
 
       'input-btn':
         'w-full max-w-md justify-between bg-background-secondary hover:bg-background-tertiary active:bg-border-primary text-text-secondary px-4 py-3 border border-border-primary',
