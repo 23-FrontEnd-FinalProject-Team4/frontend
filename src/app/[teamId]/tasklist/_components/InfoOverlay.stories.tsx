@@ -1,7 +1,8 @@
 import { Meta, StoryObj } from '@storybook/nextjs-vite';
-import InfoOverlay from './InfoOverlay';
-import { MOCK_TASKLISTS } from '../_constants/mockData';
 import { fn } from 'storybook/test';
+
+import { MOCK_TASKLISTS } from '../_constants/mockData';
+import InfoOverlay from './InfoOverlay';
 
 const meta = {
   component: InfoOverlay,
