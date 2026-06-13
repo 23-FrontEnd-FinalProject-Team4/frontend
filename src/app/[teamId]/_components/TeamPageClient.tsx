@@ -51,6 +51,15 @@ const getProgressValue = (completedTaskCount: number, totalTaskCount: number) =>
   return Math.round((completedTaskCount / totalTaskCount) * 100);
 };
 
+const getLocalDateString = () => {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+};
+
 const mapMembers = (members: Member[]): TeamPageMember[] =>
   members.map((member) => ({
     id: member.userId,
@@ -102,7 +111,7 @@ export default function TeamPageClient({ teamId }: TeamPageClientProps) {
   const queryClient = useQueryClient();
   const isDesktop = useMediaQuery(MEDIA_QUERY.desktop);
   const isTablet = useMediaQuery(MEDIA_QUERY.tablet);
-  const today = useMemo(() => new Date().toISOString(), []);
+  const today = useMemo(() => getLocalDateString(), []);
 
   const [isTeamMenuOpen, setIsTeamMenuOpen] = useState(false);
 

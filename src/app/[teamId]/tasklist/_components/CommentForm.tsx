@@ -16,7 +16,7 @@ const CommentForm = ({ writer }: CommentFormProps) => {
   const writerImage = writer?.image ?? null;
 
   return (
-    <form className="flex items-center gap-3">
+    <form className="flex items-center gap-3" onSubmit={(event) => event.preventDefault()}>
       <Profile src={writerImage} alt={writerName} />
       {/* TODO: 기능 구현 시 onSubmit 구현 */}
       <InputReply value={comment} onChange={setComment} onSubmit={() => {}} size="lg" />
