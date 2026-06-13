@@ -5,18 +5,20 @@ import BestIcon from '@/assets/icons/best.svg?react';
 import HeartEmptyIcon from '@/assets/icons/heart_empty.svg';
 import HeartFillIcon from '@/assets/icons/heart_fill.svg';
 import { cn } from '@/utils/cn';
+import { formatDate } from '@/utils/formatDate';
 
-import type { ArticleCardProps } from './ArticleCard.type';
+import type { ArticleCardProps } from './Card.type';
 
 export const ArticleCard = ({ article, variant = 'normal' }: ArticleCardProps) => {
   const isBest = variant === 'best';
 
   const { id, title, content, image, writer, createdAt, isLiked } = article;
+  const formattedDate = formatDate(createdAt);
 
   return (
     <Link
       href={`/articles/${id}`}
-      className="border-border-primary bg-background-primary hover:shadow-brand-tertiary-20 flex flex-col gap-4 rounded-2xl border px-6 py-4 transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
+      className="border-border-primary bg-background-primary hover:shadow-brand-tertiary-20 flex h-full flex-col gap-4 rounded-2xl border px-6 py-4 transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
     >
       {isBest && (
         <span className="bg-background-secondary text-brand-primary flex w-18 flex-row items-center justify-center gap-1 rounded-full py-1.5 text-sm font-bold">
@@ -49,7 +51,7 @@ export const ArticleCard = ({ article, variant = 'normal' }: ArticleCardProps) =
             <span className="text-text-primary text-md">{writer}</span>
 
             <div className="bg-text-default h-3 w-px" />
-            <span className="text-text-disabled text-md">{createdAt}</span>
+            <span className="text-text-disabled text-md">{formattedDate}</span>
           </div>
           <span
             className={cn(
