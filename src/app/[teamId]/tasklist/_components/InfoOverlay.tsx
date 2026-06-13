@@ -26,6 +26,8 @@ interface InfoOverlayProps {
 const InfoOverlay = ({ task, isOpen, onClose }: InfoOverlayProps) => {
   // TODO: API를 통해 Comment 받아오기
   const comments = MOCK_COMMENTS;
+  const writerName = task.writer?.nickname ?? '알 수 없음';
+  const writerImage = task.writer?.image ?? null;
 
   const isDone = Boolean(task.doneAt);
 
@@ -68,8 +70,8 @@ const InfoOverlay = ({ task, isOpen, onClose }: InfoOverlayProps) => {
         </div>
 
         <div className="flex items-center gap-2 pb-4">
-          <Profile src={task.writer.image} alt={task.writer.nickname} />
-          <span className="text-md font-medium">{task.writer.nickname}</span>
+          <Profile src={writerImage} alt={writerName} />
+          <span className="text-md font-medium">{writerName}</span>
         </div>
 
         <div className="flex items-center justify-between">

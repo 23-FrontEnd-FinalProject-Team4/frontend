@@ -72,8 +72,10 @@ const DEFAULT_TEAM_LABELS = {
   settings: '팀 설정',
 };
 
-const TEAM_CARD_BASE_CLASS = 'bg-background-inverse shadow-xl shadow-background-primary/10';
-const TEAM_FALLBACK_IMAGE_CLASS = 'bg-brand-primary text-background-inverse';
+const TEAM_CARD_BASE_CLASS =
+  'bg-background-inverse shadow-xl shadow-background-primary/10 ring-1 ring-border-primary/40 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-brand-primary/10 hover:ring-brand-primary/20';
+const TEAM_FALLBACK_IMAGE_CLASS =
+  'bg-brand-primary text-background-inverse shadow-sm shadow-brand-primary/30';
 
 const getProfileSrc = (imageUrl: TeamMember['imageUrl']) =>
   typeof imageUrl === 'string' ? imageUrl : (imageUrl?.src ?? null);
@@ -104,7 +106,7 @@ const TeamImage = ({
   <div
     className={cn(
       !imageUrl && TEAM_FALLBACK_IMAGE_CLASS,
-      'relative shrink-0 overflow-hidden rounded-md',
+      'relative shrink-0 overflow-hidden rounded-md ring-1 ring-background-primary/70',
       TEAM_IMAGE_SIZE_CLASS[size],
     )}
   >
@@ -139,7 +141,7 @@ const MemberPreview = ({
   }
 
   return (
-    <div className="border-border-primary bg-background-inverse flex h-8 items-center rounded-lg border px-2">
+    <div className="border-border-primary bg-background-inverse/90 flex h-8 items-center rounded-lg border px-2 shadow-sm shadow-background-primary/5 transition-colors duration-200 hover:border-brand-primary/20 hover:bg-background-inverse">
       <span className="sr-only">팀 멤버 {totalMemberCount}명</span>
 
       {visibleMembers.map((member) => (
@@ -174,10 +176,10 @@ const SettingsButton = ({ label, onClick }: SettingsButtonProps) => {
     <button
       type="button"
       aria-label={label}
-      className="hover:bg-background-secondary focus:ring-brand-primary flex size-6 shrink-0 items-center justify-center rounded-sm transition-colors focus:ring-2 focus:outline-none"
+      className="group text-icon-primary hover:bg-brand-secondary hover:text-brand-primary focus:ring-brand-primary flex size-7 shrink-0 items-center justify-center rounded-full transition-all duration-200 ease-out hover:scale-105 active:scale-95 focus:ring-2 focus:outline-none"
       onClick={onClick}
     >
-      <SettingIcon className="size-4" aria-hidden="true" />
+      <SettingIcon className="size-4 transition-transform duration-200 group-hover:rotate-45" aria-hidden="true" />
     </button>
   );
 };

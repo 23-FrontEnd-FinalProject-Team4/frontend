@@ -33,6 +33,8 @@ export const TASK_LISTS: TaskListItem[] = [
   createTaskList(4, 'scheduled'),
   createTaskList(5, 'scheduled'),
   createTaskList(6, 'scheduled'),
+  createTaskList(9, 'scheduled'),
+  createTaskList(10, 'scheduled'),
   createTaskList(7, 'done'),
   createTaskList(8, 'done'),
 ];

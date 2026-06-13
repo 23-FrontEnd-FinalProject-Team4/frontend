@@ -1,13 +1,15 @@
 import type { StaticImageData } from 'next/image';
 
+import type { TeamMember } from '@/components/team/type';
+
 export type TeamPageRole = 'ADMIN' | 'MEMBER';
 export type TaskStatus = 'today' | 'scheduled' | 'done';
 
-export interface TeamPageMember {
+export interface TeamPageMember extends TeamMember {
   id: number;
   name: string;
   email: string;
-  imageUrl?: StaticImageData;
+  imageUrl?: string | StaticImageData;
 }
 
 export interface TeamPageTask {
