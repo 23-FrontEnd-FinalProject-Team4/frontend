@@ -2,21 +2,21 @@
 
 import { useMemo, useState } from 'react';
 
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { overlay } from 'overlay-kit';
 import { toast } from 'react-hot-toast';
 
-import { useQuery } from '@tanstack/react-query';
-
-import { getGroup, getGroupInvitation, getGroupTasks } from '@/apis/group';
 import type { Member, TaskList } from '@/apis/group/type';
 import type { Task } from '@/apis/task/type';
-import { getMyGroups, getMyProfile } from '@/apis/user';
-
 import Modal from '@/components/modal/Modal';
 import type { TeamCardSize } from '@/components/team/type';
-
 import useMediaQuery, { MEDIA_QUERY } from '@/hooks/useMediaQuery';
 
+import {
+  createTeamTaskListAction,
+  getTeamInvitationAction,
+  getTeamPageDataAction,
+} from '../_actions/team-page.action';
 import { TASK_LISTS, TASK_STATUS_SECTIONS, TEAM_PAGE_MEMBERS } from '../_constants/mockData';
 import type { TaskListItem, TeamPageMember, TeamPageRole } from '../type';
 import TeamPageHeader from './header/TeamPageHeader';
@@ -29,11 +29,7 @@ interface TeamPageClientProps {
 }
 
 const TEAM_PAGE_QUERY_KEY = {
-  myGroups: ['team-page', 'my-groups'] as const,
-  myProfile: ['team-page', 'my-profile'] as const,
-  group: (groupId: number) => ['team-page', 'group', groupId] as const,
-  groupTasks: (groupId: number, date: string) =>
-    ['team-page', 'group-tasks', groupId, date] as const,
+  data: (teamId: string, date: string) => ['team-page', teamId, date] as const,
 };
 
 const FALLBACK_INVITE_LINK = 'https://coworkers.example.com/invite/management';
@@ -88,12 +84,22 @@ const copyInviteLink = async (groupId?: number) => {
     return;
   }
 
-  const inviteLink = groupId ? await getGroupInvitation({ id: groupId }) : FALLBACK_INVITE_LINK;
+  if (!groupId) {
+    await navigator.clipboard.writeText(FALLBACK_INVITE_LINK);
+    return;
+  }
 
-  await navigator.clipboard.writeText(inviteLink);
+  const inviteResult = await getTeamInvitationAction({ groupId });
+
+  if (!inviteResult.success) {
+    throw new Error(inviteResult.error);
+  }
+
+  await navigator.clipboard.writeText(inviteResult.data);
 };
 
 export default function TeamPageClient({ teamId }: TeamPageClientProps) {
+  const queryClient = useQueryClient();
   const isDesktop = useMediaQuery(MEDIA_QUERY.desktop);
   const isTablet = useMediaQuery(MEDIA_QUERY.tablet);
   const today = useMemo(() => new Date().toISOString(), []);
@@ -102,33 +108,17 @@ export default function TeamPageClient({ teamId }: TeamPageClientProps) {
 
   const routeGroupId = getRouteGroupId(teamId);
 
-  const { data: myGroups = [] } = useQuery({
-    queryKey: TEAM_PAGE_QUERY_KEY.myGroups,
-    queryFn: getMyGroups,
+  const { data: teamPageResult } = useQuery({
+    queryKey: TEAM_PAGE_QUERY_KEY.data(teamId, today),
+    queryFn: () => getTeamPageDataAction({ teamId, date: today }),
   });
 
-  const selectedGroupId = routeGroupId ?? myGroups[0]?.id;
-
-  const { data: myProfile } = useQuery({
-    queryKey: TEAM_PAGE_QUERY_KEY.myProfile,
-    queryFn: getMyProfile,
-  });
-
-  const { data: group } = useQuery({
-    queryKey: selectedGroupId
-      ? TEAM_PAGE_QUERY_KEY.group(selectedGroupId)
-      : [...TEAM_PAGE_QUERY_KEY.group(0), 'disabled'],
-    queryFn: () => getGroup({ id: selectedGroupId as number }),
-    enabled: Boolean(selectedGroupId),
-  });
-
-  const { data: todayTasks } = useQuery({
-    queryKey: selectedGroupId
-      ? TEAM_PAGE_QUERY_KEY.groupTasks(selectedGroupId, today)
-      : [...TEAM_PAGE_QUERY_KEY.groupTasks(0, today), 'disabled'],
-    queryFn: () => getGroupTasks({ id: selectedGroupId as number, date: today }),
-    enabled: Boolean(selectedGroupId),
-  });
+  const teamPageData = teamPageResult?.success ? teamPageResult.data : undefined;
+  const myGroups = teamPageData?.myGroups ?? [];
+  const myProfile = teamPageData?.myProfile;
+  const selectedGroupId = teamPageData?.selectedGroupId ?? routeGroupId ?? myGroups[0]?.id;
+  const group = teamPageData?.group;
+  const todayTasks = teamPageData?.todayTasks;
 
   const fallbackRole: TeamPageRole = isMemberView(teamId) ? 'MEMBER' : 'ADMIN';
   const role =
@@ -169,9 +159,15 @@ export default function TeamPageClient({ teamId }: TeamPageClientProps) {
           primaryAction={{
             label: '링크 복사하기',
             onClick: () => {
-              void copyInviteLink(selectedGroupId).then(() => {
-                toast.success('초대 링크가 클립보드에 복사되었습니다.');
-              });
+              void copyInviteLink(selectedGroupId)
+                .then(() => {
+                  toast.success('초대 링크가 클립보드에 복사되었습니다.');
+                })
+                .catch((error) => {
+                  toast.error(
+                    error instanceof Error ? error.message : '초대 링크를 복사하지 못했습니다.',
+                  );
+                });
               close();
             },
           }}
@@ -184,7 +180,35 @@ export default function TeamPageClient({ teamId }: TeamPageClientProps) {
 
   const openCreateListModal = () => {
     overlay.open(({ isOpen, close }) => {
-      return <CreateTaskListModal isOpen={isOpen} onClose={close} />;
+      return (
+        <CreateTaskListModal
+          isOpen={isOpen}
+          onClose={close}
+          onCreate={async (title) => {
+            if (!selectedGroupId) {
+              toast.error('팀 정보를 찾을 수 없습니다.');
+              return false;
+            }
+
+            const result = await createTeamTaskListAction({
+              groupId: selectedGroupId,
+              name: title,
+            });
+
+            if (!result.success) {
+              toast.error(result.error);
+              return false;
+            }
+
+            toast.success('할 일 목록을 만들었습니다.');
+            await queryClient.invalidateQueries({
+              queryKey: TEAM_PAGE_QUERY_KEY.data(teamId, today),
+            });
+
+            return true;
+          }}
+        />
+      );
     });
   };
 
