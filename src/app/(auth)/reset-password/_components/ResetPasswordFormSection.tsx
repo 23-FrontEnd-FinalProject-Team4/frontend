@@ -31,18 +31,24 @@ const ResetPasswordFormSection = ({ token }: ResetPasswordFormSectionProps) => {
 
   const errors = resetPasswordForm.formState.errors;
 
+  if (!hasToken) {
+    return (
+      <div className="flex flex-col gap-4 py-8 text-center">
+        <p className="text-status-danger">유효하지 않은 비밀번호 재설정 링크입니다.</p>
+        <Button type="button" onClick={() => router.push('/login')}>
+          로그인으로 돌아가기
+        </Button>
+      </div>
+    );
+  }
+
   const onSubmit = async (data: PasswordChangeFormValues) => {
     if (isPending) return;
-
-    if (!token) {
-      toast.error('유효하지 않은 비밀번호 재설정 링크입니다.');
-      return;
-    }
 
     try {
       await mutateAsync({
         ...data,
-        token,
+        token: token as string,
       });
       toast.success('비밀번호가 재설정되었어요. 다시 로그인해주세요.');
       router.push('/login');
@@ -58,7 +64,7 @@ const ResetPasswordFormSection = ({ token }: ResetPasswordFormSectionProps) => {
         label="새 비밀번호"
         type="password"
         placeholder="새 비밀번호를 입력해주세요."
-        disabled={isPending || !hasToken}
+        disabled={isPending}
         isError={!!errors.password}
         errorMessage={errors.password?.message}
         {...resetPasswordForm.register('password')}
@@ -69,7 +75,7 @@ const ResetPasswordFormSection = ({ token }: ResetPasswordFormSectionProps) => {
         label="비밀번호 확인"
         type="password"
         placeholder="비밀번호를 다시 입력해주세요."
-        disabled={isPending || !hasToken}
+        disabled={isPending}
         isError={!!errors.passwordConfirmation}
         errorMessage={errors.passwordConfirmation?.message}
         {...resetPasswordForm.register('passwordConfirmation')}
@@ -78,7 +84,7 @@ const ResetPasswordFormSection = ({ token }: ResetPasswordFormSectionProps) => {
       <Button
         type="submit"
         className="my-4"
-        disabled={isPending || !resetPasswordForm.formState.isValid || !hasToken}
+        disabled={isPending || !resetPasswordForm.formState.isValid}
       >
         {isPending ? (
           <span className="flex items-center gap-2">
