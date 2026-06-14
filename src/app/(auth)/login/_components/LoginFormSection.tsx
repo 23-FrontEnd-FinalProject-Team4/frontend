@@ -18,9 +18,11 @@ import { type LoginFormValues, emailSchema, loginSchema } from '@/schemas/auth.s
 
 const LoginFormSection = () => {
   const router = useRouter();
+
   const { mutateAsync, isPending } = useLoginMutation();
   const { mutateAsync: sendResetPasswordEmail, isPending: isSendingResetEmail } =
     useSendResetPasswordEmailMutation();
+
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
   const [resetEmailError, setResetEmailError] = useState('');
@@ -57,7 +59,7 @@ const LoginFormSection = () => {
     try {
       await sendResetPasswordEmail({
         email: validatedEmail.data,
-        redirectUrl: `${window.location.origin}/reset-password`,
+        redirectUrl: `${window.location.origin}`,
       });
       toast.success('비밀번호 재설정 메일을 전송했어요.');
       closeResetModal();
