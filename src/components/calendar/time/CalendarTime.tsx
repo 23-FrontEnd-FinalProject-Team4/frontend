@@ -7,7 +7,7 @@ const minutes = generateMinutesByInterval(30);
 
 interface CalendarTimeProps {
   selectedTime: TimeState;
-  setSelectedTime: React.Dispatch<React.SetStateAction<TimeState>>;
+  setSelectedTime: (time: TimeState) => void;
 }
 
 const CalendarTime = ({ selectedTime, setSelectedTime }: CalendarTimeProps) => {
@@ -23,7 +23,7 @@ const CalendarTime = ({ selectedTime, setSelectedTime }: CalendarTimeProps) => {
               key={hour}
               type="button"
               className={`px-2 py-[7.5px] text-left ${selectedHour === hour ? 'outline-brand-primary rounded-xl outline' : 'outline-0'}`}
-              onClick={() => setSelectedTime((prev) => ({ ...prev, hour }))}
+              onClick={() => setSelectedTime({ ...selectedTime, hour })}
               aria-label={`${hour}시`}
             >
               {hour}:00
@@ -40,7 +40,7 @@ const CalendarTime = ({ selectedTime, setSelectedTime }: CalendarTimeProps) => {
               type="button"
               key={minute}
               variant={selectedMinute === minute ? 'primary-filled' : 'primary-outline'}
-              onClick={() => setSelectedTime((prev) => ({ ...prev, minute }))}
+              onClick={() => setSelectedTime({ ...selectedTime, minute })}
               aria-label={`${minute}분`}
               className="min-w-0"
             >

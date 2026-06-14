@@ -11,12 +11,14 @@ import { addDays } from '@/utils/date';
 
 import InfoOverlay from './InfoOverlay';
 import TaskListTitle from './TaskListTitle';
+import AddTaskModal from './modals/AddTaskModal';
 
 interface TaskListMainProps {
   taskList: TaskList;
+  groupId: number;
 }
 
-const TaskListMain = ({ taskList }: TaskListMainProps) => {
+const TaskListMain = ({ taskList, groupId }: TaskListMainProps) => {
   // TODO: 해당 위치에서 task들에 대한 CRUD 진행
   const { selectedDate, setDate } = useTaskDate();
 
@@ -38,16 +40,22 @@ const TaskListMain = ({ taskList }: TaskListMainProps) => {
     ));
   };
 
+  const handleAddModalOpen = () => {
+    overlay.open(({ isOpen, close }) => (
+      <AddTaskModal isOpen={isOpen} onClose={close} groupId={groupId} taskListId={taskList.id} />
+    ));
+  };
+
   return (
     <div className="relative flex flex-col gap-10 rounded-[20px] bg-white p-4 md:p-7.5 xl:p-10">
       <TaskListTitle
         onNextWeek={handleNextWeek}
         onPrevWeek={handlePrevWeek}
         onToday={handleToday}
-        taskName={taskList.name}
+        taskName={taskList?.name}
       />
       <div className="flex flex-col gap-3">
-        {taskList.tasks.map((task) => (
+        {taskList?.tasks.map((task) => (
           <ListItem
             task={task}
             key={task.id}
@@ -60,7 +68,11 @@ const TaskListMain = ({ taskList }: TaskListMainProps) => {
         ))}
       </div>
       <div className="fixed right-5 bottom-5 xl:right-20 xl:bottom-20">
-        <Button variant="icon-circle" icon={<PlusIcon className="size-6" />} />
+        <Button
+          variant="icon-circle"
+          icon={<PlusIcon className="size-6" />}
+          onClick={handleAddModalOpen}
+        />
       </div>
     </div>
   );

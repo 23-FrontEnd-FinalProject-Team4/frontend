@@ -43,6 +43,7 @@ export interface RequestUpdateTaskListOrder {
 export interface GetTaskListsParams {
   groupId: number;
   id: string;
+  date?: string;
 }
 
 export interface CreateTaskListParams {

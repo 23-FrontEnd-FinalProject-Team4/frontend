@@ -3,22 +3,19 @@
 import { TaskList } from '@/apis/group/type';
 import KebabIcon from '@/assets/icons/kebab.svg?react';
 import PlusIcon from '@/assets/icons/plus.svg?react';
-
 import BadgeDone from '@/components/badgeDone/BadgeDone';
 import Button from '@/components/button/Button';
 import DropdownMd from '@/components/dropdown/DropdownMd';
-
 import { useCustomSearchParams } from '@/hooks/useCustomSearchParams';
 
 interface TaskListSetProps {
   taskLists: TaskList[];
-  selectedId: number | null;
+  selectedId: number;
 }
 
-const TaskListSet = ({ taskLists, selectedId: propSelectedId }: TaskListSetProps) => {
-  const { searchParams, setSearchParams } = useCustomSearchParams();
+const TaskListSet = ({ taskLists, selectedId }: TaskListSetProps) => {
+  const { setSearchParams } = useCustomSearchParams();
 
-  const selectedId = Number(searchParams.get('taskListId')) || propSelectedId;
   const selectedTaskList = taskLists.find((taskList) => taskList.id === selectedId);
 
   const options = taskLists.map((taskList) => taskList.name);
