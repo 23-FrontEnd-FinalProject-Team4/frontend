@@ -28,6 +28,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       id: group.id,
       name: group.name,
       route: `/${group.id}`,
+      image: group.image,
     })) ?? FALLBACK_SIDEBAR_GROUPS;
 
   return (
