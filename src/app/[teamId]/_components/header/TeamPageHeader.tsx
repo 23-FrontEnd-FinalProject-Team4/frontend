@@ -7,19 +7,29 @@ import type { TeamCardSize, TeamMember } from '@/components/team/type';
 import type { TeamPageRole } from '../../type';
 
 interface TeamPageHeaderProps {
+  name: string;
+  imageUrl?: string | null;
   role: TeamPageRole;
   size: TeamCardSize;
   members: TeamMember[];
   memberCount: number;
+  completedTaskCount: number;
+  totalTaskCount: number;
+  progressValue: number;
   isSettingsOpen: boolean;
   onSettingsClick: () => void;
 }
 
 export default function TeamPageHeader({
+  name,
+  imageUrl,
   role,
   size,
   members,
   memberCount,
+  completedTaskCount,
+  totalTaskCount,
+  progressValue,
   isSettingsOpen,
   onSettingsClick,
 }: TeamPageHeaderProps) {
@@ -29,12 +39,13 @@ export default function TeamPageHeader({
   return (
     <div className="relative">
       <Team
-        name="경영관리팀"
+        name={name}
+        imageUrl={imageUrl ?? undefined}
         members={members}
         memberCount={memberCount}
-        completedTaskCount={5}
-        totalTaskCount={20}
-        progressValue={25}
+        completedTaskCount={completedTaskCount}
+        totalTaskCount={totalTaskCount}
+        progressValue={progressValue}
         variant={isAdminLayout ? 'admin' : 'user'}
         size={size}
         className={cn(

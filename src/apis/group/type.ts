@@ -1,4 +1,6 @@
-import { Task } from '../task/type';
+import type { Task } from '@/apis/task/type';
+
+export type GroupMemberRole = 'ADMIN' | 'MEMBER';
 
 export interface Member {
   userId: number;
@@ -6,7 +8,7 @@ export interface Member {
   userName: string;
   userEmail: string;
   userImage: null | string;
-  role: string;
+  role: GroupMemberRole;
 }
 
 export interface TaskList {
@@ -16,13 +18,13 @@ export interface TaskList {
   updatedAt: string;
   groupId: number;
   displayIndex: number;
-  tasks: Task[]; //추후 tasks 발견하면 수정
+  tasks: Task[];
 }
 
 export interface GroupDetail {
   id: number;
   name: string;
-  image: string;
+  image: string | null;
   createdAt: string;
   updatedAt: string;
   teamId: string;
@@ -30,7 +32,7 @@ export interface GroupDetail {
   taskLists: TaskList[];
 }
 
-export interface GetGroupMemeberParams {
+export interface GetGroupMemberParams {
   id: GroupDetail['id'];
   memberUserId: Member['userId'];
 }
@@ -43,4 +45,9 @@ export interface PostGroupAcceptInvitationParams {
 export interface PostGroupMember {
   id: GroupDetail['id'];
   userEmail: Member['userEmail'];
+}
+
+export interface GetGroupTasksParams {
+  id: GroupDetail['id'];
+  date?: string;
 }

@@ -1,4 +1,5 @@
-import { expect, describe, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
+
 import { generateHoursByInterval, generateMinutesByInterval, getWeekDatesAround } from './date';
 
 describe('date', () => {
