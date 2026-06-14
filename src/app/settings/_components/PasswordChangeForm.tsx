@@ -6,11 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
 import FormField from '@/components/formField/FormField';
-
-import {
-  type PasswordChangeFormValues,
-  passwordChangeSchema,
-} from '../_schemas/password-change.schema';
+import { type PasswordChangeFormValues, passwordChangeSchema } from '@/schemas/auth.schema';
 
 const PasswordChangeForm = () => {
   const [isPasswordEditing, setIsPasswordEditing] = useState(false);

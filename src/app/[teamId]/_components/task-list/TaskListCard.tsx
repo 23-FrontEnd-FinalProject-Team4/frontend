@@ -1,7 +1,6 @@
 import Link from 'next/link';
 
 import KebabIcon from '@/assets/icons/kebab.svg?react';
-
 import BadgeDone from '@/components/badgeDone/BadgeDone';
 import TaskCheckbox from '@/components/taskCheckbox/TaskCheckbox';
 
@@ -19,8 +18,10 @@ export default function TaskListCard({ item, teamId }: TaskListCardProps) {
   return (
     <article className="border-border-primary bg-background-primary hover:border-brand-primary/40 focus-within:ring-brand-primary/30 relative h-37.75 overflow-hidden rounded-xl border px-5 pt-5 pb-4 shadow-sm transition-all duration-200 focus-within:ring-2 hover:-translate-y-0.5 hover:shadow-md">
       <Link
-        href={`/${teamId}/task-lists/${item.id}`}
+        href={`/${teamId}/tasklist?taskListId=${item.id}`}
         className="absolute inset-0 z-0 rounded-xl focus:outline-none"
+        draggable={false}
+        onDragStart={(event) => event.preventDefault()}
         aria-label={`${item.title} 할 일 목록으로 이동`}
       />
 
