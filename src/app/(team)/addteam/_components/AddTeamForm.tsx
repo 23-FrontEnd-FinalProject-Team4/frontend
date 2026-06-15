@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect } from 'react';
+
 import { useRouter } from 'next/navigation';
 
 import { Controller, useForm } from 'react-hook-form';
@@ -20,6 +22,12 @@ const AddTeamForm = () => {
   const router = useRouter();
   const { mutateAsync, isPending } = useCreateTeamMutation();
   const { imagePreview, imageFile, setImage, reset } = useAddTeamStore();
+
+  useEffect(() => {
+    return () => {
+      reset();
+    };
+  }, [reset]);
 
   const { control, handleSubmit, setError } = useForm<AddTeamFormValues>({
     defaultValues: {
