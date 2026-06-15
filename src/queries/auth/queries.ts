@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { signUp } from '@/apis/Auth';
-import type { AuthResponse, SignInRequest, SignUpRequest } from '@/apis/Auth/type';
+import { signUp } from '@/apis/auth/client';
+import type { AuthResponse, SignInRequest, SignUpRequest } from '@/apis/auth/type';
 import { type LoginActionResult, loginAction } from '@/app/(auth)/login/_actions/login.action';
 
 export const useLoginMutation = () => {

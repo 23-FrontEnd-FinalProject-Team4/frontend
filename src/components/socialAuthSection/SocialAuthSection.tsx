@@ -15,7 +15,7 @@ const SocialAuthSection = ({ label }: SocialAuthSectionProps) => {
     const kakaoLoginUrl =
       `https://kauth.kakao.com/oauth/authorize` +
       `?client_id=${kakaoApiKey}` +
-      `&redirect_uri=${kakaoRedirectUri}` +
+      `&redirect_uri=${encodeURIComponent(kakaoRedirectUri!)}` +
       `&response_type=code`;
 
     window.location.href = kakaoLoginUrl;
