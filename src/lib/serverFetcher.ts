@@ -1,5 +1,6 @@
-import { getAccessToken } from '@/utils/auth/token';
 import 'server-only';
+
+import { getAccessToken } from '@/utils/auth/token';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -59,7 +60,8 @@ export const serverFetcher = async <T>(path: string, options: RequestInit = {}):
   });
 
   if (!response.ok) {
-    throw new Error(`API request failed with status ${response.status}`);
+    const errorBody = await response.text();
+    throw new Error(`API request failed with status ${response.status}: ${errorBody}`);
   }
 
   return parseResponse<T>(response);

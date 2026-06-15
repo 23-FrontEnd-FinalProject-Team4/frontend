@@ -1,8 +1,7 @@
 import SettingsIcon from '@/assets/icons/setting.svg?react';
-import { cn } from '@/utils/cn';
-
 import Team from '@/components/team/Team';
 import type { TeamCardSize, TeamMember } from '@/components/team/type';
+import { cn } from '@/utils/cn';
 
 import type { TeamPageRole } from '../../type';
 

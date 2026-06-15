@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { signUp } from '@/apis/Auth';
-import type { AuthResponse, SignInRequest, SignUpRequest } from '@/apis/Auth/type';
+import { signUp } from '@/apis/auth/client';
+import type { AuthResponse, SignInRequest, SignUpRequest } from '@/apis/auth/type';
 import { resetPassword, sendResetPasswordEmail } from '@/apis/user';
 import type {
   MessageResponse,
