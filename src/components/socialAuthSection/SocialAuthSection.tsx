@@ -12,10 +12,14 @@ const SocialAuthSection = ({ label }: SocialAuthSectionProps) => {
     const kakaoApiKey = process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY;
     const kakaoRedirectUri = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI;
 
+    if (!kakaoApiKey || !kakaoRedirectUri) {
+      return;
+    }
+
     const kakaoLoginUrl =
       `https://kauth.kakao.com/oauth/authorize` +
       `?client_id=${kakaoApiKey}` +
-      `&redirect_uri=${encodeURIComponent(kakaoRedirectUri!)}` +
+      `&redirect_uri=${encodeURIComponent(kakaoRedirectUri)}` +
       `&response_type=code`;
 
     window.location.href = kakaoLoginUrl;
