@@ -26,5 +26,6 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     taskList: MOCK_TASKLISTS[0],
+    groupId: 0,
   },
 };

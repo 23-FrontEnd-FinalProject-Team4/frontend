@@ -11,7 +11,7 @@ import { FREQUENCY_TEXT } from '@/constants/listItem';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { formatISODate } from '@/utils/date';
 
-import { OPTIONS as FREQUENCY_OPTIONS } from '../../_constants/options';
+import { FREQUENCY_OPTIONS } from '../../_constants/options';
 import { TaskFormValues } from '../../_schemas/task.schema';
 import { getFrequencyEnumValue } from '../../_utils/task';
 import WeekdayPicker from './WeekdayPicker';

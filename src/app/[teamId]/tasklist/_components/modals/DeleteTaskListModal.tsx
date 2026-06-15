@@ -1,20 +1,25 @@
 import { useRouter } from 'next/navigation';
 
-import { Task } from '@/apis/task/type';
 import Modal from '@/components/modal/Modal';
-import { useDeleteTask } from '@/queries/task/queries';
+import { useDeleteTaskList } from '@/queries/taskList/queries';
 
-interface DeleteTaskModalProps {
+interface DeleteTaskListModalProps {
   isOpen: boolean;
   onClose: () => void;
-  task: Task;
   groupId: number;
   taskListId: number;
+  taskListName: string;
 }
 
-const DeleteTaskModal = ({ isOpen, onClose, task, groupId, taskListId }: DeleteTaskModalProps) => {
+const DeleteTaskListModal = ({
+  isOpen,
+  onClose,
+  groupId,
+  taskListId,
+  taskListName,
+}: DeleteTaskListModalProps) => {
   const router = useRouter();
-  const { mutate } = useDeleteTask({
+  const { mutate } = useDeleteTaskList({
     onSuccess: () => {
       onClose();
       router.refresh();
@@ -25,13 +30,13 @@ const DeleteTaskModal = ({ isOpen, onClose, task, groupId, taskListId }: DeleteT
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={`'${task.name}' 할 일을 정말 삭제하시겠어요?`}
+      title={`'${taskListName}' 할 일 목록을 정말 삭제하시겠어요?`}
       description="삭제 후에는 되돌릴 수 없습니다."
       variant="danger"
       primaryAction={{
         label: '삭제하기',
         onClick: () => {
-          mutate({ groupId, taskListId, taskId: task.id });
+          mutate({ groupId, id: String(taskListId) });
         },
       }}
       secondaryAction={{
@@ -42,4 +47,4 @@ const DeleteTaskModal = ({ isOpen, onClose, task, groupId, taskListId }: DeleteT
   );
 };
 
-export default DeleteTaskModal;
+export default DeleteTaskListModal;
