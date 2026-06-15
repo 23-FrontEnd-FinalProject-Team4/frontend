@@ -4,6 +4,7 @@ import {
   CreateTaskListParams,
   DeleteTaskListParams,
   ResponseCreateTaskList,
+  ResponseUpdateTaskListName,
   UpdateTaskListNameParams,
 } from '@/apis/taskList/type';
 import { serverFetcher } from '@/lib/serverFetcher';
@@ -16,13 +17,13 @@ export const createTaskListAction = async ({ groupId, body }: CreateTaskListPara
 };
 
 export const deleteTaskListAction = async ({ groupId, id: taskListId }: DeleteTaskListParams) => {
-  return await serverFetcher(`/groups/${groupId}/task-lists/${taskListId}`, {
+  return await serverFetcher<void>(`/groups/${groupId}/task-lists/${taskListId}`, {
     method: 'DELETE',
   });
 };
 
-export const updateTaskListAction = async ({ groupId, id, body }: UpdateTaskListNameParams) => {
-  return await serverFetcher(`/groups/${groupId}/task-lists/${id}`, {
+export const updateTaskListNameAction = async ({ groupId, id, body }: UpdateTaskListNameParams) => {
+  return (await serverFetcher)<ResponseUpdateTaskListName>(`/groups/${groupId}/task-lists/${id}`, {
     method: 'PATCH',
     body: JSON.stringify(body),
   });

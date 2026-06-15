@@ -1,36 +1,40 @@
-import { useMutation } from '@tanstack/react-query';
+import { MutationOptions, useMutation } from '@tanstack/react-query';
 
+import {
+  CreateRecurringTaskParams,
+  ResponseTaskRecurring,
+  UpdateRecurringTaskParams,
+} from '@/apis/recurring/type';
+import { TaskDetailPathParams } from '@/apis/task/type';
 import {
   createTaskAction,
   deleteTaskAction,
   updateTaskAction,
 } from '@/app/[teamId]/tasklist/_action/task';
 
-interface MutationOptions {
-  onSuccess?: () => void;
-  onError?: (error: unknown) => void;
-}
-
-export const useCreateTask = ({ onSuccess, onError }: MutationOptions) => {
-  return useMutation({
+export const useCreateTask = (
+  mutationOptions: MutationOptions<ResponseTaskRecurring, Error, CreateRecurringTaskParams>,
+) => {
+  return useMutation<ResponseTaskRecurring, Error, CreateRecurringTaskParams>({
     mutationFn: createTaskAction,
-    onSuccess,
-    onError,
+    ...mutationOptions,
   });
 };
 
-export const useUpdateTask = ({ onSuccess, onError }: MutationOptions) => {
-  return useMutation({
+export const useUpdateTask = (
+  mutationOptions: MutationOptions<ResponseTaskRecurring, Error, UpdateRecurringTaskParams>,
+) => {
+  return useMutation<ResponseTaskRecurring, Error, UpdateRecurringTaskParams>({
     mutationFn: updateTaskAction,
-    onSuccess,
-    onError,
+    ...mutationOptions,
   });
 };
 
-export const useDeleteTask = ({ onSuccess, onError }: MutationOptions) => {
-  return useMutation({
+export const useDeleteTask = (
+  mutationOptions: MutationOptions<ResponseTaskRecurring, Error, TaskDetailPathParams>,
+) => {
+  return useMutation<ResponseTaskRecurring, Error, TaskDetailPathParams>({
     mutationFn: deleteTaskAction,
-    onSuccess,
-    onError,
+    ...mutationOptions,
   });
 };

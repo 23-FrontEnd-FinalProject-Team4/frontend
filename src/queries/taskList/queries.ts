@@ -1,36 +1,41 @@
-import { useMutation } from '@tanstack/react-query';
+import { MutationOptions, useMutation } from '@tanstack/react-query';
 
+import {
+  CreateTaskListParams,
+  DeleteTaskListParams,
+  ResponseCreateTaskList,
+  ResponseUpdateTaskListName,
+  UpdateTaskListNameParams,
+} from '@/apis/taskList/type';
 import {
   createTaskListAction,
   deleteTaskListAction,
-  updateTaskListAction,
+  updateTaskListNameAction,
 } from '@/app/[teamId]/tasklist/_action/taskList';
 
-interface MutationOptions {
-  onSuccess?: () => void;
-  onError?: (error: unknown) => void;
-}
-
-export const useCreateTaskList = ({ onSuccess, onError }: MutationOptions) => {
-  return useMutation({
+export const useCreateTaskList = (
+  mutationOptions: MutationOptions<ResponseCreateTaskList, Error, CreateTaskListParams>,
+) => {
+  return useMutation<ResponseCreateTaskList, Error, CreateTaskListParams>({
     mutationFn: createTaskListAction,
-    onSuccess,
-    onError,
+    ...mutationOptions,
   });
 };
 
-export const useUpdateTaskList = ({ onSuccess, onError }: MutationOptions) => {
-  return useMutation({
-    mutationFn: updateTaskListAction,
-    onSuccess,
-    onError,
+export const useUpdateTaskList = (
+  mutationOptions: MutationOptions<ResponseUpdateTaskListName, Error, UpdateTaskListNameParams>,
+) => {
+  return useMutation<ResponseUpdateTaskListName, Error, UpdateTaskListNameParams>({
+    mutationFn: updateTaskListNameAction,
+    ...mutationOptions,
   });
 };
 
-export const useDeleteTaskList = ({ onSuccess, onError }: MutationOptions) => {
-  return useMutation({
+export const useDeleteTaskList = (
+  mutationOptions: MutationOptions<void, Error, DeleteTaskListParams>,
+) => {
+  return useMutation<void, Error, DeleteTaskListParams>({
     mutationFn: deleteTaskListAction,
-    onSuccess,
-    onError,
+    ...mutationOptions,
   });
 };
