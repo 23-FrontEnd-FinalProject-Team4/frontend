@@ -12,10 +12,11 @@ import { getErrorMessage } from '@/lib/error';
 import { useLoginMutation } from '@/queries/auth/queries';
 import { type LoginFormValues, loginSchema } from '@/schemas/auth.schema';
 
-const handleForgotPasswordClick = () => {};
+import ResetPasswordEmailSection from './ResetPasswordEmailSection';
 
 const LoginFormSection = () => {
   const router = useRouter();
+
   const { mutateAsync, isPending } = useLoginMutation();
 
   const loginForm = useForm<LoginFormValues>({
@@ -61,13 +62,7 @@ const LoginFormSection = () => {
         {...loginForm.register('password')}
       />
 
-      <button
-        type="button"
-        className="text-md text-brand-primary mb-4 text-right underline"
-        onClick={handleForgotPasswordClick}
-      >
-        비밀번호를 잊으셨나요?
-      </button>
+      <ResetPasswordEmailSection defaultEmail={loginForm.getValues('email') ?? ''} />
 
       <Button type="submit" disabled={isPending || !loginForm.formState.isValid}>
         {isPending ? (

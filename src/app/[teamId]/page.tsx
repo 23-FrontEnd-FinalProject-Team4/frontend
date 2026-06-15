@@ -1,3 +1,5 @@
+import { formatISODate } from '@/utils/date';
+
 import TeamPageClient from './_components/TeamPageClient';
 
 interface TeamPageProps {
@@ -8,6 +10,7 @@ interface TeamPageProps {
 
 export default async function TeamPage({ params }: TeamPageProps) {
   const { teamId } = await params;
+  const initialDate = formatISODate(new Date());
 
-  return <TeamPageClient teamId={teamId} />;
+  return <TeamPageClient teamId={teamId} initialDate={initialDate} />;
 }

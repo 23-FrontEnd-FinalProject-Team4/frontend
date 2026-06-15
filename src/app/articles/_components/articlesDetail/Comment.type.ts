@@ -3,12 +3,12 @@ export type CommentSectionProps = {
 };
 
 export type Comment = {
-  id: number;
+  id: string;
   content: string;
   createdAt: string;
   updatedAt: string;
   writer: {
-    id: number;
+    id: string;
     nickname: string;
     image: string | null;
   };
