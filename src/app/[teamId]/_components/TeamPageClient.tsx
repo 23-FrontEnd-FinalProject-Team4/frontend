@@ -26,6 +26,7 @@ import TaskListSection from './task-list/TaskListSection';
 
 interface TeamPageClientProps {
   teamId: string;
+  initialDate: string;
 }
 
 const TEAM_PAGE_QUERY_KEY = {
@@ -49,15 +50,6 @@ const getProgressValue = (completedTaskCount: number, totalTaskCount: number) =>
   }
 
   return Math.round((completedTaskCount / totalTaskCount) * 100);
-};
-
-const getLocalDateString = () => {
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-
-  return `${year}-${month}-${day}`;
 };
 
 const mapMembers = (members: Member[]): TeamPageMember[] =>
@@ -152,21 +144,29 @@ const InviteMemberModal = ({ isOpen, groupId, onClose }: InviteMemberModalProps)
   );
 };
 
-export default function TeamPageClient({ teamId }: TeamPageClientProps) {
+const TeamPageStatus = ({ message }: { message: string }) => (
+  <div className="bg-background-primary text-text-default text-md flex min-h-60 items-center justify-center rounded-xl font-medium shadow-sm">
+    {message}
+  </div>
+);
+
+export default function TeamPageClient({ teamId, initialDate }: TeamPageClientProps) {
   const queryClient = useQueryClient();
   const isDesktop = useMediaQuery(MEDIA_QUERY.desktop);
   const isTablet = useMediaQuery(MEDIA_QUERY.tablet);
-  const today = useMemo(() => getLocalDateString(), []);
+  const today = initialDate;
 
   const [isTeamMenuOpen, setIsTeamMenuOpen] = useState(false);
 
   const routeGroupId = getRouteGroupId(teamId);
 
-  const { data: teamPageResult } = useQuery({
+  const { data: teamPageResult, isPending } = useQuery({
     queryKey: TEAM_PAGE_QUERY_KEY.data(teamId, today),
     queryFn: () => getTeamPageDataAction({ teamId, date: today }),
+    enabled: Boolean(today),
   });
 
+  const teamPageError = teamPageResult?.success === false ? teamPageResult.error : undefined;
   const teamPageData = teamPageResult?.success ? teamPageResult.data : undefined;
   const myGroups = teamPageData?.myGroups ?? [];
   const myProfile = teamPageData?.myProfile;
@@ -260,14 +260,22 @@ export default function TeamPageClient({ teamId }: TeamPageClientProps) {
           onSettingsClick={() => setIsTeamMenuOpen((prev) => !prev)}
         />
 
-        <TaskListSection
-          teamId={String(selectedGroupId ?? teamId)}
-          taskListsCount={taskLists.length}
-          sections={groupedTaskLists}
-          onCreateTaskList={openCreateListModal}
-        />
+        {isPending ? (
+          <TeamPageStatus message="팀 페이지 정보를 불러오는 중입니다." />
+        ) : teamPageError ? (
+          <TeamPageStatus message={teamPageError} />
+        ) : (
+          <>
+            <TaskListSection
+              teamId={String(selectedGroupId ?? teamId)}
+              taskListsCount={taskLists.length}
+              sections={groupedTaskLists}
+              onCreateTaskList={openCreateListModal}
+            />
 
-        <MemberSection members={members} onInviteClick={openInviteModal} />
+            <MemberSection members={members} onInviteClick={openInviteModal} />
+          </>
+        )}
       </div>
     </div>
   );

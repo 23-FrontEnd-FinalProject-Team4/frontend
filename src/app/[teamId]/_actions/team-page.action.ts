@@ -38,6 +38,11 @@ const getRouteGroupId = (teamId: string) => {
   return Number.isSafeInteger(groupId) && groupId > 0 ? groupId : undefined;
 };
 
+const createGroupTasksPath = (groupId: number, date?: string) => {
+  const query = date ? `?date=${encodeURIComponent(date)}` : '';
+  return `/groups/${groupId}/tasks${query}`;
+};
+
 export const getTeamPageDataAction = async (
   payload: TeamPageQueryValues,
 ): Promise<TeamPageActionResult<TeamPageData>> => {
@@ -49,11 +54,33 @@ export const getTeamPageDataAction = async (
 
   try {
     const { teamId, date } = parsedPayload.data;
+    const routeGroupId = getRouteGroupId(teamId);
+
+    if (routeGroupId) {
+      const [myGroups, myProfile, group, todayTasks] = await Promise.all([
+        serverFetcher<Group[]>('/user/groups'),
+        serverFetcher<Profile>('/user'),
+        serverFetcher<GroupDetail>(`/groups/${routeGroupId}`),
+        serverFetcher<Task[]>(createGroupTasksPath(routeGroupId, date)),
+      ]);
+
+      return {
+        success: true,
+        data: {
+          myGroups,
+          myProfile,
+          selectedGroupId: routeGroupId,
+          group,
+          todayTasks,
+        },
+      };
+    }
+
     const [myGroups, myProfile] = await Promise.all([
       serverFetcher<Group[]>('/user/groups'),
       serverFetcher<Profile>('/user'),
     ]);
-    const selectedGroupId = getRouteGroupId(teamId) ?? myGroups[0]?.id;
+    const selectedGroupId = myGroups[0]?.id;
 
     if (!selectedGroupId) {
       return {
@@ -68,9 +95,7 @@ export const getTeamPageDataAction = async (
 
     const [group, todayTasks] = await Promise.all([
       serverFetcher<GroupDetail>(`/groups/${selectedGroupId}`),
-      serverFetcher<Task[]>(
-        `/groups/${selectedGroupId}/tasks${date ? `?date=${encodeURIComponent(date)}` : ''}`,
-      ),
+      serverFetcher<Task[]>(createGroupTasksPath(selectedGroupId, date)),
     ]);
 
     return {
