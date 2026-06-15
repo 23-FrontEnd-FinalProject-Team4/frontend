@@ -1,20 +1,19 @@
-'use client';
 import Link from 'next/link';
 
-import { mockArticles, mockComments } from '@/app/articles/mockArticles';
+import { getArticleDetail } from '@/apis/article';
+import { getArticleComments } from '@/apis/articleComment';
+import CommentSection from '@/app/articles/_components/articlesDetail/CommentSection';
+import ArticleContent from '@/app/articles/_components/articlesDetail/Content';
+import ArticleHeader from '@/app/articles/_components/articlesDetail/Header';
+import LikeButton from '@/app/articles/_components/articlesDetail/LikeButton';
 import ArrowLeft from '@/assets/icons/arrow_left.svg';
+import { formatDate } from '@/utils/formatDate';
 
-import ArticleContent from '@/components/articlesDetail/ArticleContent';
-import ArticleHeader from '@/components/articlesDetail/ArticleHeader';
-import CommentSection from '@/components/articlesDetail/CommentSection';
-import LikeButton from '@/components/articlesDetail/LikeButton';
-
-const ArticleDetailPage = () => {
-  const article = mockArticles[0];
-  const comments = mockComments;
-  const handleLikeClick = () => {
-    console.log('like button clicked');
-  };
+const ArticleDetailPage = async ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = await params;
+  const article = await getArticleDetail(`${id}`);
+  const comments = await getArticleComments({ articleId: `${id}`, limit: 10, cursor: 0 });
+  const formattedDate = formatDate(article.createdAt);
   return (
     <div className="mx-auto flex min-h-screen px-4 pt-5 md:p-22">
       <main className="min-h-screen w-full">
@@ -25,18 +24,14 @@ const ArticleDetailPage = () => {
         </Link>
         <div className="bg-background-primary mx-auto flex w-full flex-col gap-4 rounded-2xl px-5 py-10 md:px-10 md:py-14">
           <ArticleHeader
+            id={`${article.id}`}
             title={article.title}
-            writer={article.writer}
-            createdAt={article.createdAt}
+            writer={article.writer.nickname}
+            createdAt={formattedDate}
           />
           <ArticleContent content={article.content} image={article.image} />
-          {/* 좋아요 클릭 핸들러 구현 */}
-          <LikeButton
-            isLiked={article.isLiked}
-            likeCount={article.likeCount}
-            onLikeClick={handleLikeClick}
-          />
-          <CommentSection comments={comments} />
+          <LikeButton isLiked={article.isLiked} likeCount={article.likeCount} />
+          <CommentSection articleId={`${article.id}`} comments={comments.list} />
         </div>
       </main>
     </div>
