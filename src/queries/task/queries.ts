@@ -1,6 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { createTaskAction, updateTaskAction } from '@/app/[teamId]/tasklist/_action/task';
+import {
+  createTaskAction,
+  deleteTaskAction,
+  updateTaskAction,
+} from '@/app/[teamId]/tasklist/_action/task';
 
 interface MutationOptions {
   onSuccess?: () => void;
@@ -18,6 +22,14 @@ export const useCreateTask = ({ onSuccess, onError }: MutationOptions) => {
 export const useUpdateTask = ({ onSuccess, onError }: MutationOptions) => {
   return useMutation({
     mutationFn: updateTaskAction,
+    onSuccess,
+    onError,
+  });
+};
+
+export const useDeleteTask = ({ onSuccess, onError }: MutationOptions) => {
+  return useMutation({
+    mutationFn: deleteTaskAction,
     onSuccess,
     onError,
   });

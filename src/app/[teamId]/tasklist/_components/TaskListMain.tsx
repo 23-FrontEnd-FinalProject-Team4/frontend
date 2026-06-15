@@ -13,6 +13,7 @@ import { addDays } from '@/utils/date';
 import InfoOverlay from './InfoOverlay';
 import TaskListTitle from './TaskListTitle';
 import AddTaskModal from './modals/AddTaskModal';
+import DeleteTaskModal from './modals/DeleteTaskModal';
 import EditTaskModal from './modals/EditTaskModal';
 
 interface TaskListMainProps {
@@ -21,7 +22,6 @@ interface TaskListMainProps {
 }
 
 const TaskListMain = ({ taskList, groupId }: TaskListMainProps) => {
-  // TODO: 해당 위치에서 task들에 대한 CRUD 진행
   const { selectedDate, setDate } = useTaskDate();
 
   const handleNextWeek = () => {
@@ -60,6 +60,18 @@ const TaskListMain = ({ taskList, groupId }: TaskListMainProps) => {
     ));
   };
 
+  const handleDeleteModalOpen = (task: Task) => {
+    overlay.open(({ isOpen, close }) => (
+      <DeleteTaskModal
+        isOpen={isOpen}
+        onClose={close}
+        task={task}
+        groupId={groupId}
+        taskListId={taskList.id}
+      />
+    ));
+  };
+
   return (
     <div className="relative flex flex-col gap-10 rounded-[20px] bg-white p-4 md:p-7.5 xl:p-10">
       <TaskListTitle
@@ -76,7 +88,7 @@ const TaskListMain = ({ taskList, groupId }: TaskListMainProps) => {
             onClick={() => handleOpenOverlay(task)}
             // TODO: API 연결 시 함수 연결
             onToggle={() => {}}
-            onDelete={() => {}}
+            onDelete={() => handleDeleteModalOpen(task)}
             onEdit={() => handleEditModalOpen(task)}
           />
         ))}
