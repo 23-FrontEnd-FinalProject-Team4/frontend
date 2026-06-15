@@ -1,66 +1,26 @@
-'use client';
-
-import { useState } from 'react';
-
 import Link from 'next/link';
 
-import UploadIcon from '@/assets/icons/img.svg?react';
+import { getArticleDetail } from '@/apis/article';
+import EditorClient from '@/app/articles/write/_components/EditorClient';
 
-import Button from '@/components/button/Button';
-import Input from '@/components/input/Input';
-import InputBox from '@/components/inputBox/InputBox';
-
-const EditArticlePage = () => {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [image, setImage] = useState<File | null>(null);
+const EditArticlePage = async ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = await params;
+  const article = await getArticleDetail(`${id}`);
 
   return (
     <div className="mx-auto flex min-h-screen px-4 pt-5 md:p-20">
       <main className="min-h-screen w-full">
         <div className="bg-background-primary mx-auto flex w-full flex-col gap-4 rounded-2xl px-5 py-10 md:px-10 md:py-14 lg:max-w-[900px]">
           <h1 className="mb-8 text-xl font-bold md:text-2xl">게시글 수정</h1>
-          <div className="mb-8 flex flex-col gap-2">
-            <div className="flex gap-1">
-              <span className="text-md flex gap-1 font-bold md:text-lg">제목</span>
-              <span className="text-point-rose">*</span>
-            </div>
-            <Input
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="제목을 입력해주세요."
-              size="lg"
-            />
-          </div>
-
-          <div className="mb-8 flex flex-col gap-2">
-            <div className="flex gap-1">
-              <span className="text-md flex gap-1 font-bold md:text-lg">내용</span>
-              <span className="text-point-rose">*</span>
-            </div>
-            <InputBox
-              size="lg"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="내용을 입력해주세요."
-              maxLength={1000}
-            />
-          </div>
-          <div className="mb-8 flex flex-col gap-2">
-            <span className="text-md flex gap-1 font-bold md:text-lg">이미지</span>
-            <button
-              type="button"
-              aria-label="업로드 이미지 수정"
-              className="border-border-primary flex h-20 w-20 flex-col items-center justify-center gap-1 rounded-xl border"
-            >
-              <UploadIcon className="size-6" />
-              <span className="text-text-disabled text-md">0 / 1</span>
-            </button>
-          </div>
-
-          <Button variant="primary-filled" onClick={() => {}}>
-            수정하기
-          </Button>
+          <EditorClient
+            mode="edit"
+            defaultValues={{
+              id: `${article.id}`,
+              title: article.title,
+              content: article.content,
+              image: article.image ?? null,
+            }}
+          />
         </div>
         <div className="flex w-full justify-center pt-8">
           {/* TODO : 수정 전 글로 이동 */}

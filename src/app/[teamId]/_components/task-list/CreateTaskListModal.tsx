@@ -7,7 +7,7 @@ import Modal from '@/components/modal/Modal';
 interface CreateTaskListModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onCreate?: (title: string) => void;
+  onCreate?: (title: string) => boolean | void | Promise<boolean | void>;
 }
 
 export default function CreateTaskListModal({
@@ -16,15 +16,28 @@ export default function CreateTaskListModal({
   onCreate,
 }: CreateTaskListModalProps) {
   const [title, setTitle] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const trimmedTitle = title.trim();
 
-  const handleCreate = () => {
-    if (!trimmedTitle) {
+  const handleCreate = async () => {
+    if (!trimmedTitle || isSubmitting) {
       return;
     }
 
-    onCreate?.(trimmedTitle);
-    onClose();
+    setIsSubmitting(true);
+
+    try {
+      const shouldClose = await onCreate?.(trimmedTitle);
+
+      if (shouldClose === false) {
+        return;
+      }
+
+      setTitle('');
+      onClose();
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -34,7 +47,7 @@ export default function CreateTaskListModal({
       primaryAction={{
         label: '만들기',
         onClick: handleCreate,
-        disabled: !trimmedTitle,
+        disabled: !trimmedTitle || isSubmitting,
       }}
       size="md"
       onClose={onClose}

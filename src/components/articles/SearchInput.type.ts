@@ -1,5 +1,0 @@
-export type SearchInputProps = {
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  placeholder: string;
-};

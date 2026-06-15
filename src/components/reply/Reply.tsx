@@ -47,7 +47,7 @@ const Reply = ({ size = 'sm', author, avatar, children, date, onMenuClick }: Rep
           onClick={onMenuClick}
           className="absolute top-6 right-5"
         >
-          <KebabIcon aria-hidden />
+          <KebabIcon className="size-4" aria-hidden />
         </button>
       )}
     </div>

@@ -41,18 +41,18 @@ export interface UpdateTaskOrderRequest extends UpdateTaskOrderPathParams {
 }
 
 export interface TaskUser {
-  image: string;
+  image: string | null;
   nickname: string;
   id: number;
 }
 
 export interface TaskDoneBy {
-  user: TaskUser;
+  user: TaskUser | null;
 }
 
 export interface Task {
   doneBy: TaskDoneBy | null;
-  writer: TaskUser;
+  writer: TaskUser | null;
   displayIndex: number;
   commentCount: number;
   deletedAt: string | null;
@@ -60,9 +60,9 @@ export interface Task {
   frequency: FrequencyType;
   updatedAt: string;
   doneAt: string | null;
-  startDate: string;
-  date: string;
-  description: string;
+  startDate: string | null;
+  date: string | null;
+  description: string | null;
   name: string;
   id: number;
 }

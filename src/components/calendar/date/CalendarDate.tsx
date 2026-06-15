@@ -1,8 +1,10 @@
-"use client"
+'use client';
+
+import { useState } from 'react';
 
 import { DayPicker } from '@daypicker/react';
 import { ko } from '@daypicker/react/locale';
-import { useState } from 'react';
+
 import { CalendarDateProps } from './type';
 
 const CalendarDate = ({ selectedDate, setSelectedDate }: CalendarDateProps) => {

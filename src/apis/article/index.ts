@@ -22,31 +22,31 @@ export const createArticle = async (request: CreateArticleRequest) => {
 };
 
 // 게시글 상세 조회
-export const getArticleDetail = async (id: number) => {
+export const getArticleDetail = async (id: string) => {
   const response = await clientFetcher.get<ArticleDetail>(`/articles/${id}`);
   return response.data;
 };
 
 // 게시글 수정
-export const updateArticle = async (id: number, request: UpdateArticleRequest) => {
+export const updateArticle = async (id: string, request: UpdateArticleRequest) => {
   const response = await clientFetcher.patch<ArticleDetail>(`/articles/${id}`, request);
   return response.data;
 };
 
 // 게시글 삭제
-export const deleteArticle = async (id: number) => {
+export const deleteArticle = async (id: string) => {
   const response = await clientFetcher.delete<void>(`/articles/${id}`);
   return response.data;
 };
 
 // 게시글 좋아요
-export const likeArticle = async (id: number) => {
+export const likeArticle = async (id: string) => {
   const response = await clientFetcher.post<ArticleDetail>(`/articles/${id}/like`);
   return response.data;
 };
 
 // 게시글 좋아요 취소
-export const unlikeArticle = async (id: number) => {
+export const unlikeArticle = async (id: string) => {
   const response = await clientFetcher.delete<ArticleDetail>(`/articles/${id}/like`);
   return response.data;
 };

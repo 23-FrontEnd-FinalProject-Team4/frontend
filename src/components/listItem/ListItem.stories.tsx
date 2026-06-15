@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
 
+import { MOCK_TASKLISTS } from '../../app/[teamId]/tasklist/_constants/mockData';
 import ListItem from './ListItem';
 
 const meta = {
@@ -21,26 +22,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    task: {
-      name: 'Task 1',
-      frequency: 'DAILY',
-      commentCount: 1,
-      date: '2026년 6월 2일',
-      id: 1,
-      doneBy: null,
-      writer: {
-        image: '',
-        nickname: 'John Doe',
-        id: 1,
-      },
-      displayIndex: 1,
-      deletedAt: null,
-      recurringId: 1,
-      updatedAt: new Date().toISOString(),
-      doneAt: null,
-      description: 'Description',
-      startDate: new Date().toISOString(),
-    },
+    task: MOCK_TASKLISTS[0].tasks[0],
     onEdit: fn(),
     onDelete: fn(),
     onToggle: fn(),
@@ -50,10 +32,7 @@ export const Default: Story = {
 export const Checked: Story = {
   args: {
     ...Default.args,
-    task: {
-      ...Default.args.task,
-      doneAt: '2026년 6월 3일',
-    },
+    task: MOCK_TASKLISTS[0].tasks[1],
   },
 };
 
@@ -76,7 +55,7 @@ export const ToggleTest: Story = {
     const canvas = within(canvasElement);
 
     // Act
-    await userEvent.click(canvas.getByText('Task 1'));
+    await userEvent.click(canvas.getByText('할 일 목록 1'));
 
     // Assert
     expect(args.onToggle).toHaveBeenCalledWith(true);

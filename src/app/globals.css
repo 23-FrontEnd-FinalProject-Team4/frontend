@@ -69,6 +69,8 @@
 
   --text-xs: 12px;
   --text-xs--line-height: 14px;
+
+  --z-index-calendar: 100;
 }
 
 :root {
@@ -107,6 +109,7 @@ a {
 @utility custom-scrollbar {
   scrollbar-gutter: stable;
   &::-webkit-scrollbar {
+    height: 0.375rem;
     width: 0.375rem;
   }
   &::-webkit-scrollbar-thumb {

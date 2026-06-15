@@ -1,7 +1,8 @@
 import CalendarIcon from '@/assets/icons/calendar.svg?react';
 import RepeatIcon from '@/assets/icons/repeat.svg?react';
-import { ListItemDateProps } from './type';
 import { FREQUENCY_TEXT } from '@/constants/listItem';
+
+import { ListItemDateProps } from './type';
 
 const ListItemDate = ({ date, frequency }: ListItemDateProps) => {
   return (

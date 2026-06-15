@@ -15,7 +15,7 @@ export interface UpdateCommentRequest extends CommentDetailPathParams {
 }
 
 export interface CommentUser {
-  image: string;
+  image: string | null;
   nickname: string;
   id: number;
 }

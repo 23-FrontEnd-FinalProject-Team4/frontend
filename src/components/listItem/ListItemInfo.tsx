@@ -1,13 +1,16 @@
 'use client';
 
-import { ListItemInfoProps } from './type';
-import TaskCheckbox from '../taskCheckbox/TaskCheckbox';
+import { useRef, useState } from 'react';
+
 import CommentIcon from '@/assets/icons/comment.svg?react';
-import Dropdown from '../dropdown/Dropdown';
 import KebabIcon from '@/assets/icons/kebab.svg?react';
 import { OPTIONS } from '@/constants/listItem';
-import { useRef, useState } from 'react';
+
 import { useOutsideClick } from '@/hooks/useOutsideClick';
+
+import Dropdown from '../dropdown/Dropdown';
+import TaskCheckbox from '../taskCheckbox/TaskCheckbox';
+import { ListItemInfoProps } from './type';
 
 const ListItemInfo = ({
   name,
@@ -20,8 +23,9 @@ const ListItemInfo = ({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  const handleToggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+  const handleToggleDropdown = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setIsDropdownOpen((prev) => !prev);
   };
 
   useOutsideClick(dropdownRef, () => {
@@ -40,7 +44,7 @@ const ListItemInfo = ({
 
   return (
     <div className="relative flex items-center justify-between">
-      <div className="flex gap-3.5">
+      <div className="flex gap-3.5" onClick={(e) => e.stopPropagation()}>
         <TaskCheckbox task={name} checked={isDone} size="lg" onChange={onToggle} />
         {commentCount > 0 && (
           <div className="flex items-center gap-1">
@@ -58,7 +62,7 @@ const ListItemInfo = ({
         <KebabIcon width={16} height={16} />
       </button>
       {isDropdownOpen && (
-        <div className="absolute right-10" ref={dropdownRef}>
+        <div className="absolute right-25" ref={dropdownRef} onClick={(e) => e.stopPropagation()}>
           <Dropdown options={OPTIONS} onSelect={handleSelect} />
         </div>
       )}

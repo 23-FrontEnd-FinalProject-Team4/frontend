@@ -2,6 +2,7 @@ import { DateItemProps } from './type';
 
 const DateItem = ({ date, isSelected, onClick }: DateItemProps) => {
   const day = date.getDate();
+  const month = date.getMonth() + 1;
   const week = date.toLocaleDateString('ko-KR', { weekday: 'short' });
 
   return (
@@ -13,6 +14,7 @@ const DateItem = ({ date, isSelected, onClick }: DateItemProps) => {
           ? 'text-text-inverse border-0 bg-slate-800'
           : 'bg-background-primary hover:bg-background-secondary text-text-default'
       }`}
+      aria-label={`${month}월 ${day}일`}
     >
       <span
         className={`text-center align-middle text-sm font-medium ${
