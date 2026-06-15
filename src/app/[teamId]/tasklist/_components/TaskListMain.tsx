@@ -1,5 +1,7 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+
 import { overlay } from 'overlay-kit';
 
 import { TaskList } from '@/apis/group/type';
@@ -10,6 +12,7 @@ import ListItem from '@/components/listItem/ListItem';
 import { useTaskDate } from '@/hooks/useTaskDate';
 import { addDays } from '@/utils/date';
 
+import { toggleTaskAction } from '../_action/task';
 import InfoOverlay from './InfoOverlay';
 import TaskListTitle from './TaskListTitle';
 import AddTaskModal from './modals/AddTaskModal';
@@ -72,6 +75,17 @@ const TaskListMain = ({ taskList, groupId }: TaskListMainProps) => {
     ));
   };
 
+  const router = useRouter();
+  const handleToggle = async (task: Task) => {
+    await toggleTaskAction({
+      groupId,
+      taskId: task.id,
+      taskListId: taskList.id,
+      done: !task.doneAt,
+    });
+    router.refresh();
+  };
+
   return (
     <div className="relative flex flex-col gap-10 rounded-[20px] bg-white p-4 md:p-7.5 xl:p-10">
       <TaskListTitle
@@ -87,7 +101,9 @@ const TaskListMain = ({ taskList, groupId }: TaskListMainProps) => {
             key={task.id}
             onClick={() => handleOpenOverlay(task)}
             // TODO: API 연결 시 함수 연결
-            onToggle={() => {}}
+            onToggle={() => {
+              handleToggle(task);
+            }}
             onDelete={() => handleDeleteModalOpen(task)}
             onEdit={() => handleEditModalOpen(task)}
           />
