@@ -1,8 +1,8 @@
-import { RequestCreateTaskRecurring } from '@/apis/recurring/type';
+import { RequestCreateTaskRecurring, RequestUpdateTaskRecurring } from '@/apis/recurring/type';
 import { FrequencyType } from '@/apis/task/type';
 import { FREQUENCY_TEXT } from '@/constants/listItem';
 
-import { AddTaskFormValues } from '../_schemas/addTask.schema';
+import { TaskFormValues } from '../_schemas/task.schema';
 
 export const getFrequencyEnumValue = (label: string): FrequencyType => {
   switch (label) {
@@ -18,7 +18,7 @@ export const getFrequencyEnumValue = (label: string): FrequencyType => {
 };
 
 export const createRecurringPayload = (
-  formValues: AddTaskFormValues,
+  formValues: TaskFormValues,
   startDate: string,
 ): RequestCreateTaskRecurring => {
   const { name, description, weekDays, frequency, date } = formValues;
@@ -51,4 +51,19 @@ export const createRecurringPayload = (
         frequencyType: 'ONCE',
       };
   }
+};
+
+export const updateRecurringPayload = (
+  formValues: TaskFormValues,
+  startDate: string,
+): RequestUpdateTaskRecurring => {
+  const { name, description, weekDays, frequency, date } = formValues;
+  return {
+    name,
+    description,
+    startDate,
+    weekDays,
+    frequencyType: frequency,
+    monthDay: date.getDate(),
+  };
 };

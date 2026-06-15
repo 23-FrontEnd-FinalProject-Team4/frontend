@@ -1,5 +1,3 @@
-'use client';
-
 import { useRef } from 'react';
 
 import { useRouter } from 'next/navigation';
@@ -7,38 +5,40 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { Task } from '@/apis/task/type';
 import Button from '@/components/button/Button';
 import Modal from '@/components/modal/Modal';
-import { useCreateTask } from '@/queries/task/queries';
+import { useUpdateTask } from '@/queries/task/queries';
 
 import { TaskFormValues, taskSchema } from '../../_schemas/task.schema';
 import { createStartDate } from '../../_utils/date';
-import { createRecurringPayload } from '../../_utils/task';
+import { updateRecurringPayload } from '../../_utils/task';
 import TaskForm from './TaskForm';
 
-interface AddTaskModalProps {
+interface EditTaskModalProps {
   isOpen: boolean;
   onClose: () => void;
+  task: Task;
   groupId: number;
   taskListId: number;
 }
 
-const AddTaskModal = ({ isOpen, onClose, groupId, taskListId }: AddTaskModalProps) => {
+const EditTaskModal = ({ isOpen, onClose, task, groupId, taskListId }: EditTaskModalProps) => {
   const submitButtonRef = useRef<HTMLButtonElement>(null);
 
   const methods = useForm<TaskFormValues>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
-      name: '',
-      date: new Date(),
+      name: task.name,
+      date: new Date(task.startDate ?? ''),
       time: { hour: 0, minute: 0 },
-      frequency: 'ONCE',
-      description: '',
+      frequency: task.frequency,
+      description: task.description ?? '',
     },
   });
 
   const router = useRouter();
-  const { mutate, isPending } = useCreateTask({
+  const { mutate, isPending } = useUpdateTask({
     onSuccess: () => {
       router.refresh();
     },
@@ -46,9 +46,11 @@ const AddTaskModal = ({ isOpen, onClose, groupId, taskListId }: AddTaskModalProp
 
   const onSubmit = (formValues: TaskFormValues) => {
     const startDate = createStartDate(formValues.date, formValues.time);
-    const payload = createRecurringPayload(formValues, startDate);
+    const payload = updateRecurringPayload(formValues, startDate);
 
-    mutate({ groupId, taskListId, body: payload });
+    console.log(payload);
+
+    mutate({ groupId, taskListId, body: payload, recurringId: task.recurringId });
     onClose();
   };
 
@@ -56,7 +58,7 @@ const AddTaskModal = ({ isOpen, onClose, groupId, taskListId }: AddTaskModalProp
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="할 일 만들기"
+      title="할 일 수정"
       description="할 일은 실제로 행동 가능한 작업 중심으로 작성해주시면 좋습니다."
       size="lg"
       closeOnOverlayClick
@@ -74,4 +76,4 @@ const AddTaskModal = ({ isOpen, onClose, groupId, taskListId }: AddTaskModalProp
   );
 };
 
-export default AddTaskModal;
+export default EditTaskModal;

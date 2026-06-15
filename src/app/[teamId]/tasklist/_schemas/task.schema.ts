@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const addTaskSchema = z.object({
+export const taskSchema = z.object({
   name: z.string().min(1, '할 일 제목을 입력해 주세요'),
   date: z.date(),
   time: z.object({
@@ -12,4 +12,4 @@ export const addTaskSchema = z.object({
   weekDays: z.array(z.number().min(0).max(6)).optional(),
 });
 
-export type AddTaskFormValues = z.infer<typeof addTaskSchema>;
+export type TaskFormValues = z.infer<typeof taskSchema>;

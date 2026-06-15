@@ -3,6 +3,7 @@
 import { overlay } from 'overlay-kit';
 
 import { TaskList } from '@/apis/group/type';
+import { Task } from '@/apis/task/type';
 import PlusIcon from '@/assets/icons/plus_white.svg?react';
 import Button from '@/components/button/Button';
 import ListItem from '@/components/listItem/ListItem';
@@ -12,6 +13,7 @@ import { addDays } from '@/utils/date';
 import InfoOverlay from './InfoOverlay';
 import TaskListTitle from './TaskListTitle';
 import AddTaskModal from './modals/AddTaskModal';
+import EditTaskModal from './modals/EditTaskModal';
 
 interface TaskListMainProps {
   taskList: TaskList;
@@ -46,6 +48,18 @@ const TaskListMain = ({ taskList, groupId }: TaskListMainProps) => {
     ));
   };
 
+  const handleEditModalOpen = (task: Task) => {
+    overlay.open(({ isOpen, close }) => (
+      <EditTaskModal
+        isOpen={isOpen}
+        onClose={close}
+        task={task}
+        groupId={groupId}
+        taskListId={taskList.id}
+      />
+    ));
+  };
+
   return (
     <div className="relative flex flex-col gap-10 rounded-[20px] bg-white p-4 md:p-7.5 xl:p-10">
       <TaskListTitle
@@ -63,7 +77,7 @@ const TaskListMain = ({ taskList, groupId }: TaskListMainProps) => {
             // TODO: API 연결 시 함수 연결
             onToggle={() => {}}
             onDelete={() => {}}
-            onEdit={() => {}}
+            onEdit={() => handleEditModalOpen(task)}
           />
         ))}
       </div>
