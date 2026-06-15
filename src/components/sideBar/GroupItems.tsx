@@ -1,11 +1,19 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import GroupIcon from '@/assets/icons/profile.svg?react';
-
 import type { GroupItemProps } from '@/components/sideBar/type';
+import { cn } from '@/utils/cn';
 
-export default function GroupItems({ id, name, route, collapsed, selected }: GroupItemProps) {
+export default function GroupItems({
+  id,
+  name,
+  route,
+  image,
+  collapsed,
+  selected,
+}: GroupItemProps) {
   const pathname = usePathname() ?? '';
   const href = route ?? `/groups/${id}`;
   const isSelected = selected ?? pathname.startsWith(href);
@@ -23,8 +31,24 @@ export default function GroupItems({ id, name, route, collapsed, selected }: Gro
           : 'hover:bg-background-secondary hover:text-brand-primary'
       } `}
     >
-      {/* 각 팀에 해당하는 이미지 표시 */}
-      <GroupIcon className={`text-icon-primary h-7 w-7 ${collapsed ? 'h-10 w-10' : ''}`} />
+      <div
+        className={cn(
+          'relative shrink-0 overflow-hidden rounded-md',
+          collapsed ? 'h-10 w-10' : 'h-7 w-7',
+        )}
+      >
+        {image ? (
+          <Image
+            src={image}
+            alt={`${name} 팀 이미지`}
+            fill
+            className="object-cover"
+            sizes={collapsed ? '40px' : '28px'}
+          />
+        ) : (
+          <GroupIcon className="text-icon-primary h-full w-full" />
+        )}
+      </div>
       {!collapsed && <span>{name}</span>}
     </Link>
   );

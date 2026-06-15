@@ -2,9 +2,7 @@
 
 import ArrowLeftIcon from '@/assets/icons/arrow_left.svg?react';
 import ArrowRightIcon from '@/assets/icons/arrow_right.svg?react';
-
 import useHorizontalScroll from '@/hooks/useHorizontalScroll';
-
 import { cn } from '@/utils/cn';
 
 import type { TaskListItem, TaskStatus, TaskStatusSection } from '../../type';
@@ -33,14 +31,8 @@ interface TaskStatusSectionRowProps {
 }
 
 function TaskStatusSectionRow({ teamId, section }: TaskStatusSectionRowProps) {
-  const {
-    scrollRef,
-    canScrollLeft,
-    canScrollRight,
-    isDragging,
-    scrollByDirection,
-    dragHandlers,
-  } = useHorizontalScroll<HTMLDivElement>();
+  const { scrollRef, canScrollLeft, canScrollRight, isDragging, scrollByDirection, dragHandlers } =
+    useHorizontalScroll<HTMLDivElement>();
   const isScrollable = canScrollLeft || canScrollRight;
 
   return (

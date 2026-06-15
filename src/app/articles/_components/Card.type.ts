@@ -1,11 +1,11 @@
 export type ArticleWrither = {
-  id: number;
+  id: string;
   name: string;
   profileImage?: string;
 };
 
 export type Article = {
-  id: number;
+  id: string;
   title: string;
   content: string;
   image?: string;

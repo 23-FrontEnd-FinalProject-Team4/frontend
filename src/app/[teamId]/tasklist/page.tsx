@@ -63,7 +63,12 @@ const getTaskListPageData = async ({
 
   try {
     const group = await serverFetcher<GroupDetail>(`/groups/${groupId}`);
-    const taskLists = group.taskLists.length > 0 ? group.taskLists : MOCK_TASKLISTS;
+
+    if (group.taskLists.length === 0) {
+      return getFallbackTaskListPageData(taskListId);
+    }
+
+    const taskLists = group.taskLists;
     const requestedTaskListId = taskListId ? Number(taskListId) : taskLists[0].id;
     const selectedTaskListId = taskLists.some((taskList) => taskList.id === requestedTaskListId)
       ? requestedTaskListId

@@ -1,7 +1,6 @@
 import Link from 'next/link';
 
 import KebabIcon from '@/assets/icons/kebab.svg?react';
-
 import BadgeDone from '@/components/badgeDone/BadgeDone';
 import TaskCheckbox from '@/components/taskCheckbox/TaskCheckbox';
 
