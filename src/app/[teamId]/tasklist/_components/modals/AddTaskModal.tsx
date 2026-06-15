@@ -40,6 +40,7 @@ const AddTaskModal = ({ isOpen, onClose, groupId, taskListId }: AddTaskModalProp
   const router = useRouter();
   const { mutate, isPending } = useCreateTask({
     onSuccess: () => {
+      onClose();
       router.refresh();
     },
   });
@@ -49,7 +50,6 @@ const AddTaskModal = ({ isOpen, onClose, groupId, taskListId }: AddTaskModalProp
     const payload = createRecurringPayload(formValues, startDate);
 
     mutate({ groupId, taskListId, body: payload });
-    onClose();
   };
 
   return (

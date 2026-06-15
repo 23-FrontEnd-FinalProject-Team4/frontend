@@ -1,6 +1,7 @@
 import CalendarIcon from '@/assets/icons/calendar.svg?react';
 import RepeatIcon from '@/assets/icons/repeat.svg?react';
 import { FREQUENCY_TEXT } from '@/constants/listItem';
+import { formatYearMonthDay } from '@/utils/date';
 
 import { ListItemDateProps } from './type';
 
@@ -12,7 +13,7 @@ const ListItemDate = ({ date, frequency }: ListItemDateProps) => {
         <span className="flex h-4 w-4 shrink-0 items-center justify-center">
           <CalendarIcon width={16} height={16} />
         </span>
-        <span>{date}</span>
+        <span>{formatYearMonthDay(new Date(date ?? ''))}</span>
       </div>
 
       {/* Recurring */}

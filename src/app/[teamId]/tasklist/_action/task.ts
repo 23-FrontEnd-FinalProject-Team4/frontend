@@ -5,7 +5,7 @@ import {
   ResponseTaskRecurring,
   UpdateRecurringTaskParams,
 } from '@/apis/recurring/type';
-import { TaskDetailPathParams, UpdateTaskRequest } from '@/apis/task/type';
+import { Task, TaskDetailPathParams, UpdateTaskRequest } from '@/apis/task/type';
 import { serverFetcher } from '@/lib/serverFetcher';
 
 export type CreateTaskActionResult =
@@ -26,19 +26,33 @@ export const createTaskAction = async ({
   );
 };
 
-export const updateTaskAction = async ({
+export const updateRecurringTaskAction = async ({
   groupId,
   taskListId,
   recurringId,
   body,
 }: UpdateRecurringTaskParams) => {
   return await serverFetcher<ResponseTaskRecurring>(
-    `/groups/${groupId}/task-lists/${taskListId}/tasks/${recurringId}`,
+    `/groups/${groupId}/task-lists/${taskListId}/recurring/${recurringId}`,
     {
       method: 'PATCH',
       body: JSON.stringify(body),
     },
   );
+};
+
+export const updateTaskAction = async ({
+  groupId,
+  taskListId,
+  taskId,
+  description,
+  name,
+  done,
+}: UpdateTaskRequest) => {
+  return await serverFetcher<Task>(`/groups/${groupId}/task-lists/${taskListId}/tasks/${taskId}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ description, name, done }),
+  });
 };
 
 export const toggleTaskAction = async ({

@@ -3,7 +3,7 @@ import ListItemInfo from './ListItemInfo';
 import { ListItemProps } from './type';
 
 const ListItem = ({ task, onEdit, onDelete, onToggle, onClick }: ListItemProps) => {
-  const { name, frequency, startDate, doneAt, commentCount } = task;
+  const { name, frequency, date, doneAt, commentCount } = task;
   const isDone = Boolean(doneAt);
 
   return (
@@ -19,7 +19,7 @@ const ListItem = ({ task, onEdit, onDelete, onToggle, onClick }: ListItemProps) 
         onEdit={onEdit}
         onDelete={onDelete}
       />
-      <ListItemDate date={startDate} frequency={frequency} />
+      <ListItemDate date={date} frequency={frequency} />
     </div>
   );
 };

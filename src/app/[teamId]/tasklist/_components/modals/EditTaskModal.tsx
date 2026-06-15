@@ -8,7 +8,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Task } from '@/apis/task/type';
 import Button from '@/components/button/Button';
 import Modal from '@/components/modal/Modal';
-import { useUpdateTask } from '@/queries/task/queries';
+import { useUpdateRecurringTask, useUpdateTask } from '@/queries/task/queries';
 
 import { TaskFormValues, taskSchema } from '../../_schemas/task.schema';
 import { createStartDate } from '../../_utils/date';
@@ -26,21 +26,34 @@ interface EditTaskModalProps {
 const EditTaskModal = ({ isOpen, onClose, task, groupId, taskListId }: EditTaskModalProps) => {
   const submitButtonRef = useRef<HTMLButtonElement>(null);
 
+  const hour = (Number(task.date?.slice(11, 13)) + 9) % 24;
+  const minute = Number(task.date?.slice(14, 16));
+
   const methods = useForm<TaskFormValues>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
       name: task.name,
-      date: new Date(task.startDate ?? ''),
-      time: { hour: 0, minute: 0 },
+      date: new Date(task.date ?? ''),
+      time: { hour, minute },
       frequency: task.frequency,
       description: task.description ?? '',
     },
   });
 
   const router = useRouter();
-  const { mutate, isPending } = useUpdateTask({
+  const { mutate: mutateRecurringTask, isPending: isPendingRecurringTask } = useUpdateRecurringTask(
+    {
+      onSuccess: () => {
+        router.refresh();
+        onClose();
+      },
+    },
+  );
+
+  const { mutate: mutateTask, isPending: isPendingTask } = useUpdateTask({
     onSuccess: () => {
       router.refresh();
+      onClose();
     },
   });
 
@@ -48,9 +61,19 @@ const EditTaskModal = ({ isOpen, onClose, task, groupId, taskListId }: EditTaskM
     const startDate = createStartDate(formValues.date, formValues.time);
     const payload = updateRecurringPayload(formValues, startDate);
 
-    console.log(payload);
-
-    mutate({ groupId, taskListId, body: payload, recurringId: task.recurringId });
+    mutateTask({
+      groupId,
+      taskListId,
+      taskId: task.id,
+      description: formValues.description ?? '',
+      name: formValues.name,
+    });
+    mutateRecurringTask({
+      groupId,
+      taskListId,
+      body: payload,
+      recurringId: task.recurringId,
+    });
     onClose();
   };
 
@@ -67,8 +90,13 @@ const EditTaskModal = ({ isOpen, onClose, task, groupId, taskListId }: EditTaskM
         <form className="flex flex-col gap-6" onSubmit={methods.handleSubmit(onSubmit)}>
           <TaskForm submitButtonRef={submitButtonRef} />
 
-          <Button variant="primary-filled" fullWidth ref={submitButtonRef} disabled={isPending}>
-            만들기
+          <Button
+            variant="primary-filled"
+            fullWidth
+            ref={submitButtonRef}
+            disabled={isPendingRecurringTask || isPendingTask}
+          >
+            수정하기
           </Button>
         </form>
       </FormProvider>
