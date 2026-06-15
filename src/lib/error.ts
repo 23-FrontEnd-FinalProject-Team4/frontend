@@ -63,7 +63,7 @@ export const isDuplicateNameError = (error: unknown) => {
       return parsed.status === 409 || (parsed.message?.includes('이미 존재') ?? false);
     }
 
-    return error.message.includes('409') || error.message.includes('이미 존재');
+    return error.message.includes('이미 존재');
   }
 
   return false;
