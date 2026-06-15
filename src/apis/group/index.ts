@@ -28,8 +28,17 @@ export const deleteGroup = async ({ id }: Pick<GroupDetail, 'id'>) => {
   await clientFetcher.delete(`/groups/${id}`);
 };
 
-export const postGroup = async ({ image, name }: Pick<GroupDetail, 'image' | 'name'>) => {
-  const { data } = await clientFetcher.post<GroupDetail>(`/groups`, { image, name });
+export const postGroup = async ({
+  image,
+  name,
+}: Pick<GroupDetail, 'name'> & { image?: GroupDetail['image'] }) => {
+  const body: { name: string; image?: string } = { name };
+
+  if (image) {
+    body.image = image;
+  }
+
+  const { data } = await clientFetcher.post<GroupDetail>(`/groups`, body);
   return data;
 };
 
