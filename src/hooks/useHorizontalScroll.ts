@@ -62,6 +62,7 @@ export default function useHorizontalScroll<T extends HTMLElement>() {
     const scrollElement = scrollRef.current;
 
     if (
+      event.pointerType !== 'mouse' ||
       event.button !== 0 ||
       !scrollElement ||
       scrollElement.scrollWidth <= scrollElement.clientWidth

@@ -1,31 +1,32 @@
-export interface ArticleCommentWriter {
-  id: number;
+export type ArticleCommentWriter = {
+  id: string;
   nickname: string;
   image: string;
-}
+};
 
-export interface ArticleComment {
-  id: number;
+export type ArticleComment = {
+  id: string;
   content: string;
   createdAt: string;
   updatedAt: string;
   writer: ArticleCommentWriter;
-}
+};
 
 // 클라이언트에서 서버
 
-export interface ArticleIdParams {
-  articleId: number;
-}
+export type ArticleIdParams = {
+  articleId: string;
+};
 
-export interface CommentIdParams {
-  commentId: number;
-}
+export type CommentIdParams = {
+  commentId: string;
+};
 
-export interface GetArticleCommentsParams extends ArticleIdParams {
+export type GetArticleCommentsParams = ArticleIdParams & {
+  articleId: string;
   limit: number;
   cursor?: number;
-}
+};
 
 export interface ArticleCommentForm {
   content: string;
@@ -35,17 +36,19 @@ export type CreateArticleCommentRequest = ArticleCommentForm;
 
 export type UpdateArticleCommentRequest = ArticleCommentForm;
 
+export type DeleteArticleCommentRequest = void;
+
 // 서버에서 클라이언트
 
-export interface GetArticleCommentsResponse {
+export type GetArticleCommentsResponse = {
   nextCursor: number | null;
   list: ArticleComment[];
-}
+};
 
 export type CreateArticleCommentResponse = ArticleComment;
 
 export type UpdateArticleCommentResponse = ArticleComment;
 
-export interface DeleteArticleCommentResponse {
-  id: number;
-}
+export type DeleteArticleCommentResponse = {
+  id: string;
+};

@@ -4,9 +4,16 @@ import { useState } from 'react';
 
 import { useParams } from 'next/navigation';
 
+import { Controller, useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+
 import Button from '@/components/button/Button';
 import EditableProfileImage from '@/components/editableProfileImage/EditableProfileImage';
 import Input from '@/components/input/Input';
+
+interface EditTeamFormValues {
+  teamName: string;
+}
 
 const EditTeamForm = () => {
   const { teamId } = useParams<{ teamId: string }>();
@@ -14,8 +21,13 @@ const EditTeamForm = () => {
   const [imagePreview, setImagePreview] = useState<string>('/profile.svg');
   const [imageFile, setImageFile] = useState<File | null>(null);
 
-  const [teamName, setTeamName] = useState<string>('경영관리');
-  const [teamNameError, setTeamNameError] = useState<string | null>(null);
+  const { control, handleSubmit, setError } = useForm<EditTeamFormValues>({
+    defaultValues: {
+      teamName: '경영관리',
+    },
+
+    mode: 'onBlur',
+  });
 
   const handleImageChange = (file: File) => {
     setImageFile(file);
@@ -29,43 +41,29 @@ const EditTeamForm = () => {
     });
   };
 
-  const handleTeamNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTeamName(e.target.value);
-    if (teamNameError) {
-      setTeamNameError(null);
-    }
-  };
-
-  const handleTeamNameBlur = () => {
-    if (!teamName.trim()) {
-      setTeamNameError('팀 이름을 입력해주세요.');
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!teamName.trim()) {
-      setTeamNameError('팀 이름을 입력해주세요.');
-      return;
-    }
-
-    if (teamName.trim() === '이미존재하는다른팀이름') {
-      setTeamNameError('이미 존재하는 이름입니다.');
+  const onSubmit = async (data: EditTeamFormValues) => {
+    if (data.teamName.trim() === '이미존재하는다른팀이름') {
+      toast.error('이미 존재하는 팀 이름입니다. 다른 이름을 입력해주세요.');
+      setError('teamName', {
+        type: 'validate',
+        message: '이미 존재하는 이름입니다.',
+      });
       return;
     }
 
     const requestBody = {
-      name: teamName,
+      name: data.teamName,
       image: imagePreview,
     };
 
     console.log(`PATCH 요청 보낼 주소: /${teamId}/groups/{id}`);
     console.log('서버로 보낼 데이터(Body):', requestBody);
+
+    toast.success('팀 정보가 성공적으로 수정되었습니다! 🎉');
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-8 md:gap-10">
         <span className="text-text-primary text-xl font-bold md:text-2xl">팀 수정하기</span>
 
@@ -79,15 +77,25 @@ const EditTeamForm = () => {
           </div>
           <div className="flex flex-col gap-2 md:gap-3">
             <label className="text-md text-text-primary font-medium">팀 이름</label>
-            <Input
-              type="text"
-              size="sm"
-              value={teamName}
-              placeholder="팀 이름을 입력해주세요."
-              onChange={handleTeamNameChange}
-              isError={Boolean(teamNameError)}
-              errorMessage={teamNameError ?? undefined}
-              onBlur={handleTeamNameBlur}
+            <Controller
+              name="teamName"
+              control={control}
+              rules={{
+                required: '팀 이름을 입력해주세요.',
+                validate: (value) => value.trim() !== '' || '팀 이름을 입력해주세요.',
+              }}
+              render={({ field, fieldState: { error } }) => (
+                <Input
+                  type="text"
+                  size="sm"
+                  placeholder="팀 이름을 입력해주세요."
+                  value={field.value}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  isError={Boolean(error)}
+                  errorMessage={error?.message}
+                />
+              )}
             />
           </div>
         </div>

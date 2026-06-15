@@ -1,37 +1,45 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 
 import Button from '@/components/button/Button';
 import Input from '@/components/input/Input';
 
-interface JoinTeamFormProps {
+interface EditTeamFormProps {
   onSuccess?: () => void;
 }
 
-interface JoinTeamFormData {
-  teamLink: string;
-}
+const EditTeamForm = ({ onSuccess }: EditTeamFormProps) => {
+  const [teamLink, setTeamLink] = useState<string>('');
+  const [teamLinkError, setTeamLinkError] = useState<string | null>(null);
 
-const JoinTeamForm = ({ onSuccess }: JoinTeamFormProps) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<JoinTeamFormData>({
-    defaultValues: {
-      teamLink: '',
-    },
-    mode: 'onBlur',
-  });
+  const handleLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTeamLink(e.target.value);
+    if (teamLinkError) {
+      setTeamLinkError(null);
+    }
+  };
 
-  const onSubmit = (data: JoinTeamFormData) => {
-    console.log('서버로 보낼 팀 참여 링크:', { link: data.teamLink });
+  const handleLinkBlur = () => {
+    if (!teamLink.trim()) {
+      setTeamLinkError('팀 링크를 입력해주세요.');
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!teamLink.trim()) {
+      setTeamLinkError('팀 링크를 입력해주세요.');
+      return;
+    }
+
+    console.log('서버로 보낼 팀 참여 링크:', { link: teamLink });
     if (onSuccess) onSuccess();
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-[400px] md:max-w-[460px]">
+    <form onSubmit={handleSubmit} className="w-full max-w-[400px] md:max-w-[460px]">
       <div className="flex flex-col gap-8 md:gap-10">
         <h1 className="text-text-primary text-xl font-bold md:text-2xl">팀 참여하기</h1>
 
@@ -44,13 +52,12 @@ const JoinTeamForm = ({ onSuccess }: JoinTeamFormProps) => {
               id="teamLink"
               type="text"
               size="sm"
+              value={teamLink}
               placeholder="팀 링크를 입력해주세요."
-              isError={Boolean(errors.teamLink)}
-              errorMessage={errors.teamLink?.message}
-              {...register('teamLink', {
-                required: '팀 링크를 입력해주세요.',
-                validate: (value) => value.trim() !== '' || '팀 링크를 입력해주세요.',
-              })}
+              onChange={handleLinkChange}
+              isError={Boolean(teamLinkError)}
+              errorMessage={teamLinkError ?? undefined}
+              onBlur={handleLinkBlur}
             />
           </div>
         </div>
@@ -72,4 +79,4 @@ const JoinTeamForm = ({ onSuccess }: JoinTeamFormProps) => {
   );
 };
 
-export default JoinTeamForm;
+export default EditTeamForm;
