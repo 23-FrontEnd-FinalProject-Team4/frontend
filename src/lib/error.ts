@@ -15,3 +15,13 @@ export const getErrorMessage = (error: unknown, fallbackMessage: string) => {
 
   return fallbackMessage;
 };
+
+export const isDuplicateNameError = (error: unknown) => {
+  if (!axios.isAxiosError<ErrorResponse>(error)) {
+    return false;
+  }
+
+  const message = error.response?.data?.message ?? '';
+
+  return error.response?.status === 409 || message.includes('이미 존재');
+};
