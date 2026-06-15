@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import type { GroupDetail } from '@/apis/group/type';
-import { createTeamAction } from '@/app/(team)/addteam/_actions/creatTeam.action';
+import { createTeamAction } from '@/app/(team)/addteam/_actions/createTeam.action';
 
 interface CreateTeamVariables {
   name: string;
