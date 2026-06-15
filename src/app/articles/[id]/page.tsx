@@ -30,7 +30,11 @@ const ArticleDetailPage = async ({ params }: { params: Promise<{ id: string }> }
             createdAt={formattedDate}
           />
           <ArticleContent content={article.content} image={article.image} />
-          <LikeButton isLiked={article.isLiked} likeCount={article.likeCount} />
+          <LikeButton
+            articleId={`${article.id}`}
+            initialIsLiked={article.isLiked}
+            initialLikeCount={article.likeCount}
+          />
           <CommentSection articleId={`${article.id}`} comments={comments.list} />
         </div>
       </main>
