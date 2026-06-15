@@ -31,6 +31,8 @@ const BestSection = ({ articles, currentPage, totalPages, onPageChange }: BestSe
         <div className="absolute right-0 -bottom-3 flex flex-row items-center gap-1">
           <button
             type="button"
+            disabled={currentPage === 1}
+            onClick={() => onPageChange(currentPage - 1)}
             className={cn(
               'border-border-primary bg-background-primary hover:bg-background-tertiary hover:text-text-primary flex h-8 w-8 items-center justify-center gap-1 rounded-full border',
             )}
@@ -39,6 +41,8 @@ const BestSection = ({ articles, currentPage, totalPages, onPageChange }: BestSe
           </button>
           <button
             type="button"
+            disabled={currentPage === totalPages}
+            onClick={() => onPageChange(currentPage + 1)}
             className={cn(
               'border-border-primary bg-background-primary hover:bg-background-tertiary hover:text-text-primary flex h-8 w-8 items-center justify-center gap-1 rounded-full border',
             )}
