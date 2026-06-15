@@ -3,7 +3,6 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { getMyGroups } from '@/apis/user';
-
 import Sidebar from '@/components/sideBar/SideBar';
 import type { Group } from '@/components/sideBar/type';
 
@@ -29,6 +28,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       id: group.id,
       name: group.name,
       route: `/${group.id}`,
+      image: group.image,
     })) ?? FALLBACK_SIDEBAR_GROUPS;
 
   return (
