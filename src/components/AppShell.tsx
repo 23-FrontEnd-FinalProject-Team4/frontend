@@ -1,11 +1,16 @@
 'use client';
 
+import dynamic from 'next/dynamic';
+import { usePathname } from 'next/navigation';
+
 import { useQuery } from '@tanstack/react-query';
 
 import { getMyGroups } from '@/apis/user';
-
-import Sidebar from '@/components/sideBar/SideBar';
 import type { Group } from '@/components/sideBar/type';
+
+const Sidebar = dynamic(() => import('@/components/sideBar/SideBar'), {
+  ssr: false,
+});
 
 const FALLBACK_SIDEBAR_GROUPS: Group[] = [
   { id: 1, name: '경영관리팀', route: '/management' },
@@ -18,10 +23,16 @@ const SIDEBAR_QUERY_KEY = {
   myGroups: ['sidebar', 'my-groups'] as const,
 };
 
+const PUBLIC_PAGE_PATHS = new Set(['/', '/login', '/signup', '/reset-password']);
+
 export default function AppShell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const isPublicPage = PUBLIC_PAGE_PATHS.has(pathname);
+
   const { data: myGroups } = useQuery({
     queryKey: SIDEBAR_QUERY_KEY.myGroups,
     queryFn: getMyGroups,
+    enabled: !isPublicPage,
   });
 
   const sidebarGroups =
@@ -30,6 +41,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       name: group.name,
       route: `/${group.id}`,
     })) ?? FALLBACK_SIDEBAR_GROUPS;
+
+  if (isPublicPage) {
+    return <>{children}</>;
+  }
 
   return (
     <div className="bg-background-secondary flex min-h-screen">
