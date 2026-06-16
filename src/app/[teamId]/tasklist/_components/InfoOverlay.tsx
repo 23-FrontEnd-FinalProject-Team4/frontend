@@ -13,19 +13,20 @@ import Profile from '@/components/profile/Profile';
 import Reply from '@/components/reply/Reply';
 import { FREQUENCY_TEXT } from '@/constants/listItem';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
+import { useGetTaskComments } from '@/queries/taskList/comment/queries';
 
-import { MOCK_COMMENTS } from '../_constants/mockData';
 import CommentForm from './CommentForm';
 
 interface InfoOverlayProps {
   task: Task;
   isOpen: boolean;
   onClose: () => void;
+  onToggle: (task: Task) => Promise<void>;
 }
 
-const InfoOverlay = ({ task, isOpen, onClose }: InfoOverlayProps) => {
-  // TODO: API를 통해 Comment 받아오기
-  const comments = MOCK_COMMENTS;
+const InfoOverlay = ({ task, isOpen, onClose, onToggle }: InfoOverlayProps) => {
+  const { data: comments, isPending } = useGetTaskComments({ taskId: task.id });
+
   const writerName = task.writer?.nickname ?? '알 수 없음';
   const writerImage = task.writer?.image ?? null;
 
@@ -38,7 +39,7 @@ const InfoOverlay = ({ task, isOpen, onClose }: InfoOverlayProps) => {
   // TODO: 기능 추가 예정
   const handleMenuClick = () => {};
 
-  if (!isOpen) return null;
+  if (!isOpen || isPending) return null;
   return (
     <div
       className="fixed inset-0 top-16 z-200 overflow-y-auto bg-white px-4 py-3 shadow-xl md:top-0 md:left-1/2 md:px-7 md:py-10 xl:px-10"
@@ -102,8 +103,7 @@ const InfoOverlay = ({ task, isOpen, onClose }: InfoOverlayProps) => {
             <Button
               icon={<CheckIcon className={isDone ? '' : '[&_path]:stroke-white'} />}
               variant={isDone ? 'secondary-whiteFilled' : 'secondary-filled'}
-              // TODO: 기능 연결 시 해당 부분 작성
-              onClick={() => {}}
+              onClick={() => onToggle(task)}
             >
               {isDone ? '완료 취소하기' : '완료하기'}
             </Button>
@@ -118,7 +118,7 @@ const InfoOverlay = ({ task, isOpen, onClose }: InfoOverlayProps) => {
       <div>
         <div className="mb-4 flex gap-1">
           <span className="text-text-primary text-lg font-bold">댓글</span>
-          <span className="text-brand-primary text-lg font-bold">{comments.length}</span>
+          <span className="text-brand-primary text-lg font-bold">{comments?.length ?? 0}</span>
         </div>
 
         {/* Comment Input */}
@@ -126,17 +126,18 @@ const InfoOverlay = ({ task, isOpen, onClose }: InfoOverlayProps) => {
 
         {/* Comment List */}
         <div className="divide-border-primary divide-y divide-solid">
-          {comments.map((comment) => (
-            <Reply
-              key={comment.id}
-              author={comment.user.nickname}
-              avatar={<Profile src={comment.user.image} alt={comment.user.nickname} />}
-              date={comment.createdAt}
-              onMenuClick={handleMenuClick}
-            >
-              {comment.content}
-            </Reply>
-          ))}
+          {comments &&
+            comments.map((comment) => (
+              <Reply
+                key={comment.id}
+                author={comment.user.nickname}
+                avatar={<Profile src={comment.user.image} alt={comment.user.nickname} />}
+                date={comment.createdAt}
+                onMenuClick={handleMenuClick}
+              >
+                {comment.content}
+              </Reply>
+            ))}
         </div>
       </div>
     </div>

@@ -15,11 +15,13 @@ const CommentForm = ({ writer }: CommentFormProps) => {
   const writerName = writer?.nickname ?? '알 수 없음';
   const writerImage = writer?.image ?? null;
 
+  const handleSubmit = () => {};
+
   return (
     <form className="flex items-center gap-3" onSubmit={(event) => event.preventDefault()}>
       <Profile src={writerImage} alt={writerName} />
       {/* TODO: 기능 구현 시 onSubmit 구현 */}
-      <InputReply value={comment} onChange={setComment} onSubmit={() => {}} size="lg" />
+      <InputReply value={comment} onChange={setComment} onSubmit={handleSubmit} size="lg" />
     </form>
   );
 };

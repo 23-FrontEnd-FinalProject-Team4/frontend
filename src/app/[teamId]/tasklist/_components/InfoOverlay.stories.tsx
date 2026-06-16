@@ -18,5 +18,6 @@ export const Default: Story = {
     task: MOCK_TASKLISTS[0].tasks[0],
     isOpen: true,
     onClose: fn(),
+    onToggle: fn(),
   },
 };
