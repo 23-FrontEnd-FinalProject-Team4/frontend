@@ -10,8 +10,8 @@ import toast from 'react-hot-toast';
 import Button from '@/components/button/Button';
 import EditableProfileImage from '@/components/editableProfileImage/EditableProfileImage';
 import Input from '@/components/input/Input';
-import { getErrorMessage, isDuplicateNameError } from '@/lib/error';
-import { useCreateTeamMutation } from '@/queries/teams/queries';
+import { getErrorMessage } from '@/lib/error';
+import { CreateTeamMutationError, useCreateTeamMutation } from '@/queries/teams/queries';
 import { useAddTeamStore } from '@/stores/addTeamStore';
 
 interface AddTeamFormValues {
@@ -49,7 +49,7 @@ const AddTeamForm = () => {
       toast.success('새로운 팀이 성공적으로 생성되었습니다!');
       router.push(`/${createdGroup.id}`);
     } catch (error) {
-      if (isDuplicateNameError(error)) {
+      if (error instanceof CreateTeamMutationError && error.isDuplicateName) {
         setError('teamName', {
           type: 'validate',
           message: '이미 존재하는 이름입니다.',
