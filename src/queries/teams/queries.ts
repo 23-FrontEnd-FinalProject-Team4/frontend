@@ -5,6 +5,7 @@ import { postGroup } from '@/apis/group/index';
 import type { GroupDetail } from '@/apis/group/type';
 import { uploadImage } from '@/apis/image';
 import { joinTeamAction } from '@/app/(team)/jointeam/_actions/join-team.action';
+import { JoinTeamError } from '@/app/(team)/jointeam/join-team.error';
 
 interface CreateTeamVariables {
   name: string;
@@ -35,7 +36,7 @@ const joinTeam = async ({ teamLink }: JoinTeamVariables) => {
   const result = await joinTeamAction({ teamLink });
 
   if (!result.success) {
-    throw new Error(result.error);
+    throw new JoinTeamError(result.error, result.code);
   }
 
   return result.data;
@@ -57,7 +58,7 @@ export const useCreateTeamMutation = () => {
 export const useJoinTeamMutation = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<{ groupId: number }, Error, JoinTeamVariables>({
+  return useMutation<{ groupId: number }, JoinTeamError, JoinTeamVariables>({
     mutationFn: joinTeam,
     retry: false,
     onSuccess: () => {

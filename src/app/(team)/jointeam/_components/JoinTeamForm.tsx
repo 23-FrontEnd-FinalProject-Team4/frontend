@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
+import { JOIN_TEAM_ERROR_CODE, JoinTeamError } from '@/app/(team)/jointeam/join-team.error';
 import Button from '@/components/button/Button';
 import Input from '@/components/input/Input';
 import { getErrorMessage } from '@/lib/error';
@@ -46,17 +47,19 @@ const JoinTeamForm = ({ onSuccess }: JoinTeamFormProps) => {
       onSuccess?.();
       router.push(`/${groupId}`);
     } catch (error) {
-      const message = getErrorMessage(error, '팀 참여 중 오류가 발생했어요.');
-
-      if (message.includes('올바른 팀 링크')) {
+      if (
+        error instanceof JoinTeamError &&
+        (error.code === JOIN_TEAM_ERROR_CODE.INVALID_LINK ||
+          error.code === JOIN_TEAM_ERROR_CODE.VALIDATION)
+      ) {
         setError('teamLink', {
           type: 'validate',
-          message,
+          message: error.message,
         });
         return;
       }
 
-      toast.error(message);
+      toast.error(getErrorMessage(error, '팀 참여 중 오류가 발생했어요.'));
     }
   };
 
