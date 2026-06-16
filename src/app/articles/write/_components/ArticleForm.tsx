@@ -1,5 +1,5 @@
 'use client';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import Image from 'next/image';
 
@@ -8,6 +8,7 @@ import { FieldErrors, UseFormRegister } from 'react-hook-form';
 import { ArticleFormData } from '@/app/articles/write/_components/schema';
 import UploadIcon from '@/assets/icons/img.svg';
 import Button from '@/components/button/Button';
+import InputBox from '@/components/inputBox/InputBox';
 
 type ArticleFormProps = {
   id?: string;
@@ -17,7 +18,7 @@ type ArticleFormProps = {
   onImageChange: (file: File | string | null) => void;
   submitText: string;
   onSubmit: () => void;
-  isloading: boolean;
+  isLoading: boolean;
 };
 
 const ArticleForm = ({
@@ -28,12 +29,10 @@ const ArticleForm = ({
   onImageChange,
   submitText,
   onSubmit,
-  isloading,
+  isLoading,
 }: ArticleFormProps) => {
   const previewUrl = useMemo(() => {
-    if (!image) {
-      return '';
-    }
+    if (!image) return '';
 
     if (typeof image === 'string') {
       return image;
@@ -42,10 +41,18 @@ const ArticleForm = ({
     return URL.createObjectURL(image);
   }, [image]);
 
+  useEffect(() => {
+    if (!image || typeof image === 'string') return;
+
+    return () => {
+      URL.revokeObjectURL(previewUrl);
+    };
+  }, [image, previewUrl]);
+
   return (
     <form onSubmit={onSubmit}>
       {id && <input type="hidden" name="id" value={id} />}
-      <div className="mb-8 flex">
+      <div className="mb-8 flex w-full">
         <label className="flex w-full flex-col items-start gap-2">
           <div className="flex items-center gap-1">
             <span className="text-md font-bold md:text-lg">제목</span>
@@ -53,9 +60,10 @@ const ArticleForm = ({
           </div>
 
           <input
+            type="text"
             {...register('title')}
             placeholder="제목을 입력해주세요."
-            className="border-border-primary w-full rounded-xl border p-4"
+            className="border-border-primary bg-background-primary text-text-primary placeholder:text-text-default hover:border-interaction-hover focus:border-interaction-pressed h-12 w-full rounded-xl border px-4 py-4 text-base transition-colors outline-none"
           />
 
           {errors.title && <p className="text-point-rose">{errors.title.message}</p>}
@@ -69,8 +77,9 @@ const ArticleForm = ({
             <span className="text-point-rose">*</span>
           </div>
 
-          <textarea
+          <InputBox
             {...register('content')}
+            size="lg"
             placeholder="내용을 입력해주세요."
             className="border-border-primary min-h-[300px] w-full rounded-xl border p-4"
           />
@@ -83,7 +92,7 @@ const ArticleForm = ({
         <span className="text-md font-bold md:text-lg">이미지</span>
 
         {previewUrl ? (
-          <div className="relative h-24 w-24 overflow-hidden rounded-xl border">
+          <div className="border-border-primary relative h-24 w-24 overflow-hidden rounded-xl border">
             <Image
               src={previewUrl}
               alt="미리보기"
@@ -122,8 +131,8 @@ const ArticleForm = ({
         )}
       </div>
 
-      <Button variant="primary-filled" className="w-full" type="submit" disabled={isloading}>
-        {isloading ? '저장 중...' : submitText}
+      <Button variant="primary-filled" className="w-full" type="submit" disabled={isLoading}>
+        {isLoading ? '저장 중...' : submitText}
       </Button>
     </form>
   );
