@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from 'react';
 
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { useQuery } from '@tanstack/react-query';
 
 import { getArticles } from '@/apis/article';
+import { Article } from '@/apis/article/type';
 import BestSection from '@/app/articles/_components/BestSection';
 import ListSection from '@/app/articles/_components/ListSection';
 import SearchInput from '@/app/articles/_components/SearchInput';
@@ -18,10 +19,28 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { cn } from '@/utils/cn';
 
 const ArticlesPage = () => {
-  const [page, setPage] = useState(1);
   const [bestPage, setBestPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(3);
   const [searchValue, setSearchValue] = useState('');
+
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const sortType = searchParams.get('orderBy') === 'like' ? 'like' : 'recent';
+
+  const pageParam = Number(searchParams.get('page'));
+
+  const page = Number.isInteger(pageParam) && pageParam > 0 ? pageParam : 1;
+
+  const onSortChange = (value: 'recent' | 'like') => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    params.set('orderBy', value);
+    params.set('page', '1');
+
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
   const debouncedKeyword = useDebounce(searchValue, 500);
   const router = useRouter();
   useEffect(() => {
@@ -40,13 +59,14 @@ const ArticlesPage = () => {
 
     return () => window.removeEventListener('resize', updateItemsPerPage);
   }, []);
+
   const { data } = useQuery({
-    queryKey: ['articles', page, debouncedKeyword],
+    queryKey: ['articles', page, debouncedKeyword, sortType],
     queryFn: () =>
       getArticles({
         page,
         pageSize: 10,
-        orderBy: 'recent',
+        orderBy: sortType,
         keyword: debouncedKeyword || undefined,
       }),
   });
@@ -62,18 +82,16 @@ const ArticlesPage = () => {
   });
 
   const articleCards =
-    data?.list.map((article) => ({
+    data?.list.map((article: Article) => ({
       ...article,
       writer: article.writer.nickname,
-      isLiked: false,
       id: `${article.id}`,
     })) ?? [];
 
   const bestArticleCards =
-    bestData?.list.map((article) => ({
+    bestData?.list.map((article: Article) => ({
       ...article,
       writer: article.writer.nickname,
-      isLiked: false,
       id: `${article.id}`,
     })) ?? [];
 
@@ -85,6 +103,15 @@ const ArticlesPage = () => {
   const bestTotalPages = Math.max(1, Math.ceil(bestArticleCards.length / itemsPerPage));
 
   const totalPages = Math.max(1, Math.ceil((data?.totalCount ?? 0) / 10));
+  const PAGE_WINDOW = 5;
+
+  const startPage = Math.max(1, page - Math.floor(PAGE_WINDOW / 2));
+  const endPage = Math.min(totalPages, startPage + PAGE_WINDOW - 1);
+
+  const visiblePages = Array.from(
+    { length: endPage - startPage + 1 },
+    (_, index) => startPage + index,
+  );
 
   return (
     <div className="bg-background-primary mx-auto flex min-h-screen p-0 md:p-22">
@@ -95,7 +122,9 @@ const ArticlesPage = () => {
             value={searchValue}
             onChange={(e) => {
               setSearchValue(e.target.value);
-              setPage(1);
+              const params = new URLSearchParams(searchParams.toString());
+              params.set('page', '1');
+              router.replace(`${pathname}?${params.toString()}`);
             }}
             placeholder="검색어를 입력해주세요."
             aria-label="검색"
@@ -112,7 +141,7 @@ const ArticlesPage = () => {
             '{searchValue}'에 해당하는 결과가 없습니다.
           </div>
         ) : (
-          <ListSection articles={articleCards} />
+          <ListSection articles={articleCards} onSortChange={onSortChange} sortType={sortType} />
         )}
         <div className="mt-8 flex justify-center gap-2">
           <button
@@ -121,14 +150,17 @@ const ArticlesPage = () => {
               'hover:bg-background-tertiary hover:text-text-primary text-md disabled:text-text-disabled flex items-center justify-center gap-1 rounded-md px-2 py-1 font-medium',
             )}
             disabled={page === 1}
-            onClick={() => setPage((prev) => prev - 1)}
+            onClick={() => {
+              const nextPage = page - 1;
+              const params = new URLSearchParams(searchParams.toString());
+              params.set('page', String(nextPage));
+              router.push(`${pathname}?${params.toString()}`);
+            }}
           >
             <ArrowLeftIcon className="size-4" />
           </button>
 
-          {Array.from({ length: totalPages }, (_, index) => {
-            const pageNumber = index + 1;
-
+          {visiblePages.map((pageNumber) => {
             return (
               <button
                 type="button"
@@ -139,7 +171,11 @@ const ArticlesPage = () => {
                     ? 'bg-brand-primary text-text-inverse'
                     : 'hover:bg-background-tertiary hover:text-text-primary',
                 )}
-                onClick={() => setPage(pageNumber)}
+                onClick={() => {
+                  const params = new URLSearchParams(searchParams.toString());
+                  params.set('page', String(pageNumber));
+                  router.push(`${pathname}?${params.toString()}`);
+                }}
               >
                 {pageNumber}
               </button>
@@ -152,7 +188,12 @@ const ArticlesPage = () => {
               'hover:bg-background-tertiary hover:text-text-primary text-md disabled:text-text-disabled font-mediu flex items-center justify-center gap-1 rounded-md px-2 py-1',
             )}
             disabled={page === totalPages}
-            onClick={() => setPage((prev) => prev + 1)}
+            onClick={() => {
+              const nextPage = page + 1;
+              const params = new URLSearchParams(searchParams.toString());
+              params.set('page', String(nextPage));
+              router.push(`${pathname}?${params.toString()}`);
+            }}
           >
             <ArrowRightIcon className="size-4" />
           </button>

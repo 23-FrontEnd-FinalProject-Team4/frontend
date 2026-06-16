@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useWatch } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
 
 import { ArticleFormData, articleSchema } from '@/app/articles/write/_components/schema';
 import {
@@ -36,11 +37,14 @@ export default function EditorClient({ mode, defaultValues }: UseArticleEditorPr
   const { handleFormSubmit } = useArticleEditor({ mode, defaultValues });
 
   const handleSubmit = async (values: ArticleFormData) => {
-    const result = await handleFormSubmit(values);
-
-    if (!result) return;
-
-    router.push(`/articles/${result.id}`);
+    try {
+      const result = await handleFormSubmit(values);
+      if (!result) return;
+      router.push(`/articles/${result.id}`);
+    } catch (error) {
+      console.error(error);
+      toast.error('게시글 저장에 실패했습니다.');
+    }
   };
 
   const image = useWatch({ control, name: ARTICLE_FORM_FIELDS.IMAGE });

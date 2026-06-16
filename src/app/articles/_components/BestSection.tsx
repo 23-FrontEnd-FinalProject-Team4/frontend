@@ -3,11 +3,11 @@ import ArrowRightIcon from '@/assets/icons/arrow_right.svg?react';
 import { cn } from '@/utils/cn';
 
 import ArticleCard from './Card';
-import type { ArticleWithLike } from './Card.type';
+import type { Article } from './Card.type';
 import PageIndicator from './PageIndicator';
 
 type BestSectionProps = {
-  articles: ArticleWithLike[];
+  articles: Article[];
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
