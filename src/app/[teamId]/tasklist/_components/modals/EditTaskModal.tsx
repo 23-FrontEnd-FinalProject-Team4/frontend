@@ -26,14 +26,15 @@ interface EditTaskModalProps {
 const EditTaskModal = ({ isOpen, onClose, task, groupId, taskListId }: EditTaskModalProps) => {
   const submitButtonRef = useRef<HTMLButtonElement>(null);
 
-  const hour = (Number(task.date?.slice(11, 13)) + 9) % 24;
-  const minute = Number(task.date?.slice(14, 16));
+  const localDate = task.date ? new Date(task.date) : new Date();
+  const hour = localDate.getHours();
+  const minute = localDate.getMinutes();
 
   const methods = useForm<TaskFormValues>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
       name: task.name,
-      date: new Date(task.date ?? ''),
+      date: localDate,
       time: { hour, minute },
       frequency: task.frequency,
       description: task.description ?? '',

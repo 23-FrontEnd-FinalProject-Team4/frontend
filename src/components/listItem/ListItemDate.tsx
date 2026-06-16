@@ -13,7 +13,7 @@ const ListItemDate = ({ date, frequency }: ListItemDateProps) => {
         <span className="flex h-4 w-4 shrink-0 items-center justify-center">
           <CalendarIcon width={16} height={16} />
         </span>
-        <span>{formatYearMonthDay(new Date(date ?? ''))}</span>
+        <span>{date ? formatYearMonthDay(new Date(date)) : ''}</span>
       </div>
 
       {/* Recurring */}

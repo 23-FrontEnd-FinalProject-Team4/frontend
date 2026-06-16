@@ -14,7 +14,7 @@ interface DeleteTaskModalProps {
 
 const DeleteTaskModal = ({ isOpen, onClose, task, groupId, taskListId }: DeleteTaskModalProps) => {
   const router = useRouter();
-  const { mutate } = useDeleteTask({
+  const { mutate, isPending } = useDeleteTask({
     onSuccess: () => {
       onClose();
       router.refresh();
@@ -33,6 +33,7 @@ const DeleteTaskModal = ({ isOpen, onClose, task, groupId, taskListId }: DeleteT
         onClick: () => {
           mutate({ groupId, taskListId, taskId: task.id });
         },
+        disabled: isPending,
       }}
       secondaryAction={{
         label: '닫기',

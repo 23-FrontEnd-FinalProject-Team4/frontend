@@ -19,7 +19,7 @@ const DeleteTaskListModal = ({
   taskListName,
 }: DeleteTaskListModalProps) => {
   const router = useRouter();
-  const { mutate } = useDeleteTaskList({
+  const { mutate, isPending } = useDeleteTaskList({
     onSuccess: () => {
       onClose();
       router.refresh();
@@ -38,6 +38,7 @@ const DeleteTaskListModal = ({
         onClick: () => {
           mutate({ groupId, id: String(taskListId) });
         },
+        disabled: isPending,
       }}
       secondaryAction={{
         label: '닫기',

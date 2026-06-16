@@ -56,6 +56,8 @@ const TaskListSet = ({ taskLists, selectedTaskListId, groupId }: TaskListSetProp
 
     if (!dropdownSelectedTaskList) return;
 
+    setDropdownOpenedId(null);
+
     if (value === 'EDIT') {
       overlay.open(({ isOpen, close }) => (
         <EditTaskListModal

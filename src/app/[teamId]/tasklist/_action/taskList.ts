@@ -23,7 +23,7 @@ export const deleteTaskListAction = async ({ groupId, id: taskListId }: DeleteTa
 };
 
 export const updateTaskListNameAction = async ({ groupId, id, body }: UpdateTaskListNameParams) => {
-  return (await serverFetcher)<ResponseUpdateTaskListName>(`/groups/${groupId}/task-lists/${id}`, {
+  return await serverFetcher<ResponseUpdateTaskListName>(`/groups/${groupId}/task-lists/${id}`, {
     method: 'PATCH',
     body: JSON.stringify(body),
   });
