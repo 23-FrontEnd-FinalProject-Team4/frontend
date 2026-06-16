@@ -11,6 +11,7 @@ import Button from '@/components/button/Button';
 import Dropdown from '@/components/dropdown/Dropdown';
 import Profile from '@/components/profile/Profile';
 import Reply from '@/components/reply/Reply';
+import ReplyEdit from '@/components/reply/ReplyEdit';
 import { FREQUENCY_TEXT, OPTIONS } from '@/constants/listItem';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import {
@@ -37,15 +38,18 @@ const InfoOverlay = ({ taskId, isOpen, onClose, taskListId, groupId }: InfoOverl
 
   const { data: comments, isPending } = useGetTaskComments({ taskId });
   const { mutate: editComment } = useUpdateTaskComment();
+  const [updateComment, setUpdateComment] = useState('');
+
   const { mutate: deleteComment } = useDeleteTaskComment();
 
   const overlayRef = useRef<HTMLDivElement>(null);
   useOutsideClick(overlayRef, onClose);
 
   const [selectedCommentId, setSelectedCommentId] = useState<number | null>(null);
+  const [openedCommentId, setOpenedCommentId] = useState<number | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   useOutsideClick(dropdownRef, () => {
-    setSelectedCommentId(null);
+    setOpenedCommentId(null);
   });
 
   if (!task) return null;
@@ -53,14 +57,25 @@ const InfoOverlay = ({ taskId, isOpen, onClose, taskListId, groupId }: InfoOverl
   const isDone = Boolean(task.doneAt);
 
   const handleMenuClick = (id: number) => {
-    setSelectedCommentId(id);
+    setOpenedCommentId(id);
   };
 
   const handleMenuItemSelect = (value: string, commentId: number) => {
     if (value === 'DELETE') {
       deleteComment({ taskId: task!.id, commentId });
+    } else if (value === 'EDIT') {
+      setSelectedCommentId(commentId);
     }
-    setSelectedCommentId(null);
+    setOpenedCommentId(null);
+  };
+
+  const handleUpdateComment = (commentId: number) => {
+    editComment(
+      { taskId, content: updateComment, commentId },
+      {
+        onSuccess: () => setSelectedCommentId(null),
+      },
+    );
   };
 
   const handleToggle = async () => {
@@ -161,15 +176,27 @@ const InfoOverlay = ({ taskId, isOpen, onClose, taskListId, groupId }: InfoOverl
           {comments &&
             comments.map((comment) => (
               <div className="relative" key={comment.id}>
-                <Reply
-                  author={comment.user.nickname}
-                  avatar={<Profile src={comment.user.image} alt={comment.user.nickname} />}
-                  date={formatYearMonthDay(new Date(comment.createdAt))}
-                  onMenuClick={() => handleMenuClick(comment.id)}
-                >
-                  {comment.content}
-                </Reply>
-                {selectedCommentId === comment.id && (
+                {/* TODO: User 감지하여 관리자 및 작성자 본인 댓글일 때만 수정, 삭제 버튼 표시 */}
+                {selectedCommentId === comment.id ? (
+                  <ReplyEdit
+                    author={comment.user.nickname}
+                    avatar={<Profile src={comment.user.image} alt={comment.user.nickname} />}
+                    value={updateComment}
+                    onCancel={() => setSelectedCommentId(null)}
+                    onChange={setUpdateComment}
+                    onSubmit={() => handleUpdateComment(comment.id)}
+                  />
+                ) : (
+                  <Reply
+                    author={comment.user.nickname}
+                    avatar={<Profile src={comment.user.image} alt={comment.user.nickname} />}
+                    date={formatYearMonthDay(new Date(comment.createdAt))}
+                    onMenuClick={() => handleMenuClick(comment.id)}
+                  >
+                    {comment.content}
+                  </Reply>
+                )}
+                {openedCommentId === comment.id && (
                   <div className="absolute top-10 right-30" ref={dropdownRef}>
                     <Dropdown
                       options={OPTIONS}

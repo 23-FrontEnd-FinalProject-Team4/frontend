@@ -49,9 +49,8 @@ export const useUpdateTaskComment = (
     onSuccess: (data, variables, onMutateResult, context) => {
       mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
       queryClient.invalidateQueries({
-        queryKey: taskCommentKeys.detail({
+        queryKey: taskCommentKeys.all({
           taskId: variables.taskId,
-          commentId: variables.commentId,
         }),
       });
     },
