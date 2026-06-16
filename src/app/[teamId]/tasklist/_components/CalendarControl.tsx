@@ -40,7 +40,7 @@ const CalendarControl = ({
   });
 
   return (
-    <div className="relative flex items-center gap-2">
+    <div className="relative flex min-w-fit items-center gap-2">
       <Button
         variant="secondary-filled"
         onClick={handleToday}

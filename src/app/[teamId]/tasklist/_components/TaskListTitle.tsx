@@ -1,7 +1,6 @@
 'use client';
 
 import DateList from '@/components/dateList/DateList';
-
 import { useTaskDate } from '@/hooks/useTaskDate';
 
 import CalendarControl from './CalendarControl';
@@ -23,10 +22,16 @@ const TaskListTitle = ({
 
   return (
     <div className="flex flex-col gap-6 md:gap-8">
-      <div className="relative flex items-center justify-between">
-        <div className="text-text-primary text-2lg font-bold wrap-break-word md:text-xl">
-          {taskName}
-        </div>
+      <div className="relative flex items-center justify-between gap-3 md:gap-10">
+        {taskName ? (
+          <div className="text-text-primary w-full flex-1 text-lg font-bold wrap-break-word md:text-xl">
+            {taskName}
+          </div>
+        ) : (
+          <div className="w-full border-b border-slate-200 text-lg font-bold text-slate-400 md:text-xl">
+            할 일을 입력해주세요..
+          </div>
+        )}
         <CalendarControl
           handleToday={handleToday}
           handlePrev={handlePrevWeek}

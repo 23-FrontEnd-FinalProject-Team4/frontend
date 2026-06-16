@@ -11,7 +11,6 @@ import {
   updateArticle,
 } from '@/apis/article';
 import KebabIcon from '@/assets/icons/kebab.svg';
-
 import Dropdown from '@/components/dropdown/Dropdown';
 import Modal from '@/components/modal/Modal';
 import Profile from '@/components/profile/Profile';
