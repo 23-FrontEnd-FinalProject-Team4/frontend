@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -8,7 +8,15 @@ import { useForm } from 'react-hook-form';
 import FormField from '@/components/formField/FormField';
 import { type PasswordChangeFormValues, passwordChangeSchema } from '@/schemas/auth.schema';
 
-const PasswordChangeForm = () => {
+type PasswordChangeFormProps = {
+  onEditModeChange?: (isEditing: boolean) => void;
+  onPasswordValueChange?: (hasValue: boolean) => void;
+};
+
+const PasswordChangeForm = ({
+  onEditModeChange,
+  onPasswordValueChange,
+}: PasswordChangeFormProps) => {
   const [isPasswordEditing, setIsPasswordEditing] = useState(false);
 
   const passwordChangeForm = useForm<PasswordChangeFormValues>({
@@ -23,11 +31,22 @@ const PasswordChangeForm = () => {
 
   const passwordErrors = passwordChangeForm.formState.errors;
 
+  const password = passwordChangeForm.watch('password');
+  const passwordConfirmation = passwordChangeForm.watch('passwordConfirmation');
+
+  useEffect(() => {
+    onEditModeChange?.(isPasswordEditing);
+  }, [isPasswordEditing, onEditModeChange]);
+
+  useEffect(() => {
+    onPasswordValueChange?.(Boolean(password || passwordConfirmation));
+  }, [password, passwordConfirmation, onPasswordValueChange]);
+
   return (
     <form
       id="settings-password-form"
       onSubmit={passwordChangeForm.handleSubmit(onSubmitPassword)}
-      className="border-border-primary flex flex-col gap-4"
+      className="border-border-primary flex flex-col gap-1"
     >
       <FormField
         id="settings-password"
