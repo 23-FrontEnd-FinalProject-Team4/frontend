@@ -14,6 +14,7 @@ import ArrowLeftIcon from '@/assets/icons/arrow_left.svg';
 import ArrowRightIcon from '@/assets/icons/arrow_right.svg';
 import WriteIcon from '@/assets/icons/pencil.svg';
 import Button from '@/components/button/Button';
+import { useDebounce } from '@/hooks/useDebounce';
 import { cn } from '@/utils/cn';
 
 const ArticlesPage = () => {
@@ -21,6 +22,7 @@ const ArticlesPage = () => {
   const [bestPage, setBestPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(3);
   const [searchValue, setSearchValue] = useState('');
+  const debouncedKeyword = useDebounce(searchValue, 500);
   const router = useRouter();
   useEffect(() => {
     const updateItemsPerPage = () => {
@@ -39,13 +41,13 @@ const ArticlesPage = () => {
     return () => window.removeEventListener('resize', updateItemsPerPage);
   }, []);
   const { data } = useQuery({
-    queryKey: ['articles', page, searchValue],
+    queryKey: ['articles', page, debouncedKeyword],
     queryFn: () =>
       getArticles({
         page,
         pageSize: 10,
         orderBy: 'recent',
-        keyword: searchValue || undefined,
+        keyword: debouncedKeyword || undefined,
       }),
   });
 
@@ -105,7 +107,13 @@ const ArticlesPage = () => {
           totalPages={bestTotalPages}
           onPageChange={(page) => setBestPage(page)}
         />
-        <ListSection articles={articleCards} />
+        {articleCards.length === 0 && searchValue ? (
+          <div className="text-text-default flex min-h-40 items-center justify-center text-center">
+            '{searchValue}'에 해당하는 결과가 없습니다.
+          </div>
+        ) : (
+          <ListSection articles={articleCards} />
+        )}
         <div className="mt-8 flex justify-center gap-2">
           <button
             type="button"
