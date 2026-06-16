@@ -33,7 +33,7 @@ export const LANDING_FEATURES: LandingFeature[] = [
     icon: 'folder',
     title: '칸반보드로 함께\n할 일 목록을 관리해요',
     description:
-      '팀원과 함께 실시간으로 할 일을 추가하고 지금 무엇을 해야 하는지 한눈에 볼 수 있어요',
+      '팀원과 함께 실시간으로 할 일을 추가하고\n지금 무엇을 해야 하는지 한눈에 볼 수 있어요',
     images: {
       alt: '할 일 목록을 칸반보드로 확인하는 화면',
       desktop: LandingBoardLarge,
@@ -48,7 +48,7 @@ export const LANDING_FEATURES: LandingFeature[] = [
   {
     icon: 'check',
     title: '세부적으로 할 일들을\n간편하게 체크해요',
-    description: '일정에 맞춰 해야 할 세부 항목을 정리하고, 하나씩 빠르게 완료해보세요',
+    description: '일정에 맞춰 해야 할 세부 항목을 정리하고,\n 하나씩 빠르게 완료해보세요',
     images: {
       alt: '할 일을 날짜별로 확인하고 체크하는 화면',
       desktop: LandingCheckLarge,
@@ -65,7 +65,7 @@ export const LANDING_FEATURES: LandingFeature[] = [
   {
     icon: 'chat',
     title: '할 일 공유를 넘어\n의견을 나누고 함께 결정해요',
-    description: '댓글로 진행상황을 기록하고 피드백을 주고받으며 함께 결정을 내릴 수 있어요',
+    description: '댓글로 진행상황을 기록하고 피드백을 주고받으며\n 함께 결정을 내릴 수 있어요',
     images: {
       alt: '할 일 상세에서 댓글로 의견을 나누는 화면',
       desktop: LandingCommentLarge,

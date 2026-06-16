@@ -12,7 +12,7 @@ type LandingFeatureSectionProps = LandingFeature;
 function FeatureIcon({ icon }: { icon: LandingFeature['icon'] }) {
   return (
     <span
-      className="mb-5 flex size-12 items-center justify-center overflow-visible"
+      className="mb-5 flex size-12 items-center justify-center overflow-visible transition-transform duration-300 group-hover:scale-110"
       aria-hidden="true"
     >
       {icon === 'folder' && <FolderFillIcon className="size-9 overflow-visible" />}
@@ -58,19 +58,23 @@ export default function LandingFeatureSection({
         }`}
       >
         <div
-          className="relative z-10 max-w-[354px] overflow-visible xl:translate-x-[var(--text-offset-x)]"
+          className="group relative z-10 max-w-[354px] overflow-visible xl:translate-x-[var(--text-offset-x)]"
           style={textStyle}
         >
           <FeatureIcon icon={icon} />
 
           <h2
-            className={`text-3xl leading-tight font-bold whitespace-pre-line ${isBrandTone ? 'text-white' : 'text-brand-primary'}`}
+            className={`text-3xl leading-tight font-bold whitespace-pre-line transition-all duration-300 group-hover:-translate-y-1 ${
+              isBrandTone ? 'text-white' : 'text-brand-primary'
+            }`}
           >
             {title}
           </h2>
 
           <p
-            className={`mt-6 text-base leading-relaxed ${isBrandTone ? 'text-white/80' : 'text-text-default'}`}
+            className={`mt-6 text-base leading-relaxed whitespace-pre-line ${
+              isBrandTone ? 'text-white/80' : 'text-text-default'
+            }`}
           >
             {description}
           </p>

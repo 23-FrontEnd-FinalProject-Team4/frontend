@@ -14,14 +14,16 @@ export default function LandingHero({ startHref }: LandingHeroProps) {
   return (
     <section className="bg-background-tertiary overflow-hidden">
       <div className="relative mx-auto flex min-h-[calc(100svh-4rem)] max-w-screen-2xl flex-col px-9 pt-10 pb-10 md:px-16 xl:px-20">
-        <div className="relative z-10 max-w-sm pt-4 md:pt-12 xl:pt-24">
-          <LogoCoworkersIcon className="mb-4 size-12 md:size-14" aria-hidden="true" />
+        <div className="group relative z-10 max-w-sm pt-4 md:pt-12 xl:pt-24">
+          <div className="transition-transform duration-300 group-hover:scale-105">
+            <LogoCoworkersIcon className="mb-4 size-12 md:size-14" aria-hidden="true" />
+          </div>
 
-          <p className="text-text-disabled text-sm font-medium md:text-lg">
+          <p className="text-text-disabled text-sm font-medium transition-all duration-300 group-hover:-translate-y-0.5 md:text-lg">
             함께 만들어가는 To do list
           </p>
 
-          <h1 className="text-brand-primary text-4xl leading-tight font-bold md:text-5xl">
+          <h1 className="text-brand-primary text-4xl leading-tight font-bold transition-all duration-300 group-hover:-translate-y-1 md:text-5xl">
             Coworkers
           </h1>
         </div>
