@@ -10,12 +10,11 @@ import {
   updateArticleComment,
 } from '@/apis/articleComment';
 import type { ArticleComment } from '@/apis/articleComment/type';
-import { formatDate } from '@/utils/formatDate';
-
 import Dropdown from '@/components/dropdown/Dropdown';
 import InputReply from '@/components/inputReply/InputReply';
 import Modal from '@/components/modal/Modal';
 import Reply from '@/components/reply/Reply';
+import { formatDate } from '@/utils/formatDate';
 
 const CommentSection = ({
   articleId,
@@ -89,7 +88,7 @@ const CommentSection = ({
         댓글
         <span className="text-brand-primary">{comments?.length || 0}</span>
       </div>
-      <InputReply value={replyValue} onChange={setReplyValue} onSubmit={handleSubmit} />
+      <InputReply size="lg" value={replyValue} onChange={setReplyValue} onSubmit={handleSubmit} />
       <div className="divide-border-primary divide-y">
         {hasComments ? (
           comments.map((comment: ArticleComment) => (
@@ -139,7 +138,7 @@ const CommentSection = ({
             </div>
           ))
         ) : (
-          <div className="text-text-disabled py-4 text-center text-sm">
+          <div className="text-text-disabled text-md py-4 text-center">
             아직 작성된 댓글이 없습니다.
           </div>
         )}
