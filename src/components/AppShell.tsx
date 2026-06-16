@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 
-import { getMyGroups } from '@/apis/user';
+import { getMyGroupsAction } from '@/app/_actions/sidebar.action';
 import Sidebar from '@/components/sideBar/SideBar';
 import type { Group } from '@/components/sideBar/type';
 
@@ -20,7 +20,15 @@ const SIDEBAR_QUERY_KEY = {
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const { data: myGroups } = useQuery({
     queryKey: SIDEBAR_QUERY_KEY.myGroups,
-    queryFn: getMyGroups,
+    queryFn: async () => {
+      const result = await getMyGroupsAction();
+
+      if (!result.success) {
+        throw new Error(result.error);
+      }
+
+      return result.data;
+    },
   });
 
   const sidebarGroups =

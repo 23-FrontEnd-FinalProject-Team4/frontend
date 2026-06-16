@@ -1,18 +1,18 @@
-import { generateHoursByInterval, generateMinutesByInterval } from '@/utils/date';
-
 import Button from '@/components/button/Button';
-
-import { CalendarTimeProps } from './type';
+import type { TimeState } from '@/types/time';
+import { generateHoursByInterval, generateMinutesByInterval } from '@/utils/date';
 
 const hours = generateHoursByInterval();
 const minutes = generateMinutesByInterval(30);
 
-const CalendarTime = ({
-  selectedHour = 0,
-  setSelectedHour,
-  selectedMinute = 0,
-  setSelectedMinute,
-}: CalendarTimeProps) => {
+interface CalendarTimeProps {
+  selectedTime: TimeState;
+  setSelectedTime: (time: TimeState) => void;
+}
+
+const CalendarTime = ({ selectedTime, setSelectedTime }: CalendarTimeProps) => {
+  const { hour: selectedHour, minute: selectedMinute } = selectedTime;
+
   return (
     <div className="border-interaction-hover text-text-default flex w-full gap-3.5 rounded-xl border p-4">
       {/* Hour */}
@@ -23,7 +23,7 @@ const CalendarTime = ({
               key={hour}
               type="button"
               className={`px-2 py-[7.5px] text-left ${selectedHour === hour ? 'outline-brand-primary rounded-xl outline' : 'outline-0'}`}
-              onClick={() => setSelectedHour(hour)}
+              onClick={() => setSelectedTime({ ...selectedTime, hour })}
               aria-label={`${hour}시`}
             >
               {hour}:00
@@ -40,8 +40,9 @@ const CalendarTime = ({
               type="button"
               key={minute}
               variant={selectedMinute === minute ? 'primary-filled' : 'primary-outline'}
-              onClick={() => setSelectedMinute(minute)}
+              onClick={() => setSelectedTime({ ...selectedTime, minute })}
               aria-label={`${minute}분`}
+              className="min-w-0"
             >
               {minute}분
             </Button>

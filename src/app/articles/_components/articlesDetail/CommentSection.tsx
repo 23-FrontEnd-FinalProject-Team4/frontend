@@ -10,12 +10,11 @@ import {
   updateArticleComment,
 } from '@/apis/articleComment';
 import type { ArticleComment } from '@/apis/articleComment/type';
-import { formatDate } from '@/utils/formatDate';
-
 import Dropdown from '@/components/dropdown/Dropdown';
 import InputReply from '@/components/inputReply/InputReply';
 import Modal from '@/components/modal/Modal';
 import Reply from '@/components/reply/Reply';
+import { formatDate } from '@/utils/formatDate';
 
 const CommentSection = ({
   articleId,
