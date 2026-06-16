@@ -78,6 +78,10 @@ const AccountSettingForm = ({ initialProfile }: AccountSettingFormProps) => {
         });
 
         setSelectedImageFile(null);
+        reset({
+          ...values,
+          image: savedImage,
+        });
       }
 
       if (hasPasswordValue) {
