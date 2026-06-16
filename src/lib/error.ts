@@ -4,6 +4,13 @@ interface ErrorResponse {
   message?: string;
 }
 
+export class BusinessError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'BusinessError';
+  }
+}
+
 const SERVER_FETCHER_ERROR_PATTERN = /^API request failed with status (\d+): ([\s\S]*)$/;
 
 const parseServerFetcherError = (message: string) => {
@@ -43,7 +50,11 @@ export const getErrorMessage = (error: unknown, fallbackMessage: string) => {
       return parsed.message;
     }
 
-    return error.message;
+    if (error instanceof BusinessError) {
+      return error.message;
+    }
+
+    return fallbackMessage;
   }
 
   return fallbackMessage;

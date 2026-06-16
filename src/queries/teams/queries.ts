@@ -2,13 +2,19 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import type { GroupDetail } from '@/apis/group/type';
 import { createTeamAction } from '@/app/(team)/addteam/_actions/createTeam.action';
+import { joinTeamAction } from '@/app/(team)/jointeam/_actions/join-team.action';
+import { JoinTeamError } from '@/app/(team)/jointeam/join-team.error';
 
 interface CreateTeamVariables {
   name: string;
   imageFile: File | null;
 }
 
-class CreateTeamMutationError extends Error {
+interface JoinTeamVariables {
+  teamLink: string;
+}
+
+export class CreateTeamMutationError extends Error {
   readonly isDuplicateName: boolean;
 
   constructor(message: string, isDuplicateName = false) {
@@ -35,6 +41,16 @@ const createTeam = async ({ name, imageFile }: CreateTeamVariables) => {
   return result.data;
 };
 
+const joinTeam = async ({ teamLink }: JoinTeamVariables) => {
+  const result = await joinTeamAction({ teamLink });
+
+  if (!result.success) {
+    throw new JoinTeamError(result.error, result.code);
+  }
+
+  return result.data;
+};
+
 export const useCreateTeamMutation = () => {
   const queryClient = useQueryClient();
 
@@ -48,4 +64,15 @@ export const useCreateTeamMutation = () => {
   });
 };
 
-export { CreateTeamMutationError };
+export const useJoinTeamMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<{ groupId: number }, JoinTeamError, JoinTeamVariables>({
+    mutationFn: joinTeam,
+    retry: false,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['team-page'] });
+      queryClient.invalidateQueries({ queryKey: ['sidebar'] });
+    },
+  });
+};
