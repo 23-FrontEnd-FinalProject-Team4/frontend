@@ -1,9 +1,14 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
 import Button from '@/components/button/Button';
 import Input from '@/components/input/Input';
+import { getErrorMessage } from '@/lib/error';
+import { useJoinTeamMutation } from '@/queries/teams/queries';
 
 interface JoinTeamFormProps {
   onSuccess?: () => void;
@@ -14,9 +19,13 @@ interface JoinTeamFormData {
 }
 
 const JoinTeamForm = ({ onSuccess }: JoinTeamFormProps) => {
+  const router = useRouter();
+  const { mutateAsync, isPending } = useJoinTeamMutation();
+
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<JoinTeamFormData>({
     defaultValues: {
@@ -25,9 +34,30 @@ const JoinTeamForm = ({ onSuccess }: JoinTeamFormProps) => {
     mode: 'onBlur',
   });
 
-  const onSubmit = (data: JoinTeamFormData) => {
-    console.log('서버로 보낼 팀 참여 링크:', { link: data.teamLink });
-    if (onSuccess) onSuccess();
+  const onSubmit = async (data: JoinTeamFormData) => {
+    if (isPending) return;
+
+    try {
+      const { groupId } = await mutateAsync({
+        teamLink: data.teamLink.trim(),
+      });
+
+      toast.success('팀에 성공적으로 참여했습니다!');
+      onSuccess?.();
+      router.push(`/${groupId}`);
+    } catch (error) {
+      const message = getErrorMessage(error, '팀 참여 중 오류가 발생했어요.');
+
+      if (message.includes('올바른 팀 링크')) {
+        setError('teamLink', {
+          type: 'validate',
+          message,
+        });
+        return;
+      }
+
+      toast.error(message);
+    }
   };
 
   return (
@@ -45,6 +75,7 @@ const JoinTeamForm = ({ onSuccess }: JoinTeamFormProps) => {
               type="text"
               size="sm"
               placeholder="팀 링크를 입력해주세요."
+              disabled={isPending}
               isError={Boolean(errors.teamLink)}
               errorMessage={errors.teamLink?.message}
               {...register('teamLink', {
@@ -58,9 +89,16 @@ const JoinTeamForm = ({ onSuccess }: JoinTeamFormProps) => {
         <div className="flex flex-col gap-5">
           <Button
             type="submit"
+            disabled={isPending}
             className="bg-brand-primary hover:bg-interaction-hover active:bg-interaction-pressed w-full rounded-xl py-3 font-semibold text-white transition-colors"
           >
-            참여하기
+            {isPending ? (
+              <span className="flex items-center justify-center gap-2">
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+              </span>
+            ) : (
+              '참여하기'
+            )}
           </Button>
 
           <p className="text-text-default flex justify-center text-lg break-all">
