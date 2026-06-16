@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -10,24 +10,44 @@ import toast from 'react-hot-toast';
 import Button from '@/components/button/Button';
 import EditableProfileImage from '@/components/editableProfileImage/EditableProfileImage';
 import Input from '@/components/input/Input';
+import { getErrorMessage } from '@/lib/error';
+import { UpdateTeamMutationError, useUpdateTeamMutation } from '@/queries/teams/queries';
+
+const DEFAULT_IMAGE_PREVIEW = '/profile.svg';
+
+interface EditTeamFormProps {
+  groupId: number;
+  initialName: string;
+  initialImageUrl: string | null;
+}
 
 interface EditTeamFormValues {
   teamName: string;
 }
 
-const EditTeamForm = () => {
-  const { teamId } = useParams<{ teamId: string }>();
+const EditTeamForm = ({ groupId, initialName, initialImageUrl }: EditTeamFormProps) => {
+  const router = useRouter();
+  const { mutateAsync, isPending } = useUpdateTeamMutation();
 
-  const [imagePreview, setImagePreview] = useState<string>('/profile.svg');
+  const [imagePreview, setImagePreview] = useState<string>(
+    initialImageUrl ?? DEFAULT_IMAGE_PREVIEW,
+  );
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const { control, handleSubmit, setError } = useForm<EditTeamFormValues>({
     defaultValues: {
-      teamName: '경영관리',
+      teamName: initialName,
     },
-
     mode: 'onBlur',
   });
+
+  useEffect(() => {
+    return () => {
+      if (imagePreview.startsWith('blob:')) {
+        URL.revokeObjectURL(imagePreview);
+      }
+    };
+  }, [imagePreview]);
 
   const handleImageChange = (file: File) => {
     setImageFile(file);
@@ -42,24 +62,29 @@ const EditTeamForm = () => {
   };
 
   const onSubmit = async (data: EditTeamFormValues) => {
-    if (data.teamName.trim() === '이미존재하는다른팀이름') {
-      toast.error('이미 존재하는 팀 이름입니다. 다른 이름을 입력해주세요.');
-      setError('teamName', {
-        type: 'validate',
-        message: '이미 존재하는 이름입니다.',
+    if (isPending) return;
+
+    try {
+      await mutateAsync({
+        groupId,
+        name: data.teamName.trim(),
+        imageFile,
+        currentImage: initialImageUrl,
       });
-      return;
+
+      toast.success('팀 정보가 성공적으로 수정되었습니다!');
+      router.push(`/${groupId}`);
+    } catch (error) {
+      if (error instanceof UpdateTeamMutationError && error.isDuplicateName) {
+        setError('teamName', {
+          type: 'validate',
+          message: '이미 존재하는 이름입니다.',
+        });
+        return;
+      }
+
+      toast.error(getErrorMessage(error, '팀 정보 수정 중 오류가 발생했어요.'));
     }
-
-    const requestBody = {
-      name: data.teamName,
-      image: imagePreview,
-    };
-
-    console.log(`PATCH 요청 보낼 주소: /${teamId}/groups/{id}`);
-    console.log('서버로 보낼 데이터(Body):', requestBody);
-
-    toast.success('팀 정보가 성공적으로 수정되었습니다! 🎉');
   };
 
   return (
@@ -92,6 +117,7 @@ const EditTeamForm = () => {
                   value={field.value}
                   onChange={field.onChange}
                   onBlur={field.onBlur}
+                  disabled={isPending}
                   isError={Boolean(error)}
                   errorMessage={error?.message}
                 />
@@ -101,7 +127,19 @@ const EditTeamForm = () => {
         </div>
 
         <div className="flex flex-col gap-5">
-          <Button type="submit">수정하기</Button>
+          <Button type="submit" disabled={isPending}>
+            {isPending ? (
+              <span className="flex items-center justify-center gap-2">
+                <span
+                  className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"
+                  role="status"
+                />
+                <span className="sr-only">처리 중...</span>
+              </span>
+            ) : (
+              '수정하기'
+            )}
+          </Button>
           <p className="text-text-default flex justify-center text-xs break-all md:text-lg">
             팀 이름은 회사명이나 모임 이름 등으로 설정하면 좋아요.
           </p>
