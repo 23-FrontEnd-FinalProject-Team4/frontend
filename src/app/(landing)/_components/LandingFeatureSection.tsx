@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react';
+
 import ChatFillIcon from '@/assets/icons/Chat_fill.svg?react';
 import CheckFillIcon from '@/assets/icons/Check_fill.svg?react';
 import FolderFillIcon from '@/assets/icons/Folder_fill.svg?react';
@@ -38,6 +40,10 @@ export default function LandingFeatureSection({
     ? 'xl:grid-cols-[minmax(0,0.58fr)_minmax(354px,0.42fr)]'
     : 'xl:grid-cols-[minmax(354px,0.42fr)_minmax(0,0.58fr)]';
 
+  const textStyle = {
+    '--text-offset-x': `${textOffsetX}px`,
+  } as CSSProperties;
+
   return (
     <section
       className={
@@ -47,39 +53,35 @@ export default function LandingFeatureSection({
       }
     >
       <div
-        className={`mx-auto grid max-w-screen-xl items-center gap-10 px-9 py-16 md:px-16 md:py-24 xl:min-h-[800px] ${gridColumns} xl:px-20 xl:py-0 ${
+        className={`mx-auto flex min-h-[560px] max-w-screen-xl flex-col px-9 pt-11 md:min-h-[667px] md:px-16 md:pt-12 xl:grid xl:min-h-[800px] xl:items-center xl:gap-10 xl:px-20 xl:py-0 ${gridColumns} ${
           reverse ? 'xl:[&>div:first-child]:order-2' : ''
         }`}
       >
         <div
-          className="relative z-10 max-w-[354px] overflow-visible"
-          style={{
-            transform: `translateX(${textOffsetX}px)`,
-          }}
+          className="relative z-10 max-w-[354px] overflow-visible xl:translate-x-[var(--text-offset-x)]"
+          style={textStyle}
         >
           <FeatureIcon icon={icon} />
 
           <h2
-            className={`text-3xl leading-tight font-bold whitespace-pre-line ${
-              isBrandTone ? 'text-white' : 'text-brand-primary'
-            }`}
+            className={`text-3xl leading-tight font-bold whitespace-pre-line ${isBrandTone ? 'text-white' : 'text-brand-primary'}`}
           >
             {title}
           </h2>
 
           <p
-            className={`mt-6 text-base leading-relaxed ${
-              isBrandTone ? 'text-white/80' : 'text-text-default'
-            }`}
+            className={`mt-6 text-base leading-relaxed ${isBrandTone ? 'text-white/80' : 'text-text-default'}`}
           >
             {description}
           </p>
         </div>
 
-        <div className="flex w-full justify-center xl:hidden">
+        <div className="mt-7 flex flex-1 items-end justify-center xl:hidden">
           <ResponsiveLandingImage
             {...images}
-            className="w-full max-w-2xl transition-transform duration-300 hover:scale-[1.01]"
+            className={`w-full transition-transform duration-300 hover:scale-[1.01] ${
+              isBrandTone ? 'max-w-[357px] md:max-w-[627px]' : 'max-w-[340px] md:max-w-[540px]'
+            }`}
           />
         </div>
 
