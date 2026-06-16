@@ -10,6 +10,7 @@ import {
   updateArticleComment,
 } from '@/apis/articleComment';
 import type { ArticleComment } from '@/apis/articleComment/type';
+import ProfileIcon from '@/assets/icons/profile.svg';
 import Dropdown from '@/components/dropdown/Dropdown';
 import InputReply from '@/components/inputReply/InputReply';
 import Modal from '@/components/modal/Modal';
@@ -103,7 +104,13 @@ const CommentSection = ({
                 <Reply
                   size="lg"
                   author={comment.writer.nickname}
-                  avatar={comment.writer.image}
+                  avatar={
+                    comment.writer.image ? (
+                      comment.writer.image
+                    ) : (
+                      <ProfileIcon className="h-8 w-8" />
+                    )
+                  }
                   date={formatDate(comment.createdAt)}
                   onMenuClick={() =>
                     setOpenedCommentId(openedCommentId === comment.id ? null : comment.id)
