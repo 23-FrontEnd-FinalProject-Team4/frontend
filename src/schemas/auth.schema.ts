@@ -59,3 +59,49 @@ export const passwordChangeSchema = z
   });
 
 export type PasswordChangeFormValues = z.infer<typeof passwordChangeSchema>;
+
+export const accountSettingsSchema = z
+  .object({
+    nickname: nicknameSchema,
+    image: z.string().trim(),
+    password: z.string(),
+    passwordConfirmation: z.string(),
+  })
+  .superRefine(({ password, passwordConfirmation }, ctx) => {
+    const hasPasswordInput = Boolean(password || passwordConfirmation);
+
+    if (!hasPasswordInput) return;
+
+    if (!password) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['password'],
+        message: '비밀번호는 필수 입력입니다.',
+      });
+    } else {
+      const passwordValidation = passwordSchema.safeParse(password);
+      if (!passwordValidation.success) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['password'],
+          message: passwordValidation.error.issues[0]?.message ?? '비밀번호를 확인해주세요.',
+        });
+      }
+    }
+
+    if (!passwordConfirmation) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['passwordConfirmation'],
+        message: '비밀번호 확인을 입력해주세요.',
+      });
+    } else if (password !== passwordConfirmation) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['passwordConfirmation'],
+        message: '비밀번호가 일치하지 않습니다.',
+      });
+    }
+  });
+
+export type AccountSettingsFormValues = z.infer<typeof accountSettingsSchema>;

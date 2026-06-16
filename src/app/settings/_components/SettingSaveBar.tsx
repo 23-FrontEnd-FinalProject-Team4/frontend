@@ -2,7 +2,6 @@ import AlertIcon from '@/assets/icons/alert.svg';
 
 interface SettingSaveBarProps {
   description: string;
-  formId?: string;
   buttonText: string;
   disabled?: boolean;
   onSave?: () => void | Promise<void>;
@@ -10,7 +9,6 @@ interface SettingSaveBarProps {
 
 const SettingSaveBar = ({
   description,
-  formId,
   buttonText,
   disabled = false,
   onSave,
@@ -22,8 +20,7 @@ const SettingSaveBar = ({
         <span>{description}</span>
       </p>
       <button
-        type={formId ? 'submit' : 'button'}
-        form={formId}
+        type="button"
         disabled={disabled}
         onClick={onSave}
         className="bg-background-primary text-brand-primary rounded-lg px-4 py-2"
