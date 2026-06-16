@@ -1,5 +1,12 @@
 'use server';
 
+import { uploadImageServer } from '@/apis/image/server';
+import type { UploadImageResponse } from '@/apis/image/type';
+import {
+  changePasswordServer,
+  getMyProfileServer,
+  updateMyProfileServer,
+} from '@/apis/user/server';
 import type {
   ChangePasswordRequest,
   MessageResponse,
@@ -7,13 +14,12 @@ import type {
   UpdateProfileRequest,
 } from '@/apis/user/type';
 import { getErrorMessage } from '@/lib/error';
-import { serverFetcher } from '@/lib/serverFetcher';
 
 type SettingsActionResult<T> = { success: true; data: T } | { success: false; error: string };
 
 export const getMyProfileAction = async (): Promise<SettingsActionResult<Profile>> => {
   try {
-    const profile = await serverFetcher<Profile>('/user');
+    const profile = await getMyProfileServer();
 
     return {
       success: true,
@@ -31,10 +37,7 @@ export const updateMyProfileAction = async (
   payload: UpdateProfileRequest,
 ): Promise<SettingsActionResult<MessageResponse>> => {
   try {
-    const result = await serverFetcher<MessageResponse>('/user', {
-      method: 'PATCH',
-      body: JSON.stringify(payload),
-    });
+    const result = await updateMyProfileServer(payload);
 
     return {
       success: true,
@@ -52,10 +55,7 @@ export const changePasswordAction = async (
   payload: ChangePasswordRequest,
 ): Promise<SettingsActionResult<MessageResponse>> => {
   try {
-    const result = await serverFetcher<MessageResponse>('/user/password', {
-      method: 'PATCH',
-      body: JSON.stringify(payload),
-    });
+    const result = await changePasswordServer(payload);
 
     return {
       success: true,
@@ -65,6 +65,24 @@ export const changePasswordAction = async (
     return {
       success: false,
       error: getErrorMessage(error, '비밀번호를 변경하지 못했어요.'),
+    };
+  }
+};
+
+export const uploadSettingsImageAction = async (
+  formData: FormData,
+): Promise<SettingsActionResult<UploadImageResponse>> => {
+  try {
+    const result = await uploadImageServer(formData);
+
+    return {
+      success: true,
+      data: result,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: getErrorMessage(error, '이미지를 업로드하지 못했어요.'),
     };
   }
 };

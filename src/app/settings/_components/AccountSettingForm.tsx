@@ -1,10 +1,13 @@
 'use client';
 
+import { useState } from 'react';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 
 import type { Profile } from '@/apis/user/type';
+import { uploadSettingsImageAction } from '@/app/settings/_actions/settings.action';
 import SecessionIcon from '@/assets/icons/secession.svg';
 import { getErrorMessage } from '@/lib/error';
 import { useChangePasswordMutation, useUpdateMyProfileMutation } from '@/queries/user/queries';
@@ -23,6 +26,7 @@ const DEFAULT_PROFILE_IMAGE = '/images/default-profile.png';
 const AccountSettingForm = ({ initialProfile }: AccountSettingFormProps) => {
   const updateProfileMutation = useUpdateMyProfileMutation();
   const changePasswordMutation = useChangePasswordMutation();
+  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
 
   const form = useForm<AccountSettingsFormValues>({
     resolver: zodResolver(accountSettingsSchema),
@@ -53,11 +57,27 @@ const AccountSettingForm = ({ initialProfile }: AccountSettingFormProps) => {
 
   const handleSave = handleSubmit(async (values) => {
     try {
+      let savedImage = values.image;
+
       if (isProfileChanged) {
+        if (selectedImageFile) {
+          const formData = new FormData();
+          formData.append('image', selectedImageFile);
+          const uploadResult = await uploadSettingsImageAction(formData);
+
+          if (!uploadResult.success) {
+            throw new Error(uploadResult.error);
+          }
+
+          savedImage = uploadResult.data.url;
+        }
+
         await updateProfileMutation.mutateAsync({
           nickname: values.nickname,
-          image: values.image,
+          image: savedImage,
         });
+
+        setSelectedImageFile(null);
       }
 
       if (hasPasswordValue) {
@@ -69,7 +89,7 @@ const AccountSettingForm = ({ initialProfile }: AccountSettingFormProps) => {
 
       reset({
         nickname: values.nickname,
-        image: values.image,
+        image: savedImage,
         password: '',
         passwordConfirmation: '',
       });
@@ -85,7 +105,12 @@ const AccountSettingForm = ({ initialProfile }: AccountSettingFormProps) => {
       <section className="bg-background-primary w-full max-w-[780px] rounded-2xl p-8 md:p-12">
         <h1 className="text-medium font-semibold">계정 설정</h1>
 
-        <ProfileUpdateForm email={initialProfile?.email ?? ''} />
+        <ProfileUpdateForm
+          email={initialProfile?.email ?? ''}
+          onImageFileSelect={(file) => {
+            setSelectedImageFile(file);
+          }}
+        />
 
         <PasswordChangeForm />
 

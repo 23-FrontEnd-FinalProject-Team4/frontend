@@ -68,38 +68,17 @@ export const accountSettingsSchema = z
     passwordConfirmation: z.string(),
   })
   .superRefine(({ password, passwordConfirmation }, ctx) => {
-    const hasPasswordInput = Boolean(password || passwordConfirmation);
+    if (!password && !passwordConfirmation) return;
 
-    if (!hasPasswordInput) return;
+    const result = passwordChangeSchema.safeParse({ password, passwordConfirmation });
 
-    if (!password) {
+    if (result.success) return;
+
+    for (const issue of result.error.issues) {
       ctx.addIssue({
         code: 'custom',
-        path: ['password'],
-        message: '비밀번호는 필수 입력입니다.',
-      });
-    } else {
-      const passwordValidation = passwordSchema.safeParse(password);
-      if (!passwordValidation.success) {
-        ctx.addIssue({
-          code: 'custom',
-          path: ['password'],
-          message: passwordValidation.error.issues[0]?.message ?? '비밀번호를 확인해주세요.',
-        });
-      }
-    }
-
-    if (!passwordConfirmation) {
-      ctx.addIssue({
-        code: 'custom',
-        path: ['passwordConfirmation'],
-        message: '비밀번호 확인을 입력해주세요.',
-      });
-    } else if (password !== passwordConfirmation) {
-      ctx.addIssue({
-        code: 'custom',
-        path: ['passwordConfirmation'],
-        message: '비밀번호가 일치하지 않습니다.',
+        path: issue.path,
+        message: issue.message,
       });
     }
   });
