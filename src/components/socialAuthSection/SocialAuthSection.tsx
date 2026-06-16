@@ -17,7 +17,7 @@ const SocialAuthSection = ({ label }: SocialAuthSectionProps) => {
           href="/oauth/kakao/start"
           className="text-md text-text-default flex items-center gap-2"
         >
-          <KakaoIcon />
+          <KakaoIcon aria-hidden />
           <span>카카오 로그인</span>
         </Link>
       </div>

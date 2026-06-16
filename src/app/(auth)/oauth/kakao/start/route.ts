@@ -5,7 +5,7 @@ export async function GET(request: NextRequest) {
   const kakaoRedirectUri = process.env.KAKAO_REDIRECT_URI;
 
   if (!kakaoApiKey || !kakaoRedirectUri) {
-    return NextResponse.redirect(new URL('/login', request.url));
+    return NextResponse.redirect(new URL('/login?error=config_error', request.url));
   }
 
   const params = new URLSearchParams({
