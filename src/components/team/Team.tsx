@@ -1,9 +1,8 @@
 import Image from 'next/image';
 
 import SettingIcon from '@/assets/icons/setting.svg?react';
-import { cn } from '@/utils/cn';
-
 import Profile from '@/components/profile/Profile';
+import { cn } from '@/utils/cn';
 
 import ProgressBar from '../progressBar/ProgressBar';
 import type { TeamCardSize, TeamMember, TeamProps } from './type';
@@ -106,7 +105,7 @@ const TeamImage = ({
   <div
     className={cn(
       !imageUrl && TEAM_FALLBACK_IMAGE_CLASS,
-      'relative shrink-0 overflow-hidden rounded-md ring-1 ring-background-primary/70',
+      'ring-background-primary/70 relative shrink-0 overflow-hidden rounded-md ring-1',
       TEAM_IMAGE_SIZE_CLASS[size],
     )}
   >
@@ -141,7 +140,7 @@ const MemberPreview = ({
   }
 
   return (
-    <div className="border-border-primary bg-background-inverse/90 flex h-8 items-center rounded-lg border px-2 shadow-sm shadow-background-primary/5 transition-colors duration-200 hover:border-brand-primary/20 hover:bg-background-inverse">
+    <div className="border-border-primary bg-background-inverse/90 shadow-background-primary/5 hover:border-brand-primary/20 hover:bg-background-inverse flex h-8 items-center rounded-lg border px-2 shadow-sm transition-colors duration-200">
       <span className="sr-only">팀 멤버 {totalMemberCount}명</span>
 
       {visibleMembers.map((member) => (
@@ -176,10 +175,13 @@ const SettingsButton = ({ label, onClick }: SettingsButtonProps) => {
     <button
       type="button"
       aria-label={label}
-      className="group text-icon-primary hover:bg-brand-secondary hover:text-brand-primary focus:ring-brand-primary flex size-7 shrink-0 items-center justify-center rounded-full transition-all duration-200 ease-out hover:scale-105 active:scale-95 focus:ring-2 focus:outline-none"
+      className="group text-icon-primary hover:bg-brand-secondary hover:text-brand-primary focus:ring-brand-primary flex size-7 shrink-0 items-center justify-center rounded-full transition-all duration-200 ease-out hover:scale-105 focus:ring-2 focus:outline-none active:scale-95"
       onClick={onClick}
     >
-      <SettingIcon className="size-4 transition-transform duration-200 group-hover:rotate-45" aria-hidden="true" />
+      <SettingIcon
+        className="size-4 transition-transform duration-200 group-hover:rotate-45"
+        aria-hidden="true"
+      />
     </button>
   );
 };

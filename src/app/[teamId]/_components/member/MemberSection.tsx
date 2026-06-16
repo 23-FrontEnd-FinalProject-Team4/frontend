@@ -1,5 +1,4 @@
 import KebabIcon from '@/assets/icons/kebab.svg?react';
-
 import Profile from '@/components/profile/Profile';
 
 import type { TeamPageMember } from '../../type';
