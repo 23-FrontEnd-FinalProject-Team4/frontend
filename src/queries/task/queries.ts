@@ -9,6 +9,7 @@ import { Task, TaskDetailPathParams, UpdateTaskRequest } from '@/apis/task/type'
 import {
   createTaskAction,
   deleteTaskAction,
+  getTaskAction,
   getTasksAction,
   toggleTaskAction,
   updateRecurringTaskAction,
@@ -21,6 +22,13 @@ export const useGetTasks = ({ groupId, taskListId, date }: Omit<TaskKeyParams, '
   return useQuery({
     queryKey: taskKeys.date({ groupId, taskListId, date }),
     queryFn: async () => getTasksAction({ groupId, taskListId, date }),
+  });
+};
+
+export const useGetTask = ({ groupId, taskListId, taskId }: Omit<TaskKeyParams, 'date'>) => {
+  return useQuery({
+    queryKey: taskKeys.detail({ groupId, taskListId, taskId }),
+    queryFn: async () => getTaskAction({ groupId, taskListId, taskId }),
   });
 };
 

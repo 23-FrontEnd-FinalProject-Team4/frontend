@@ -1,45 +1,73 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
-import { Task } from '@/apis/task/type';
 import CalendarIcon from '@/assets/icons/calendar.svg?react';
 import CheckIcon from '@/assets/icons/check_blue.svg?react';
 import KebabIcon from '@/assets/icons/kebab.svg?react';
 import RepeatIcon from '@/assets/icons/repeat.svg?react';
 import XIcon from '@/assets/icons/x.svg?react';
 import Button from '@/components/button/Button';
+import Dropdown from '@/components/dropdown/Dropdown';
 import Profile from '@/components/profile/Profile';
 import Reply from '@/components/reply/Reply';
-import { FREQUENCY_TEXT } from '@/constants/listItem';
+import { FREQUENCY_TEXT, OPTIONS } from '@/constants/listItem';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
-import { useGetTaskComments } from '@/queries/taskList/comment/queries';
+import {
+  useDeleteTaskComment,
+  useGetTaskComments,
+  useUpdateTaskComment,
+} from '@/queries/task/comment/queries';
+import { useGetTask, useToggleTask } from '@/queries/task/queries';
+import { formatYearMonthDay } from '@/utils/date';
 
 import CommentForm from './CommentForm';
 
 interface InfoOverlayProps {
-  task: Task;
+  groupId: number;
+  taskListId: number;
+  taskId: number;
   isOpen: boolean;
   onClose: () => void;
-  onToggle: (task: Task) => Promise<void>;
 }
 
-const InfoOverlay = ({ task, isOpen, onClose, onToggle }: InfoOverlayProps) => {
-  const { data: comments, isPending } = useGetTaskComments({ taskId: task.id });
+const InfoOverlay = ({ taskId, isOpen, onClose, taskListId, groupId }: InfoOverlayProps) => {
+  const { data: task } = useGetTask({ taskId, taskListId, groupId });
+  const { mutate: toggleTask } = useToggleTask();
 
-  const writerName = task.writer?.nickname ?? '알 수 없음';
-  const writerImage = task.writer?.image ?? null;
+  const { data: comments, isPending } = useGetTaskComments({ taskId });
+  const { mutate: editComment } = useUpdateTaskComment();
+  const { mutate: deleteComment } = useDeleteTaskComment();
+
+  const overlayRef = useRef<HTMLDivElement>(null);
+  useOutsideClick(overlayRef, onClose);
+
+  const [selectedCommentId, setSelectedCommentId] = useState<number | null>(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+  useOutsideClick(dropdownRef, () => {
+    setSelectedCommentId(null);
+  });
+
+  if (!task) return null;
 
   const isDone = Boolean(task.doneAt);
 
-  const overlayRef = useRef<HTMLDivElement>(null);
+  const handleMenuClick = (id: number) => {
+    setSelectedCommentId(id);
+  };
 
-  useOutsideClick(overlayRef, onClose);
+  const handleMenuItemSelect = (value: string, commentId: number) => {
+    if (value === 'DELETE') {
+      deleteComment({ taskId: task!.id, commentId });
+    }
+    setSelectedCommentId(null);
+  };
 
-  // TODO: 기능 추가 예정
-  const handleMenuClick = () => {};
+  const handleToggle = async () => {
+    toggleTask({ groupId, taskId, done: !isDone, taskListId });
+  };
 
-  if (!isOpen || isPending) return null;
+  if (!isOpen || isPending || !task) return null;
   return (
     <div
       className="fixed inset-0 top-16 z-200 overflow-y-auto bg-white px-4 py-3 shadow-xl md:top-0 md:left-1/2 md:px-7 md:py-10 xl:px-10"
@@ -71,8 +99,8 @@ const InfoOverlay = ({ task, isOpen, onClose, onToggle }: InfoOverlayProps) => {
         </div>
 
         <div className="flex items-center gap-2 pb-4">
-          <Profile src={writerImage} alt={writerName} />
-          <span className="text-md font-medium">{writerName}</span>
+          <Profile src={task.writer?.image} alt={task.writer?.nickname ?? ''} />
+          <span className="text-md font-medium">{task.writer?.nickname}</span>
         </div>
 
         <div className="flex items-center justify-between">
@@ -83,7 +111,11 @@ const InfoOverlay = ({ task, isOpen, onClose, onToggle }: InfoOverlayProps) => {
                 <span className="text-text-default text-xs font-normal">시작 날짜</span>
               </div>
               <div className="flex items-center">
-                <span className="text-text-primary text-xs font-normal">{task.startDate}</span>
+                <span className="text-text-primary text-xs font-normal">
+                  {task.startDate
+                    ? formatYearMonthDay(new Date(task.startDate))
+                    : formatYearMonthDay(new Date())}
+                </span>
               </div>
             </div>
             <div className="flex gap-3">
@@ -103,7 +135,7 @@ const InfoOverlay = ({ task, isOpen, onClose, onToggle }: InfoOverlayProps) => {
             <Button
               icon={<CheckIcon className={isDone ? '' : '[&_path]:stroke-white'} />}
               variant={isDone ? 'secondary-whiteFilled' : 'secondary-filled'}
-              onClick={() => onToggle(task)}
+              onClick={handleToggle}
             >
               {isDone ? '완료 취소하기' : '완료하기'}
             </Button>
@@ -122,21 +154,30 @@ const InfoOverlay = ({ task, isOpen, onClose, onToggle }: InfoOverlayProps) => {
         </div>
 
         {/* Comment Input */}
-        <CommentForm writer={task.writer} />
+        <CommentForm writer={task.writer} taskId={task.id} />
 
         {/* Comment List */}
         <div className="divide-border-primary divide-y divide-solid">
           {comments &&
             comments.map((comment) => (
-              <Reply
-                key={comment.id}
-                author={comment.user.nickname}
-                avatar={<Profile src={comment.user.image} alt={comment.user.nickname} />}
-                date={comment.createdAt}
-                onMenuClick={handleMenuClick}
-              >
-                {comment.content}
-              </Reply>
+              <div className="relative" key={comment.id}>
+                <Reply
+                  author={comment.user.nickname}
+                  avatar={<Profile src={comment.user.image} alt={comment.user.nickname} />}
+                  date={formatYearMonthDay(new Date(comment.createdAt))}
+                  onMenuClick={() => handleMenuClick(comment.id)}
+                >
+                  {comment.content}
+                </Reply>
+                {selectedCommentId === comment.id && (
+                  <div className="absolute top-10 right-30" ref={dropdownRef}>
+                    <Dropdown
+                      options={OPTIONS}
+                      onSelect={(value) => handleMenuItemSelect(value, comment.id)}
+                    />
+                  </div>
+                )}
+              </div>
             ))}
         </div>
       </div>

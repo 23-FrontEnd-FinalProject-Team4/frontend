@@ -47,7 +47,13 @@ const TaskListMain = ({ taskListId, groupId, taskListName }: TaskListMainProps) 
 
   const handleOpenOverlay = (task: Task) => {
     overlay.open(({ isOpen, close }) => (
-      <InfoOverlay task={task} isOpen={isOpen} onClose={close} onToggle={handleToggle} />
+      <InfoOverlay
+        groupId={groupId}
+        taskListId={taskListId}
+        taskId={task.id}
+        isOpen={isOpen}
+        onClose={close}
+      />
     ));
   };
 

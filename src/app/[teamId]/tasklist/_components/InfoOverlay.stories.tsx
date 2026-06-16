@@ -15,9 +15,10 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    task: MOCK_TASKLISTS[0].tasks[0],
+    groupId: MOCK_TASKLISTS[0].groupId,
+    taskListId: MOCK_TASKLISTS[0].id,
+    taskId: MOCK_TASKLISTS[0].tasks[0].id,
     isOpen: true,
     onClose: fn(),
-    onToggle: fn(),
   },
 };
