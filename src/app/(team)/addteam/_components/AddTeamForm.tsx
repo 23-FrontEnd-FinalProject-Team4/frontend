@@ -10,8 +10,8 @@ import toast from 'react-hot-toast';
 import Button from '@/components/button/Button';
 import EditableProfileImage from '@/components/editableProfileImage/EditableProfileImage';
 import Input from '@/components/input/Input';
-import { getErrorMessage, isDuplicateNameError } from '@/lib/error';
-import { useCreateTeamMutation } from '@/queries/teams/queries';
+import { getErrorMessage } from '@/lib/error';
+import { CreateTeamMutationError, useCreateTeamMutation } from '@/queries/teams/queries';
 import { useAddTeamStore } from '@/stores/addTeamStore';
 
 interface AddTeamFormValues {
@@ -49,7 +49,7 @@ const AddTeamForm = () => {
       toast.success('새로운 팀이 성공적으로 생성되었습니다!');
       router.push(`/${createdGroup.id}`);
     } catch (error) {
-      if (isDuplicateNameError(error)) {
+      if (error instanceof CreateTeamMutationError && error.isDuplicateName) {
         setError('teamName', {
           type: 'validate',
           message: '이미 존재하는 이름입니다.',
@@ -97,8 +97,12 @@ const AddTeamForm = () => {
         <div className="flex flex-col gap-5">
           <Button type="submit" disabled={isPending}>
             {isPending ? (
-              <span className="flex items-center gap-2">
-                <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+              <span className="flex items-center justify-center gap-2">
+                <span
+                  className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"
+                  role="status"
+                />
+                <span className="sr-only">처리 중...</span>
               </span>
             ) : (
               '생성하기'

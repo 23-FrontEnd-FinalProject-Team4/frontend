@@ -12,21 +12,17 @@ const meta = {
 
   // meta 레벨 render: 모든 Story가 이 wrapper를 공유
   render: (args) => {
-    const [selectedHour, setSelectedHour] = useState(args.selectedHour ?? 0);
-    const [selectedMinute, setSelectedMinute] = useState(args.selectedMinute ?? 0);
+    const { hour, minute } = args.selectedTime;
+    const [selectedHour, setSelectedHour] = useState(hour ?? 0);
+    const [selectedMinute, setSelectedMinute] = useState(minute ?? 0);
 
     return (
       <CalendarTime
         {...args}
-        selectedHour={selectedHour}
-        setSelectedHour={(hour) => {
-          setSelectedHour(hour);
-          args.setSelectedHour(hour); // ← fn() spy도 동시에 호출 (Actions 탭에 기록됨)
-        }}
-        selectedMinute={selectedMinute}
-        setSelectedMinute={(minute) => {
-          setSelectedMinute(minute);
-          args.setSelectedMinute(minute); // ← fn() spy
+        selectedTime={{ hour: selectedHour, minute: selectedMinute }}
+        setSelectedTime={(time) => {
+          setSelectedHour(time.hour);
+          setSelectedMinute(time.minute);
         }}
       />
     );
@@ -39,18 +35,21 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    selectedHour: 0,
-    selectedMinute: 0,
-    setSelectedHour: fn(),
-    setSelectedMinute: fn(),
+    selectedTime: {
+      hour: 0,
+      minute: 0,
+    },
+    setSelectedTime: fn(),
   },
   play: async ({ canvasElement, args }) => {
-    const { selectedHour, selectedMinute } = args;
+    const {
+      selectedTime: { hour, minute },
+    } = args;
     const hourButtons = within(canvasElement).getByRole('button', {
-      name: `${selectedHour}시`,
+      name: `${hour}시`,
     });
     const minuteButtons = within(canvasElement).getByRole('button', {
-      name: `${selectedMinute}분`,
+      name: `${minute}분`,
     });
 
     expect(hourButtons).toHaveClass('outline');
@@ -60,10 +59,7 @@ export const Default: Story = {
 
 export const ClickTest: Story = {
   args: {
-    selectedHour: 0,
-    selectedMinute: 0,
-    setSelectedHour: fn(),
-    setSelectedMinute: fn(),
+    ...Default.args,
   },
   play: async ({ canvasElement }) => {
     // Arrange
