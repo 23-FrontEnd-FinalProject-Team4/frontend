@@ -1,9 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
 
-import { postGroup } from '@/apis/group/index';
 import type { GroupDetail } from '@/apis/group/type';
-import { uploadImage } from '@/apis/image';
+import { createTeamAction } from '@/app/(team)/addteam/_actions/createTeam.action';
 import { joinTeamAction } from '@/app/(team)/jointeam/_actions/join-team.action';
 import { JoinTeamError } from '@/app/(team)/jointeam/join-team.error';
 
@@ -16,20 +14,31 @@ interface JoinTeamVariables {
   teamLink: string;
 }
 
-interface ErrorResponseData {
-  message?: string;
+export class CreateTeamMutationError extends Error {
+  readonly isDuplicateName: boolean;
+
+  constructor(message: string, isDuplicateName = false) {
+    super(message);
+    this.name = 'CreateTeamMutationError';
+    this.isDuplicateName = isDuplicateName;
+  }
 }
 
 const createTeam = async ({ name, imageFile }: CreateTeamVariables) => {
-  if (!imageFile) {
-    return postGroup({ name });
+  const formData = new FormData();
+  formData.append('name', name);
+
+  if (imageFile) {
+    formData.append('image', imageFile);
   }
 
-  const formData = new FormData();
-  formData.append('image', imageFile);
-  const { url } = await uploadImage(formData);
+  const result = await createTeamAction(formData);
 
-  return postGroup({ name, image: url });
+  if (!result.success) {
+    throw new CreateTeamMutationError(result.error, result.isDuplicateName);
+  }
+
+  return result.data;
 };
 
 const joinTeam = async ({ teamLink }: JoinTeamVariables) => {
@@ -45,7 +54,7 @@ const joinTeam = async ({ teamLink }: JoinTeamVariables) => {
 export const useCreateTeamMutation = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<GroupDetail, AxiosError<ErrorResponseData>, CreateTeamVariables>({
+  return useMutation<GroupDetail, CreateTeamMutationError, CreateTeamVariables>({
     mutationFn: createTeam,
     retry: false,
     onSuccess: () => {
