@@ -12,7 +12,7 @@ import type { ArticleCardProps } from './Card.type';
 export const ArticleCard = ({ article, variant = 'normal' }: ArticleCardProps) => {
   const isBest = variant === 'best';
 
-  const { id, title, content, image, writer, createdAt, isLiked } = article;
+  const { id, title, content, image, writer, createdAt, isLiked, likeCount } = article;
   const formattedDate = formatDate(createdAt);
 
   return (
@@ -64,7 +64,7 @@ export const ArticleCard = ({ article, variant = 'normal' }: ArticleCardProps) =
             ) : (
               <HeartEmptyIcon className="h-6 w-4" />
             )}
-            {article.likeCount}
+            {likeCount}
           </span>
         </div>
       </div>
