@@ -156,7 +156,7 @@ const TeamPageClient = ({ teamId, initialDate }: TeamPageClientProps) => {
     }
 
     setIsTeamMenuOpen(false);
-    router.push(`/${selectedGroupId}/editteam`);
+    router.push(`/${selectedGroupId}/edit-team`);
   };
 
   const openDeleteTeamModal = () => {
