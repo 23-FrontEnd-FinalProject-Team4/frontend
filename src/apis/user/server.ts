@@ -23,3 +23,9 @@ export const changePasswordServer = async (body: ChangePasswordRequest) => {
     body: JSON.stringify(body),
   });
 };
+
+export const deleteMyAccountServer = async () => {
+  return serverFetcher<MessageResponse>('/user', {
+    method: 'DELETE',
+  });
+};
