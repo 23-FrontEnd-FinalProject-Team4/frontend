@@ -2,17 +2,20 @@
 import { TaskHistory } from '@/apis/user/type';
 import ListItemDate from '@/components/listItem/ListItemDate';
 import TaskCheckbox from '@/components/taskCheckbox/TaskCheckbox';
-import { formatISODate, formatYearMonthDay } from '@/utils/date';
+import { formatYearMonthDay } from '@/utils/date';
 
-const HistoryMain = ({ tasks }: { tasks: TaskHistory[] }) => {
-  const grouped = Object.groupBy(tasks, (task) => formatISODate(new Date(task.date)));
-  Object.values(grouped).forEach((items) => {
-    items?.sort((a, b) => a.displayIndex - b.displayIndex);
-  });
+import { groupDoneTasksByDate } from '../_utils/task';
+
+interface HistoryMainProps {
+  tasks: TaskHistory[];
+}
+
+const HistoryMain = ({ tasks }: HistoryMainProps) => {
+  const groupedTasks = groupDoneTasksByDate(tasks);
 
   return (
     <>
-      {Object.entries(grouped).map(([date, items]) => {
+      {Object.entries(groupedTasks).map(([date, items]) => {
         return (
           <div key={date} className="flex flex-col gap-3">
             <h2 className="text-text-default text-lg font-semibold">
