@@ -1,13 +1,31 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import type { GroupDetail } from '@/apis/group/type';
+import {
+  createTeamTaskListAction,
+  deleteTeamAction,
+  getTeamInvitationAction,
+} from '@/app/[teamId]/_actions/team-page.action';
 import { createTeamAction } from '@/app/(team)/addteam/_actions/createTeam.action';
 import { joinTeamAction } from '@/app/(team)/jointeam/_actions/join-team.action';
 import { JoinTeamError } from '@/app/(team)/jointeam/join-team.error';
 
+interface CreateTeamTaskListVariables {
+  groupId: number;
+  name: string;
+}
+
 interface CreateTeamVariables {
   name: string;
   imageFile: File | null;
+}
+
+interface DeleteTeamVariables {
+  groupId: number;
+}
+
+interface GetTeamInvitationVariables {
+  groupId: number;
 }
 
 interface JoinTeamVariables {
@@ -51,6 +69,36 @@ const joinTeam = async ({ teamLink }: JoinTeamVariables) => {
   return result.data;
 };
 
+const createTeamTaskList = async ({ groupId, name }: CreateTeamTaskListVariables) => {
+  const result = await createTeamTaskListAction({ groupId, name });
+
+  if (!result.success) {
+    throw new Error(result.error);
+  }
+
+  return result.data;
+};
+
+const deleteTeam = async ({ groupId }: DeleteTeamVariables) => {
+  const result = await deleteTeamAction({ groupId });
+
+  if (!result.success) {
+    throw new Error(result.error);
+  }
+
+  return result.data;
+};
+
+const getTeamInvitation = async ({ groupId }: GetTeamInvitationVariables) => {
+  const result = await getTeamInvitationAction({ groupId });
+
+  if (!result.success) {
+    throw new Error(result.error);
+  }
+
+  return result.data;
+};
+
 export const useCreateTeamMutation = () => {
   const queryClient = useQueryClient();
 
@@ -61,6 +109,27 @@ export const useCreateTeamMutation = () => {
       queryClient.invalidateQueries({ queryKey: ['team-page'] });
       queryClient.invalidateQueries({ queryKey: ['sidebar'] });
     },
+  });
+};
+
+export const useCreateTeamTaskListMutation = () => {
+  return useMutation<void, Error, CreateTeamTaskListVariables>({
+    mutationFn: createTeamTaskList,
+    retry: false,
+  });
+};
+
+export const useDeleteTeamMutation = () => {
+  return useMutation<void, Error, DeleteTeamVariables>({
+    mutationFn: deleteTeam,
+    retry: false,
+  });
+};
+
+export const useTeamInvitationMutation = () => {
+  return useMutation<string, Error, GetTeamInvitationVariables>({
+    mutationFn: getTeamInvitation,
+    retry: false,
   });
 };
 

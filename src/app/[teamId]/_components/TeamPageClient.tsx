@@ -13,13 +13,13 @@ import type { Task } from '@/apis/task/type';
 import Modal from '@/components/modal/Modal';
 import type { TeamCardSize } from '@/components/team/type';
 import useMediaQuery, { MEDIA_QUERY } from '@/hooks/useMediaQuery';
-
 import {
-  createTeamTaskListAction,
-  deleteTeamAction,
-  getTeamInvitationAction,
-  getTeamPageDataAction,
-} from '../_actions/team-page.action';
+  useCreateTeamTaskListMutation,
+  useDeleteTeamMutation,
+  useTeamInvitationMutation,
+} from '@/queries/teams/queries';
+
+import { getTeamPageDataAction } from '../_actions/team-page.action';
 import { TASK_LISTS, TASK_STATUS_SECTIONS, TEAM_PAGE_MEMBERS } from '../_constants/mockData';
 import type { TaskListItem, TeamPageMember, TeamPageRole } from '../type';
 import TeamPageHeader from './header/TeamPageHeader';
@@ -35,8 +35,6 @@ interface TeamPageClientProps {
 const TEAM_PAGE_QUERY_KEY = {
   data: (teamId: string, date: string) => ['team-page', teamId, date] as const,
 };
-
-const FALLBACK_INVITE_LINK = 'https://coworkers.example.com/invite/management';
 
 const isMemberView = (teamId: string) => ['member', 'user'].includes(teamId.toLowerCase());
 
@@ -83,23 +81,23 @@ const mapTaskLists = (taskLists: TaskList[] = []): TaskListItem[] =>
     };
   });
 
-const copyInviteLink = async (groupId?: number) => {
+const copyInviteLink = async ({
+  groupId,
+  getInvitationLink,
+}: {
+  groupId?: number;
+  getInvitationLink: (groupId: number) => Promise<string>;
+}) => {
   if (!navigator.clipboard) {
-    return;
+    throw new Error('클립보드를 사용할 수 없습니다.');
   }
 
   if (!groupId) {
-    await navigator.clipboard.writeText(FALLBACK_INVITE_LINK);
-    return;
+    throw new Error('팀 정보를 찾을 수 없습니다.');
   }
 
-  const inviteResult = await getTeamInvitationAction({ groupId });
-
-  if (!inviteResult.success) {
-    throw new Error(inviteResult.error);
-  }
-
-  await navigator.clipboard.writeText(inviteResult.data);
+  const invitationLink = await getInvitationLink(groupId);
+  await navigator.clipboard.writeText(invitationLink);
 };
 
 interface InviteMemberModalProps {
@@ -116,23 +114,22 @@ interface DeleteTeamModalProps {
 }
 
 const InviteMemberModal = ({ isOpen, groupId, onClose }: InviteMemberModalProps) => {
-  const [isCopying, setIsCopying] = useState(false);
+  const { mutateAsync: getInvitationLink, isPending: isCopying } = useTeamInvitationMutation();
 
   const handleCopyInviteLink = async () => {
     if (isCopying) {
       return;
     }
 
-    setIsCopying(true);
-
     try {
-      await copyInviteLink(groupId);
+      await copyInviteLink({
+        groupId,
+        getInvitationLink: (currentGroupId) => getInvitationLink({ groupId: currentGroupId }),
+      });
       toast.success('초대 링크가 클립보드에 복사되었습니다.');
       onClose();
     } catch (error) {
       toast.error(error instanceof Error ? error.message : '초대 링크를 복사하지 못했습니다.');
-    } finally {
-      setIsCopying(false);
     }
   };
 
@@ -209,6 +206,8 @@ const TeamPageStatus = ({ message }: { message: string }) => (
 const TeamPageClient = ({ teamId, initialDate }: TeamPageClientProps) => {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const { mutateAsync: createTeamTaskList } = useCreateTeamTaskListMutation();
+  const { mutateAsync: deleteTeam } = useDeleteTeamMutation();
   const isDesktop = useMediaQuery(MEDIA_QUERY.desktop);
   const isTablet = useMediaQuery(MEDIA_QUERY.tablet);
   const today = initialDate;
@@ -286,10 +285,10 @@ const TeamPageClient = ({ teamId, initialDate }: TeamPageClientProps) => {
 
     overlay.open(({ isOpen, close }) => {
       const handleDeleteTeam = async () => {
-        const result = await deleteTeamAction({ groupId: selectedGroupId });
-
-        if (!result.success) {
-          toast.error(result.error);
+        try {
+          await deleteTeam({ groupId: selectedGroupId });
+        } catch (error) {
+          toast.error(error instanceof Error ? error.message : '팀을 삭제하지 못했습니다.');
           return false;
         }
 
@@ -328,13 +327,15 @@ const TeamPageClient = ({ teamId, initialDate }: TeamPageClientProps) => {
               return false;
             }
 
-            const result = await createTeamTaskListAction({
-              groupId: selectedGroupId,
-              name: title,
-            });
-
-            if (!result.success) {
-              toast.error(result.error);
+            try {
+              await createTeamTaskList({
+                groupId: selectedGroupId,
+                name: title,
+              });
+            } catch (error) {
+              toast.error(
+                error instanceof Error ? error.message : '할 일 목록을 생성하지 못했습니다.',
+              );
               return false;
             }
 
