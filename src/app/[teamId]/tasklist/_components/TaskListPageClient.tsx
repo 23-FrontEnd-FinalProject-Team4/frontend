@@ -1,5 +1,7 @@
 'use client';
 
+import { notFound } from 'next/navigation';
+
 import { useGetTaskLists } from '@/queries/taskList/queries';
 
 import TaskListHeader from './TaskListHeader';
@@ -15,8 +17,7 @@ const TaskListPageClient = ({ groupId, taskListId }: { groupId: number; taskList
   );
 
   // TODO: 추후에 redirect 등을 고려
-  if (!selectedTaskList || !taskLists || !selectedTaskListId)
-    return <div>TaskList가 없습니다.</div>;
+  if (!selectedTaskList || !taskLists || !selectedTaskListId) return notFound();
 
   return (
     <div className="flex flex-col gap-5 p-4 md:gap-7 md:px-6 md:py-17.5 xl:px-30 xl:py-30">
