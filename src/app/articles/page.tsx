@@ -4,13 +4,13 @@ import { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
+import { useQuery } from '@tanstack/react-query';
+
 import { getArticles } from '@/apis/article';
 import BestSection from '@/app/articles/_components/BestSection';
 import ListSection from '@/app/articles/_components/ListSection';
 import SearchInput from '@/app/articles/_components/SearchInput';
 import WriteIcon from '@/assets/icons/pencil.svg?react';
-import { useQuery } from '@tanstack/react-query';
-
 import Button from '@/components/button/Button';
 
 const ArticlesPage = () => {

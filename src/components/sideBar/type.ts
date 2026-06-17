@@ -2,6 +2,7 @@ export type Group = {
   id: number;
   name: string;
   route?: string;
+  image?: string | null;
 };
 
 export type GroupItemProps = Group & {

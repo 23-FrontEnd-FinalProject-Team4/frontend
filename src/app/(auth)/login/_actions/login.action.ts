@@ -1,7 +1,7 @@
 'use server';
 
-import { signIn } from '@/apis/Auth';
-import type { SignInRequest } from '@/apis/Auth/type';
+import { signIn } from '@/apis/auth/client';
+import type { SignInRequest } from '@/apis/auth/type';
 import { getErrorMessage } from '@/lib/error';
 import { setAuthTokens } from '@/utils/auth/token';
 

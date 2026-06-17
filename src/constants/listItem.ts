@@ -1,9 +1,11 @@
-export const FREQUENCY_TEXT = {
+import { FrequencyType } from '@/apis/task/type';
+
+export const FREQUENCY_TEXT: Record<FrequencyType, string> = {
   ONCE: '반복 안함',
   DAILY: '매일 반복',
   WEEKLY: '매주 반복',
   MONTHLY: '매달 반복',
-} as const;
+};
 
 export const OPTIONS = [
   { value: 'EDIT', label: '수정하기' },

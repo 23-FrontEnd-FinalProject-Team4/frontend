@@ -46,3 +46,19 @@ export const taskListCreateSchema = z.object({
 });
 
 export type TaskListCreateValues = z.infer<typeof taskListCreateSchema>;
+
+export const teamJoinSchema = z.object({
+  teamLink: z.string().trim().min(1, '팀 링크를 입력해주세요.'),
+});
+
+export type TeamJoinValues = z.infer<typeof teamJoinSchema>;
+
+export const teamCreateSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(1, '팀 이름을 입력해주세요.')
+    .max(20, '팀 이름은 20자 이하로 입력해주세요.'),
+});
+
+export type TeamCreateValues = z.infer<typeof teamCreateSchema>;

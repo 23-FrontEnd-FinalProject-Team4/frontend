@@ -29,7 +29,8 @@ type Story = StoryObj<typeof meta>;
 export const Mobile: Story = {
   args: {
     taskLists: MOCK_TASKLISTS,
-    selectedId: 0,
+    selectedTaskListId: 0,
+    groupId: 0,
   },
   globals: {
     viewport: {

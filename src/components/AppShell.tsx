@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 
 import { useQuery } from '@tanstack/react-query';
 
-import { getMyGroups } from '@/apis/user';
+import { getMyGroupsAction } from '@/app/_actions/sidebar.action';
 import type { Group } from '@/components/sideBar/type';
 
 const Sidebar = dynamic(() => import('@/components/sideBar/SideBar'), {
@@ -31,7 +31,15 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   const { data: myGroups } = useQuery({
     queryKey: SIDEBAR_QUERY_KEY.myGroups,
-    queryFn: getMyGroups,
+    queryFn: async () => {
+      const result = await getMyGroupsAction();
+
+      if (!result.success) {
+        throw new Error(result.error);
+      }
+
+      return result.data;
+    },
     enabled: !isPublicPage,
   });
 
@@ -40,6 +48,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       id: group.id,
       name: group.name,
       route: `/${group.id}`,
+      image: group.image,
     })) ?? FALLBACK_SIDEBAR_GROUPS;
 
   if (isPublicPage) {

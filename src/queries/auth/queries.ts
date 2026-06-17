@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { signUp } from '@/apis/Auth';
-import type { AuthResponse, SignInRequest, SignUpRequest } from '@/apis/Auth/type';
+import { signUp } from '@/apis/auth/client';
+import type { AuthResponse, SignInRequest, SignUpRequest } from '@/apis/auth/type';
 import { resetPassword, sendResetPasswordEmail } from '@/apis/user';
 import type {
   MessageResponse,
@@ -9,6 +9,7 @@ import type {
   SendPasswordResetEmailRequest,
 } from '@/apis/user/type';
 import { type LoginActionResult, loginAction } from '@/app/(auth)/login/_actions/login.action';
+import { BusinessError } from '@/lib/error';
 
 export const useLoginMutation = () => {
   return useMutation<LoginActionResult, Error, SignInRequest>({
@@ -16,7 +17,7 @@ export const useLoginMutation = () => {
       const result = await loginAction(data);
 
       if (!result.success) {
-        throw new Error(result.error);
+        throw new BusinessError(result.error);
       }
 
       return result;
