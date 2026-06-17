@@ -17,7 +17,7 @@ export type Article = {
 };
 
 export type ArticleWithLike = Article & {
-  isLiked: boolean;
+  isLiked?: boolean;
 };
 
 export type ArticleCardProps = {

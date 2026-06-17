@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import type { GroupDetail } from '@/apis/group/type';
+import { updateTeamAction } from '@/app/(team)/[teamId]/editteam/_actions/updateTeam.action';
 import { createTeamAction } from '@/app/(team)/addteam/_actions/createTeam.action';
 import { joinTeamAction } from '@/app/(team)/jointeam/_actions/join-team.action';
 import { JoinTeamError } from '@/app/(team)/jointeam/join-team.error';
@@ -14,12 +15,29 @@ interface JoinTeamVariables {
   teamLink: string;
 }
 
+interface UpdateTeamVariables {
+  groupId: number;
+  name: string;
+  imageFile: File | null;
+  currentImage: string | null;
+}
+
 export class CreateTeamMutationError extends Error {
   readonly isDuplicateName: boolean;
 
   constructor(message: string, isDuplicateName = false) {
     super(message);
     this.name = 'CreateTeamMutationError';
+    this.isDuplicateName = isDuplicateName;
+  }
+}
+
+export class UpdateTeamMutationError extends Error {
+  readonly isDuplicateName: boolean;
+
+  constructor(message: string, isDuplicateName = false) {
+    super(message);
+    this.name = 'UpdateTeamMutationError';
     this.isDuplicateName = isDuplicateName;
   }
 }
@@ -51,6 +69,28 @@ const joinTeam = async ({ teamLink }: JoinTeamVariables) => {
   return result.data;
 };
 
+const updateTeam = async ({ groupId, name, imageFile, currentImage }: UpdateTeamVariables) => {
+  const formData = new FormData();
+  formData.append('groupId', String(groupId));
+  formData.append('name', name);
+
+  if (currentImage) {
+    formData.append('currentImage', currentImage);
+  }
+
+  if (imageFile) {
+    formData.append('image', imageFile);
+  }
+
+  const result = await updateTeamAction(formData);
+
+  if (!result.success) {
+    throw new UpdateTeamMutationError(result.error, result.isDuplicateName);
+  }
+
+  return result.data;
+};
+
 export const useCreateTeamMutation = () => {
   const queryClient = useQueryClient();
 
@@ -69,6 +109,19 @@ export const useJoinTeamMutation = () => {
 
   return useMutation<{ groupId: number }, JoinTeamError, JoinTeamVariables>({
     mutationFn: joinTeam,
+    retry: false,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['team-page'] });
+      queryClient.invalidateQueries({ queryKey: ['sidebar'] });
+    },
+  });
+};
+
+export const useUpdateTeamMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<GroupDetail, UpdateTeamMutationError, UpdateTeamVariables>({
+    mutationFn: updateTeam,
     retry: false,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['team-page'] });

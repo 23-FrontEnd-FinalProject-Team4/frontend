@@ -1,0 +1,66 @@
+'use client';
+
+import { useMutation } from '@tanstack/react-query';
+
+import { createArticle, updateArticle } from '@/apis/article';
+import { CreateArticleRequest, UpdateArticleRequest } from '@/apis/article/type';
+import { uploadImage } from '@/apis/image';
+import { ArticleFormData } from '@/app/articles/write/_components/schema';
+
+export const ARTICLE_EDITOR_MODE = {
+  WRITE: 'write',
+  EDIT: 'edit',
+} as const;
+
+export type UseArticleEditorProps = {
+  mode: (typeof ARTICLE_EDITOR_MODE)[keyof typeof ARTICLE_EDITOR_MODE];
+  defaultValues: ArticleFormData;
+};
+export const useArticleEditor = ({ mode, defaultValues }: UseArticleEditorProps) => {
+  const uploadImageMutation = useMutation({
+    mutationFn: async (file: File) => {
+      const formData = new FormData();
+      formData.append('image', file);
+      return uploadImage(formData);
+    },
+  });
+
+  const createArticleMutation = useMutation({
+    mutationFn: createArticle,
+  });
+
+  const updateArticleMutation = useMutation({
+    mutationFn: ({ id, payload }: { id: string; payload: UpdateArticleRequest }) =>
+      updateArticle(id, payload),
+  });
+
+  const handleFormSubmit = async (values: ArticleFormData) => {
+    const imageUrl =
+      values.image instanceof File ? await uploadImageMutation.mutateAsync(values.image) : null;
+    const payload: CreateArticleRequest = {
+      title: values.title,
+      content: values.content,
+      image: imageUrl?.url ?? (typeof values.image === 'string' ? values.image : undefined),
+    };
+
+    if (mode === ARTICLE_EDITOR_MODE.WRITE) {
+      return createArticleMutation.mutateAsync(payload);
+    }
+
+    if (mode === ARTICLE_EDITOR_MODE.EDIT && defaultValues.id) {
+      return updateArticleMutation.mutateAsync({
+        id: defaultValues.id,
+        payload,
+      });
+    }
+
+    return null;
+  };
+
+  return {
+    uploadImageMutation,
+    createArticleMutation,
+    updateArticleMutation,
+    handleFormSubmit,
+  };
+};
