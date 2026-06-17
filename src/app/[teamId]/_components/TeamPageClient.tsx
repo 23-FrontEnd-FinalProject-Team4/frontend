@@ -2,20 +2,21 @@
 
 import { useMemo, useState } from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { overlay } from 'overlay-kit';
 import { toast } from 'react-hot-toast';
 
-import { getGroup, getGroupInvitation, getGroupTasks } from '@/apis/group';
 import type { Member, TaskList } from '@/apis/group/type';
 import type { Task } from '@/apis/task/type';
-import { getMyGroups, getMyProfile } from '@/apis/user';
 import Modal from '@/components/modal/Modal';
 import type { TeamCardSize } from '@/components/team/type';
 import useMediaQuery, { MEDIA_QUERY } from '@/hooks/useMediaQuery';
 
 import {
   createTeamTaskListAction,
+  deleteTeamAction,
   getTeamInvitationAction,
   getTeamPageDataAction,
 } from '../_actions/team-page.action';
@@ -107,6 +108,13 @@ interface InviteMemberModalProps {
   onClose: () => void;
 }
 
+interface DeleteTeamModalProps {
+  isOpen: boolean;
+  teamName: string;
+  onClose: () => void;
+  onDelete: () => Promise<boolean>;
+}
+
 const InviteMemberModal = ({ isOpen, groupId, onClose }: InviteMemberModalProps) => {
   const [isCopying, setIsCopying] = useState(false);
 
@@ -146,13 +154,60 @@ const InviteMemberModal = ({ isOpen, groupId, onClose }: InviteMemberModalProps)
   );
 };
 
+const DeleteTeamModal = ({ isOpen, teamName, onClose, onDelete }: DeleteTeamModalProps) => {
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDeleteTeam = async () => {
+    if (isDeleting) {
+      return;
+    }
+
+    setIsDeleting(true);
+
+    try {
+      const shouldClose = await onDelete();
+
+      if (shouldClose) {
+        onClose();
+      }
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  return (
+    <Modal
+      isOpen={isOpen}
+      title="팀 삭제"
+      description={`${teamName} 팀을 삭제하시겠어요?\n삭제한 팀은 다시 복구할 수 없습니다.`}
+      primaryAction={{
+        label: '삭제하기',
+        loadingLabel: '삭제 중',
+        onClick: handleDeleteTeam,
+        disabled: isDeleting,
+        isLoading: isDeleting,
+      }}
+      secondaryAction={{
+        label: '취소',
+        onClick: onClose,
+        disabled: isDeleting,
+      }}
+      variant="danger"
+      size="md"
+      closeOnOverlayClick={!isDeleting}
+      onClose={onClose}
+    />
+  );
+};
+
 const TeamPageStatus = ({ message }: { message: string }) => (
   <div className="bg-background-primary text-text-default text-md flex min-h-60 items-center justify-center rounded-xl font-medium shadow-sm">
     {message}
   </div>
 );
 
-export default function TeamPageClient({ teamId, initialDate }: TeamPageClientProps) {
+const TeamPageClient = ({ teamId, initialDate }: TeamPageClientProps) => {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const isDesktop = useMediaQuery(MEDIA_QUERY.desktop);
   const isTablet = useMediaQuery(MEDIA_QUERY.tablet);
@@ -211,6 +266,56 @@ export default function TeamPageClient({ teamId, initialDate }: TeamPageClientPr
     });
   };
 
+  const handleEditTeam = () => {
+    if (!selectedGroupId) {
+      toast.error('팀 정보를 찾을 수 없습니다.');
+      return;
+    }
+
+    setIsTeamMenuOpen(false);
+    router.push(`/${selectedGroupId}/edit`);
+  };
+
+  const openDeleteTeamModal = () => {
+    if (!selectedGroupId) {
+      toast.error('팀 정보를 찾을 수 없습니다.');
+      return;
+    }
+
+    setIsTeamMenuOpen(false);
+
+    overlay.open(({ isOpen, close }) => {
+      const handleDeleteTeam = async () => {
+        const result = await deleteTeamAction({ groupId: selectedGroupId });
+
+        if (!result.success) {
+          toast.error(result.error);
+          return false;
+        }
+
+        const nextGroupId = myGroups.find((myGroup) => myGroup.id !== selectedGroupId)?.id;
+
+        toast.success('팀을 삭제했습니다.');
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: ['sidebar'] }),
+          queryClient.invalidateQueries({ queryKey: ['team-page'] }),
+        ]);
+
+        router.push(nextGroupId ? `/${nextGroupId}` : '/no-team');
+        return true;
+      };
+
+      return (
+        <DeleteTeamModal
+          isOpen={isOpen}
+          teamName={group?.name ?? '선택한'}
+          onClose={close}
+          onDelete={handleDeleteTeam}
+        />
+      );
+    });
+  };
+
   const openCreateListModal = () => {
     overlay.open(({ isOpen, close }) => {
       return (
@@ -260,6 +365,8 @@ export default function TeamPageClient({ teamId, initialDate }: TeamPageClientPr
           progressValue={progressValue}
           isSettingsOpen={isTeamMenuOpen}
           onSettingsClick={() => setIsTeamMenuOpen((prev) => !prev)}
+          onEditClick={handleEditTeam}
+          onDeleteClick={openDeleteTeamModal}
         />
 
         {isPending ? (
@@ -281,4 +388,6 @@ export default function TeamPageClient({ teamId, initialDate }: TeamPageClientPr
       </div>
     </div>
   );
-}
+};
+
+export default TeamPageClient;

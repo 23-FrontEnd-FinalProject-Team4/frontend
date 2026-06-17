@@ -17,9 +17,11 @@ interface TeamPageHeaderProps {
   progressValue: number;
   isSettingsOpen: boolean;
   onSettingsClick: () => void;
+  onEditClick: () => void;
+  onDeleteClick: () => void;
 }
 
-export default function TeamPageHeader({
+const TeamPageHeader = ({
   name,
   imageUrl,
   role,
@@ -31,7 +33,9 @@ export default function TeamPageHeader({
   progressValue,
   isSettingsOpen,
   onSettingsClick,
-}: TeamPageHeaderProps) {
+  onEditClick,
+  onDeleteClick,
+}: TeamPageHeaderProps) => {
   const isAdmin = role === 'ADMIN';
   const isAdminLayout = isAdmin || size === 'lg';
 
@@ -72,12 +76,14 @@ export default function TeamPageHeader({
           <button
             type="button"
             className="hover:bg-background-secondary focus-visible:ring-brand-primary text-text-primary text-md w-full px-5 py-4 text-center transition-colors focus-visible:ring-2 focus-visible:outline-none"
+            onClick={onEditClick}
           >
             수정하기
           </button>
           <button
             type="button"
             className="hover:bg-background-secondary focus-visible:ring-brand-primary text-text-primary text-md w-full px-5 py-4 text-center transition-colors focus-visible:ring-2 focus-visible:outline-none"
+            onClick={onDeleteClick}
           >
             삭제하기
           </button>
@@ -85,4 +91,6 @@ export default function TeamPageHeader({
       )}
     </div>
   );
-}
+};
+
+export default TeamPageHeader;
