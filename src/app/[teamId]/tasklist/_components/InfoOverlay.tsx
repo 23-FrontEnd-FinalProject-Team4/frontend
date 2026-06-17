@@ -1,44 +1,89 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
-import { Task } from '@/apis/task/type';
 import CalendarIcon from '@/assets/icons/calendar.svg?react';
 import CheckIcon from '@/assets/icons/check_blue.svg?react';
 import KebabIcon from '@/assets/icons/kebab.svg?react';
 import RepeatIcon from '@/assets/icons/repeat.svg?react';
 import XIcon from '@/assets/icons/x.svg?react';
 import Button from '@/components/button/Button';
+import Dropdown from '@/components/dropdown/Dropdown';
 import Profile from '@/components/profile/Profile';
 import Reply from '@/components/reply/Reply';
-import { FREQUENCY_TEXT } from '@/constants/listItem';
+import ReplyEdit from '@/components/reply/ReplyEdit';
+import { FREQUENCY_TEXT, OPTIONS } from '@/constants/listItem';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
+import {
+  useDeleteTaskComment,
+  useGetTaskComments,
+  useUpdateTaskComment,
+} from '@/queries/task/comment/queries';
+import { useGetTask, useToggleTask } from '@/queries/task/queries';
+import { formatYearMonthDay } from '@/utils/date';
 
-import { MOCK_COMMENTS } from '../_constants/mockData';
 import CommentForm from './CommentForm';
 
 interface InfoOverlayProps {
-  task: Task;
+  groupId: number;
+  taskListId: number;
+  taskId: number;
   isOpen: boolean;
   onClose: () => void;
 }
 
-const InfoOverlay = ({ task, isOpen, onClose }: InfoOverlayProps) => {
-  // TODO: API를 통해 Comment 받아오기
-  const comments = MOCK_COMMENTS;
-  const writerName = task.writer?.nickname ?? '알 수 없음';
-  const writerImage = task.writer?.image ?? null;
+const InfoOverlay = ({ taskId, isOpen, onClose, taskListId, groupId }: InfoOverlayProps) => {
+  const { data: task } = useGetTask({ taskId, taskListId, groupId });
+  const { mutate: toggleTask } = useToggleTask();
+
+  const { data: comments, isPending } = useGetTaskComments({ taskId });
+  const { mutate: editComment } = useUpdateTaskComment();
+  const [updateComment, setUpdateComment] = useState('');
+
+  const { mutate: deleteComment } = useDeleteTaskComment();
+
+  const overlayRef = useRef<HTMLDivElement>(null);
+  useOutsideClick(overlayRef, onClose);
+
+  const [selectedCommentId, setSelectedCommentId] = useState<number | null>(null);
+  const [openedCommentId, setOpenedCommentId] = useState<number | null>(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+  useOutsideClick(dropdownRef, () => {
+    setOpenedCommentId(null);
+  });
+
+  if (!task) return null;
 
   const isDone = Boolean(task.doneAt);
 
-  const overlayRef = useRef<HTMLDivElement>(null);
+  const handleMenuClick = (id: number) => {
+    setOpenedCommentId(id);
+  };
 
-  useOutsideClick(overlayRef, onClose);
+  const handleMenuItemSelect = (value: string, commentId: number, content: string) => {
+    if (value === 'DELETE') {
+      deleteComment({ taskId: task!.id, commentId });
+    } else if (value === 'EDIT') {
+      setSelectedCommentId(commentId);
+      setUpdateComment(content);
+    }
+    setOpenedCommentId(null);
+  };
 
-  // TODO: 기능 추가 예정
-  const handleMenuClick = () => {};
+  const handleUpdateComment = (commentId: number) => {
+    editComment(
+      { taskId, content: updateComment, commentId },
+      {
+        onSuccess: () => setSelectedCommentId(null),
+      },
+    );
+  };
 
-  if (!isOpen) return null;
+  const handleToggle = async () => {
+    toggleTask({ groupId, taskId, done: !isDone, taskListId });
+  };
+
+  if (!isOpen || isPending || !task) return null;
   return (
     <div
       className="fixed inset-0 top-16 z-200 overflow-y-auto bg-white px-4 py-3 shadow-xl md:top-0 md:left-1/2 md:px-7 md:py-10 xl:px-10"
@@ -70,8 +115,8 @@ const InfoOverlay = ({ task, isOpen, onClose }: InfoOverlayProps) => {
         </div>
 
         <div className="flex items-center gap-2 pb-4">
-          <Profile src={writerImage} alt={writerName} />
-          <span className="text-md font-medium">{writerName}</span>
+          <Profile src={task.writer?.image} alt={task.writer?.nickname ?? '알 수 없음'} />
+          <span className="text-md font-medium">{task.writer?.nickname ?? '알 수 없음'}</span>
         </div>
 
         <div className="flex items-center justify-between">
@@ -82,7 +127,11 @@ const InfoOverlay = ({ task, isOpen, onClose }: InfoOverlayProps) => {
                 <span className="text-text-default text-xs font-normal">시작 날짜</span>
               </div>
               <div className="flex items-center">
-                <span className="text-text-primary text-xs font-normal">{task.startDate}</span>
+                <span className="text-text-primary text-xs font-normal">
+                  {task.startDate
+                    ? formatYearMonthDay(new Date(task.startDate))
+                    : formatYearMonthDay(new Date())}
+                </span>
               </div>
             </div>
             <div className="flex gap-3">
@@ -102,8 +151,7 @@ const InfoOverlay = ({ task, isOpen, onClose }: InfoOverlayProps) => {
             <Button
               icon={<CheckIcon className={isDone ? '' : '[&_path]:stroke-white'} />}
               variant={isDone ? 'secondary-whiteFilled' : 'secondary-filled'}
-              // TODO: 기능 연결 시 해당 부분 작성
-              onClick={() => {}}
+              onClick={handleToggle}
             >
               {isDone ? '완료 취소하기' : '완료하기'}
             </Button>
@@ -118,25 +166,51 @@ const InfoOverlay = ({ task, isOpen, onClose }: InfoOverlayProps) => {
       <div>
         <div className="mb-4 flex gap-1">
           <span className="text-text-primary text-lg font-bold">댓글</span>
-          <span className="text-brand-primary text-lg font-bold">{comments.length}</span>
+          <span className="text-brand-primary text-lg font-bold">{comments?.length ?? 0}</span>
         </div>
 
         {/* Comment Input */}
-        <CommentForm writer={task.writer} />
+        <CommentForm writer={task.writer} taskId={task.id} />
 
         {/* Comment List */}
         <div className="divide-border-primary divide-y divide-solid">
-          {comments.map((comment) => (
-            <Reply
-              key={comment.id}
-              author={comment.user.nickname}
-              avatar={<Profile src={comment.user.image} alt={comment.user.nickname} />}
-              date={comment.createdAt}
-              onMenuClick={handleMenuClick}
-            >
-              {comment.content}
-            </Reply>
-          ))}
+          {comments &&
+            comments.map((comment) => (
+              <div
+                className="relative"
+                key={comment.id}
+                ref={openedCommentId === comment.id ? dropdownRef : null}
+              >
+                {/* TODO: User 감지하여 관리자 및 작성자 본인 댓글일 때만 수정, 삭제 버튼 표시 */}
+                {selectedCommentId === comment.id ? (
+                  <ReplyEdit
+                    author={comment.user.nickname}
+                    avatar={<Profile src={comment.user.image} alt={comment.user.nickname} />}
+                    value={updateComment}
+                    onCancel={() => setSelectedCommentId(null)}
+                    onChange={setUpdateComment}
+                    onSubmit={() => handleUpdateComment(comment.id)}
+                  />
+                ) : (
+                  <Reply
+                    author={comment.user.nickname}
+                    avatar={<Profile src={comment.user.image} alt={comment.user.nickname} />}
+                    date={formatYearMonthDay(new Date(comment.createdAt))}
+                    onMenuClick={() => handleMenuClick(comment.id)}
+                  >
+                    {comment.content}
+                  </Reply>
+                )}
+                {openedCommentId === comment.id && (
+                  <div className="absolute top-10 right-30">
+                    <Dropdown
+                      options={OPTIONS}
+                      onSelect={(value) => handleMenuItemSelect(value, comment.id, comment.content)}
+                    />
+                  </div>
+                )}
+              </div>
+            ))}
         </div>
       </div>
     </div>

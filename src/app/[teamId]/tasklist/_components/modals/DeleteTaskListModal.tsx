@@ -1,5 +1,3 @@
-import { useRouter } from 'next/navigation';
-
 import Modal from '@/components/modal/Modal';
 import { useDeleteTaskList } from '@/queries/taskList/queries';
 
@@ -18,12 +16,8 @@ const DeleteTaskListModal = ({
   taskListId,
   taskListName,
 }: DeleteTaskListModalProps) => {
-  const router = useRouter();
   const { mutate, isPending } = useDeleteTaskList({
-    onSuccess: () => {
-      onClose();
-      router.refresh();
-    },
+    onSuccess: onClose,
   });
 
   return (

@@ -1,7 +1,5 @@
 import { useRef } from 'react';
 
-import { useRouter } from 'next/navigation';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -41,35 +39,23 @@ const EditTaskModal = ({ isOpen, onClose, task, groupId, taskListId }: EditTaskM
     },
   });
 
-  const router = useRouter();
-  const { mutate: mutateRecurringTask, isPending: isPendingRecurringTask } = useUpdateRecurringTask(
-    {
-      onSuccess: () => {
-        router.refresh();
-        onClose();
-      },
-    },
-  );
+  const { mutateAsync: mutateRecurringTaskAsync, isPending: isPendingRecurringTask } =
+    useUpdateRecurringTask();
 
-  const { mutate: mutateTask, isPending: isPendingTask } = useUpdateTask({
-    onSuccess: () => {
-      router.refresh();
-      onClose();
-    },
-  });
+  const { mutateAsync: mutateTaskAsync, isPending: isPendingTask } = useUpdateTask();
 
-  const onSubmit = (formValues: TaskFormValues) => {
+  const handleSubmit = async (formValues: TaskFormValues) => {
     const startDate = createStartDate(formValues.date, formValues.time);
     const payload = updateRecurringPayload(formValues, startDate);
 
-    mutateTask({
+    await mutateTaskAsync({
       groupId,
       taskListId,
       taskId: task.id,
       description: formValues.description ?? '',
       name: formValues.name,
     });
-    mutateRecurringTask({
+    await mutateRecurringTaskAsync({
       groupId,
       taskListId,
       body: payload,
@@ -88,7 +74,7 @@ const EditTaskModal = ({ isOpen, onClose, task, groupId, taskListId }: EditTaskM
       closeOnOverlayClick
     >
       <FormProvider {...methods}>
-        <form className="flex flex-col gap-6" onSubmit={methods.handleSubmit(onSubmit)}>
+        <form className="flex flex-col gap-6" onSubmit={methods.handleSubmit(handleSubmit)}>
           <TaskForm submitButtonRef={submitButtonRef} />
 
           <Button

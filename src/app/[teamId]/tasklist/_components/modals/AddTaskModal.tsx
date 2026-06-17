@@ -2,8 +2,6 @@
 
 import { useRef } from 'react';
 
-import { useRouter } from 'next/navigation';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -37,15 +35,11 @@ const AddTaskModal = ({ isOpen, onClose, groupId, taskListId }: AddTaskModalProp
     },
   });
 
-  const router = useRouter();
   const { mutate, isPending } = useCreateTask({
-    onSuccess: () => {
-      onClose();
-      router.refresh();
-    },
+    onSuccess: onClose,
   });
 
-  const onSubmit = (formValues: TaskFormValues) => {
+  const handleSubmit = (formValues: TaskFormValues) => {
     const startDate = createStartDate(formValues.date, formValues.time);
     const payload = createRecurringPayload(formValues, startDate);
 
@@ -62,7 +56,7 @@ const AddTaskModal = ({ isOpen, onClose, groupId, taskListId }: AddTaskModalProp
       closeOnOverlayClick
     >
       <FormProvider {...methods}>
-        <form className="flex flex-col gap-6" onSubmit={methods.handleSubmit(onSubmit)}>
+        <form className="flex flex-col gap-6" onSubmit={methods.handleSubmit(handleSubmit)}>
           <TaskForm submitButtonRef={submitButtonRef} />
 
           <Button variant="primary-filled" fullWidth ref={submitButtonRef} disabled={isPending}>

@@ -1,7 +1,5 @@
 import { useState } from 'react';
 
-import { useRouter } from 'next/navigation';
-
 import Input from '@/components/input/Input';
 import Modal from '@/components/modal/Modal';
 import { useUpdateTaskList } from '@/queries/taskList/queries';
@@ -23,12 +21,8 @@ const EditTaskListModal = ({
 }: AddTaskListModalProps) => {
   const [taskListName, setTaskListName] = useState(title);
 
-  const router = useRouter();
   const { mutate, isPending } = useUpdateTaskList({
-    onSuccess: () => {
-      onClose();
-      router.refresh();
-    },
+    onSuccess: onClose,
   });
 
   return (
