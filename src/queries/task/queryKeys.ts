@@ -13,4 +13,5 @@ export const taskKeys = {
     [...taskKeys.taskList({ groupId, taskListId }), date] as const,
   detail: ({ groupId, taskListId, taskId }: Omit<TaskKeyParams, 'date'>) =>
     [...taskKeys.taskList({ groupId, taskListId }), taskId] as const,
+  history: () => [...taskKeys.all, 'history'] as const,
 };
