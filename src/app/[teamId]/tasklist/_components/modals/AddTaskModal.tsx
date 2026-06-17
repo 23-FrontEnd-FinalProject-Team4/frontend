@@ -4,9 +4,11 @@ import { useRef } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
 
 import Button from '@/components/button/Button';
 import Modal from '@/components/modal/Modal';
+import { getErrorMessage } from '@/lib/error';
 import { useCreateTask } from '@/queries/task/queries';
 
 import { TaskFormValues, taskSchema } from '../../_schemas/task.schema';
@@ -35,15 +37,20 @@ const AddTaskModal = ({ isOpen, onClose, groupId, taskListId }: AddTaskModalProp
     },
   });
 
-  const { mutate, isPending } = useCreateTask({
-    onSuccess: onClose,
-  });
+  const { mutateAsync: createTask, isPending } = useCreateTask();
 
-  const handleSubmit = (formValues: TaskFormValues) => {
+  const handleSubmit = async (formValues: TaskFormValues) => {
     const startDate = createStartDate(formValues.date, formValues.time);
     const payload = createRecurringPayload(formValues, startDate);
 
-    mutate({ groupId, taskListId, body: payload });
+    try {
+      await createTask({ groupId, taskListId, body: payload });
+
+      toast.success('할 일을 만들었습니다.');
+      onClose();
+    } catch (error) {
+      toast.error(getErrorMessage(error, '할 일을 만들지 못했습니다.'));
+    }
   };
 
   return (
@@ -51,7 +58,7 @@ const AddTaskModal = ({ isOpen, onClose, groupId, taskListId }: AddTaskModalProp
       isOpen={isOpen}
       onClose={onClose}
       title="할 일 만들기"
-      description="할 일은 실제로 행동 가능한 작업 중심으로 작성해주시면 좋습니다."
+      description="할 일을 실제로 행동 가능한 작업 중심으로 작성해주시면 좋습니다."
       size="lg"
       closeOnOverlayClick
     >

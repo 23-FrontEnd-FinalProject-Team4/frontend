@@ -56,6 +56,7 @@ export const useUpdateRecurringTask = (
   mutationOptions?: MutationOptions<ResponseTaskRecurring, Error, UpdateRecurringTaskParams>,
 ) => {
   const queryClient = useQueryClient();
+
   return useMutation<ResponseTaskRecurring, Error, UpdateRecurringTaskParams>({
     ...mutationOptions,
     mutationFn: updateRecurringTaskAction,
@@ -75,6 +76,7 @@ export const useUpdateTask = (
   mutationOptions?: MutationOptions<Task, Error, UpdateTaskRequest>,
 ) => {
   const queryClient = useQueryClient();
+
   return useMutation<Task, Error, UpdateTaskRequest>({
     ...mutationOptions,
     mutationFn: updateTaskAction,
@@ -95,6 +97,7 @@ export const useToggleTask = (
   mutationOptions?: MutationOptions<Task, Error, UpdateTaskRequest>,
 ) => {
   const queryClient = useQueryClient();
+
   return useMutation<Task, Error, UpdateTaskRequest>({
     ...mutationOptions,
     mutationFn: toggleTaskAction,
@@ -114,6 +117,7 @@ export const useDeleteTask = (
   mutationOptions?: MutationOptions<ResponseTaskRecurring, Error, TaskDetailPathParams>,
 ) => {
   const queryClient = useQueryClient();
+
   return useMutation<ResponseTaskRecurring, Error, TaskDetailPathParams>({
     ...mutationOptions,
     mutationFn: deleteTaskAction,

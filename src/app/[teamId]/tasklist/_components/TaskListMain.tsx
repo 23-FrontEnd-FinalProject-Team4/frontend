@@ -1,12 +1,14 @@
 'use client';
 
 import { overlay } from 'overlay-kit';
+import { toast } from 'react-hot-toast';
 
 import { Task } from '@/apis/task/type';
 import PlusIcon from '@/assets/icons/plus_white.svg?react';
 import Button from '@/components/button/Button';
 import ListItem from '@/components/listItem/ListItem';
 import { useTaskDate } from '@/hooks/useTaskDate';
+import { getErrorMessage } from '@/lib/error';
 import { useGetTasks, useToggleTask } from '@/queries/task/queries';
 import { addDays, formatISODate } from '@/utils/date';
 
@@ -24,6 +26,12 @@ interface TaskListMainProps {
 
 const TaskListMain = ({ taskListId, groupId, taskListName }: TaskListMainProps) => {
   const { selectedDate, setDate } = useTaskDate();
+  const { data: tasks } = useGetTasks({ groupId, taskListId, date: formatISODate(selectedDate) });
+  const { mutate: toggleTask } = useToggleTask({
+    onError: (error) => {
+      toast.error(getErrorMessage(error, '할 일 상태를 변경하지 못했습니다.'));
+    },
+  });
 
   const handleNextWeek = () => {
     setDate(addDays(selectedDate, 7));
@@ -37,12 +45,8 @@ const TaskListMain = ({ taskListId, groupId, taskListName }: TaskListMainProps) 
     setDate(new Date());
   };
 
-  const { data: tasks } = useGetTasks({ groupId, taskListId, date: formatISODate(selectedDate) });
-
-  const { mutate: toggleMutate } = useToggleTask();
-
-  const handleToggle = async (task: Task) => {
-    toggleMutate({ groupId, taskId: task.id, done: !task.doneAt, taskListId });
+  const handleToggle = (task: Task) => {
+    toggleTask({ groupId, taskId: task.id, done: !task.doneAt, taskListId });
   };
 
   const handleOpenOverlay = (task: Task) => {
@@ -96,17 +100,16 @@ const TaskListMain = ({ taskListId, groupId, taskListName }: TaskListMainProps) 
         taskName={taskListName}
       />
       <div className="flex flex-col gap-3">
-        {tasks &&
-          tasks.map((task) => (
-            <ListItem
-              task={task}
-              key={task.id}
-              onClick={() => handleOpenOverlay(task)}
-              onToggle={() => handleToggle(task)}
-              onDelete={() => handleDeleteModalOpen(task)}
-              onEdit={() => handleEditModalOpen(task)}
-            />
-          ))}
+        {tasks?.map((task) => (
+          <ListItem
+            task={task}
+            key={task.id}
+            onClick={() => handleOpenOverlay(task)}
+            onToggle={() => handleToggle(task)}
+            onDelete={() => handleDeleteModalOpen(task)}
+            onEdit={() => handleEditModalOpen(task)}
+          />
+        ))}
       </div>
       <div className="fixed right-5 bottom-5 xl:right-20 xl:bottom-20">
         <Button
