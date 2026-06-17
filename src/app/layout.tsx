@@ -1,15 +1,17 @@
 import type { Metadata } from 'next';
 
 import '@/app/globals.css';
+import AppShell from '@/components/AppShell';
 import OverlayProvider from '@/providers/OverlayProvider';
 import QueryProvider from '@/providers/QueryProvider';
 import ToastProvider from '@/providers/ToastProvider';
 
-import AppShell from '@/components/AppShell';
-
 export const metadata: Metadata = {
   title: 'Coworkers',
   description: 'Coworkers project',
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
