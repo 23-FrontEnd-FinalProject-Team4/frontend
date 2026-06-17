@@ -60,11 +60,12 @@ const InfoOverlay = ({ taskId, isOpen, onClose, taskListId, groupId }: InfoOverl
     setOpenedCommentId(id);
   };
 
-  const handleMenuItemSelect = (value: string, commentId: number) => {
+  const handleMenuItemSelect = (value: string, commentId: number, content: string) => {
     if (value === 'DELETE') {
       deleteComment({ taskId: task!.id, commentId });
     } else if (value === 'EDIT') {
       setSelectedCommentId(commentId);
+      setUpdateComment(content);
     }
     setOpenedCommentId(null);
   };
@@ -114,8 +115,8 @@ const InfoOverlay = ({ taskId, isOpen, onClose, taskListId, groupId }: InfoOverl
         </div>
 
         <div className="flex items-center gap-2 pb-4">
-          <Profile src={task.writer?.image} alt={task.writer?.nickname ?? ''} />
-          <span className="text-md font-medium">{task.writer?.nickname}</span>
+          <Profile src={task.writer?.image} alt={task.writer?.nickname ?? '알 수 없음'} />
+          <span className="text-md font-medium">{task.writer?.nickname ?? '알 수 없음'}</span>
         </div>
 
         <div className="flex items-center justify-between">
@@ -175,7 +176,11 @@ const InfoOverlay = ({ taskId, isOpen, onClose, taskListId, groupId }: InfoOverl
         <div className="divide-border-primary divide-y divide-solid">
           {comments &&
             comments.map((comment) => (
-              <div className="relative" key={comment.id}>
+              <div
+                className="relative"
+                key={comment.id}
+                ref={openedCommentId === comment.id ? dropdownRef : null}
+              >
                 {/* TODO: User 감지하여 관리자 및 작성자 본인 댓글일 때만 수정, 삭제 버튼 표시 */}
                 {selectedCommentId === comment.id ? (
                   <ReplyEdit
@@ -197,10 +202,10 @@ const InfoOverlay = ({ taskId, isOpen, onClose, taskListId, groupId }: InfoOverl
                   </Reply>
                 )}
                 {openedCommentId === comment.id && (
-                  <div className="absolute top-10 right-30" ref={dropdownRef}>
+                  <div className="absolute top-10 right-30">
                     <Dropdown
                       options={OPTIONS}
-                      onSelect={(value) => handleMenuItemSelect(value, comment.id)}
+                      onSelect={(value) => handleMenuItemSelect(value, comment.id, comment.content)}
                     />
                   </div>
                 )}

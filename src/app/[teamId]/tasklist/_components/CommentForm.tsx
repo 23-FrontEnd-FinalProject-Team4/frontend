@@ -19,10 +19,10 @@ const CommentForm = ({ writer, taskId }: CommentFormProps) => {
 
   const { mutate: createComment } = useCreateTaskComment({});
 
-  const handleSubmit = () => {
-    if (!comment) return;
+  const submitComment = () => {
+    if (!comment.trim()) return;
     createComment(
-      { content: comment, taskId },
+      { content: comment.trim(), taskId },
       {
         onSuccess: () => {
           setComment('');
@@ -31,10 +31,15 @@ const CommentForm = ({ writer, taskId }: CommentFormProps) => {
     );
   };
 
+  const handleSubmit = (e: React.SubmitEvent) => {
+    e.preventDefault();
+    submitComment();
+  };
+
   return (
-    <form className="flex items-center gap-3" onSubmit={(event) => event.preventDefault()}>
+    <form className="flex items-center gap-3" onSubmit={handleSubmit}>
       <Profile src={writerImage} alt={writerName} />
-      <InputReply value={comment} onChange={setComment} onSubmit={handleSubmit} size="lg" />
+      <InputReply value={comment} onChange={setComment} onSubmit={submitComment} size="lg" />
     </form>
   );
 };
