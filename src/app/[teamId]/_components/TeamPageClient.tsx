@@ -10,13 +10,11 @@ import { toast } from 'react-hot-toast';
 
 import type { Member, TaskList } from '@/apis/group/type';
 import type { Task } from '@/apis/task/type';
-import Modal from '@/components/modal/Modal';
 import type { TeamCardSize } from '@/components/team/type';
 import useMediaQuery, { MEDIA_QUERY } from '@/hooks/useMediaQuery';
 import {
   useCreateTeamTaskListMutation,
   useDeleteTeamMutation,
-  useTeamInvitationMutation,
 } from '@/queries/teams/queries';
 
 import { getTeamPageDataAction } from '../_actions/team-page.action';
@@ -24,6 +22,8 @@ import { TASK_LISTS, TASK_STATUS_SECTIONS, TEAM_PAGE_MEMBERS } from '../_constan
 import type { TaskListItem, TeamPageMember, TeamPageRole } from '../type';
 import TeamPageHeader from './header/TeamPageHeader';
 import MemberSection from './member/MemberSection';
+import DeleteTeamModal from './modals/DeleteTeamModal';
+import InviteMemberModal from './modals/InviteMemberModal';
 import CreateTaskListModal from './task-list/CreateTaskListModal';
 import TaskListSection from './task-list/TaskListSection';
 
@@ -80,122 +80,6 @@ const mapTaskLists = (taskLists: TaskList[] = []): TaskListItem[] =>
       })),
     };
   });
-
-const copyInviteLink = async ({
-  groupId,
-  getInvitationLink,
-}: {
-  groupId?: number;
-  getInvitationLink: (groupId: number) => Promise<string>;
-}) => {
-  if (!navigator.clipboard) {
-    throw new Error('클립보드를 사용할 수 없습니다.');
-  }
-
-  if (!groupId) {
-    throw new Error('팀 정보를 찾을 수 없습니다.');
-  }
-
-  const invitationLink = await getInvitationLink(groupId);
-  await navigator.clipboard.writeText(invitationLink);
-};
-
-interface InviteMemberModalProps {
-  isOpen: boolean;
-  groupId?: number;
-  onClose: () => void;
-}
-
-interface DeleteTeamModalProps {
-  isOpen: boolean;
-  teamName: string;
-  onClose: () => void;
-  onDelete: () => Promise<boolean>;
-}
-
-const InviteMemberModal = ({ isOpen, groupId, onClose }: InviteMemberModalProps) => {
-  const { mutateAsync: getInvitationLink, isPending: isCopying } = useTeamInvitationMutation();
-
-  const handleCopyInviteLink = async () => {
-    if (isCopying) {
-      return;
-    }
-
-    try {
-      await copyInviteLink({
-        groupId,
-        getInvitationLink: (currentGroupId) => getInvitationLink({ groupId: currentGroupId }),
-      });
-      toast.success('초대 링크가 클립보드에 복사되었습니다.');
-      onClose();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : '초대 링크를 복사하지 못했습니다.');
-    }
-  };
-
-  return (
-    <Modal
-      isOpen={isOpen}
-      title="멤버 초대"
-      description="그룹에 참여할 수 있는 링크를 복사합니다."
-      primaryAction={{
-        label: '링크 복사하기',
-        loadingLabel: '복사 중',
-        onClick: handleCopyInviteLink,
-        disabled: isCopying,
-        isLoading: isCopying,
-      }}
-      size="md"
-      onClose={onClose}
-    />
-  );
-};
-
-const DeleteTeamModal = ({ isOpen, teamName, onClose, onDelete }: DeleteTeamModalProps) => {
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  const handleDeleteTeam = async () => {
-    if (isDeleting) {
-      return;
-    }
-
-    setIsDeleting(true);
-
-    try {
-      const shouldClose = await onDelete();
-
-      if (shouldClose) {
-        onClose();
-      }
-    } finally {
-      setIsDeleting(false);
-    }
-  };
-
-  return (
-    <Modal
-      isOpen={isOpen}
-      title="팀 삭제"
-      description={`${teamName} 팀을 삭제하시겠어요?\n삭제한 팀은 다시 복구할 수 없습니다.`}
-      primaryAction={{
-        label: '삭제하기',
-        loadingLabel: '삭제 중',
-        onClick: handleDeleteTeam,
-        disabled: isDeleting,
-        isLoading: isDeleting,
-      }}
-      secondaryAction={{
-        label: '취소',
-        onClick: onClose,
-        disabled: isDeleting,
-      }}
-      variant="danger"
-      size="md"
-      closeOnOverlayClick={!isDeleting}
-      onClose={onClose}
-    />
-  );
-};
 
 const TeamPageStatus = ({ message }: { message: string }) => (
   <div className="bg-background-primary text-text-default text-md flex min-h-60 items-center justify-center rounded-xl font-medium shadow-sm">

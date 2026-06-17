@@ -7,7 +7,7 @@ import Modal from '@/components/modal/Modal';
 interface CreateTaskListModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onCreate?: (title: string) => boolean | void | Promise<boolean | void>;
+  onCreate: (title: string) => boolean | void | Promise<boolean | void>;
 }
 
 const CreateTaskListModal = ({
@@ -27,7 +27,7 @@ const CreateTaskListModal = ({
     setIsSubmitting(true);
 
     try {
-      const shouldClose = await onCreate?.(trimmedTitle);
+      const shouldClose = await onCreate(trimmedTitle);
 
       if (shouldClose === false) {
         return;
