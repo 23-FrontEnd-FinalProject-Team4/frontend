@@ -1,6 +1,12 @@
 import 'server-only';
 
-import { getAccessToken } from '@/utils/auth/token';
+import { refreshAccessToken } from '@/apis/auth/server';
+import {
+  clearAuthTokens,
+  getAccessToken,
+  getRefreshToken,
+  setAccessToken,
+} from '@/utils/auth/token';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -52,15 +58,49 @@ const parseResponse = async <T>(response: Response): Promise<T> => {
   return response.text() as Promise<T>;
 };
 
+const refreshSession = async (): Promise<boolean> => {
+  const refreshToken = await getRefreshToken();
+
+  if (!refreshToken) {
+    return false;
+  }
+
+  try {
+    const { accessToken } = await refreshAccessToken({
+      refreshToken,
+    });
+
+    await setAccessToken(accessToken);
+
+    return true;
+  } catch {
+    await clearAuthTokens();
+    return false;
+  }
+};
+
 export const serverFetcher = async <T>(path: string, options: RequestInit = {}): Promise<T> => {
-  const response = await fetch(createRequestUrl(path), {
+  let response = await fetch(createRequestUrl(path), {
     ...options,
     headers: await createServerHeaders(options.headers, options.body),
     cache: options.cache ?? 'no-store',
   });
 
+  if (response.status === 401) {
+    const refreshed = await refreshSession();
+
+    if (refreshed) {
+      response = await fetch(createRequestUrl(path), {
+        ...options,
+        headers: await createServerHeaders(options.headers, options.body),
+        cache: options.cache ?? 'no-store',
+      });
+    }
+  }
+
   if (!response.ok) {
     const errorBody = await response.text();
+
     throw new Error(`API request failed with status ${response.status}: ${errorBody}`);
   }
 
