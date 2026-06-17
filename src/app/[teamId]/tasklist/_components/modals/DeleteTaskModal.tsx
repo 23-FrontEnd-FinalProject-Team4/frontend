@@ -1,7 +1,10 @@
 import { useRouter } from 'next/navigation';
 
+import { toast } from 'react-hot-toast';
+
 import { Task } from '@/apis/task/type';
 import Modal from '@/components/modal/Modal';
+import { getErrorMessage } from '@/lib/error';
 import { useDeleteTask } from '@/queries/task/queries';
 
 interface DeleteTaskModalProps {
@@ -14,12 +17,19 @@ interface DeleteTaskModalProps {
 
 const DeleteTaskModal = ({ isOpen, onClose, task, groupId, taskListId }: DeleteTaskModalProps) => {
   const router = useRouter();
-  const { mutate, isPending } = useDeleteTask({
-    onSuccess: () => {
+  const { mutateAsync: deleteTask, isPending } = useDeleteTask({});
+
+  const handleDeleteTask = async () => {
+    try {
+      await deleteTask({ groupId, taskListId, taskId: task.id });
+
+      toast.success('할 일을 삭제했습니다.');
       onClose();
       router.refresh();
-    },
-  });
+    } catch (error) {
+      toast.error(getErrorMessage(error, '할 일을 삭제하지 못했습니다.'));
+    }
+  };
 
   return (
     <Modal
@@ -30,9 +40,7 @@ const DeleteTaskModal = ({ isOpen, onClose, task, groupId, taskListId }: DeleteT
       variant="danger"
       primaryAction={{
         label: '삭제하기',
-        onClick: () => {
-          mutate({ groupId, taskListId, taskId: task.id });
-        },
+        onClick: handleDeleteTask,
         disabled: isPending,
       }}
       secondaryAction={{

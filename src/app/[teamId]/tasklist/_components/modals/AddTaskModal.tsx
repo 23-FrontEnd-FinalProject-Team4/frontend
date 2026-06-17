@@ -6,9 +6,11 @@ import { useRouter } from 'next/navigation';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
 
 import Button from '@/components/button/Button';
 import Modal from '@/components/modal/Modal';
+import { getErrorMessage } from '@/lib/error';
 import { useCreateTask } from '@/queries/task/queries';
 
 import { TaskFormValues, taskSchema } from '../../_schemas/task.schema';
@@ -38,18 +40,21 @@ const AddTaskModal = ({ isOpen, onClose, groupId, taskListId }: AddTaskModalProp
   });
 
   const router = useRouter();
-  const { mutate, isPending } = useCreateTask({
-    onSuccess: () => {
-      onClose();
-      router.refresh();
-    },
-  });
+  const { mutateAsync: createTask, isPending } = useCreateTask({});
 
-  const onSubmit = (formValues: TaskFormValues) => {
+  const onSubmit = async (formValues: TaskFormValues) => {
     const startDate = createStartDate(formValues.date, formValues.time);
     const payload = createRecurringPayload(formValues, startDate);
 
-    mutate({ groupId, taskListId, body: payload });
+    try {
+      await createTask({ groupId, taskListId, body: payload });
+
+      toast.success('할 일을 만들었습니다.');
+      onClose();
+      router.refresh();
+    } catch (error) {
+      toast.error(getErrorMessage(error, '할 일을 만들지 못했습니다.'));
+    }
   };
 
   return (

@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 
 import { overlay } from 'overlay-kit';
+import { toast } from 'react-hot-toast';
 
 import { TaskList } from '@/apis/group/type';
 import { Task } from '@/apis/task/type';
@@ -10,9 +11,10 @@ import PlusIcon from '@/assets/icons/plus_white.svg?react';
 import Button from '@/components/button/Button';
 import ListItem from '@/components/listItem/ListItem';
 import { useTaskDate } from '@/hooks/useTaskDate';
+import { getErrorMessage } from '@/lib/error';
+import { useToggleTask } from '@/queries/task/queries';
 import { addDays } from '@/utils/date';
 
-import { toggleTaskAction } from '../_action/task';
 import InfoOverlay from './InfoOverlay';
 import TaskListTitle from './TaskListTitle';
 import AddTaskModal from './modals/AddTaskModal';
@@ -26,6 +28,15 @@ interface TaskListMainProps {
 
 const TaskListMain = ({ taskList, groupId }: TaskListMainProps) => {
   const { selectedDate, setDate } = useTaskDate();
+  const router = useRouter();
+  const { mutate: toggleTask } = useToggleTask({
+    onSuccess: () => {
+      router.refresh();
+    },
+    onError: (error) => {
+      toast.error(getErrorMessage(error, '할 일 상태를 변경하지 못했습니다.'));
+    },
+  });
 
   const handleNextWeek = () => {
     setDate(addDays(selectedDate, 7));
@@ -75,15 +86,13 @@ const TaskListMain = ({ taskList, groupId }: TaskListMainProps) => {
     ));
   };
 
-  const router = useRouter();
-  const handleToggle = async (task: Task) => {
-    await toggleTaskAction({
+  const handleToggle = (task: Task) => {
+    toggleTask({
       groupId,
       taskId: task.id,
       taskListId: taskList.id,
       done: !task.doneAt,
     });
-    router.refresh();
   };
 
   return (
@@ -100,7 +109,6 @@ const TaskListMain = ({ taskList, groupId }: TaskListMainProps) => {
             task={task}
             key={task.id}
             onClick={() => handleOpenOverlay(task)}
-            // TODO: API 연결 시 함수 연결
             onToggle={() => {
               handleToggle(task);
             }}

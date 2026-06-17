@@ -9,6 +9,7 @@ import { Task, TaskDetailPathParams, UpdateTaskRequest } from '@/apis/task/type'
 import {
   createTaskAction,
   deleteTaskAction,
+  toggleTaskAction,
   updateRecurringTaskAction,
   updateTaskAction,
 } from '@/app/[teamId]/tasklist/_action/task';
@@ -34,6 +35,13 @@ export const useUpdateRecurringTask = (
 export const useUpdateTask = (mutationOptions: MutationOptions<Task, Error, UpdateTaskRequest>) => {
   return useMutation<Task, Error, UpdateTaskRequest>({
     mutationFn: updateTaskAction,
+    ...mutationOptions,
+  });
+};
+
+export const useToggleTask = (mutationOptions: MutationOptions<Task, Error, UpdateTaskRequest>) => {
+  return useMutation<Task, Error, UpdateTaskRequest>({
+    mutationFn: toggleTaskAction,
     ...mutationOptions,
   });
 };

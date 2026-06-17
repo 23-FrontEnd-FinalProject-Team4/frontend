@@ -61,7 +61,7 @@ export const toggleTaskAction = async ({
   taskId,
   done,
 }: UpdateTaskRequest) => {
-  return await serverFetcher(`/groups/${groupId}/task-lists/${taskListId}/tasks/${taskId}`, {
+  return await serverFetcher<Task>(`/groups/${groupId}/task-lists/${taskListId}/tasks/${taskId}`, {
     method: 'PATCH',
     body: JSON.stringify({ done }),
   });
