@@ -5,12 +5,18 @@ import {
   ResponseTaskRecurring,
   UpdateRecurringTaskParams,
 } from '@/apis/recurring/type';
-import { Task, TaskDetailPathParams, UpdateTaskRequest } from '@/apis/task/type';
+import { GetTasksRequest, Task, TaskDetailPathParams, UpdateTaskRequest } from '@/apis/task/type';
 import { serverFetcher } from '@/lib/serverFetcher';
 
-export type CreateTaskActionResult =
-  | { success: true; data: ResponseTaskRecurring }
-  | { success: false; error: string };
+export const getTaskAction = async ({ groupId, taskListId, taskId }: TaskDetailPathParams) => {
+  return await serverFetcher<Task>(`/groups/${groupId}/task-lists/${taskListId}/tasks/${taskId}`);
+};
+
+export const getTasksAction = async ({ groupId, taskListId, date }: GetTasksRequest) => {
+  return await serverFetcher<Task[]>(
+    `/groups/${groupId}/task-lists/${taskListId}/tasks` + (date ? `?date=${date}` : ''),
+  );
+};
 
 export const createTaskAction = async ({
   groupId,

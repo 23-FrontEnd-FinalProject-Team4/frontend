@@ -1,4 +1,4 @@
-import { useRouter } from 'next/navigation';
+'use client';
 
 import { toast } from 'react-hot-toast';
 
@@ -16,8 +16,7 @@ interface DeleteTaskModalProps {
 }
 
 const DeleteTaskModal = ({ isOpen, onClose, task, groupId, taskListId }: DeleteTaskModalProps) => {
-  const router = useRouter();
-  const { mutateAsync: deleteTask, isPending } = useDeleteTask({});
+  const { mutateAsync: deleteTask, isPending } = useDeleteTask();
 
   const handleDeleteTask = async () => {
     try {
@@ -25,7 +24,6 @@ const DeleteTaskModal = ({ isOpen, onClose, task, groupId, taskListId }: DeleteT
 
       toast.success('할 일을 삭제했습니다.');
       onClose();
-      router.refresh();
     } catch (error) {
       toast.error(getErrorMessage(error, '할 일을 삭제하지 못했습니다.'));
     }

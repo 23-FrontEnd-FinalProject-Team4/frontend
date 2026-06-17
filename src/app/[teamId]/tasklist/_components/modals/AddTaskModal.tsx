@@ -2,8 +2,6 @@
 
 import { useRef } from 'react';
 
-import { useRouter } from 'next/navigation';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
@@ -39,10 +37,9 @@ const AddTaskModal = ({ isOpen, onClose, groupId, taskListId }: AddTaskModalProp
     },
   });
 
-  const router = useRouter();
-  const { mutateAsync: createTask, isPending } = useCreateTask({});
+  const { mutateAsync: createTask, isPending } = useCreateTask();
 
-  const onSubmit = async (formValues: TaskFormValues) => {
+  const handleSubmit = async (formValues: TaskFormValues) => {
     const startDate = createStartDate(formValues.date, formValues.time);
     const payload = createRecurringPayload(formValues, startDate);
 
@@ -51,7 +48,6 @@ const AddTaskModal = ({ isOpen, onClose, groupId, taskListId }: AddTaskModalProp
 
       toast.success('할 일을 만들었습니다.');
       onClose();
-      router.refresh();
     } catch (error) {
       toast.error(getErrorMessage(error, '할 일을 만들지 못했습니다.'));
     }
@@ -62,12 +58,12 @@ const AddTaskModal = ({ isOpen, onClose, groupId, taskListId }: AddTaskModalProp
       isOpen={isOpen}
       onClose={onClose}
       title="할 일 만들기"
-      description="할 일은 실제로 행동 가능한 작업 중심으로 작성해주시면 좋습니다."
+      description="할 일을 실제로 행동 가능한 작업 중심으로 작성해주시면 좋습니다."
       size="lg"
       closeOnOverlayClick
     >
       <FormProvider {...methods}>
-        <form className="flex flex-col gap-6" onSubmit={methods.handleSubmit(onSubmit)}>
+        <form className="flex flex-col gap-6" onSubmit={methods.handleSubmit(handleSubmit)}>
           <TaskForm submitButtonRef={submitButtonRef} />
 
           <Button variant="primary-filled" fullWidth ref={submitButtonRef} disabled={isPending}>

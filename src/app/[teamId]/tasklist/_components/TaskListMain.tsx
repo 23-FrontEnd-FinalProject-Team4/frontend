@@ -1,19 +1,16 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-
 import { overlay } from 'overlay-kit';
 import { toast } from 'react-hot-toast';
 
-import { TaskList } from '@/apis/group/type';
 import { Task } from '@/apis/task/type';
 import PlusIcon from '@/assets/icons/plus_white.svg?react';
 import Button from '@/components/button/Button';
 import ListItem from '@/components/listItem/ListItem';
 import { useTaskDate } from '@/hooks/useTaskDate';
 import { getErrorMessage } from '@/lib/error';
-import { useToggleTask } from '@/queries/task/queries';
-import { addDays } from '@/utils/date';
+import { useGetTasks, useToggleTask } from '@/queries/task/queries';
+import { addDays, formatISODate } from '@/utils/date';
 
 import InfoOverlay from './InfoOverlay';
 import TaskListTitle from './TaskListTitle';
@@ -22,17 +19,15 @@ import DeleteTaskModal from './modals/DeleteTaskModal';
 import EditTaskModal from './modals/EditTaskModal';
 
 interface TaskListMainProps {
-  taskList: TaskList;
+  taskListId: number;
   groupId: number;
+  taskListName?: string;
 }
 
-const TaskListMain = ({ taskList, groupId }: TaskListMainProps) => {
+const TaskListMain = ({ taskListId, groupId, taskListName }: TaskListMainProps) => {
   const { selectedDate, setDate } = useTaskDate();
-  const router = useRouter();
+  const { data: tasks } = useGetTasks({ groupId, taskListId, date: formatISODate(selectedDate) });
   const { mutate: toggleTask } = useToggleTask({
-    onSuccess: () => {
-      router.refresh();
-    },
     onError: (error) => {
       toast.error(getErrorMessage(error, '할 일 상태를 변경하지 못했습니다.'));
     },
@@ -50,15 +45,25 @@ const TaskListMain = ({ taskList, groupId }: TaskListMainProps) => {
     setDate(new Date());
   };
 
-  const handleOpenOverlay = (task: TaskList['tasks'][0]) => {
+  const handleToggle = (task: Task) => {
+    toggleTask({ groupId, taskId: task.id, done: !task.doneAt, taskListId });
+  };
+
+  const handleOpenOverlay = (task: Task) => {
     overlay.open(({ isOpen, close }) => (
-      <InfoOverlay task={task} isOpen={isOpen} onClose={close} />
+      <InfoOverlay
+        groupId={groupId}
+        taskListId={taskListId}
+        taskId={task.id}
+        isOpen={isOpen}
+        onClose={close}
+      />
     ));
   };
 
   const handleAddModalOpen = () => {
     overlay.open(({ isOpen, close }) => (
-      <AddTaskModal isOpen={isOpen} onClose={close} groupId={groupId} taskListId={taskList.id} />
+      <AddTaskModal isOpen={isOpen} onClose={close} groupId={groupId} taskListId={taskListId} />
     ));
   };
 
@@ -69,7 +74,7 @@ const TaskListMain = ({ taskList, groupId }: TaskListMainProps) => {
         onClose={close}
         task={task}
         groupId={groupId}
-        taskListId={taskList.id}
+        taskListId={taskListId}
       />
     ));
   };
@@ -81,18 +86,9 @@ const TaskListMain = ({ taskList, groupId }: TaskListMainProps) => {
         onClose={close}
         task={task}
         groupId={groupId}
-        taskListId={taskList.id}
+        taskListId={taskListId}
       />
     ));
-  };
-
-  const handleToggle = (task: Task) => {
-    toggleTask({
-      groupId,
-      taskId: task.id,
-      taskListId: taskList.id,
-      done: !task.doneAt,
-    });
   };
 
   return (
@@ -101,17 +97,15 @@ const TaskListMain = ({ taskList, groupId }: TaskListMainProps) => {
         onNextWeek={handleNextWeek}
         onPrevWeek={handlePrevWeek}
         onToday={handleToday}
-        taskName={taskList?.name}
+        taskName={taskListName}
       />
       <div className="flex flex-col gap-3">
-        {taskList?.tasks.map((task) => (
+        {tasks?.map((task) => (
           <ListItem
             task={task}
             key={task.id}
             onClick={() => handleOpenOverlay(task)}
-            onToggle={() => {
-              handleToggle(task);
-            }}
+            onToggle={() => handleToggle(task)}
             onDelete={() => handleDeleteModalOpen(task)}
             onEdit={() => handleEditModalOpen(task)}
           />

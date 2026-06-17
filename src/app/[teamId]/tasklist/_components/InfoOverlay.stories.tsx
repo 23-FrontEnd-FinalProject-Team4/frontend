@@ -1,13 +1,24 @@
 import { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient } from '@tanstack/react-query';
 import { fn } from 'storybook/test';
 
 import { MOCK_TASKLISTS } from '../_constants/mockData';
 import InfoOverlay from './InfoOverlay';
 
+const queryClient = new QueryClient();
+
 const meta = {
   component: InfoOverlay,
   title: 'TaskList/InfoOverlay',
   tags: ['autodocs'],
+  decorators: [
+    (Story) => (
+      <QueryClientProvider client={queryClient}>
+        <Story />
+      </QueryClientProvider>
+    ),
+  ],
 } satisfies Meta<typeof InfoOverlay>;
 export default meta;
 
@@ -15,7 +26,9 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    task: MOCK_TASKLISTS[0].tasks[0],
+    groupId: MOCK_TASKLISTS[0].groupId,
+    taskListId: MOCK_TASKLISTS[0].id,
+    taskId: MOCK_TASKLISTS[0].tasks[0].id,
     isOpen: true,
     onClose: fn(),
   },
