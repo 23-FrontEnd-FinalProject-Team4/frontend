@@ -2,27 +2,28 @@
 
 import { useMemo, useState } from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { overlay } from 'overlay-kit';
 import { toast } from 'react-hot-toast';
 
-import { getGroup, getGroupInvitation, getGroupTasks } from '@/apis/group';
 import type { Member, TaskList } from '@/apis/group/type';
 import type { Task } from '@/apis/task/type';
-import { getMyGroups, getMyProfile } from '@/apis/user';
-import Modal from '@/components/modal/Modal';
 import type { TeamCardSize } from '@/components/team/type';
 import useMediaQuery, { MEDIA_QUERY } from '@/hooks/useMediaQuery';
-
 import {
-  createTeamTaskListAction,
-  getTeamInvitationAction,
-  getTeamPageDataAction,
-} from '../_actions/team-page.action';
+  useCreateTeamTaskListMutation,
+  useDeleteTeamMutation,
+} from '@/queries/teams/queries';
+
+import { getTeamPageDataAction } from '../_actions/team-page.action';
 import { TASK_LISTS, TASK_STATUS_SECTIONS, TEAM_PAGE_MEMBERS } from '../_constants/mockData';
 import type { TaskListItem, TeamPageMember, TeamPageRole } from '../type';
 import TeamPageHeader from './header/TeamPageHeader';
 import MemberSection from './member/MemberSection';
+import DeleteTeamModal from './modals/DeleteTeamModal';
+import InviteMemberModal from './modals/InviteMemberModal';
 import CreateTaskListModal from './task-list/CreateTaskListModal';
 import TaskListSection from './task-list/TaskListSection';
 
@@ -34,8 +35,6 @@ interface TeamPageClientProps {
 const TEAM_PAGE_QUERY_KEY = {
   data: (teamId: string, date: string) => ['team-page', teamId, date] as const,
 };
-
-const FALLBACK_INVITE_LINK = 'https://coworkers.example.com/invite/management';
 
 const isMemberView = (teamId: string) => ['member', 'user'].includes(teamId.toLowerCase());
 
@@ -82,78 +81,17 @@ const mapTaskLists = (taskLists: TaskList[] = []): TaskListItem[] =>
     };
   });
 
-const copyInviteLink = async (groupId?: number) => {
-  if (!navigator.clipboard) {
-    return;
-  }
-
-  if (!groupId) {
-    await navigator.clipboard.writeText(FALLBACK_INVITE_LINK);
-    return;
-  }
-
-  const inviteResult = await getTeamInvitationAction({ groupId });
-
-  if (!inviteResult.success) {
-    throw new Error(inviteResult.error);
-  }
-
-  await navigator.clipboard.writeText(inviteResult.data);
-};
-
-interface InviteMemberModalProps {
-  isOpen: boolean;
-  groupId?: number;
-  onClose: () => void;
-}
-
-const InviteMemberModal = ({ isOpen, groupId, onClose }: InviteMemberModalProps) => {
-  const [isCopying, setIsCopying] = useState(false);
-
-  const handleCopyInviteLink = async () => {
-    if (isCopying) {
-      return;
-    }
-
-    setIsCopying(true);
-
-    try {
-      await copyInviteLink(groupId);
-      toast.success('초대 링크가 클립보드에 복사되었습니다.');
-      onClose();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : '초대 링크를 복사하지 못했습니다.');
-    } finally {
-      setIsCopying(false);
-    }
-  };
-
-  return (
-    <Modal
-      isOpen={isOpen}
-      title="멤버 초대"
-      description="그룹에 참여할 수 있는 링크를 복사합니다."
-      primaryAction={{
-        label: '링크 복사하기',
-        loadingLabel: '복사 중',
-        onClick: handleCopyInviteLink,
-        disabled: isCopying,
-        isLoading: isCopying,
-      }}
-      size="md"
-      onClose={onClose}
-    />
-  );
-};
-
 const TeamPageStatus = ({ message }: { message: string }) => (
   <div className="bg-background-primary text-text-default text-md flex min-h-60 items-center justify-center rounded-xl font-medium shadow-sm">
     {message}
   </div>
 );
 
-export default function TeamPageClient({ teamId, initialDate }: TeamPageClientProps) {
+const TeamPageClient = ({ teamId, initialDate }: TeamPageClientProps) => {
+  const router = useRouter();
   const queryClient = useQueryClient();
+  const { mutateAsync: createTeamTaskList } = useCreateTeamTaskListMutation();
+  const { mutateAsync: deleteTeam } = useDeleteTeamMutation();
   const isDesktop = useMediaQuery(MEDIA_QUERY.desktop);
   const isTablet = useMediaQuery(MEDIA_QUERY.tablet);
   const today = initialDate;
@@ -211,6 +149,56 @@ export default function TeamPageClient({ teamId, initialDate }: TeamPageClientPr
     });
   };
 
+  const handleEditTeam = () => {
+    if (!selectedGroupId) {
+      toast.error('팀 정보를 찾을 수 없습니다.');
+      return;
+    }
+
+    setIsTeamMenuOpen(false);
+    router.push(`/${selectedGroupId}/edit`);
+  };
+
+  const openDeleteTeamModal = () => {
+    if (!selectedGroupId) {
+      toast.error('팀 정보를 찾을 수 없습니다.');
+      return;
+    }
+
+    setIsTeamMenuOpen(false);
+
+    overlay.open(({ isOpen, close }) => {
+      const handleDeleteTeam = async () => {
+        try {
+          await deleteTeam({ groupId: selectedGroupId });
+        } catch (error) {
+          toast.error(error instanceof Error ? error.message : '팀을 삭제하지 못했습니다.');
+          return false;
+        }
+
+        const nextGroupId = myGroups.find((myGroup) => myGroup.id !== selectedGroupId)?.id;
+
+        toast.success('팀을 삭제했습니다.');
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: ['sidebar'] }),
+          queryClient.invalidateQueries({ queryKey: ['team-page'] }),
+        ]);
+
+        router.push(nextGroupId ? `/${nextGroupId}` : '/no-team');
+        return true;
+      };
+
+      return (
+        <DeleteTeamModal
+          isOpen={isOpen}
+          teamName={group?.name ?? '선택한'}
+          onClose={close}
+          onDelete={handleDeleteTeam}
+        />
+      );
+    });
+  };
+
   const openCreateListModal = () => {
     overlay.open(({ isOpen, close }) => {
       return (
@@ -223,13 +211,15 @@ export default function TeamPageClient({ teamId, initialDate }: TeamPageClientPr
               return false;
             }
 
-            const result = await createTeamTaskListAction({
-              groupId: selectedGroupId,
-              name: title,
-            });
-
-            if (!result.success) {
-              toast.error(result.error);
+            try {
+              await createTeamTaskList({
+                groupId: selectedGroupId,
+                name: title,
+              });
+            } catch (error) {
+              toast.error(
+                error instanceof Error ? error.message : '할 일 목록을 생성하지 못했습니다.',
+              );
               return false;
             }
 
@@ -260,6 +250,8 @@ export default function TeamPageClient({ teamId, initialDate }: TeamPageClientPr
           progressValue={progressValue}
           isSettingsOpen={isTeamMenuOpen}
           onSettingsClick={() => setIsTeamMenuOpen((prev) => !prev)}
+          onEditClick={handleEditTeam}
+          onDeleteClick={openDeleteTeamModal}
         />
 
         {isPending ? (
@@ -281,4 +273,6 @@ export default function TeamPageClient({ teamId, initialDate }: TeamPageClientPr
       </div>
     </div>
   );
-}
+};
+
+export default TeamPageClient;
