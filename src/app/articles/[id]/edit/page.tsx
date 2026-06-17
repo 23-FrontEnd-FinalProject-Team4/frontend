@@ -22,13 +22,9 @@ const EditArticlePage = async ({ params }: { params: Promise<{ id: string }> }) 
             }}
           />
         </div>
-        <div className="flex w-full justify-center pt-8">
-          {/* TODO : 수정 전 글로 이동 */}
-          <Link
-            href="/articles"
-            className="text-text-secondary text-md hover:text-brand-primary px-3"
-          >
-            목록으로
+        <div className="mt-5 flex w-full justify-center pr-2">
+          <Link href="/articles" className="text-text-default">
+            <span className="text-lg">목록으로</span>
           </Link>
         </div>
       </main>
