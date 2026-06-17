@@ -2,6 +2,7 @@ import LandingPage from './_components/LandingPage';
 
 const LOGIN_PAGE_PATH = '/login';
 
-export default function Home() {
+const Home = () => {
   return <LandingPage startHref={LOGIN_PAGE_PATH} />;
-}
+};
+export default Home;

@@ -9,7 +9,7 @@ import type { LandingFeature } from './landingData';
 
 type LandingFeatureSectionProps = LandingFeature;
 
-function FeatureIcon({ icon }: { icon: LandingFeature['icon'] }) {
+const FeatureIcon = ({ icon }: { icon: LandingFeature['icon'] }) => {
   return (
     <span
       className="mb-5 flex size-12 items-center justify-center overflow-visible transition-transform duration-300 group-hover:scale-110"
@@ -20,9 +20,9 @@ function FeatureIcon({ icon }: { icon: LandingFeature['icon'] }) {
       {icon === 'chat' && <ChatFillIcon className="size-9 overflow-visible" />}
     </span>
   );
-}
+};
 
-export default function LandingFeatureSection({
+const LandingFeatureSection = ({
   description,
   icon,
   imageOffsetX = 0,
@@ -33,7 +33,7 @@ export default function LandingFeatureSection({
   textOffsetX = 0,
   title,
   tone = 'light',
-}: LandingFeatureSectionProps) {
+}: LandingFeatureSectionProps) => {
   const isBrandTone = tone === 'brand';
 
   const gridColumns = reverse
@@ -104,4 +104,6 @@ export default function LandingFeatureSection({
       </div>
     </section>
   );
-}
+};
+
+export default LandingFeatureSection;
