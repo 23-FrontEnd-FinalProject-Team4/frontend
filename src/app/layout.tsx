@@ -9,9 +9,6 @@ import ToastProvider from '@/providers/ToastProvider';
 export const metadata: Metadata = {
   title: 'Coworkers',
   description: 'Coworkers project',
-  icons: {
-    icon: '/favicon.ico',
-  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
