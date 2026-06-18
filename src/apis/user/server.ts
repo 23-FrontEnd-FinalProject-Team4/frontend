@@ -25,6 +25,12 @@ export const changePasswordServer = async (body: ChangePasswordRequest) => {
   });
 };
 
+export const deleteMyAccountServer = async () => {
+  return serverFetcher<MessageResponse>('/user', {
+    method: 'DELETE',
+  });
+};
+
 export const getMyTaskHistoryServer = async () => {
   return await serverFetcher<{ tasksDone: TaskHistory[] }>('/user/history');
 };

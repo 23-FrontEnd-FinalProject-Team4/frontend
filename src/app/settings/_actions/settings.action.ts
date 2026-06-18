@@ -4,6 +4,7 @@ import { uploadImageServer } from '@/apis/image/server';
 import type { UploadImageResponse } from '@/apis/image/type';
 import {
   changePasswordServer,
+  deleteMyAccountServer,
   getMyProfileServer,
   updateMyProfileServer,
 } from '@/apis/user/server';
@@ -14,6 +15,7 @@ import type {
   UpdateProfileRequest,
 } from '@/apis/user/type';
 import { getErrorMessage } from '@/lib/error';
+import { clearAuthTokens } from '@/utils/auth/token';
 
 type SettingsActionResult<T> = { success: true; data: T } | { success: false; error: string };
 
@@ -83,6 +85,24 @@ export const uploadSettingsImageAction = async (
     return {
       success: false,
       error: getErrorMessage(error, '이미지를 업로드하지 못했어요.'),
+    };
+  }
+};
+
+export const deleteMyAccountAction = async (): Promise<SettingsActionResult<MessageResponse>> => {
+  try {
+    const result = await deleteMyAccountServer();
+
+    await clearAuthTokens();
+
+    return {
+      success: true,
+      data: result,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: getErrorMessage(error, '회원 탈퇴에 실패했어요.'),
     };
   }
 };
