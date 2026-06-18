@@ -102,7 +102,7 @@ const TaskListSection = ({
 
         <button
           type="button"
-          className="text-brand-primary hover:text-interaction-hover focus-visible:ring-brand-primary hidden rounded-sm text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:outline-none xl:block"
+          className="text-brand-primary hover:text-interaction-hover focus-visible:ring-brand-primary rounded-sm text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:outline-none"
           onClick={onCreateTaskList}
         >
           할일 추가하기 +
