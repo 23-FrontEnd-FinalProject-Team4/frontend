@@ -1,8 +1,14 @@
+'use client';
+
 import Link from 'next/link';
+
+import { toast } from 'react-hot-toast';
 
 import KebabIcon from '@/assets/icons/kebab.svg?react';
 import BadgeDone from '@/components/badgeDone/BadgeDone';
 import TaskCheckbox from '@/components/taskCheckbox/TaskCheckbox';
+import { getErrorMessage } from '@/lib/error';
+import { useToggleTask } from '@/queries/task/queries';
 
 import type { TaskListItem } from '../../type';
 
@@ -12,8 +18,30 @@ interface TaskListCardProps {
 }
 
 export default function TaskListCard({ item, teamId }: TaskListCardProps) {
+  const groupId = Number(teamId);
+  const { mutate: toggleTask } = useToggleTask({
+    onError: (error) => {
+      toast.error(getErrorMessage(error, '할 일 상태를 변경하지 못했습니다.'));
+    },
+  });
+
   const badgeStatus =
     item.totalCount === 0 ? 'none' : item.doneCount >= item.totalCount ? 'done' : 'progress';
+  const canToggleTask = Number.isSafeInteger(groupId) && groupId > 0;
+
+  const handleToggleTask = (taskId: number, checked: boolean) => {
+    if (!canToggleTask) {
+      toast.error('팀 정보를 찾을 수 없습니다.');
+      return;
+    }
+
+    toggleTask({
+      groupId,
+      taskListId: item.id,
+      taskId,
+      done: checked,
+    });
+  };
 
   return (
     <article className="border-border-primary bg-background-primary hover:border-brand-primary/40 focus-within:ring-brand-primary/30 relative h-37.75 overflow-hidden rounded-xl border px-5 pt-5 pb-4 shadow-sm transition-all duration-200 focus-within:ring-2 hover:-translate-y-0.5 hover:shadow-md">
@@ -45,9 +73,15 @@ export default function TaskListCard({ item, teamId }: TaskListCardProps) {
         </div>
       </div>
 
-      <div className="pointer-events-none relative z-10 mt-5 flex flex-col gap-2 [&_label]:min-w-0 [&_span]:block [&_span]:truncate [&_span]:text-xs">
+      <div className="relative z-10 mt-5 flex flex-col gap-2 [&_label]:min-w-0 [&_span]:block [&_span]:truncate [&_span]:text-xs">
         {item.tasks.map((task) => (
-          <TaskCheckbox key={task.id} task={task.title} checked={task.done} disabled />
+          <TaskCheckbox
+            key={task.id}
+            task={task.title}
+            checked={task.done}
+            disabled={!canToggleTask}
+            onChange={(checked) => handleToggleTask(task.id, checked)}
+          />
         ))}
       </div>
     </article>
