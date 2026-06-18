@@ -1,0 +1,8 @@
+storybook-static/
+.next/
+out/
+build/
+coverage/
+playwright-report/
+test-results/
+blob-report/
