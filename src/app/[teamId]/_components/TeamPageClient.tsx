@@ -12,10 +12,8 @@ import type { Member, TaskList } from '@/apis/group/type';
 import type { Task } from '@/apis/task/type';
 import type { TeamCardSize } from '@/components/team/type';
 import useMediaQuery, { MEDIA_QUERY } from '@/hooks/useMediaQuery';
-import {
-  useCreateTeamTaskListMutation,
-  useDeleteTeamMutation,
-} from '@/queries/teams/queries';
+import { useCreateTeamTaskListMutation, useDeleteTeamMutation } from '@/queries/teams/queries';
+import { teamKeys } from '@/queries/teams/queryKeys';
 
 import { getTeamPageDataAction } from '../_actions/team-page.action';
 import { TASK_LISTS, TASK_STATUS_SECTIONS, TEAM_PAGE_MEMBERS } from '../_constants/mockData';
@@ -31,10 +29,6 @@ interface TeamPageClientProps {
   teamId: string;
   initialDate: string;
 }
-
-const TEAM_PAGE_QUERY_KEY = {
-  data: (teamId: string, date: string) => ['team-page', teamId, date] as const,
-};
 
 const isMemberView = (teamId: string) => ['member', 'user'].includes(teamId.toLowerCase());
 
@@ -101,7 +95,7 @@ const TeamPageClient = ({ teamId, initialDate }: TeamPageClientProps) => {
   const routeGroupId = getRouteGroupId(teamId);
 
   const { data: teamPageResult, isPending } = useQuery({
-    queryKey: TEAM_PAGE_QUERY_KEY.data(teamId, today),
+    queryKey: teamKeys.detail({ teamId, date: today }),
     queryFn: () => getTeamPageDataAction({ teamId, date: today }),
     enabled: Boolean(today),
   });
@@ -224,9 +218,6 @@ const TeamPageClient = ({ teamId, initialDate }: TeamPageClientProps) => {
             }
 
             toast.success('할 일 목록을 만들었습니다.');
-            await queryClient.invalidateQueries({
-              queryKey: TEAM_PAGE_QUERY_KEY.data(teamId, today),
-            });
 
             return true;
           }}

@@ -15,6 +15,7 @@ import {
   updateRecurringTaskAction,
   updateTaskAction,
 } from '@/app/[teamId]/tasklist/_action/task';
+import { teamKeys } from '@/queries/teams/queryKeys';
 
 import { TaskKeyParams, taskKeys } from './queryKeys';
 
@@ -42,12 +43,17 @@ export const useCreateTask = (
     mutationFn: createTaskAction,
     onSuccess: (data, variables, onMutateResult, context) => {
       mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
-      queryClient.invalidateQueries({
-        queryKey: taskKeys.taskList({
-          groupId: variables.groupId,
-          taskListId: variables.taskListId,
+      return Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: taskKeys.taskList({
+            groupId: variables.groupId,
+            taskListId: variables.taskListId,
+          }),
         }),
-      });
+        queryClient.invalidateQueries({
+          queryKey: teamKeys.group({ groupId: variables.groupId }),
+        }),
+      ]);
     },
   });
 };
@@ -62,12 +68,17 @@ export const useUpdateRecurringTask = (
     mutationFn: updateRecurringTaskAction,
     onSuccess: (data, variables, onMutateResult, context) => {
       mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
-      queryClient.invalidateQueries({
-        queryKey: taskKeys.taskList({
-          groupId: variables.groupId,
-          taskListId: variables.taskListId,
+      return Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: taskKeys.taskList({
+            groupId: variables.groupId,
+            taskListId: variables.taskListId,
+          }),
         }),
-      });
+        queryClient.invalidateQueries({
+          queryKey: teamKeys.group({ groupId: variables.groupId }),
+        }),
+      ]);
     },
   });
 };
@@ -82,13 +93,18 @@ export const useUpdateTask = (
     mutationFn: updateTaskAction,
     onSuccess: (data, variables, onMutateResult, context) => {
       mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
-      queryClient.invalidateQueries({
-        queryKey: taskKeys.detail({
-          groupId: variables.groupId,
-          taskListId: variables.taskListId,
-          taskId: variables.taskId,
+      return Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: taskKeys.detail({
+            groupId: variables.groupId,
+            taskListId: variables.taskListId,
+            taskId: variables.taskId,
+          }),
         }),
-      });
+        queryClient.invalidateQueries({
+          queryKey: teamKeys.group({ groupId: variables.groupId }),
+        }),
+      ]);
     },
   });
 };
@@ -103,12 +119,17 @@ export const useToggleTask = (
     mutationFn: toggleTaskAction,
     onSuccess: (data, variables, onMutateResult, context) => {
       mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
-      queryClient.invalidateQueries({
-        queryKey: taskKeys.taskList({
-          groupId: variables.groupId,
-          taskListId: variables.taskListId,
+      return Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: taskKeys.taskList({
+            groupId: variables.groupId,
+            taskListId: variables.taskListId,
+          }),
         }),
-      });
+        queryClient.invalidateQueries({
+          queryKey: teamKeys.group({ groupId: variables.groupId }),
+        }),
+      ]);
     },
   });
 };
@@ -123,12 +144,17 @@ export const useDeleteTask = (
     mutationFn: deleteTaskAction,
     onSuccess: (data, variables, onMutateResult, context) => {
       mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
-      queryClient.invalidateQueries({
-        queryKey: taskKeys.taskList({
-          groupId: variables.groupId,
-          taskListId: variables.taskListId,
+      return Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: taskKeys.taskList({
+            groupId: variables.groupId,
+            taskListId: variables.taskListId,
+          }),
         }),
-      });
+        queryClient.invalidateQueries({
+          queryKey: teamKeys.group({ groupId: variables.groupId }),
+        }),
+      ]);
     },
   });
 };

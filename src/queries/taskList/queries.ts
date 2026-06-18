@@ -13,6 +13,7 @@ import {
   getTaskListsAction,
   updateTaskListNameAction,
 } from '@/app/[teamId]/tasklist/_action/taskList';
+import { teamKeys } from '@/queries/teams/queryKeys';
 
 import { taskListKeys } from './queryKey';
 
@@ -32,7 +33,14 @@ export const useCreateTaskList = (
     mutationFn: createTaskListAction,
     onSuccess: (data, variables, onMutateResult, context) => {
       mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
-      queryClient.invalidateQueries({ queryKey: taskListKeys.all({ groupId: variables.groupId }) });
+      return Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: taskListKeys.all({ groupId: variables.groupId }),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: teamKeys.group({ groupId: variables.groupId }),
+        }),
+      ]);
     },
   });
 };
@@ -46,7 +54,14 @@ export const useUpdateTaskList = (
     mutationFn: updateTaskListNameAction,
     onSuccess: (data, variables, onMutateResult, context) => {
       mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
-      queryClient.invalidateQueries({ queryKey: taskListKeys.all({ groupId: variables.groupId }) });
+      return Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: taskListKeys.all({ groupId: variables.groupId }),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: teamKeys.group({ groupId: variables.groupId }),
+        }),
+      ]);
     },
   });
 };
@@ -60,7 +75,14 @@ export const useDeleteTaskList = (
     mutationFn: deleteTaskListAction,
     onSuccess: (data, variables, onMutateResult, context) => {
       mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
-      queryClient.invalidateQueries({ queryKey: taskListKeys.all({ groupId: variables.groupId }) });
+      return Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: taskListKeys.all({ groupId: variables.groupId }),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: teamKeys.group({ groupId: variables.groupId }),
+        }),
+      ]);
     },
   });
 };
