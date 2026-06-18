@@ -73,15 +73,16 @@ export default function TaskListCard({ item, teamId }: TaskListCardProps) {
         </div>
       </div>
 
-      <div className="relative z-10 mt-5 flex flex-col gap-2 [&_label]:min-w-0 [&_span]:block [&_span]:truncate [&_span]:text-xs">
+      <div className="pointer-events-none relative z-10 mt-5 flex flex-col gap-2 [&_label]:min-w-0 [&_span]:block [&_span]:truncate [&_span]:text-xs">
         {item.tasks.map((task) => (
-          <TaskCheckbox
-            key={task.id}
-            task={task.title}
-            checked={task.done}
-            disabled={!canToggleTask}
-            onChange={(checked) => handleToggleTask(task.id, checked)}
-          />
+          <div key={task.id} className="pointer-events-auto">
+            <TaskCheckbox
+              task={task.title}
+              checked={task.done}
+              disabled={!canToggleTask}
+              onChange={(checked) => handleToggleTask(task.id, checked)}
+            />
+          </div>
         ))}
       </div>
     </article>
