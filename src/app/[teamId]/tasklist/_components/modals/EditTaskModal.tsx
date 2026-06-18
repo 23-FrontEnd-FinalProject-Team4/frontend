@@ -1,13 +1,15 @@
-import { useRef } from 'react';
+'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRef } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
 
 import { Task } from '@/apis/task/type';
 import Button from '@/components/button/Button';
 import Modal from '@/components/modal/Modal';
+import { getErrorMessage } from '@/lib/error';
 import { useUpdateRecurringTask, useUpdateTask } from '@/queries/task/queries';
 
 import { TaskFormValues, taskSchema } from '../../_schemas/task.schema';
@@ -41,41 +43,37 @@ const EditTaskModal = ({ isOpen, onClose, task, groupId, taskListId }: EditTaskM
     },
   });
 
-  const router = useRouter();
-  const { mutate: mutateRecurringTask, isPending: isPendingRecurringTask } = useUpdateRecurringTask(
-    {
-      onSuccess: () => {
-        router.refresh();
-        onClose();
-      },
-    },
-  );
+  const { mutateAsync: updateRecurringTask, isPending: isPendingRecurringTask } =
+    useUpdateRecurringTask();
 
-  const { mutate: mutateTask, isPending: isPendingTask } = useUpdateTask({
-    onSuccess: () => {
-      router.refresh();
-      onClose();
-    },
-  });
+  const { mutateAsync: updateTask, isPending: isPendingTask } = useUpdateTask();
 
-  const onSubmit = (formValues: TaskFormValues) => {
+  const handleSubmit = async (formValues: TaskFormValues) => {
     const startDate = createStartDate(formValues.date, formValues.time);
     const payload = updateRecurringPayload(formValues, startDate);
 
-    mutateTask({
-      groupId,
-      taskListId,
-      taskId: task.id,
-      description: formValues.description ?? '',
-      name: formValues.name,
-    });
-    mutateRecurringTask({
-      groupId,
-      taskListId,
-      body: payload,
-      recurringId: task.recurringId,
-    });
-    onClose();
+    try {
+      await Promise.all([
+        updateTask({
+          groupId,
+          taskListId,
+          taskId: task.id,
+          description: formValues.description ?? '',
+          name: formValues.name,
+        }),
+        updateRecurringTask({
+          groupId,
+          taskListId,
+          body: payload,
+          recurringId: task.recurringId,
+        }),
+      ]);
+
+      toast.success('할 일을 수정했습니다.');
+      onClose();
+    } catch (error) {
+      toast.error(getErrorMessage(error, '할 일을 수정하지 못했습니다.'));
+    }
   };
 
   return (
@@ -83,12 +81,12 @@ const EditTaskModal = ({ isOpen, onClose, task, groupId, taskListId }: EditTaskM
       isOpen={isOpen}
       onClose={onClose}
       title="할 일 수정"
-      description="할 일은 실제로 행동 가능한 작업 중심으로 작성해주시면 좋습니다."
+      description="할 일을 실제로 행동 가능한 작업 중심으로 작성해주시면 좋습니다."
       size="lg"
       closeOnOverlayClick
     >
       <FormProvider {...methods}>
-        <form className="flex flex-col gap-6" onSubmit={methods.handleSubmit(onSubmit)}>
+        <form className="flex flex-col gap-6" onSubmit={methods.handleSubmit(handleSubmit)}>
           <TaskForm submitButtonRef={submitButtonRef} />
 
           <Button

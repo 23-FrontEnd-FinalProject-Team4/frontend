@@ -59,3 +59,28 @@ export const passwordChangeSchema = z
   });
 
 export type PasswordChangeFormValues = z.infer<typeof passwordChangeSchema>;
+
+export const accountSettingsSchema = z
+  .object({
+    nickname: nicknameSchema,
+    image: z.string().trim(),
+    password: z.string(),
+    passwordConfirmation: z.string(),
+  })
+  .superRefine(({ password, passwordConfirmation }, ctx) => {
+    if (!password && !passwordConfirmation) return;
+
+    const result = passwordChangeSchema.safeParse({ password, passwordConfirmation });
+
+    if (result.success) return;
+
+    for (const issue of result.error.issues) {
+      ctx.addIssue({
+        code: 'custom',
+        path: issue.path,
+        message: issue.message,
+      });
+    }
+  });
+
+export type AccountSettingsFormValues = z.infer<typeof accountSettingsSchema>;

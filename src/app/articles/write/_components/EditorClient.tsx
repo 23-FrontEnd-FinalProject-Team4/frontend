@@ -1,79 +1,53 @@
 'use client';
 
-import { useState } from 'react';
-
 import { useRouter } from 'next/navigation';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
 
-import { createArticle, updateArticle } from '@/apis/article';
-import { CreateArticleRequest, UpdateArticleRequest } from '@/apis/article/type';
-import { uploadImage } from '@/apis/image';
 import { ArticleFormData, articleSchema } from '@/app/articles/write/_components/schema';
+import {
+  ARTICLE_EDITOR_MODE,
+  UseArticleEditorProps,
+  useArticleEditor,
+} from '@/hooks/useArticleEditor';
 
 import ArticleForm from './ArticleForm';
 
-type EditorClientProps = {
-  mode: 'write' | 'edit';
-  defaultValues: ArticleFormData;
-};
+export const ARTICLE_FORM_FIELDS = {
+  TITLE: 'title',
+  CONTENT: 'content',
+  IMAGE: 'image',
+} as const;
 
-export default function EditorClient({ mode, defaultValues }: EditorClientProps) {
+export default function EditorClient({ mode, defaultValues }: UseArticleEditorProps) {
   const router = useRouter();
+
   const {
     register,
-    handleSubmit,
+    handleSubmit: formHandleSubmit,
+    setValue,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<ArticleFormData>({
     resolver: zodResolver(articleSchema),
     defaultValues,
   });
+  const { handleFormSubmit } = useArticleEditor({ mode, defaultValues });
 
-  const [image, setImage] = useState<File | string | null>(defaultValues?.image ?? null);
-
-  const createArticleMutation = useMutation({
-    mutationFn: createArticle,
-  });
-
-  const updateArticleMutation = useMutation({
-    mutationFn: ({ id, payload }: { id: string; payload: UpdateArticleRequest }) =>
-      updateArticle(id, payload),
-  });
-
-  const resolveImageUrl = async (currentImage: File | string | null) => {
-    if (!currentImage) return null;
-    if (typeof currentImage === 'string') return currentImage;
-
-    const formData = new FormData();
-    formData.append('image', currentImage);
-    const { url } = await uploadImage(formData);
-    return url;
-  };
-
-  const handleFormSubmit = async (values: ArticleFormData) => {
-    const imageUrl = await resolveImageUrl(image);
-    const payload: CreateArticleRequest = {
-      title: values.title,
-      content: values.content,
-      image: imageUrl ?? undefined,
-    };
-
-    if (mode === 'write') {
-      const createdArticle = await createArticleMutation.mutateAsync(payload);
-      router.push(`/articles/${createdArticle.id}`);
-      return;
-    }
-
-    if (mode === 'edit' && defaultValues.id) {
-      await updateArticleMutation.mutateAsync({
-        id: defaultValues.id,
-        payload,
-      });
-      router.push(`/articles/${defaultValues.id}`);
+  const handleSubmit = async (values: ArticleFormData) => {
+    try {
+      const result = await handleFormSubmit(values);
+      if (!result) return;
+      router.push(`/articles/${result.id}`);
+    } catch (error) {
+      console.error(error);
+      toast.error('게시글 저장에 실패했습니다.');
     }
   };
+
+  const image = useWatch({ control, name: ARTICLE_FORM_FIELDS.IMAGE });
 
   return (
     <ArticleForm
@@ -81,10 +55,15 @@ export default function EditorClient({ mode, defaultValues }: EditorClientProps)
       register={register}
       errors={errors}
       image={image}
-      onImageChange={setImage}
-      isloading={isSubmitting}
-      submitText={mode === 'edit' ? '수정하기' : '등록하기'}
-      onSubmit={handleSubmit(handleFormSubmit)}
+      onImageChange={(file) => {
+        setValue(ARTICLE_FORM_FIELDS.IMAGE, file, {
+          shouldDirty: true,
+          shouldValidate: true,
+        });
+      }}
+      isLoading={isSubmitting}
+      submitText={mode === ARTICLE_EDITOR_MODE.EDIT ? '수정하기' : '등록하기'}
+      onSubmit={formHandleSubmit(handleSubmit)}
     />
   );
 }

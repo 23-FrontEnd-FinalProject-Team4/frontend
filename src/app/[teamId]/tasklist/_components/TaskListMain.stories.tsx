@@ -1,7 +1,10 @@
 import { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { MOCK_TASKLISTS } from '../_constants/mockData';
 import TaskListMain from './TaskListMain';
+
+const queryClient = new QueryClient();
 
 const meta = {
   component: TaskListMain,
@@ -18,6 +21,13 @@ const meta = {
       },
     },
   },
+  decorators: [
+    (Story) => (
+      <QueryClientProvider client={queryClient}>
+        <Story />
+      </QueryClientProvider>
+    ),
+  ],
 } satisfies Meta<typeof TaskListMain>;
 export default meta;
 
@@ -25,7 +35,8 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    taskList: MOCK_TASKLISTS[0],
+    taskListId: MOCK_TASKLISTS[0].id,
+    taskListName: MOCK_TASKLISTS[0].name,
     groupId: 0,
   },
 };

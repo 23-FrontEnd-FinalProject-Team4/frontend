@@ -97,8 +97,12 @@ const AddTeamForm = () => {
         <div className="flex flex-col gap-5">
           <Button type="submit" disabled={isPending}>
             {isPending ? (
-              <span className="flex items-center gap-2">
-                <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+              <span className="flex items-center justify-center gap-2">
+                <span
+                  className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"
+                  role="status"
+                />
+                <span className="sr-only">처리 중...</span>
               </span>
             ) : (
               '생성하기'

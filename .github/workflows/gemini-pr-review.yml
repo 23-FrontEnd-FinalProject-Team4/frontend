@@ -39,6 +39,7 @@ jobs:
             You are reviewing pull request #${{ github.event.pull_request.number }} in ${{ github.repository }}.
 
             Review only changed files in this pull request.
+            Skip generated/build artifacts (storybook-static/, .next/, out/, build/, coverage/, playwright-report/, test-results/, blob-report/).
             Use the repository style guide at .gemini/styleguide.md as the highest-priority review standard.
 
             Write review feedback in Korean.

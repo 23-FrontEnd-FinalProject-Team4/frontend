@@ -30,7 +30,7 @@ interface TaskStatusSectionRowProps {
   section: GroupedTaskStatusSection;
 }
 
-function TaskStatusSectionRow({ teamId, section }: TaskStatusSectionRowProps) {
+const TaskStatusSectionRow = ({ teamId, section }: TaskStatusSectionRowProps) => {
   const { scrollRef, canScrollLeft, canScrollRight, isDragging, scrollByDirection, dragHandlers } =
     useHorizontalScroll<HTMLDivElement>();
   const isScrollable = canScrollLeft || canScrollRight;
@@ -85,14 +85,14 @@ function TaskStatusSectionRow({ teamId, section }: TaskStatusSectionRowProps) {
       </div>
     </section>
   );
-}
+};
 
-export default function TaskListSection({
+const TaskListSection = ({
   teamId,
   taskListsCount,
   sections,
   onCreateTaskList,
-}: TaskListSectionProps) {
+}: TaskListSectionProps) => {
   return (
     <section className="border-border-primary border-t pt-6">
       <div className="mb-4 flex items-center justify-between">
@@ -116,4 +116,6 @@ export default function TaskListSection({
       </div>
     </section>
   );
-}
+};
+
+export default TaskListSection;
