@@ -2,10 +2,25 @@
 
 import { signIn } from '@/apis/auth';
 import type { SignInRequest } from '@/apis/auth/type';
+import type { Group } from '@/apis/user/type';
+import clientFetcher from '@/lib/clientFetcher';
 import { getErrorMessage } from '@/lib/error';
 import { setAuthTokens } from '@/utils/auth/token';
 
-export type LoginActionResult = { success: true } | { success: false; error: string };
+export type LoginActionResult =
+  | { success: true; redirectPath: string }
+  | { success: false; error: string };
+
+const getPostLoginRedirectPath = async (accessToken: string) => {
+  const response = await clientFetcher.get<Group[]>('/user/groups', {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  const firstGroupId = response.data[0]?.id;
+
+  return firstGroupId ? `/${firstGroupId}` : '/no-team';
+};
 
 export const loginAction = async (payload: SignInRequest): Promise<LoginActionResult> => {
   try {
@@ -16,7 +31,9 @@ export const loginAction = async (payload: SignInRequest): Promise<LoginActionRe
       refreshToken,
     });
 
-    return { success: true };
+    const redirectPath = await getPostLoginRedirectPath(accessToken);
+
+    return { success: true, redirectPath };
   } catch (error) {
     return {
       success: false,

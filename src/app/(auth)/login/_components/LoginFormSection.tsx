@@ -31,9 +31,9 @@ const LoginFormSection = () => {
     if (isPending) return;
 
     try {
-      await mutateAsync(data);
+      const result = await mutateAsync(data);
       toast.success('로그인에 성공했어요.');
-      router.push('/');
+      router.push(result.redirectPath);
     } catch (error) {
       toast.error(getErrorMessage(error, '로그인 중 오류가 발생했어요.'));
     }
