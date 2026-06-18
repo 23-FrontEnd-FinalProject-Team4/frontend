@@ -3,8 +3,8 @@
 import { signIn } from '@/apis/auth';
 import type { SignInRequest } from '@/apis/auth/type';
 import type { Group } from '@/apis/user/type';
-import clientFetcher from '@/lib/clientFetcher';
 import { getErrorMessage } from '@/lib/error';
+import { serverFetcher } from '@/lib/serverFetcher';
 import { setAuthTokens } from '@/utils/auth/token';
 
 export type LoginActionResult =
@@ -12,12 +12,12 @@ export type LoginActionResult =
   | { success: false; error: string };
 
 const getPostLoginRedirectPath = async (accessToken: string) => {
-  const response = await clientFetcher.get<Group[]>('/user/groups', {
+  const groups = await serverFetcher<Group[]>('/user/groups', {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
   });
-  const firstGroupId = response.data[0]?.id;
+  const firstGroupId = groups[0]?.id;
 
   return firstGroupId ? `/${firstGroupId}` : '/no-team';
 };
