@@ -7,14 +7,12 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 
 import { getErrorMessage } from '@/lib/error';
-import { useLogoutMutation } from '@/queries/auth/queries';
 import { useDeleteMyAccountMutation } from '@/queries/user/queries';
 
 export const useDeleteAccount = () => {
   const router = useRouter();
 
   const deleteMyAccountMutation = useDeleteMyAccountMutation();
-  const logoutMutation = useLogoutMutation();
 
   const isDeletingAccount = deleteMyAccountMutation.isPending;
 
@@ -29,13 +27,12 @@ export const useDeleteAccount = () => {
   };
 
   const handleDeleteAccount = async () => {
-    if (deleteMyAccountMutation.isPending) {
+    if (isDeletingAccount) {
       return;
     }
 
     try {
       await deleteMyAccountMutation.mutateAsync();
-      await logoutMutation.mutateAsync();
       toast.success('회원 탈퇴가 완료되었어요.');
       closeDeleteModal();
       router.replace('/login');
