@@ -1,13 +1,24 @@
 'use server';
 
+import { GroupDetail, TaskList } from '@/apis/group/type';
 import {
   CreateTaskListParams,
   DeleteTaskListParams,
+  GetTaskListsParams,
   ResponseCreateTaskList,
   ResponseUpdateTaskListName,
   UpdateTaskListNameParams,
 } from '@/apis/taskList/type';
 import { serverFetcher } from '@/lib/serverFetcher';
+
+export const getTaskListsAction = async ({ groupId }: { groupId: number }) => {
+  return (await serverFetcher<GroupDetail>(`/groups/${groupId}`)).taskLists;
+};
+
+export const getTaskListAction = async ({ groupId, id, date }: GetTaskListsParams) => {
+  const requestURL = `/groups/${groupId}/task-lists/${id}` + (date ? `?date=${date}` : '');
+  return await serverFetcher<TaskList>(requestURL);
+};
 
 export const createTaskListAction = async ({ groupId, body }: CreateTaskListParams) => {
   return await serverFetcher<ResponseCreateTaskList>(`/groups/${groupId}/task-lists`, {

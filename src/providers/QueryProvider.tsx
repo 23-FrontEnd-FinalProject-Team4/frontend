@@ -1,11 +1,20 @@
 'use client';
+import dynamic from 'next/dynamic';
+
 import { QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { toast } from 'react-hot-toast';
 
 interface QueryProviderProps {
   children: React.ReactNode;
 }
+
+const ReactQueryDevtools = dynamic(
+  () => import('@tanstack/react-query-devtools').then((module) => module.ReactQueryDevtools),
+  { ssr: false },
+);
+
+const SHOULD_SHOW_REACT_QUERY_DEVTOOLS =
+  process.env.NEXT_PUBLIC_ENABLE_REACT_QUERY_DEVTOOLS === 'true';
 
 const makeQueryClient = () => {
   return new QueryClient({
@@ -44,7 +53,7 @@ const QueryProvider = ({ children }: QueryProviderProps) => {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      <ReactQueryDevtools initialIsOpen={false} />
+      {SHOULD_SHOW_REACT_QUERY_DEVTOOLS && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
   );
 };

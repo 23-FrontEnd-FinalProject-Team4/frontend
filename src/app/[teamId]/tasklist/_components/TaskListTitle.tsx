@@ -6,7 +6,7 @@ import { useTaskDate } from '@/hooks/useTaskDate';
 import CalendarControl from './CalendarControl';
 
 interface TaskListTitleProps {
-  taskName: string;
+  taskName?: string;
   onToday: () => void;
   onPrevWeek: () => void;
   onNextWeek: () => void;
