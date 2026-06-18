@@ -20,7 +20,7 @@ const TaskListPage = async ({ params, searchParams }: TaskListPageProps) => {
   if (!date) {
     const params = new URLSearchParams();
     params.set('date', formatISODate(new Date()));
-    if (taskListId) params.set('taskList', taskListId);
+    if (taskListId) params.set('taskListId', taskListId);
     redirect(`?${params.toString()}`);
   }
 

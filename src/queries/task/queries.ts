@@ -1,4 +1,10 @@
-import { MutationOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  type MutationOptions,
+  type QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 import {
   CreateRecurringTaskParams,
@@ -15,8 +21,28 @@ import {
   updateRecurringTaskAction,
   updateTaskAction,
 } from '@/app/[teamId]/tasklist/_action/task';
+import { teamKeys } from '@/queries/teams/queryKeys';
 
 import { TaskKeyParams, taskKeys } from './queryKeys';
+
+type TaskListQueryParams = Pick<TaskKeyParams, 'groupId' | 'taskListId'>;
+
+const invalidateTaskListAndTeamQueries = (
+  queryClient: QueryClient,
+  { groupId, taskListId }: TaskListQueryParams,
+) => {
+  return Promise.all([
+    queryClient.invalidateQueries({
+      queryKey: taskKeys.taskList({
+        groupId,
+        taskListId,
+      }),
+    }),
+    queryClient.invalidateQueries({
+      queryKey: teamKeys.group({ groupId }),
+    }),
+  ]);
+};
 
 export const useGetTasks = ({ groupId, taskListId, date }: Omit<TaskKeyParams, 'taskId'>) => {
   return useQuery({
@@ -42,12 +68,7 @@ export const useCreateTask = (
     mutationFn: createTaskAction,
     onSuccess: (data, variables, onMutateResult, context) => {
       mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
-      queryClient.invalidateQueries({
-        queryKey: taskKeys.taskList({
-          groupId: variables.groupId,
-          taskListId: variables.taskListId,
-        }),
-      });
+      return invalidateTaskListAndTeamQueries(queryClient, variables);
     },
   });
 };
@@ -62,12 +83,7 @@ export const useUpdateRecurringTask = (
     mutationFn: updateRecurringTaskAction,
     onSuccess: (data, variables, onMutateResult, context) => {
       mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
-      queryClient.invalidateQueries({
-        queryKey: taskKeys.taskList({
-          groupId: variables.groupId,
-          taskListId: variables.taskListId,
-        }),
-      });
+      return invalidateTaskListAndTeamQueries(queryClient, variables);
     },
   });
 };
@@ -82,13 +98,16 @@ export const useUpdateTask = (
     mutationFn: updateTaskAction,
     onSuccess: (data, variables, onMutateResult, context) => {
       mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
-      queryClient.invalidateQueries({
-        queryKey: taskKeys.detail({
-          groupId: variables.groupId,
-          taskListId: variables.taskListId,
-          taskId: variables.taskId,
+      return Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: taskKeys.detail({
+            groupId: variables.groupId,
+            taskListId: variables.taskListId,
+            taskId: variables.taskId,
+          }),
         }),
-      });
+        invalidateTaskListAndTeamQueries(queryClient, variables),
+      ]);
     },
   });
 };
@@ -103,12 +122,7 @@ export const useToggleTask = (
     mutationFn: toggleTaskAction,
     onSuccess: (data, variables, onMutateResult, context) => {
       mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
-      queryClient.invalidateQueries({
-        queryKey: taskKeys.taskList({
-          groupId: variables.groupId,
-          taskListId: variables.taskListId,
-        }),
-      });
+      return invalidateTaskListAndTeamQueries(queryClient, variables);
     },
   });
 };
@@ -123,12 +137,7 @@ export const useDeleteTask = (
     mutationFn: deleteTaskAction,
     onSuccess: (data, variables, onMutateResult, context) => {
       mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
-      queryClient.invalidateQueries({
-        queryKey: taskKeys.taskList({
-          groupId: variables.groupId,
-          taskListId: variables.taskListId,
-        }),
-      });
+      return invalidateTaskListAndTeamQueries(queryClient, variables);
     },
   });
 };

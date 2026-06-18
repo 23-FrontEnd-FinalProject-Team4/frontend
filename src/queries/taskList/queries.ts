@@ -1,4 +1,10 @@
-import { MutationOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  type MutationOptions,
+  type QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 import {
   CreateTaskListParams,
@@ -13,8 +19,20 @@ import {
   getTaskListsAction,
   updateTaskListNameAction,
 } from '@/app/[teamId]/tasklist/_action/taskList';
+import { teamKeys } from '@/queries/teams/queryKeys';
 
 import { taskListKeys } from './queryKey';
+
+const invalidateTaskListOverviewQueries = (queryClient: QueryClient, groupId: number) => {
+  return Promise.all([
+    queryClient.invalidateQueries({
+      queryKey: taskListKeys.all({ groupId }),
+    }),
+    queryClient.invalidateQueries({
+      queryKey: teamKeys.group({ groupId }),
+    }),
+  ]);
+};
 
 export const useGetTaskLists = ({ groupId }: { groupId: number }) => {
   return useQuery({
@@ -32,7 +50,7 @@ export const useCreateTaskList = (
     mutationFn: createTaskListAction,
     onSuccess: (data, variables, onMutateResult, context) => {
       mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
-      queryClient.invalidateQueries({ queryKey: taskListKeys.all({ groupId: variables.groupId }) });
+      return invalidateTaskListOverviewQueries(queryClient, variables.groupId);
     },
   });
 };
@@ -46,7 +64,7 @@ export const useUpdateTaskList = (
     mutationFn: updateTaskListNameAction,
     onSuccess: (data, variables, onMutateResult, context) => {
       mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
-      queryClient.invalidateQueries({ queryKey: taskListKeys.all({ groupId: variables.groupId }) });
+      return invalidateTaskListOverviewQueries(queryClient, variables.groupId);
     },
   });
 };
@@ -60,7 +78,7 @@ export const useDeleteTaskList = (
     mutationFn: deleteTaskListAction,
     onSuccess: (data, variables, onMutateResult, context) => {
       mutationOptions?.onSuccess?.(data, variables, onMutateResult, context);
-      queryClient.invalidateQueries({ queryKey: taskListKeys.all({ groupId: variables.groupId }) });
+      return invalidateTaskListOverviewQueries(queryClient, variables.groupId);
     },
   });
 };

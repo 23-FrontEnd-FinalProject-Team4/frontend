@@ -13,8 +13,10 @@ import { type LoginActionResult, loginAction } from '@/app/(auth)/login/_actions
 import { BusinessError } from '@/lib/error';
 import { USER_QUERY_KEY } from '@/queries/user/queryKey';
 
+type LoginSuccessResult = Extract<LoginActionResult, { success: true }>;
+
 export const useLoginMutation = () => {
-  return useMutation<LoginActionResult, Error, SignInRequest>({
+  return useMutation<LoginSuccessResult, Error, SignInRequest>({
     mutationFn: async (data) => {
       const result = await loginAction(data);
 
