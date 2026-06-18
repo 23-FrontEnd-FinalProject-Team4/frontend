@@ -17,7 +17,7 @@ const getPostLoginRedirectPath = async (accessToken: string) => {
       Authorization: `Bearer ${accessToken}`,
     },
   });
-  const firstGroupId = groups[0]?.id;
+  const firstGroupId = groups?.[0]?.id;
 
   return firstGroupId ? `/${firstGroupId}` : '/no-team';
 };
