@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -11,6 +12,7 @@ import LogoSmall from '@/assets/icons/logo_small.svg?react';
 import ProfileIcon from '@/assets/icons/profile.svg?react';
 import type { MobileHeaderProps } from '@/components/sideBar/type';
 import { cn } from '@/utils/cn';
+import { normalizeImageUrl } from '@/utils/image';
 import {
   PROFILE_MENU_OPTIONS,
   type ProfileMenuValue,
@@ -30,6 +32,7 @@ export default function MobileHeader({
   const [isOpen, setIsOpen] = useState(false);
   const toggleOpen = () => setIsOpen(!isOpen);
   const logoHref = isLoggedIn && groups.length > 0 ? `/${groups[0].id}` : '/';
+  const profileImageSrc = normalizeImageUrl(user?.image);
   return (
     <header
       className={cn(
@@ -58,7 +61,19 @@ export default function MobileHeader({
       {user ? (
         <div className="relative z-10">
           <button type="button" onClick={toggleOpen}>
-            <ProfileIcon className="h-8 w-8" />
+            <div className="relative h-8 w-8 overflow-hidden rounded-lg">
+              {profileImageSrc ? (
+                <Image
+                  src={profileImageSrc}
+                  alt={`${user.nickname} 프로필 이미지`}
+                  fill
+                  className="object-cover"
+                  sizes="32px"
+                />
+              ) : (
+                <ProfileIcon className="h-8 w-8 rounded-lg" />
+              )}
+            </div>
           </button>
 
           {isOpen && (
