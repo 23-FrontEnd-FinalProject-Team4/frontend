@@ -78,7 +78,7 @@ const TEAM_FALLBACK_IMAGE_CLASS =
   'bg-brand-primary text-background-inverse shadow-sm shadow-brand-primary/30';
 
 const getProfileSrc = (imageUrl: TeamMember['imageUrl']) =>
-  typeof imageUrl === 'string' ? normalizeImageUrl(imageUrl) : (imageUrl?.src ?? null);
+  typeof imageUrl === 'string' ? (normalizeImageUrl(imageUrl) ?? null) : (imageUrl?.src ?? null);
 
 const getProgressValue = ({
   completedTaskCount,
@@ -114,15 +114,7 @@ const TeamImage = ({
       )}
     >
       {imageSrc ? (
-        <Image
-          src={imageSrc}
-          alt=""
-          fill
-          className="object-cover"
-          quality={100}
-          sizes="72px"
-          aria-hidden
-        />
+        <Image src={imageSrc} alt="" fill className="object-cover" sizes="72px" aria-hidden />
       ) : (
         <span className="flex h-full items-center justify-center text-xs font-semibold">
           {name.slice(0, 1)}

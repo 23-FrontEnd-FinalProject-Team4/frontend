@@ -45,7 +45,6 @@ export default function GroupItems({
             alt={`${name} 팀 이미지`}
             fill
             className="object-cover"
-            quality={100}
             sizes={collapsed ? '80px' : '56px'}
           />
         ) : (
