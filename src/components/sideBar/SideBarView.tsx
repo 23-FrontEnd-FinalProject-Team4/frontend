@@ -25,6 +25,7 @@ export default function SideBarView({
   user: User | undefined;
   onToggleCollapse: () => void;
 }) {
+  const logoHref = isLoggedIn && groups.length > 0 ? `/${groups[0].id}` : '/';
   return (
     <aside
       className={cn(
@@ -34,7 +35,7 @@ export default function SideBarView({
     >
       <div className="flex h-full flex-col">
         <Link
-          href="/"
+          href={logoHref}
           className={cn(
             'flex h-8 w-full items-center',
             collapsed ? 'justify-center' : 'justify-start',

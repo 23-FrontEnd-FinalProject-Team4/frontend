@@ -52,7 +52,12 @@ export default function Sidebar({
   return (
     <>
       <div className="md:hidden">
-        <MobileHeader isLoggedIn={isLoggedIn} user={user} onOpenSideBar={handleOpenMobileMenu} />
+        <MobileHeader
+          isLoggedIn={isLoggedIn}
+          user={user}
+          onOpenSideBar={handleOpenMobileMenu}
+          groups={groups}
+        />
         <MobileSideBar
           mobileOpen={mobileOpen}
           groups={groups}

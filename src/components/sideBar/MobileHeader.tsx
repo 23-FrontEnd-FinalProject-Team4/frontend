@@ -5,20 +5,32 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
+import { User } from '@/apis/auth/type';
 import MenuIcon from '@/assets/icons/gnb_menu.svg?react';
 import LogoLarge from '@/assets/icons/logo_large.svg?react';
 import LogoSmall from '@/assets/icons/logo_small.svg?react';
 import ProfileIcon from '@/assets/icons/profile.svg?react';
 import { handleOpenProfileMenu, openProfileMenu } from '@/components/sideBar/LoggedInFooter';
-import type { MobileHeaderProps } from '@/components/sideBar/type';
+import type { Group } from '@/components/sideBar/type';
 import { cn } from '@/utils/cn';
 
 import Dropdown from '../dropdown/Dropdown';
 
-export default function MobileHeader({ isLoggedIn, user, onOpenSideBar }: MobileHeaderProps) {
+export default function MobileHeader({
+  isLoggedIn,
+  user,
+  onOpenSideBar,
+  groups,
+}: {
+  isLoggedIn: boolean;
+  user: User | undefined;
+  onOpenSideBar: () => void;
+  groups: Group[];
+}) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const toggleOpen = () => setIsOpen(!isOpen);
+  const logoHref = isLoggedIn && groups.length > 0 ? `/${groups[0].id}` : '/';
   return (
     <header
       className={cn(
@@ -34,7 +46,7 @@ export default function MobileHeader({ isLoggedIn, user, onOpenSideBar }: Mobile
           ''
         )}
         {isLoggedIn ? (
-          <Link href="/">
+          <Link href={logoHref}>
             <LogoSmall className="h-6 w-6" />
           </Link>
         ) : (
