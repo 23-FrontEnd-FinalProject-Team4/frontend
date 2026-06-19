@@ -2,6 +2,7 @@ import Link from 'next/link';
 
 import { getArticleDetail } from '@/apis/article';
 import { getArticleComments } from '@/apis/articleComment';
+import { getMyProfileServer } from '@/apis/user/server';
 import CommentSection from '@/app/articles/_components/articlesDetail/CommentSection';
 import ArticleContent from '@/app/articles/_components/articlesDetail/Content';
 import ArticleHeader from '@/app/articles/_components/articlesDetail/Header';
@@ -12,6 +13,15 @@ const ArticleDetailPage = async ({ params }: { params: Promise<{ id: string }> }
   const { id } = await params;
   const article = await getArticleDetail(`${id}`);
   const comments = await getArticleComments({ articleId: `${id}`, limit: 10, cursor: 0 });
+  let currentUserIdentifiers: string[] = [];
+
+  try {
+    const profile = await getMyProfileServer();
+    currentUserIdentifiers = [String(profile.id), profile.teamId].filter(Boolean);
+  } catch {
+    currentUserIdentifiers = [];
+  }
+
   const formattedDate = formatDate(article.createdAt);
   return (
     <div className="mx-auto flex min-h-screen px-4 pt-5 md:p-22">
@@ -29,7 +39,11 @@ const ArticleDetailPage = async ({ params }: { params: Promise<{ id: string }> }
             initialIsLiked={article.isLiked}
             initialLikeCount={article.likeCount}
           />
-          <CommentSection articleId={`${article.id}`} comments={comments.list} />
+          <CommentSection
+            articleId={`${article.id}`}
+            comments={comments.list}
+            currentUserIdentifiers={currentUserIdentifiers}
+          />
         </div>
 
         <div className="mt-5 flex w-full justify-center pr-2">

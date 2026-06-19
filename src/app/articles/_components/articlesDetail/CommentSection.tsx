@@ -4,25 +4,27 @@ import { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import {
-  createArticleComment,
-  deleteArticleComment,
-  updateArticleComment,
-} from '@/apis/articleComment';
 import type { ArticleComment } from '@/apis/articleComment/type';
-import ProfileIcon from '@/assets/icons/profile.svg';
+import {
+  createArticleCommentAction,
+  deleteArticleCommentAction,
+  updateArticleCommentAction,
+} from '@/app/articles/_actions/comment.action';
 import Dropdown from '@/components/dropdown/Dropdown';
 import InputReply from '@/components/inputReply/InputReply';
 import Modal from '@/components/modal/Modal';
+import Profile from '@/components/profile/Profile';
 import Reply from '@/components/reply/Reply';
 import { formatDate } from '@/utils/formatDate';
 
 const CommentSection = ({
   articleId,
   comments,
+  currentUserIdentifiers,
 }: {
   articleId: string;
   comments: ArticleComment[] | null;
+  currentUserIdentifiers: string[];
 }) => {
   const [replyValue, setReplyValue] = useState('');
   const [openedCommentId, setOpenedCommentId] = useState<string | null>(null);
@@ -38,7 +40,7 @@ const CommentSection = ({
     if (!replyValue.trim()) return;
 
     try {
-      await createArticleComment(articleId, {
+      await createArticleCommentAction(articleId, {
         content: replyValue,
       });
 
@@ -52,7 +54,7 @@ const CommentSection = ({
     if (!deletingCommentId) return;
 
     try {
-      await deleteArticleComment({ commentId: deletingCommentId });
+      await deleteArticleCommentAction({ commentId: deletingCommentId });
 
       setIsDeleteModalOpen(false);
       setDeletingCommentId(null);
@@ -66,7 +68,7 @@ const CommentSection = ({
     if (!editingCommentId || !editValue.trim()) return;
 
     try {
-      await updateArticleComment(
+      await updateArticleCommentAction(
         {
           commentId: editingCommentId,
         },
@@ -92,58 +94,66 @@ const CommentSection = ({
       <InputReply size="lg" value={replyValue} onChange={setReplyValue} onSubmit={handleSubmit} />
       <div className="divide-border-primary divide-y">
         {hasComments ? (
-          comments.map((comment: ArticleComment) => (
-            <div key={comment.id} className="relative py-2">
-              {editingCommentId === comment.id ? (
-                <InputReply
-                  value={editValue}
-                  onChange={setEditValue}
-                  onSubmit={handleCommentEdit}
-                />
-              ) : (
-                <Reply
-                  size="lg"
-                  author={comment.writer.nickname}
-                  avatar={
-                    comment.writer.image ? (
-                      comment.writer.image
-                    ) : (
-                      <ProfileIcon className="h-8 w-8" />
-                    )
-                  }
-                  date={formatDate(comment.createdAt)}
-                  onMenuClick={() =>
-                    setOpenedCommentId(openedCommentId === comment.id ? null : comment.id)
-                  }
-                >
-                  {comment.content}
-                </Reply>
-              )}
+          comments.map((comment: ArticleComment) => {
+            const writerId = String(comment.writer.id);
+            const isOwnComment = currentUserIdentifiers.includes(writerId);
 
-              {openedCommentId === comment.id && (
-                <div className="absolute top-10 right-5 z-10">
-                  <Dropdown
-                    options={[
-                      { label: '수정하기', value: 'edit' },
-                      { label: '삭제하기', value: 'delete' },
-                    ]}
-                    onSelect={(option) => {
-                      if (option === 'edit') {
-                        setEditingCommentId(comment.id);
-                        setEditValue(comment.content);
-                        setOpenedCommentId(null);
-                      }
-
-                      if (option === 'delete') {
-                        setDeletingCommentId(comment.id);
-                        setIsDeleteModalOpen(true);
-                      }
-                    }}
+            return (
+              <div key={comment.id} className="relative py-2">
+                {editingCommentId === comment.id ? (
+                  <InputReply
+                    value={editValue}
+                    onChange={setEditValue}
+                    onSubmit={handleCommentEdit}
                   />
-                </div>
-              )}
-            </div>
-          ))
+                ) : (
+                  <Reply
+                    size="lg"
+                    author={comment.writer.nickname}
+                    avatar={
+                      <Profile
+                        size="md"
+                        src={comment.writer.image ?? null}
+                        alt="댓글 작성자 프로필"
+                      />
+                    }
+                    date={formatDate(comment.createdAt)}
+                    onMenuClick={
+                      isOwnComment
+                        ? () =>
+                            setOpenedCommentId(openedCommentId === comment.id ? null : comment.id)
+                        : undefined
+                    }
+                  >
+                    {comment.content}
+                  </Reply>
+                )}
+
+                {isOwnComment && openedCommentId === comment.id && (
+                  <div className="absolute top-10 right-5 z-10">
+                    <Dropdown
+                      options={[
+                        { label: '수정하기', value: 'edit' },
+                        { label: '삭제하기', value: 'delete' },
+                      ]}
+                      onSelect={(option) => {
+                        if (option === 'edit') {
+                          setEditingCommentId(comment.id);
+                          setEditValue(comment.content);
+                          setOpenedCommentId(null);
+                        }
+
+                        if (option === 'delete') {
+                          setDeletingCommentId(comment.id);
+                          setIsDeleteModalOpen(true);
+                        }
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+            );
+          })
         ) : (
           <div className="text-text-disabled text-md py-4 text-center">
             아직 작성된 댓글이 없습니다.
