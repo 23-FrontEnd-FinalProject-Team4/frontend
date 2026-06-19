@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { deleteArticle } from '@/apis/article';
+import { deleteArticleAction } from '@/app/articles/_actions/article.action';
 import KebabIcon from '@/assets/icons/kebab.svg';
 import Dropdown from '@/components/dropdown/Dropdown';
 import Modal from '@/components/modal/Modal';
@@ -32,7 +32,7 @@ const ArticleHeader = ({
 
   const handleDelete = async () => {
     try {
-      await deleteArticle(`${id}`);
+      await deleteArticleAction(`${id}`);
 
       router.push('/articles');
     } catch (error) {

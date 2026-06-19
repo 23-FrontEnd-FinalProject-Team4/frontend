@@ -1,11 +1,25 @@
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
 import { getArticleDetail } from '@/apis/article';
+import { getMyProfileServer } from '@/apis/user/server';
 import EditorClient from '@/app/articles/write/_components/EditorClient';
 
 const EditArticlePage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
   const article = await getArticleDetail(`${id}`);
+  let currentUserId = '';
+
+  try {
+    const profile = await getMyProfileServer();
+    currentUserId = String(profile.id);
+  } catch {
+    notFound();
+  }
+
+  if (currentUserId !== String(article.writer.id)) {
+    notFound();
+  }
 
   return (
     <div className="mx-auto flex min-h-screen px-4 pt-5 md:p-20">

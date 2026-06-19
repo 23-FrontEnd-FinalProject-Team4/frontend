@@ -2,9 +2,9 @@
 
 import { useMutation } from '@tanstack/react-query';
 
-import { createArticle, updateArticle } from '@/apis/article';
 import { CreateArticleRequest, UpdateArticleRequest } from '@/apis/article/type';
 import { uploadImage } from '@/apis/image';
+import { createArticleAction, updateArticleAction } from '@/app/articles/_actions/article.action';
 import { ArticleFormData } from '@/app/articles/write/_components/schema';
 
 export const ARTICLE_EDITOR_MODE = {
@@ -26,12 +26,12 @@ export const useArticleEditor = ({ mode, defaultValues }: UseArticleEditorProps)
   });
 
   const createArticleMutation = useMutation({
-    mutationFn: createArticle,
+    mutationFn: createArticleAction,
   });
 
   const updateArticleMutation = useMutation({
     mutationFn: ({ id, payload }: { id: string; payload: UpdateArticleRequest }) =>
-      updateArticle(id, payload),
+      updateArticleAction(id, payload),
   });
 
   const handleFormSubmit = async (values: ArticleFormData) => {
