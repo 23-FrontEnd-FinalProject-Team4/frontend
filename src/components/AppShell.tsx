@@ -6,21 +6,15 @@ import { usePathname } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 
 import { getMyGroupsAction } from '@/app/_actions/sidebar.action';
-import type { Group } from '@/components/sideBar/type';
+import { getMyProfileAction } from '@/app/_actions/user.action';
 
 const Sidebar = dynamic(() => import('@/components/sideBar/SideBar'), {
   ssr: false,
 });
 
-const FALLBACK_SIDEBAR_GROUPS: Group[] = [
-  { id: 1, name: '경영관리팀', route: '/management' },
-  { id: 2, name: '프로덕트팀', route: '/product' },
-  { id: 3, name: '마케팅팀', route: '/marketing' },
-  { id: 4, name: '콘텐츠팀', route: '/content' },
-];
-
 const SIDEBAR_QUERY_KEY = {
   myGroups: ['sidebar', 'my-groups'] as const,
+  user: ['sidebar', 'user'] as const,
 };
 
 const PUBLIC_PAGE_PATHS = new Set(['/', '/login', '/signup', '/reset-password']);
@@ -29,7 +23,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isPublicPage = PUBLIC_PAGE_PATHS.has(pathname);
 
-  const { data: myGroups } = useQuery({
+  const {
+    data: myGroups,
+    isSuccess,
+    isLoading: isGroupsLoading,
+  } = useQuery({
     queryKey: SIDEBAR_QUERY_KEY.myGroups,
     queryFn: async () => {
       const result = await getMyGroupsAction();
@@ -42,6 +40,15 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     },
     enabled: !isPublicPage,
   });
+  const isLoggedIn = isSuccess;
+  const { data: user, isLoading: isUserLoading } = useQuery({
+    queryKey: SIDEBAR_QUERY_KEY.user,
+    queryFn: async () => {
+      const result = await getMyProfileAction();
+      return result;
+    },
+    enabled: isLoggedIn,
+  });
 
   const sidebarGroups =
     myGroups?.map((group) => ({
@@ -49,15 +56,22 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       name: group.name,
       route: `/${group.id}`,
       image: group.image,
-    })) ?? FALLBACK_SIDEBAR_GROUPS;
+    })) ?? [];
 
   if (isPublicPage) {
     return <>{children}</>;
   }
 
+  const isAuthLoading = isGroupsLoading || (isLoggedIn && isUserLoading);
+
   return (
     <div className="bg-background-secondary flex min-h-screen">
-      <Sidebar isLoggedIn={true} groups={sidebarGroups} />
+      <Sidebar
+        isLoggedIn={isLoggedIn}
+        isAuthLoading={isAuthLoading}
+        groups={sidebarGroups}
+        user={user}
+      />
 
       <main className="flex-1 pt-16 md:pt-0">{children}</main>
     </div>
