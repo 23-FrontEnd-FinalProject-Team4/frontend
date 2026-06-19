@@ -5,6 +5,7 @@ import type {
   CreateArticleRequest,
   UpdateArticleRequest,
 } from '@/apis/article/type';
+import type { UploadImageResponse } from '@/apis/image/type';
 import { serverFetcher } from '@/lib/serverFetcher';
 
 export const createArticleAction = async (body: CreateArticleRequest): Promise<ArticleDetail> => {
@@ -27,5 +28,14 @@ export const updateArticleAction = async (
 export const deleteArticleAction = async (articleId: string): Promise<void> => {
   return serverFetcher<void>(`/articles/${articleId}`, {
     method: 'DELETE',
+  });
+};
+
+export const uploadArticleImageAction = async (
+  formData: FormData,
+): Promise<UploadImageResponse> => {
+  return serverFetcher<UploadImageResponse>('/images/upload', {
+    method: 'POST',
+    body: formData,
   });
 };
