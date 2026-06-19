@@ -5,28 +5,27 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { User } from '@/apis/auth/type';
 import MenuIcon from '@/assets/icons/gnb_menu.svg?react';
 import LogoLarge from '@/assets/icons/logo_large.svg?react';
 import LogoSmall from '@/assets/icons/logo_small.svg?react';
 import ProfileIcon from '@/assets/icons/profile.svg?react';
-import { handleOpenProfileMenu, openProfileMenu } from '@/components/sideBar/LoggedInFooter';
-import type { Group } from '@/components/sideBar/type';
+import type { MobileHeaderProps } from '@/components/sideBar/type';
 import { cn } from '@/utils/cn';
+import {
+  PROFILE_MENU_OPTIONS,
+  type ProfileMenuValue,
+  handleProfileMenuSelect,
+} from '@/utils/profileMenu';
 
 import Dropdown from '../dropdown/Dropdown';
 
 export default function MobileHeader({
   isLoggedIn,
+  isAuthLoading,
   user,
   onOpenSideBar,
   groups,
-}: {
-  isLoggedIn: boolean;
-  user: User | undefined;
-  onOpenSideBar: () => void;
-  groups: Group[];
-}) {
+}: MobileHeaderProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const toggleOpen = () => setIsOpen(!isOpen);
@@ -66,19 +65,21 @@ export default function MobileHeader({
             <div className="absolute right-20 bottom-0">
               <Dropdown
                 size="sm"
-                options={openProfileMenu()}
+                options={PROFILE_MENU_OPTIONS}
                 onSelect={async (value) => {
-                  await handleOpenProfileMenu(value, router);
+                  await handleProfileMenuSelect(value as ProfileMenuValue, router);
                 }}
                 onClose={toggleOpen}
               />
             </div>
           )}
         </div>
-      ) : (
+      ) : !isAuthLoading ? (
         <Link href="/login" className={cn('text-brand-tertiary text-md')}>
           로그인
         </Link>
+      ) : (
+        <div className="h-8 w-8" />
       )}
     </header>
   );

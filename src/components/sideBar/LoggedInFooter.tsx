@@ -4,40 +4,14 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { User } from '@/apis/auth/type';
-import { logout } from '@/app/_actions/logout.action';
 import ProfileIcon from '@/assets/icons/profile.svg?react';
 import SettingsIcon from '@/assets/icons/setting.svg?react';
 import Dropdown from '@/components/dropdown/Dropdown';
-
-export const openProfileMenu = () => {
-  return [
-    { label: '마이 히스토리', value: 'history' },
-    { label: '계정 설정', value: 'account' },
-    { label: '팀 참여', value: 'team' },
-    { label: '로그아웃', value: 'logout' },
-  ];
-};
-
-export const handleOpenProfileMenu = async (
-  value: string,
-  router: ReturnType<typeof useRouter>,
-) => {
-  switch (value) {
-    case 'history':
-      router.push('/my-history');
-      break;
-    case 'account':
-      router.push('/settings');
-      break;
-    case 'team':
-      router.push('/addteam');
-      break;
-    case 'logout':
-      await logout();
-      router.replace('/login');
-      break;
-  }
-};
+import {
+  PROFILE_MENU_OPTIONS,
+  type ProfileMenuValue,
+  handleProfileMenuSelect,
+} from '@/utils/profileMenu';
 
 export default function LoggedInFooter({
   isLoggedIn,
@@ -69,11 +43,11 @@ export default function LoggedInFooter({
           <SettingsIcon className="h-6 w-6 cursor-pointer" onClick={toggleOpen} />
 
           {isOpen && (
-            <div className="absolute right-30 bottom-50 z-20 mb-2">
+            <div className="absolute right-[112px] bottom-[200px] z-20 mb-2">
               <Dropdown
-                options={openProfileMenu()}
+                options={PROFILE_MENU_OPTIONS}
                 onSelect={async (value) => {
-                  await handleOpenProfileMenu(value, router);
+                  await handleProfileMenuSelect(value as ProfileMenuValue, router);
                 }}
                 onClose={toggleOpen}
               />

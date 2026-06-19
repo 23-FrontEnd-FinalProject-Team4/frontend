@@ -14,6 +14,7 @@ const Sidebar = dynamic(() => import('@/components/sideBar/SideBar'), {
 
 const SIDEBAR_QUERY_KEY = {
   myGroups: ['sidebar', 'my-groups'] as const,
+  user: ['sidebar', 'user'] as const,
 };
 
 const PUBLIC_PAGE_PATHS = new Set(['/', '/login', '/signup', '/reset-password']);
@@ -22,7 +23,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isPublicPage = PUBLIC_PAGE_PATHS.has(pathname);
 
-  const { data: myGroups, isSuccess } = useQuery({
+  const {
+    data: myGroups,
+    isSuccess,
+    isLoading: isGroupsLoading,
+  } = useQuery({
     queryKey: SIDEBAR_QUERY_KEY.myGroups,
     queryFn: async () => {
       const result = await getMyGroupsAction();
@@ -36,8 +41,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     enabled: !isPublicPage,
   });
   const isLoggedIn = isSuccess;
-  const { data: user } = useQuery({
-    queryKey: ['user'],
+  const { data: user, isLoading: isUserLoading } = useQuery({
+    queryKey: SIDEBAR_QUERY_KEY.user,
     queryFn: async () => {
       const result = await getMyProfileAction();
       return result;
@@ -57,9 +62,16 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
   }
 
+  const isAuthLoading = isGroupsLoading || (isLoggedIn && isUserLoading);
+
   return (
     <div className="bg-background-secondary flex min-h-screen">
-      <Sidebar isLoggedIn={isLoggedIn} groups={sidebarGroups} user={user} />
+      <Sidebar
+        isLoggedIn={isLoggedIn}
+        isAuthLoading={isAuthLoading}
+        groups={sidebarGroups}
+        user={user}
+      />
 
       <main className="flex-1 pt-16 md:pt-0">{children}</main>
     </div>

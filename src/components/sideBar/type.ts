@@ -20,7 +20,8 @@ export type GroupSectionProps = {
 export type SideBarProps = {
   isLoggedIn: boolean;
   groups: Group[];
-  user: User | null;
+  user: User | undefined;
+  isAuthLoading: boolean;
 };
 
 export type SideBarViewProps = {
@@ -37,8 +38,10 @@ export type SideBarFooterProps = {
 
 export type MobileHeaderProps = {
   isLoggedIn: boolean;
+  isAuthLoading: boolean;
   onOpenSideBar: () => void;
   user: User | undefined;
+  groups: Group[];
 };
 
 export type MobileSidebarProps = {

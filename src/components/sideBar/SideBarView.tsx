@@ -14,12 +14,14 @@ import { cn } from '@/utils/cn';
 
 export default function SideBarView({
   isLoggedIn,
+  isAuthLoading,
   collapsed,
   groups,
   user,
   onToggleCollapse,
 }: {
   isLoggedIn: boolean;
+  isAuthLoading: boolean;
   collapsed: boolean;
   groups: Group[];
   user: User | undefined;
@@ -86,7 +88,12 @@ export default function SideBarView({
         </nav>
 
         {/* 계정 설정 모달 출력 */}
-        <SidebarFooter isLoggedIn={isLoggedIn} collapsed={collapsed} user={user} />
+        <SidebarFooter
+          isLoggedIn={isLoggedIn}
+          isAuthLoading={isAuthLoading}
+          collapsed={collapsed}
+          user={user}
+        />
       </div>
     </aside>
   );
