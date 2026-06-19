@@ -76,7 +76,7 @@ const ArticlesClient = () => {
     queryFn: () =>
       getArticles({
         page: 1,
-        pageSize: 100,
+        pageSize: 30,
         orderBy: 'like',
       }),
   });
