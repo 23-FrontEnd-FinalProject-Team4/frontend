@@ -1,4 +1,4 @@
-import { logout } from '@/app/_actions/logout.action';
+import { logoutAction } from '@/app/(auth)/_actions/logout.action';
 
 export type ProfileMenuValue = 'history' | 'account' | 'team' | 'logout';
 
@@ -29,7 +29,7 @@ export const handleProfileMenuSelect = async (
       router.push('/addteam');
       break;
     case 'logout':
-      await logout();
+      await logoutAction();
       router.replace('/login');
       break;
     default:
