@@ -4,15 +4,23 @@ import { useEffect, useState } from 'react';
 
 import { usePathname } from 'next/navigation';
 
+import { User } from '@/apis/auth/type';
 import MobileHeader from '@/components/sideBar/MobileHeader';
 import MobileSideBar from '@/components/sideBar/MobileSideBar';
 import SideBarView from '@/components/sideBar/SideBarView';
-import type { SideBarProps } from '@/components/sideBar/type';
-
+import type { Group } from '@/components/sideBar/type';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { MEDIA_QUERY } from '@/hooks/useMediaQuery';
 
-export default function Sidebar({ isLoggedIn, groups }: SideBarProps) {
+export default function Sidebar({
+  isLoggedIn,
+  groups,
+  user,
+}: {
+  isLoggedIn: boolean;
+  groups: Group[];
+  user: User | undefined;
+}) {
   const isDesktop = useMediaQuery(MEDIA_QUERY.desktop);
   const [userCollapsed, setUserCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -44,7 +52,7 @@ export default function Sidebar({ isLoggedIn, groups }: SideBarProps) {
   return (
     <>
       <div className="md:hidden">
-        <MobileHeader isLoggedIn={isLoggedIn} onOpenSideBar={handleOpenMobileMenu} />
+        <MobileHeader isLoggedIn={isLoggedIn} user={user} onOpenSideBar={handleOpenMobileMenu} />
         <MobileSideBar
           mobileOpen={mobileOpen}
           groups={groups}
@@ -56,8 +64,9 @@ export default function Sidebar({ isLoggedIn, groups }: SideBarProps) {
         <SideBarView
           isLoggedIn={isLoggedIn}
           collapsed={collapsed}
-          onToggleCollapse={handleToggleCollapse}
           groups={groups}
+          user={user}
+          onToggleCollapse={handleToggleCollapse}
         />
       </div>
     </>
