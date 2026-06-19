@@ -10,13 +10,11 @@ import { getArticles } from '@/apis/article';
 import { Article } from '@/apis/article/type';
 import BestSection from '@/app/articles/_components/BestSection';
 import ListSection from '@/app/articles/_components/ListSection';
+import Pagination from '@/app/articles/_components/Pagination';
 import SearchInput from '@/app/articles/_components/SearchInput';
-import ArrowLeftIcon from '@/assets/icons/arrow_left.svg';
-import ArrowRightIcon from '@/assets/icons/arrow_right.svg';
 import WriteIcon from '@/assets/icons/pencil.svg';
 import Button from '@/components/button/Button';
 import { useDebounce } from '@/hooks/useDebounce';
-import { cn } from '@/utils/cn';
 
 const ArticlesClient = () => {
   const [bestPage, setBestPage] = useState(1);
@@ -102,17 +100,6 @@ const ArticlesClient = () => {
 
   const bestTotalPages = Math.max(1, Math.ceil(bestArticleCards.length / itemsPerPage));
 
-  const totalPages = Math.max(1, Math.ceil((data?.totalCount ?? 0) / 10));
-  const PAGE_WINDOW = 5;
-
-  const startPage = Math.max(1, page - Math.floor(PAGE_WINDOW / 2));
-  const endPage = Math.min(totalPages, startPage + PAGE_WINDOW - 1);
-
-  const visiblePages = Array.from(
-    { length: endPage - startPage + 1 },
-    (_, index) => startPage + index,
-  );
-
   return (
     <div className="bg-background-primary mx-auto flex min-h-screen p-0 md:p-22">
       <main className="min-h-screen w-full">
@@ -143,61 +130,7 @@ const ArticlesClient = () => {
         ) : (
           <ListSection articles={articleCards} onSortChange={onSortChange} sortType={sortType} />
         )}
-        <div className="mt-8 flex justify-center gap-2">
-          <button
-            type="button"
-            className={cn(
-              'hover:bg-background-tertiary hover:text-text-primary text-md disabled:text-text-disabled flex items-center justify-center gap-1 rounded-md px-2 py-1 font-medium',
-            )}
-            disabled={page === 1}
-            onClick={() => {
-              const nextPage = page - 1;
-              const params = new URLSearchParams(searchParams.toString());
-              params.set('page', String(nextPage));
-              router.push(`${pathname}?${params.toString()}`);
-            }}
-          >
-            <ArrowLeftIcon className="size-4" />
-          </button>
-
-          {visiblePages.map((pageNumber) => {
-            return (
-              <button
-                type="button"
-                key={pageNumber}
-                className={cn(
-                  'flex h-8 w-8 items-center justify-center gap-1 rounded-full',
-                  page === pageNumber
-                    ? 'bg-brand-primary text-text-inverse'
-                    : 'hover:bg-background-tertiary hover:text-text-primary',
-                )}
-                onClick={() => {
-                  const params = new URLSearchParams(searchParams.toString());
-                  params.set('page', String(pageNumber));
-                  router.push(`${pathname}?${params.toString()}`);
-                }}
-              >
-                {pageNumber}
-              </button>
-            );
-          })}
-
-          <button
-            type="button"
-            className={cn(
-              'hover:bg-background-tertiary hover:text-text-primary text-md disabled:text-text-disabled font-mediu flex items-center justify-center gap-1 rounded-md px-2 py-1',
-            )}
-            disabled={page === totalPages}
-            onClick={() => {
-              const nextPage = page + 1;
-              const params = new URLSearchParams(searchParams.toString());
-              params.set('page', String(nextPage));
-              router.push(`${pathname}?${params.toString()}`);
-            }}
-          >
-            <ArrowRightIcon className="size-4" />
-          </button>
-        </div>
+        <Pagination page={page} totalCount={data?.totalCount ?? 0} />
         <Button
           className="shadow-brand-tertiary-30 fixed right-10 bottom-10 shadow-md md:right-20 md:bottom-20"
           variant="icon-circle"
