@@ -128,7 +128,7 @@ export default function TaskListCard({ item, teamId }: TaskListCardProps) {
 
             {isMenuOpen && (
               <div
-                className="absolute top-full right-0 z-20 mt-1"
+                className="absolute top-full right-0 z-20 mt-1 w-[94px]"
                 onClick={(event) => event.stopPropagation()}
               >
                 <Dropdown options={OPTIONS} size="sm" onSelect={handleMenuItemSelect} />
