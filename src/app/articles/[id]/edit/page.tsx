@@ -1,13 +1,13 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { getArticleDetail } from '@/apis/article';
+import { getArticleDetailServer } from '@/apis/article/server';
 import { getMyProfileServer } from '@/apis/user/server';
 import EditorClient from '@/app/articles/write/_components/EditorClient';
 
 const EditArticlePage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
-  const article = await getArticleDetail(`${id}`);
+  const article = await getArticleDetailServer(`${id}`);
   let currentUserId = '';
 
   try {

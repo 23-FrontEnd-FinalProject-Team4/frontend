@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { getArticleDetail } from '@/apis/article';
+import { getArticleDetailServer } from '@/apis/article/server';
 import { getArticleComments } from '@/apis/articleComment';
 import { getMyProfileServer } from '@/apis/user/server';
 import CommentSection from '@/app/articles/_components/articlesDetail/CommentSection';
@@ -11,7 +11,7 @@ import { formatDate } from '@/utils/formatDate';
 
 const ArticleDetailPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
-  const article = await getArticleDetail(`${id}`);
+  const article = await getArticleDetailServer(`${id}`);
   const comments = await getArticleComments({ articleId: `${id}`, limit: 10, cursor: 0 });
   let currentUserIdentifiers: string[] = [];
   let currentUserId = '';
