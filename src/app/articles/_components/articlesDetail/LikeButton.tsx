@@ -2,9 +2,7 @@
 
 import { useState } from 'react';
 
-import { useRouter } from 'next/navigation';
-
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import {
   createArticleLikeAction,
@@ -23,7 +21,7 @@ interface LikeButtonProps {
 const LikeButton = ({ articleId, initialIsLiked, initialLikeCount }: LikeButtonProps) => {
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const [likeCount, setLikeCount] = useState(initialLikeCount);
-  const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (liked: boolean) => {
@@ -49,8 +47,9 @@ const LikeButton = ({ articleId, initialIsLiked, initialLikeCount }: LikeButtonP
       }
       console.error('좋아요 처리 실패', error);
     },
-    onSuccess: () => {
-      router.refresh();
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['articles'] });
+      queryClient.invalidateQueries({ queryKey: ['best-articles'] });
     },
   });
 
