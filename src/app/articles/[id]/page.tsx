@@ -14,11 +14,14 @@ const ArticleDetailPage = async ({ params }: { params: Promise<{ id: string }> }
   const article = await getArticleDetail(`${id}`);
   const comments = await getArticleComments({ articleId: `${id}`, limit: 10, cursor: 0 });
   let currentUserIdentifiers: string[] = [];
+  let currentUserId = '';
 
   try {
     const profile = await getMyProfileServer();
+    currentUserId = String(profile.id);
     currentUserIdentifiers = [String(profile.id), profile.teamId].filter(Boolean);
   } catch {
+    currentUserId = '';
     currentUserIdentifiers = [];
   }
 
@@ -31,7 +34,9 @@ const ArticleDetailPage = async ({ params }: { params: Promise<{ id: string }> }
             id={`${article.id}`}
             title={article.title}
             writer={article.writer.nickname}
+            writerImage={article.writer.image}
             createdAt={formattedDate}
+            isAuthor={currentUserId === String(article.writer.id)}
           />
           <ArticleContent content={article.content} image={article.image} />
           <LikeButton
