@@ -46,6 +46,7 @@ export const CollapsedLoggedIn: Story = {
     <div className="w-[72px]">
       <SideBarView
         isLoggedIn={true}
+        isAuthLoading={false}
         collapsed={true}
         onToggleCollapse={() => {}}
         groups={[]}
@@ -68,6 +69,7 @@ export const CollapsedLoggedOut: Story = {
     <div className="w-[72px]">
       <SideBarView
         isLoggedIn={false}
+        isAuthLoading={false}
         collapsed={true}
         onToggleCollapse={() => {}}
         groups={[]}
