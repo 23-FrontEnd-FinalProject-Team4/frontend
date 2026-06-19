@@ -114,7 +114,15 @@ const TeamImage = ({
       )}
     >
       {imageSrc ? (
-        <Image src={imageSrc} alt="" fill className="object-cover" sizes="36px" aria-hidden />
+        <Image
+          src={imageSrc}
+          alt=""
+          fill
+          className="object-cover"
+          quality={100}
+          sizes="72px"
+          aria-hidden
+        />
       ) : (
         <span className="flex h-full items-center justify-center text-xs font-semibold">
           {name.slice(0, 1)}

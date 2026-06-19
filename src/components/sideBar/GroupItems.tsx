@@ -45,7 +45,8 @@ export default function GroupItems({
             alt={`${name} 팀 이미지`}
             fill
             className="object-cover"
-            sizes={collapsed ? '40px' : '28px'}
+            quality={100}
+            sizes={collapsed ? '80px' : '56px'}
           />
         ) : (
           <GroupIcon className="text-icon-primary h-full w-full" />
