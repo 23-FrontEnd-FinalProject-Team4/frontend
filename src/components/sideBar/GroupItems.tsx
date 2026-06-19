@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import GroupIcon from '@/assets/icons/profile.svg?react';
 import type { GroupItemProps } from '@/components/sideBar/type';
 import { cn } from '@/utils/cn';
+import { normalizeImageUrl } from '@/utils/image';
 
 export default function GroupItems({
   id,
@@ -17,6 +18,7 @@ export default function GroupItems({
   const pathname = usePathname() ?? '';
   const href = route ?? `/groups/${id}`;
   const isSelected = selected ?? pathname.startsWith(href);
+  const imageSrc = normalizeImageUrl(image);
 
   return (
     <Link
@@ -37,9 +39,9 @@ export default function GroupItems({
           collapsed ? 'h-10 w-10' : 'h-7 w-7',
         )}
       >
-        {image ? (
+        {imageSrc ? (
           <Image
-            src={image}
+            src={imageSrc}
             alt={`${name} 팀 이미지`}
             fill
             className="object-cover"
