@@ -1,23 +1,33 @@
 import Link from 'next/link';
 
+import { User } from '@/apis/auth/type';
 import FoldLeftIcon from '@/assets/icons/fold_left.svg?react';
 import FoldRightIcon from '@/assets/icons/fold_right.svg?react';
 import LogoLarge from '@/assets/icons/logo_large.svg?react';
 import LogoSmall from '@/assets/icons/logo_small.svg?react';
-import { cn } from '@/utils/cn';
-
 import AddGroupButton from '@/components/sideBar/AddGroupButton';
 import ArticleMenu from '@/components/sideBar/ArticleMenu';
 import GroupSection from '@/components/sideBar/GroupSection';
 import SidebarFooter from '@/components/sideBar/SideBarFooter';
-import type { SideBarViewProps } from '@/components/sideBar/type';
+import type { Group } from '@/components/sideBar/type';
+import { cn } from '@/utils/cn';
 
 export default function SideBarView({
   isLoggedIn,
+  isAuthLoading,
   collapsed,
   groups,
+  user,
   onToggleCollapse,
-}: SideBarViewProps) {
+}: {
+  isLoggedIn: boolean;
+  isAuthLoading: boolean;
+  collapsed: boolean;
+  groups: Group[];
+  user: User | undefined;
+  onToggleCollapse: () => void;
+}) {
+  const logoHref = isLoggedIn && groups.length > 0 ? `/${groups[0].id}` : '/';
   return (
     <aside
       className={cn(
@@ -27,7 +37,7 @@ export default function SideBarView({
     >
       <div className="flex h-full flex-col">
         <Link
-          href="/"
+          href={logoHref}
           className={cn(
             'flex h-8 w-full items-center',
             collapsed ? 'justify-center' : 'justify-start',
@@ -35,7 +45,7 @@ export default function SideBarView({
         >
           {collapsed ? (
             <LogoSmall
-              className={cn('block h-8 shrink-0', collapsed ? 'opacity-100' : 'opacity-0')}
+              className={cn('block h-8 w-8 shrink-0', collapsed ? 'opacity-100' : 'opacity-0')}
             />
           ) : (
             <LogoLarge
@@ -78,7 +88,12 @@ export default function SideBarView({
         </nav>
 
         {/* 계정 설정 모달 출력 */}
-        <SidebarFooter isLoggedIn={isLoggedIn} collapsed={collapsed} />
+        <SidebarFooter
+          isLoggedIn={isLoggedIn}
+          isAuthLoading={isAuthLoading}
+          collapsed={collapsed}
+          user={user}
+        />
       </div>
     </aside>
   );
