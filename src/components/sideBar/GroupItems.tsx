@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import GroupIcon from '@/assets/icons/profile.svg?react';
 import type { GroupItemProps } from '@/components/sideBar/type';
 import { cn } from '@/utils/cn';
+import { isAllowedImageUrl } from '@/utils/isAllowedImageUrl';
 
 export default function GroupItems({
   id,
@@ -37,7 +38,7 @@ export default function GroupItems({
           collapsed ? 'h-10 w-10' : 'h-7 w-7',
         )}
       >
-        {image ? (
+        {isAllowedImageUrl(image) ? (
           <Image
             src={image}
             alt={`${name} 팀 이미지`}

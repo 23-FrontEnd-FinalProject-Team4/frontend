@@ -5,6 +5,7 @@ import type { ChangeEvent } from 'react';
 import Image from 'next/image';
 
 import PencilIcon from '@/assets/icons/pencil.svg?react';
+import { isAllowedImageUrl } from '@/utils/isAllowedImageUrl';
 
 import type { EditableProfileImageProps } from './type';
 
@@ -43,14 +44,23 @@ const EditableProfileImage = ({
 
   return (
     <div className="relative inline-block">
-      <Image
-        src={src}
-        alt={alt}
-        width={style.imageSize}
-        height={style.imageSize}
-        unoptimized
-        className={`${style.image} border-background-primary border-2 object-cover`}
-      />
+      {isAllowedImageUrl(src) ? (
+        <Image
+          src={src}
+          alt={alt}
+          width={style.imageSize}
+          height={style.imageSize}
+          unoptimized
+          className={`${style.image} border-background-primary border-2 object-cover`}
+        />
+      ) : (
+        <div
+          aria-label={alt}
+          className={`${style.image} border-background-primary bg-background-secondary text-text-disabled flex items-center justify-center border-2 text-sm font-medium`}
+        >
+          ?
+        </div>
+      )}
 
       <label className={`${style.button} cursor-pointer`}>
         <input
