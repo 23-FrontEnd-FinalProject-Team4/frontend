@@ -3,6 +3,8 @@ import { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { deleteArticleAction } from '@/app/articles/_actions/article.action';
 import KebabIcon from '@/assets/icons/kebab.svg';
 import Dropdown from '@/components/dropdown/Dropdown';
@@ -29,15 +31,25 @@ const ArticleHeader = ({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
-  const handleDelete = async () => {
-    try {
-      await deleteArticleAction(`${id}`);
+  const { mutate: deleteArticle, isPending: isDeleting } = useMutation({
+    mutationFn: deleteArticleAction,
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['articles'] }),
+        queryClient.invalidateQueries({ queryKey: ['best-articles'] }),
+      ]);
 
-      router.push('/articles');
-    } catch (error) {
+      router.replace('/articles');
+    },
+    onError: (error) => {
       console.error(error);
-    }
+    },
+  });
+
+  const handleDelete = () => {
+    deleteArticle(`${id}`);
   };
   return (
     <header className="border-border-primary mb-4 flex w-full items-start justify-between border-b pb-3">
@@ -88,7 +100,7 @@ const ArticleHeader = ({
             primaryAction={{
               label: '삭제',
               loadingLabel: '삭제 중...',
-              isLoading: false,
+              isLoading: isDeleting,
               onClick: handleDelete,
             }}
             secondaryAction={{
