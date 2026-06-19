@@ -26,8 +26,40 @@ const copyInviteLink = async ({
     throw new Error('팀 정보를 찾을 수 없습니다.');
   }
 
-  const invitationLink = await getInvitationLink(groupId);
+  const invitationLink = createJoinTeamLink(await getInvitationLink(groupId));
   await navigator.clipboard.writeText(invitationLink);
+};
+
+const createJoinTeamLink = (invitation: string) => {
+  const origin = window.location.origin;
+  const trimmedInvitation = invitation.trim();
+
+  if (!trimmedInvitation) {
+    throw new Error('초대 링크를 불러오지 못했습니다.');
+  }
+
+  try {
+    const invitationUrl = trimmedInvitation.includes('://')
+      ? new URL(trimmedInvitation)
+      : new URL(trimmedInvitation, origin);
+    const token = invitationUrl.searchParams.get('token')?.trim();
+
+    if (token) {
+      const joinTeamParams = new URLSearchParams({ token });
+      const userEmail =
+        invitationUrl.searchParams.get('userEmail') ?? invitationUrl.searchParams.get('email');
+
+      if (userEmail) {
+        joinTeamParams.set('userEmail', userEmail);
+      }
+
+      return `${origin}/jointeam?${joinTeamParams.toString()}`;
+    }
+  } catch {
+    return `${origin}/jointeam?token=${encodeURIComponent(trimmedInvitation)}`;
+  }
+
+  return `${origin}/jointeam?token=${encodeURIComponent(trimmedInvitation)}`;
 };
 
 const InviteMemberModal = ({ isOpen, groupId, onClose }: InviteMemberModalProps) => {

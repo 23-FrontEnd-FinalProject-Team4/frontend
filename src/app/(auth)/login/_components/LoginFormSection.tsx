@@ -15,7 +15,11 @@ import { type LoginFormValues, loginSchema } from '@/schemas/auth.schema';
 
 import ResetPasswordEmailSection from './ResetPasswordEmailSection';
 
-const LoginFormSection = () => {
+interface LoginFormSectionProps {
+  postLoginRedirectPath?: string;
+}
+
+const LoginFormSection = ({ postLoginRedirectPath }: LoginFormSectionProps) => {
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -36,7 +40,7 @@ const LoginFormSection = () => {
       const result = await mutateAsync(data);
       queryClient.clear();
       toast.success('로그인에 성공했어요.');
-      router.push(result.redirectPath);
+      router.push(postLoginRedirectPath ?? result.redirectPath);
     } catch (error) {
       toast.error(getErrorMessage(error, '로그인 중 오류가 발생했어요.'));
     }

@@ -15,12 +15,29 @@ const SignupPromptSection = () => {
   );
 };
 
-const LoginPage = () => {
+interface LoginPageProps {
+  searchParams: Promise<{
+    redirect?: string;
+  }>;
+}
+
+const getSafeRedirectPath = (redirectPath?: string) => {
+  if (!redirectPath || !redirectPath.startsWith('/') || redirectPath.startsWith('//')) {
+    return undefined;
+  }
+
+  return redirectPath;
+};
+
+const LoginPage = async ({ searchParams }: LoginPageProps) => {
+  const { redirect } = await searchParams;
+  const postLoginRedirectPath = getSafeRedirectPath(redirect);
+
   return (
     <main className="grid min-h-screen place-items-center p-4">
       <section className="bg-background-primary w-full max-w-[550px] rounded-2xl p-8 md:p-18">
         <h1 className="mb-12 text-center text-xl font-semibold">로그인</h1>
-        <LoginFormSection />
+        <LoginFormSection postLoginRedirectPath={postLoginRedirectPath} />
         <SignupPromptSection />
         <SocialAuthSection label="간편 로그인하기" />
       </section>
