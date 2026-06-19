@@ -1,10 +1,13 @@
 'use client';
 
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { CreateArticleRequest, UpdateArticleRequest } from '@/apis/article/type';
-import { uploadImage } from '@/apis/image';
-import { createArticleAction, updateArticleAction } from '@/app/articles/_actions/article.action';
+import {
+  createArticleAction,
+  updateArticleAction,
+  uploadArticleImageAction,
+} from '@/app/articles/_actions/article.action';
 import { ArticleFormData } from '@/app/articles/write/_components/schema';
 
 export const ARTICLE_EDITOR_MODE = {
@@ -17,21 +20,35 @@ export type UseArticleEditorProps = {
   defaultValues: ArticleFormData;
 };
 export const useArticleEditor = ({ mode, defaultValues }: UseArticleEditorProps) => {
+  const queryClient = useQueryClient();
+
   const uploadImageMutation = useMutation({
     mutationFn: async (file: File) => {
       const formData = new FormData();
       formData.append('image', file);
-      return uploadImage(formData);
+      return uploadArticleImageAction(formData);
     },
   });
 
   const createArticleMutation = useMutation({
     mutationFn: createArticleAction,
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['articles'] }),
+        queryClient.invalidateQueries({ queryKey: ['best-articles'] }),
+      ]);
+    },
   });
 
   const updateArticleMutation = useMutation({
     mutationFn: ({ id, payload }: { id: string; payload: UpdateArticleRequest }) =>
       updateArticleAction(id, payload),
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['articles'] }),
+        queryClient.invalidateQueries({ queryKey: ['best-articles'] }),
+      ]);
+    },
   });
 
   const handleFormSubmit = async (values: ArticleFormData) => {
