@@ -70,14 +70,14 @@ const TaskStatusSectionRow = ({ teamId, section }: TaskStatusSectionRowProps) =>
       <div
         ref={scrollRef}
         className={cn(
-          'custom-scrollbar min-w-0 overflow-x-auto pb-2 xl:pb-3',
+          'custom-scrollbar -mx-1 min-w-0 overflow-x-auto px-1 py-1 pb-3 xl:pb-4',
           isDragging ? 'cursor-grabbing select-none' : 'xl:cursor-grab',
         )}
         {...dragHandlers}
       >
         <div className="grid gap-3 md:grid-cols-1 xl:flex xl:w-max xl:flex-nowrap">
           {section.items.map((item) => (
-            <div key={item.id} className="xl:w-[270px] xl:shrink-0">
+            <div key={item.id} className="py-1 xl:w-[270px] xl:shrink-0">
               <TaskListCard item={item} teamId={teamId} />
             </div>
           ))}
