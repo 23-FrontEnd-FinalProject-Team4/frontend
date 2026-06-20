@@ -6,15 +6,9 @@ import GroupIcon from '@/assets/icons/profile.svg?react';
 import type { GroupItemProps } from '@/components/sideBar/type';
 import { cn } from '@/utils/cn';
 import { normalizeImageUrl } from '@/utils/image';
+import { isAllowedImageUrl } from '@/utils/isAllowedImageUrl';
 
-export default function GroupItems({
-  id,
-  name,
-  route,
-  image,
-  collapsed,
-  selected,
-}: GroupItemProps) {
+const GroupItems = ({ id, name, route, image, collapsed, selected }: GroupItemProps) => {
   const pathname = usePathname() ?? '';
   const href = route ?? `/groups/${id}`;
   const isSelected = selected ?? pathname.startsWith(href);
@@ -39,7 +33,7 @@ export default function GroupItems({
           collapsed ? 'h-10 w-10' : 'h-7 w-7',
         )}
       >
-        {imageSrc ? (
+        {isAllowedImageUrl(imageSrc) ? (
           <Image
             src={imageSrc}
             alt={`${name} 팀 이미지`}
@@ -54,4 +48,6 @@ export default function GroupItems({
       {!collapsed && <span>{name}</span>}
     </Link>
   );
-}
+};
+
+export default GroupItems;

@@ -4,6 +4,7 @@ import SettingIcon from '@/assets/icons/setting.svg?react';
 import Profile from '@/components/profile/Profile';
 import { cn } from '@/utils/cn';
 import { normalizeImageUrl } from '@/utils/image';
+import { isAllowedImageUrl } from '@/utils/isAllowedImageUrl';
 
 import ProgressBar from '../progressBar/ProgressBar';
 import type { TeamCardSize, TeamMember, TeamProps } from './type';
@@ -104,16 +105,17 @@ const TeamImage = ({
   size,
 }: Pick<TeamProps, 'imageUrl' | 'name'> & { size: TeamCardSize }) => {
   const imageSrc = typeof imageUrl === 'string' ? normalizeImageUrl(imageUrl) : imageUrl;
+  const showImage = imageSrc && (typeof imageSrc !== 'string' || isAllowedImageUrl(imageSrc));
 
   return (
     <div
       className={cn(
-        !imageSrc && TEAM_FALLBACK_IMAGE_CLASS,
+        !showImage && TEAM_FALLBACK_IMAGE_CLASS,
         'ring-background-primary/70 relative shrink-0 overflow-hidden rounded-md ring-1',
         TEAM_IMAGE_SIZE_CLASS[size],
       )}
     >
-      {imageSrc ? (
+      {showImage ? (
         <Image src={imageSrc} alt="" fill className="object-cover" sizes="72px" aria-hidden />
       ) : (
         <span className="flex h-full items-center justify-center text-xs font-semibold">
