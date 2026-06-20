@@ -55,6 +55,7 @@ const EditableProfileImage = ({
         />
       ) : (
         <div
+          role="img"
           aria-label={alt}
           className={`${style.image} border-background-primary bg-background-secondary text-text-disabled flex items-center justify-center border-2 text-sm font-medium`}
         >
