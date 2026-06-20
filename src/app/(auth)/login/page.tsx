@@ -22,11 +22,23 @@ interface LoginPageProps {
 }
 
 const getSafeRedirectPath = (redirectPath?: string) => {
-  if (!redirectPath || !redirectPath.startsWith('/') || redirectPath.startsWith('//')) {
+  if (!redirectPath || !redirectPath.startsWith('/')) {
     return undefined;
   }
 
-  return redirectPath;
+  try {
+    const decodedPath = decodeURIComponent(redirectPath);
+    const baseUrl = new URL('http://localhost');
+    const redirectUrl = new URL(decodedPath, baseUrl);
+
+    if (redirectUrl.origin !== baseUrl.origin || decodedPath.includes('\\')) {
+      return undefined;
+    }
+
+    return `${redirectUrl.pathname}${redirectUrl.search}${redirectUrl.hash}`;
+  } catch {
+    return undefined;
+  }
 };
 
 const LoginPage = async ({ searchParams }: LoginPageProps) => {
