@@ -38,10 +38,17 @@ const createJoinTeamLink = (invitation: string) => {
     throw new Error('초대 링크를 불러오지 못했습니다.');
   }
 
+  let invitationUrl: URL | null = null;
+
   try {
-    const invitationUrl = trimmedInvitation.includes('://')
+    invitationUrl = trimmedInvitation.includes('://')
       ? new URL(trimmedInvitation)
       : new URL(trimmedInvitation, origin);
+  } catch {
+    invitationUrl = null;
+  }
+
+  if (invitationUrl) {
     const token = invitationUrl.searchParams.get('token')?.trim();
 
     if (token) {
@@ -55,8 +62,6 @@ const createJoinTeamLink = (invitation: string) => {
 
       return `${origin}/jointeam?${joinTeamParams.toString()}`;
     }
-  } catch {
-    return `${origin}/jointeam?token=${encodeURIComponent(trimmedInvitation)}`;
   }
 
   return `${origin}/jointeam?token=${encodeURIComponent(trimmedInvitation)}`;

@@ -1,7 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
-
 import { useRouter } from 'next/navigation';
 
 import { useForm } from 'react-hook-form';
@@ -30,7 +28,6 @@ const JoinTeamForm = ({ initialTeamLink = '', onSuccess }: JoinTeamFormProps) =>
     register,
     handleSubmit,
     setError,
-    setValue,
     formState: { errors },
   } = useForm<JoinTeamFormData>({
     defaultValues: {
@@ -38,10 +35,6 @@ const JoinTeamForm = ({ initialTeamLink = '', onSuccess }: JoinTeamFormProps) =>
     },
     mode: 'onBlur',
   });
-
-  useEffect(() => {
-    setValue('teamLink', initialTeamLink);
-  }, [initialTeamLink, setValue]);
 
   const onSubmit = async (data: JoinTeamFormData) => {
     if (isPending) return;

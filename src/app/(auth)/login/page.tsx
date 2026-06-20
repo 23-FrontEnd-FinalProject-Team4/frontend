@@ -23,16 +23,26 @@ interface LoginPageProps {
 }
 
 const getSafeRedirectPath = (redirectPath?: string) => {
-  if (!redirectPath || !redirectPath.startsWith('/')) {
+  if (!redirectPath) {
     return undefined;
   }
 
   try {
     const decodedPath = decodeURIComponent(redirectPath);
+
+    if (
+      !decodedPath.startsWith('/') ||
+      decodedPath.startsWith('//') ||
+      decodedPath.startsWith('/\\') ||
+      decodedPath.includes('\\')
+    ) {
+      return undefined;
+    }
+
     const baseUrl = new URL('http://localhost');
     const redirectUrl = new URL(decodedPath, baseUrl);
 
-    if (redirectUrl.origin !== baseUrl.origin || decodedPath.includes('\\')) {
+    if (redirectUrl.origin !== baseUrl.origin) {
       return undefined;
     }
 
@@ -42,10 +52,24 @@ const getSafeRedirectPath = (redirectPath?: string) => {
   }
 };
 
+const isTeamInvitationPath = (redirectPath?: string) => {
+  if (!redirectPath) {
+    return false;
+  }
+
+  try {
+    const redirectUrl = new URL(redirectPath, 'http://localhost');
+
+    return redirectUrl.pathname === '/jointeam' && redirectUrl.searchParams.has('token');
+  } catch {
+    return false;
+  }
+};
+
 const LoginPage = async ({ searchParams }: LoginPageProps) => {
   const { redirect } = await searchParams;
   const postLoginRedirectPath = getSafeRedirectPath(redirect);
-  const isTeamInvitation = postLoginRedirectPath?.startsWith('/jointeam?token=') ?? false;
+  const isTeamInvitation = isTeamInvitationPath(postLoginRedirectPath);
 
   return (
     <main className="bg-background-secondary grid min-h-screen place-items-center p-4">

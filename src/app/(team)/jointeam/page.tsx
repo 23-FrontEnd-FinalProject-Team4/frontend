@@ -44,7 +44,7 @@ const JoinTeam = async ({ searchParams }: JoinTeamPageProps) => {
   return (
     <div className="bg-background-primary rounded-[20px]">
       <div className="px-[21px] py-[60px] md:px-[45px]">
-        <JoinTeamForm initialTeamLink={initialTeamLink} />
+        <JoinTeamForm key={initialTeamLink} initialTeamLink={initialTeamLink} />
       </div>
     </div>
   );
