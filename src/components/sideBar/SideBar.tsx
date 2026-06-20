@@ -8,11 +8,10 @@ import MobileHeader from '@/components/sideBar/MobileHeader';
 import MobileSideBar from '@/components/sideBar/MobileSideBar';
 import SideBarView from '@/components/sideBar/SideBarView';
 import type { SideBarProps } from '@/components/sideBar/type';
-
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { MEDIA_QUERY } from '@/hooks/useMediaQuery';
 
-export default function Sidebar({ isLoggedIn, groups }: SideBarProps) {
+export default function Sidebar({ isLoggedIn, isAuthLoading, groups, user }: SideBarProps) {
   const isDesktop = useMediaQuery(MEDIA_QUERY.desktop);
   const [userCollapsed, setUserCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -44,7 +43,13 @@ export default function Sidebar({ isLoggedIn, groups }: SideBarProps) {
   return (
     <>
       <div className="md:hidden">
-        <MobileHeader isLoggedIn={isLoggedIn} onOpenSideBar={handleOpenMobileMenu} />
+        <MobileHeader
+          isLoggedIn={isLoggedIn}
+          isAuthLoading={isAuthLoading}
+          user={user}
+          onOpenSideBar={handleOpenMobileMenu}
+          groups={groups}
+        />
         <MobileSideBar
           mobileOpen={mobileOpen}
           groups={groups}
@@ -55,9 +60,11 @@ export default function Sidebar({ isLoggedIn, groups }: SideBarProps) {
       <div className="hidden md:block">
         <SideBarView
           isLoggedIn={isLoggedIn}
+          isAuthLoading={isAuthLoading}
           collapsed={collapsed}
-          onToggleCollapse={handleToggleCollapse}
           groups={groups}
+          user={user}
+          onToggleCollapse={handleToggleCollapse}
         />
       </div>
     </>

@@ -4,6 +4,7 @@ import Image from 'next/image';
 
 import ProfileDefaultIcon from '@/assets/icons/profile.svg?react';
 import { cn } from '@/utils/cn';
+import { isAllowedImageUrl } from '@/utils/isAllowedImageUrl';
 
 import { ProfileElement, ProfileProps, ProfileSize } from './type';
 
@@ -24,7 +25,7 @@ const Profile = React.forwardRef<ProfileElement, ProfileProps>(
       sm: 24,
     };
 
-    if (!src) {
+    if (!isAllowedImageUrl(src)) {
       return (
         <span
           ref={ref as React.Ref<HTMLSpanElement>}

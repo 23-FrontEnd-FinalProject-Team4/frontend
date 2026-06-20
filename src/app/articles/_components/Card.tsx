@@ -6,6 +6,7 @@ import HeartEmptyIcon from '@/assets/icons/heart_empty.svg';
 import HeartFillIcon from '@/assets/icons/heart_fill.svg';
 import { cn } from '@/utils/cn';
 import { formatDate } from '@/utils/formatDate';
+import { isAllowedImageUrl } from '@/utils/isAllowedImageUrl';
 
 import type { ArticleCardProps } from './Card.type';
 
@@ -36,7 +37,7 @@ export const ArticleCard = ({ article, variant = 'normal' }: ArticleCardProps) =
               {content}
             </p>
           </div>
-          {image && (
+          {isAllowedImageUrl(image) && (
             <Image
               src={image}
               alt="thumbnail"
