@@ -16,6 +16,16 @@ const nextConfig: NextConfig = {
         hostname: '*.cloudfront.net',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'fe-project-cowokers.vercel.app',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'fe-project-coworkers.vercel.app',
+        pathname: '/**',
+      },
     ],
   },
   turbopack: {

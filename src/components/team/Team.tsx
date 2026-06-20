@@ -3,6 +3,7 @@ import Image from 'next/image';
 import SettingIcon from '@/assets/icons/setting.svg?react';
 import Profile from '@/components/profile/Profile';
 import { cn } from '@/utils/cn';
+import { normalizeImageUrl } from '@/utils/image';
 import { isAllowedImageUrl } from '@/utils/isAllowedImageUrl';
 
 import ProgressBar from '../progressBar/ProgressBar';
@@ -78,7 +79,7 @@ const TEAM_FALLBACK_IMAGE_CLASS =
   'bg-brand-primary text-background-inverse shadow-sm shadow-brand-primary/30';
 
 const getProfileSrc = (imageUrl: TeamMember['imageUrl']) =>
-  typeof imageUrl === 'string' ? imageUrl : (imageUrl?.src ?? null);
+  typeof imageUrl === 'string' ? (normalizeImageUrl(imageUrl) ?? null) : (imageUrl?.src ?? null);
 
 const getProgressValue = ({
   completedTaskCount,
@@ -103,7 +104,8 @@ const TeamImage = ({
   name,
   size,
 }: Pick<TeamProps, 'imageUrl' | 'name'> & { size: TeamCardSize }) => {
-  const showImage = imageUrl && (typeof imageUrl !== 'string' || isAllowedImageUrl(imageUrl));
+  const imageSrc = typeof imageUrl === 'string' ? normalizeImageUrl(imageUrl) : imageUrl;
+  const showImage = imageSrc && (typeof imageSrc !== 'string' || isAllowedImageUrl(imageSrc));
 
   return (
     <div
@@ -114,7 +116,7 @@ const TeamImage = ({
       )}
     >
       {showImage ? (
-        <Image src={imageUrl} alt="" fill className="object-cover" sizes="36px" aria-hidden />
+        <Image src={imageSrc} alt="" fill className="object-cover" sizes="72px" aria-hidden />
       ) : (
         <span className="flex h-full items-center justify-center text-xs font-semibold">
           {name.slice(0, 1)}
