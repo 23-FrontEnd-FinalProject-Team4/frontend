@@ -60,7 +60,7 @@ const ArticlesClient = () => {
     return () => window.removeEventListener('resize', updateItemsPerPage);
   }, []);
 
-  const { data } = useQuery({
+  const { data, isPending } = useQuery({
     queryKey: ['articles', page, debouncedKeyword, sortType],
     queryFn: () =>
       getArticles({
@@ -76,24 +76,24 @@ const ArticlesClient = () => {
     queryFn: () =>
       getArticles({
         page: 1,
-        pageSize: 100,
+        pageSize: 30,
         orderBy: 'like',
       }),
   });
 
-  const articleCards =
-    data?.list.map((article: Article) => ({
-      ...article,
-      writer: article.writer.nickname,
-      id: `${article.id}`,
-    })) ?? [];
+  const articleList = data?.list ?? [];
+  const articleCards = articleList.map((article: Article) => ({
+    ...article,
+    writer: article.writer.nickname,
+    id: `${article.id}`,
+  }));
 
-  const bestArticleCards =
-    bestData?.list.map((article: Article) => ({
-      ...article,
-      writer: article.writer.nickname,
-      id: `${article.id}`,
-    })) ?? [];
+  const bestArticleList = bestData?.list ?? [];
+  const bestArticleCards = bestArticleList.map((article: Article) => ({
+    ...article,
+    writer: article.writer.nickname,
+    id: `${article.id}`,
+  }));
 
   const bestArticles = bestArticleCards.slice(
     (bestPage - 1) * itemsPerPage,
@@ -136,9 +136,17 @@ const ArticlesClient = () => {
           totalPages={bestTotalPages}
           onPageChange={(nextPage) => setBestPage(nextPage)}
         />
-        {articleCards.length === 0 && searchValue ? (
+        {isPending ? (
+          <div className="text-text-default flex min-h-40 items-center justify-center text-center">
+            게시글을 불러오는 중입니다.
+          </div>
+        ) : articleCards.length === 0 && searchValue ? (
           <div className="text-text-default flex min-h-40 items-center justify-center text-center">
             '{searchValue}'에 해당하는 결과가 없습니다.
+          </div>
+        ) : articleCards.length === 0 ? (
+          <div className="text-text-default flex min-h-40 items-center justify-center text-center">
+            아직 등록된 게시글이 없습니다.
           </div>
         ) : (
           <ListSection articles={articleCards} onSortChange={onSortChange} sortType={sortType} />

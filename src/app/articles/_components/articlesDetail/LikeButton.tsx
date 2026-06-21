@@ -2,9 +2,12 @@
 
 import { useState } from 'react';
 
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { likeArticle, unlikeArticle } from '@/apis/article';
+import {
+  createArticleLikeAction,
+  deleteArticleLikeAction,
+} from '@/app/articles/_actions/like.action';
 import HeartEmptyIcon from '@/assets/icons/heart_empty.svg';
 import HeartFillIcon from '@/assets/icons/heart_fill.svg';
 import { cn } from '@/utils/cn';
@@ -18,12 +21,15 @@ interface LikeButtonProps {
 const LikeButton = ({ articleId, initialIsLiked, initialLikeCount }: LikeButtonProps) => {
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const [likeCount, setLikeCount] = useState(initialLikeCount);
+  const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (liked: boolean) => {
-      return liked ? unlikeArticle(articleId) : likeArticle(articleId);
+      return liked ? deleteArticleLikeAction(articleId) : createArticleLikeAction(articleId);
     },
-    onSuccess: (_, liked) => {
+    onMutate: (liked) => {
+      const previousState = { isLiked, likeCount };
+
       if (liked) {
         setIsLiked(false);
         setLikeCount((prev) => Math.max(0, prev - 1));
@@ -31,9 +37,19 @@ const LikeButton = ({ articleId, initialIsLiked, initialLikeCount }: LikeButtonP
         setIsLiked(true);
         setLikeCount((prev) => prev + 1);
       }
+
+      return previousState;
     },
-    onError: (error) => {
+    onError: (error, _liked, context) => {
+      if (context) {
+        setIsLiked(context.isLiked);
+        setLikeCount(context.likeCount);
+      }
       console.error('좋아요 처리 실패', error);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['articles'] });
+      queryClient.invalidateQueries({ queryKey: ['best-articles'] });
     },
   });
 

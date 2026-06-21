@@ -1,12 +1,14 @@
 'use client';
 import { useState } from 'react';
 
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 import { User } from '@/apis/auth/type';
 import ProfileIcon from '@/assets/icons/profile.svg?react';
 import SettingsIcon from '@/assets/icons/setting.svg?react';
 import Dropdown from '@/components/dropdown/Dropdown';
+import { normalizeImageUrl } from '@/utils/image';
 import {
   PROFILE_MENU_OPTIONS,
   type ProfileMenuValue,
@@ -25,6 +27,7 @@ export default function LoggedInFooter({
   const [isOpen, setIsOpen] = useState(false);
   const toggleOpen = () => setIsOpen(!isOpen);
   const router = useRouter();
+  const profileImageSrc = normalizeImageUrl(user.image);
 
   return (
     <div
@@ -34,7 +37,19 @@ export default function LoggedInFooter({
     >
       <div className="flex flex-row items-center gap-3">
         {/* 사용자 프로필 출력 */}
-        <ProfileIcon className="h-10 w-10" />
+        <div className="relative h-10 w-10 overflow-hidden rounded-lg">
+          {profileImageSrc ? (
+            <Image
+              src={profileImageSrc}
+              alt={`${user.nickname} 프로필 이미지`}
+              fill
+              className="object-cover"
+              sizes="40px"
+            />
+          ) : (
+            <ProfileIcon className="h-8 w-8 rounded-lg" />
+          )}
+        </div>
         {!collapsed && <span>{user.nickname}</span>}
       </div>
 
