@@ -10,11 +10,7 @@ interface CreateTaskListModalProps {
   onCreate: (title: string) => boolean | void | Promise<boolean | void>;
 }
 
-const CreateTaskListModal = ({
-  isOpen,
-  onClose,
-  onCreate,
-}: CreateTaskListModalProps) => {
+const CreateTaskListModal = ({ isOpen, onClose, onCreate }: CreateTaskListModalProps) => {
   const [title, setTitle] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const trimmedTitle = title.trim();
@@ -40,6 +36,15 @@ const CreateTaskListModal = ({
     }
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== 'Enter' || event.nativeEvent.isComposing) {
+      return;
+    }
+
+    event.preventDefault();
+    void handleCreate();
+  };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -60,6 +65,7 @@ const CreateTaskListModal = ({
         placeholder="목록 명을 입력해주세요."
         className="border-border-primary text-text-primary placeholder:text-text-disabled focus:border-brand-primary focus:ring-brand-primary h-11 w-full rounded-lg border px-4 text-sm transition-colors outline-none focus:ring-2"
         onChange={(event) => setTitle(event.target.value)}
+        onKeyDown={handleKeyDown}
       />
     </Modal>
   );
