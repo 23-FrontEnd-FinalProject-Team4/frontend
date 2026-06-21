@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import Link from 'next/link';
 
@@ -39,9 +39,11 @@ export default function TaskListCard({ item, teamId }: TaskListCardProps) {
     item.totalCount === 0 ? 'none' : item.doneCount >= item.totalCount ? 'done' : 'progress';
   const canToggleTask = Number.isSafeInteger(groupId) && groupId > 0;
 
-  useOutsideClick(menuRef, () => {
+  const handleCloseMenu = useCallback(() => {
     setIsMenuOpen(false);
-  });
+  }, []);
+
+  useOutsideClick(menuRef, handleCloseMenu);
 
   const handleToggleTask = (taskId: number, checked: boolean) => {
     if (!canToggleTask) {
