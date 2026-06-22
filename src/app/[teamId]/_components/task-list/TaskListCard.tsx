@@ -25,6 +25,14 @@ interface TaskListCardProps {
   teamId: string;
 }
 
+const createTaskListHref = (teamId: string, item: TaskListItem) => {
+  const searchParams = new URLSearchParams({ taskListId: String(item.id) });
+
+  if (item.date) searchParams.set('date', item.date);
+
+  return `/${teamId}/tasklist?${searchParams.toString()}`;
+};
+
 export default function TaskListCard({ item, teamId }: TaskListCardProps) {
   const groupId = Number(teamId);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -38,6 +46,7 @@ export default function TaskListCard({ item, teamId }: TaskListCardProps) {
   const badgeStatus =
     item.totalCount === 0 ? 'none' : item.doneCount >= item.totalCount ? 'done' : 'progress';
   const canToggleTask = Number.isSafeInteger(groupId) && groupId > 0;
+  const taskListHref = createTaskListHref(teamId, item);
 
   const handleCloseMenu = useCallback(() => {
     setIsMenuOpen(false);
@@ -100,7 +109,7 @@ export default function TaskListCard({ item, teamId }: TaskListCardProps) {
   return (
     <article className="border-border-primary bg-background-primary hover:border-brand-primary/40 focus-within:ring-brand-primary/30 relative h-37.75 overflow-visible rounded-xl border px-5 pt-5 pb-4 shadow-sm transition-all duration-200 focus-within:ring-2 hover:-translate-y-0.5 hover:shadow-md">
       <Link
-        href={`/${teamId}/tasklist?taskListId=${item.id}`}
+        href={taskListHref}
         className="absolute inset-0 z-0 rounded-xl focus:outline-none"
         draggable={false}
         onDragStart={(event) => event.preventDefault()}
