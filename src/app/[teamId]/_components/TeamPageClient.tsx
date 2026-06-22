@@ -107,7 +107,8 @@ const TeamPageClient = ({ teamId, initialDate }: TeamPageClientProps) => {
   const group = teamPageData?.group;
   const todayTasks = teamPageData?.todayTasks;
 
-  const fallbackRole: TeamPageRole = isMemberView(teamId) ? 'MEMBER' : 'ADMIN';
+  const fallbackRole: TeamPageRole =
+    routeGroupId !== undefined || isMemberView(teamId) ? 'MEMBER' : 'ADMIN';
   const role =
     myProfile?.memberships?.find((membership) => membership.groupId === selectedGroupId)?.role ??
     fallbackRole;

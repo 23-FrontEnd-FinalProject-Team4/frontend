@@ -33,8 +33,6 @@ const MemberItem = ({ member, canManage, onRemove }: MemberItemProps) => {
   useOutsideClick(menuRef, closeMenu);
 
   const handleMenuSelect = (value: string) => {
-    closeMenu();
-
     if (value === 'REMOVE') {
       onRemove(member);
     }

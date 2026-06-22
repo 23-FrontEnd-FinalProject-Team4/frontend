@@ -1,31 +1,19 @@
 import { cn } from '@/utils/cn';
 
-import { DropdownProps } from './type';
+import type { DropdownProps } from './type';
 
-export default function Dropdown({
-  options,
-  size = 'md',
-  className,
-  onSelect,
-  onClose,
-}: DropdownProps) {
-  const sizeStyle = {
-    md: {
-      menu: 'min-w-[120px] text-md',
-    },
+const DROPDOWN_SIZE_STYLES = {
+  md: 'min-w-[120px] text-md',
+  sm: 'min-w-[94px] text-xs',
+};
 
-    sm: {
-      menu: 'min-w-[94px] text-xs',
-    },
-  };
-  const current = sizeStyle[size];
-
+const Dropdown = ({ options, size = 'md', className, onSelect, onClose }: DropdownProps) => {
   return (
     <div
       role="menu"
       className={cn(
         'border-border-primary bg-background-primary absolute top-full left-0 z-10 mt-1 rounded-xl border',
-        current.menu,
+        DROPDOWN_SIZE_STYLES[size],
         className,
       )}
     >
@@ -45,4 +33,6 @@ export default function Dropdown({
       ))}
     </div>
   );
-}
+};
+
+export default Dropdown;

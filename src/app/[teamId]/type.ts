@@ -1,8 +1,9 @@
 import type { StaticImageData } from 'next/image';
 
+import type { GroupMemberRole } from '@/apis/group/type';
 import type { TeamMember } from '@/components/team/type';
 
-export type TeamPageRole = 'ADMIN' | 'MEMBER';
+export type TeamPageRole = GroupMemberRole;
 export type TaskStatus = 'today' | 'scheduled' | 'done';
 
 export interface TeamPageMember extends TeamMember {
