@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
 import { getArticles } from '@/apis/article';
 import { Article } from '@/apis/article/type';
@@ -38,7 +38,9 @@ const ArticlesClient = () => {
     params.set('orderBy', value);
     params.set('page', '1');
 
-    router.push(`${pathname}?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`, {
+      scroll: false,
+    });
   };
 
   const debouncedKeyword = useDebounce(searchValue, 500);
@@ -69,6 +71,7 @@ const ArticlesClient = () => {
         orderBy: sortType,
         keyword: debouncedKeyword || undefined,
       }),
+    placeholderData: keepPreviousData,
   });
 
   const { data: bestData } = useQuery({
@@ -116,7 +119,7 @@ const ArticlesClient = () => {
   return (
     <div className="bg-background-primary mx-auto flex min-h-screen p-0 md:p-22">
       <main className="min-h-screen w-full">
-        <div className="mb-7 flex w-full flex-col gap-4 p-5 px-6 md:flex-row md:justify-between xl:px-0">
+        <div className="mb-7 flex w-full flex-col gap-4 p-5 px-6 md:flex-row md:items-center md:justify-between xl:px-0">
           <h1 className="text-text-primary text-2xl font-bold">자유게시판</h1>
           <SearchInput
             value={searchValue}
@@ -162,7 +165,9 @@ const ArticlesClient = () => {
               const nextPage = page - 1;
               const params = new URLSearchParams(searchParams.toString());
               params.set('page', String(nextPage));
-              router.push(`${pathname}?${params.toString()}`);
+              router.push(`${pathname}?${params.toString()}`, {
+                scroll: false,
+              });
             }}
           >
             <ArrowLeftIcon className="size-4" />
@@ -182,7 +187,9 @@ const ArticlesClient = () => {
                 onClick={() => {
                   const params = new URLSearchParams(searchParams.toString());
                   params.set('page', String(pageNumber));
-                  router.push(`${pathname}?${params.toString()}`);
+                  router.push(`${pathname}?${params.toString()}`, {
+                    scroll: false,
+                  });
                 }}
               >
                 {pageNumber}
@@ -200,7 +207,9 @@ const ArticlesClient = () => {
               const nextPage = page + 1;
               const params = new URLSearchParams(searchParams.toString());
               params.set('page', String(nextPage));
-              router.push(`${pathname}?${params.toString()}`);
+              router.push(`${pathname}?${params.toString()}`, {
+                scroll: false,
+              });
             }}
           >
             <ArrowRightIcon className="size-4" />

@@ -5,9 +5,8 @@ import { isAllowedImageUrl } from '@/utils/isAllowedImageUrl';
 
 const ArticleContent = ({ content, image }: ArticleContentProps) => {
   return (
-    <div className="text-text-primary text-md leading-7 md:text-lg">
+    <div className="text-text-primary text-md leading-7 whitespace-pre-wrap md:text-lg">
       {content}
-      {/* api 연동 시 수정 필요 */}
       {isAllowedImageUrl(image) && (
         <div className="mt-4 flex justify-start">
           <Image
