@@ -81,7 +81,7 @@ const ArticleForm = ({
             {...register('content')}
             size="lg"
             placeholder="내용을 입력해주세요."
-            className="border-border-primary min-h-[300px] w-full rounded-xl border p-4"
+            className="border-border-primary min-h-[300px] w-full rounded-xl border p-4 whitespace-pre-wrap"
           />
 
           {errors.content && <p className="text-point-rose">{errors.content.message}</p>}
