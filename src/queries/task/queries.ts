@@ -23,6 +23,7 @@ import {
 } from '@/app/[teamId]/tasklist/_action/task';
 import { teamKeys } from '@/queries/teams/queryKeys';
 
+import { groupKeys } from '../group/queryKey';
 import { TaskKeyParams, taskKeys } from './queryKeys';
 
 type TaskListQueryParams = Pick<TaskKeyParams, 'groupId' | 'taskListId'>;
@@ -40,6 +41,9 @@ const invalidateTaskListAndTeamQueries = (
     }),
     queryClient.invalidateQueries({
       queryKey: teamKeys.group({ groupId }),
+    }),
+    queryClient.invalidateQueries({
+      queryKey: groupKeys.detail({ groupId }),
     }),
   ]);
 };

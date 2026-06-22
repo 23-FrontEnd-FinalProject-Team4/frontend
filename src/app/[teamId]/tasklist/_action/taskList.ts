@@ -11,8 +11,12 @@ import {
 } from '@/apis/taskList/type';
 import { serverFetcher } from '@/lib/serverFetcher';
 
+export const getGroupAction = async ({ groupId }: { groupId: number }) => {
+  return await serverFetcher<GroupDetail>(`/groups/${groupId}`);
+};
+
 export const getTaskListsAction = async ({ groupId }: { groupId: number }) => {
-  return (await serverFetcher<GroupDetail>(`/groups/${groupId}`)).taskLists;
+  return (await getGroupAction({ groupId })).taskLists;
 };
 
 export const getTaskListAction = async ({ groupId, id, date }: GetTaskListsParams) => {
