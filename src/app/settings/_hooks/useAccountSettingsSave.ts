@@ -5,6 +5,7 @@ import { useState } from 'react';
 import type { UseFormHandleSubmit, UseFormReset } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 
+import type { UpdateProfileRequest } from '@/apis/user/type';
 import { uploadSettingsImageAction } from '@/app/settings/_actions/settings.action';
 import { getErrorMessage } from '@/lib/error';
 import { useChangePasswordMutation, useUpdateMyProfileMutation } from '@/queries/user/queries';
@@ -12,6 +13,8 @@ import type { AccountSettingsFormValues } from '@/schemas/auth.schema';
 
 type UseAccountSettingsSaveParams = {
   isProfileChanged: boolean;
+  isNicknameChanged: boolean;
+  isImageChanged: boolean;
   hasPasswordValue: boolean;
   handleSubmit: UseFormHandleSubmit<AccountSettingsFormValues>;
   reset: UseFormReset<AccountSettingsFormValues>;
@@ -19,6 +22,8 @@ type UseAccountSettingsSaveParams = {
 
 export const useAccountSettingsSave = ({
   isProfileChanged,
+  isNicknameChanged,
+  isImageChanged,
   hasPasswordValue,
   handleSubmit,
   reset,
@@ -45,10 +50,17 @@ export const useAccountSettingsSave = ({
       image = uploadResult.data.url;
     }
 
-    await updateProfileMutation.mutateAsync({
-      nickname: values.nickname,
-      image,
-    });
+    const payload: UpdateProfileRequest = {};
+
+    if (isNicknameChanged) {
+      payload.nickname = values.nickname;
+    }
+
+    if (selectedImageFile || isImageChanged) {
+      payload.image = image;
+    }
+
+    await updateProfileMutation.mutateAsync(payload);
 
     return image;
   };
@@ -86,6 +98,7 @@ export const useAccountSettingsSave = ({
 
       toast.success('계정 설정이 저장되었어요.');
     } catch (error) {
+      console.error('[useAccountSettingsSave] failed to save account settings', error);
       toast.error(getErrorMessage(error, '계정 설정 저장 중 오류가 발생했어요.'));
     }
   });
