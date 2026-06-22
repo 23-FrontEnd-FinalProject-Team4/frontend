@@ -42,7 +42,13 @@ const TaskListPageClient = ({ groupId, taskListId }: { groupId: number; taskList
 
   return (
     <div className="flex flex-col gap-5 p-4 md:gap-7 md:px-6 md:py-17.5 xl:px-30 xl:py-30">
-      <TaskListHeader groupId={groupId} />
+      {selectedTaskList && (
+        <TaskListHeader
+          name={selectedTaskList.name}
+          groupId={groupId}
+          taskListId={Number(selectedTaskListId)}
+        />
+      )}
       <div className="flex flex-col gap-6 xl:flex-row">
         <TaskListSet
           taskLists={groupInfo.taskLists}

@@ -2,110 +2,75 @@
 
 import { useRef, useState } from 'react';
 
-import { notFound, useRouter } from 'next/navigation';
-
-import { useQueryClient } from '@tanstack/react-query';
 import { overlay } from 'overlay-kit';
-import toast from 'react-hot-toast';
 
 import SettingIcon from '@/assets/icons/setting.svg?react';
 import Dropdown from '@/components/dropdown/Dropdown';
 import { OPTIONS } from '@/constants/listItem';
-import { useGetGroup, useGetGroups } from '@/queries/group/queries';
-import { groupKeys } from '@/queries/group/queryKey';
-import { useDeleteTeamMutation } from '@/queries/teams/queries';
+import { useOutsideClick } from '@/hooks/useOutsideClick';
 
-import DeleteTeamModal from '../../_components/modals/DeleteTeamModal';
+import DeleteTaskListModal from './modals/DeleteTaskListModal';
+import EditTaskListModal from './modals/EditTaskListModal';
 
 interface TaskListHeaderProps {
+  name: string;
   groupId: number;
+  taskListId: number;
 }
 
-const TaskListHeader = ({ groupId }: TaskListHeaderProps) => {
-  const { data: groups, isPending: isGroupsPending } = useGetGroups();
-  const { data: groupInfo, isPending: isGroupPending } = useGetGroup({ groupId });
-  const queryClient = useQueryClient();
-
-  const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
-  const router = useRouter();
+const TaskListHeader = ({ name, groupId, taskListId }: TaskListHeaderProps) => {
+  const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const { mutateAsync: deleteTeam } = useDeleteTeamMutation();
 
-  if (isGroupsPending || isGroupPending) {
-    return <div className="bg-background-secondary h-9 w-48 animate-pulse rounded-xl" />;
-  }
+  useOutsideClick(dropdownRef, () => setIsOpen(false));
 
-  if (!groupInfo || !groups) return notFound();
+  const handleMenuSelect = (value: string) => {
+    setIsOpen(false);
 
-  const handleEditTeam = () => {
-    setIsDropdownMenuOpen(false);
-    router.push(`/${groupId}/editteam`);
-  };
-
-  const openDeleteTeamModal = () => {
-    setIsDropdownMenuOpen(false);
-
-    overlay.open(({ isOpen, close }) => {
-      const handleDeleteTeam = async () => {
-        try {
-          await deleteTeam({ groupId });
-        } catch (error) {
-          toast.error(error instanceof Error ? error.message : '팀을 삭제하지 못했습니다.');
-          return false;
-        }
-
-        const nextGroupId = groups.find((g) => g.id !== groupId)?.id;
-        toast.success('팀을 삭제했습니다.');
-        await Promise.all([
-          queryClient.invalidateQueries({ queryKey: ['sidebar'] }),
-          queryClient.invalidateQueries({ queryKey: ['team-page'] }),
-          queryClient.invalidateQueries({ queryKey: groupKeys.all() }),
-        ]);
-
-        router.push(nextGroupId ? `/${nextGroupId}` : '/no-team');
-        close();
-        return true;
-      };
-
-      return (
-        <DeleteTeamModal
-          isOpen={isOpen}
-          teamName={groupInfo.name}
-          onClose={close}
-          onDelete={handleDeleteTeam}
-        />
-      );
-    });
-  };
-
-  const handleMenuItemSelect = (value: string) => {
     if (value === 'EDIT') {
-      handleEditTeam();
-    } else {
-      openDeleteTeamModal();
+      overlay.open(({ isOpen, close }) => (
+        <EditTaskListModal
+          isOpen={isOpen}
+          onClose={close}
+          groupId={groupId}
+          taskListId={taskListId}
+          title={name}
+        />
+      ));
+    } else if (value === 'DELETE') {
+      overlay.open(({ isOpen, close }) => (
+        <DeleteTaskListModal
+          isOpen={isOpen}
+          onClose={close}
+          groupId={groupId}
+          taskListId={taskListId}
+          taskListName={name}
+        />
+      ));
     }
   };
 
   return (
-    <div
-      className={`text-text-primary xl:outline-border-primary relative flex items-center gap-2 rounded-xl bg-transparent text-center text-2xl font-bold xl:w-full xl:justify-between xl:bg-white xl:px-6 xl:py-4.5 xl:outline`}
-    >
-      {groupInfo.name}
-      <div className="relative flex items-center">
+    <div className="text-text-primary xl:outline-border-primary flex items-center gap-2 rounded-xl bg-transparent text-center text-2xl font-bold xl:w-full xl:justify-between xl:bg-white xl:px-6 xl:py-4.5 xl:outline">
+      {name}
+
+      <div className="relative" ref={dropdownRef}>
         <button
           type="button"
           aria-label="설정"
-          onClick={() => setIsDropdownMenuOpen((prev) => !prev)}
+          aria-expanded={isOpen}
+          onClick={() => setIsOpen((prev) => !prev)}
         >
           <SettingIcon className="size-6" />
         </button>
-        {isDropdownMenuOpen && (
-          <div
-            className="absolute top-full right-0"
-            ref={dropdownRef}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Dropdown options={OPTIONS} onSelect={handleMenuItemSelect} />
+
+        {isOpen && (
+          <div className="absolute top-full right-0 z-20 mt-1 [&>div]:top-0 [&>div]:right-0 [&>div]:left-auto">
+            <Dropdown
+              options={OPTIONS}
+              onSelect={handleMenuSelect}
+              onClose={() => setIsOpen(false)}
+            />
           </div>
         )}
       </div>
