@@ -37,7 +37,7 @@ const TaskListHeader = ({ name, groupId, taskListId }: TaskListHeaderProps) => {
           title={name}
         />
       ));
-    } else {
+    } else if (value === 'DELETE') {
       overlay.open(({ isOpen, close }) => (
         <DeleteTaskListModal
           isOpen={isOpen}

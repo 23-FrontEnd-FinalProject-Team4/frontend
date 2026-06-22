@@ -71,7 +71,7 @@ const TaskListSet = ({ taskLists, selectedTaskListId, groupId }: TaskListSetProp
           title={dropdownSelectedTaskList.name}
         />
       ));
-    } else {
+    } else if (value === 'DELETE') {
       overlay.open(({ isOpen, close }) => (
         <DeleteTaskListModal
           isOpen={isOpen}
