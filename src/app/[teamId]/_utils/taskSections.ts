@@ -35,7 +35,13 @@ export const createTaskItemsByStatus = (
   return taskLists.reduce<TaskItemsByStatus>(
     (sections, taskList) => {
       const tasks = taskList.tasks ?? [];
-      const todayTasks = tasks.filter((task) => getTaskDate(task) === today);
+      const todayTasks = tasks.filter((task) => {
+        const taskDate = getTaskDate(task);
+
+        if (!taskDate) return false;
+
+        return taskDate === today || (taskDate < today && !isTaskDone(task));
+      });
       const scheduledTasks = sortTasksByDate(
         tasks.filter((task) => {
           const taskDate = getTaskDate(task);

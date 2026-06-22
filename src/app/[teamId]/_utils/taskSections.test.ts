@@ -54,6 +54,16 @@ describe('createTaskItemsByStatus', () => {
     expect(sections.scheduled[0]?.tasks).toEqual([{ id: 26, title: 'Future task', done: false }]);
   });
 
+  it('완료하지 못한 과거 할 일을 오늘 카드에 포함한다', () => {
+    const overdueTask = createTask(21, 'Overdue task', '2026-06-21');
+
+    const sections = createTaskItemsByStatus([createTaskList([overdueTask])], TODAY);
+
+    expect(sections.today[0]?.tasks).toEqual([{ id: 21, title: 'Overdue task', done: false }]);
+    expect(sections.scheduled).toEqual([]);
+    expect(sections.done).toEqual([]);
+  });
+
   it('오늘 할 일을 모두 완료하면 완료 카드로 이동한다', () => {
     const doneTask = createTask(22, 'Done task', TODAY, true);
 

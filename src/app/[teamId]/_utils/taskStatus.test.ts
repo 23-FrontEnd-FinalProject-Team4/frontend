@@ -26,8 +26,13 @@ describe('taskStatus', () => {
       );
     });
 
+    it('시간대가 포함된 ISO 문자열에서도 원본 날짜를 유지한다', () => {
+      expect(getTaskDate(createTask({ date: '2026-06-26T23:30:00.000-07:00' }))).toBe('2026-06-26');
+    });
+
     it('유효한 날짜가 없으면 undefined를 반환한다', () => {
       expect(getTaskDate(createTask({ date: null, startDate: null }))).toBeUndefined();
+      expect(getTaskDate(createTask({ date: 'invalid-date' }))).toBeUndefined();
     });
   });
 

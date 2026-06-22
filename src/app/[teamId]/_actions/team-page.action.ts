@@ -51,7 +51,8 @@ const mergeTasksById = (...taskGroups: Task[][]) => {
   return Array.from(new Map(taskGroups.flat().map((task) => [task.id, task])).values());
 };
 
-// API가 날짜별 조회만 지원하므로 예정 카드에는 앞으로 일주일의 할 일을 사용한다.
+// API가 날짜별 조회만 지원하고 그룹 할 일에는 목록 ID가 없으므로,
+// 할 일이 있는 날짜를 먼저 좁힌 뒤 목록 상세를 조회한다.
 const UPCOMING_TASK_LOOKAHEAD_DAYS = 7;
 
 const addDaysToISODate = (date: string, days: number) => {

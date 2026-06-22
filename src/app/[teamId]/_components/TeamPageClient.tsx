@@ -108,11 +108,8 @@ const TeamPageClient = ({ teamId, initialDate }: TeamPageClientProps) => {
         : FALLBACK_TASK_ITEMS_BY_STATUS,
     [group, today],
   );
-  const totalTaskCount =
-    todayTasks?.length ?? TASK_LISTS.reduce((total, taskList) => total + taskList.totalCount, 0);
-  const completedTaskCount =
-    todayTasks?.filter(isTaskDone).length ??
-    TASK_LISTS.reduce((total, taskList) => total + taskList.doneCount, 0);
+  const totalTaskCount = todayTasks?.length ?? 0;
+  const completedTaskCount = todayTasks?.filter(isTaskDone).length ?? 0;
   const progressValue = getProgressValue(completedTaskCount, totalTaskCount);
 
   const groupedTaskLists = useMemo(

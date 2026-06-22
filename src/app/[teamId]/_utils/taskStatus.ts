@@ -1,9 +1,8 @@
 import type { Task } from '@/apis/task/type';
 
-import { formatISODate } from '../../../utils/date';
-
 type TaskStatusSource = Pick<Task, 'date' | 'doneAt' | 'doneBy' | 'startDate'>;
 const DATE_ONLY_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+const DATE_PREFIX_PATTERN = /^(\d{4}-\d{2}-\d{2})/;
 
 export const isTaskDone = (task: TaskStatusSource) => Boolean(task.doneAt || task.doneBy?.user);
 
@@ -18,11 +17,17 @@ export const getTaskDate = (task: TaskStatusSource) => {
     return taskDate;
   }
 
+  const datePrefix = taskDate.match(DATE_PREFIX_PATTERN)?.[1];
+
+  if (datePrefix) {
+    return datePrefix;
+  }
+
   const parsedDate = new Date(taskDate);
 
   if (Number.isNaN(parsedDate.getTime())) {
     return undefined;
   }
 
-  return formatISODate(parsedDate);
+  return parsedDate.toISOString().slice(0, 10);
 };
