@@ -82,7 +82,6 @@ const ArticlesClient = () => {
         pageSize: 30,
         orderBy: 'like',
       }),
-    placeholderData: keepPreviousData,
   });
 
   const articleList = data?.list ?? [];

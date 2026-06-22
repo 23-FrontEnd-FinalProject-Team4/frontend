@@ -21,7 +21,7 @@ export const ArticleCard = ({ article, variant = 'normal' }: ArticleCardProps) =
       href={`/articles/${id}`}
       className={cn(
         'border-border-primary bg-background-primary hover:shadow-brand-tertiary-20 flex flex-col gap-4 rounded-2xl border px-6 py-4 transition-all duration-200 hover:-translate-y-1 hover:shadow-md',
-        isBest ? 'h-[208px]' : 'h-[160px]',
+        isBest ? 'min-h-[208px]' : 'min-h-[160px]',
       )}
     >
       {isBest && (
