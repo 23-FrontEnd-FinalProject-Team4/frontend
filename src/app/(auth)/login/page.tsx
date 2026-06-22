@@ -2,6 +2,7 @@ import Link from 'next/link';
 
 import AlertIcon from '@/assets/icons/alert.svg?react';
 import SocialAuthSection from '@/components/socialAuthSection/SocialAuthSection';
+import { getSafeRedirectPath } from '@/lib/auth/postLoginRedirect';
 
 import LoginFormSection from './_components/LoginFormSection';
 
@@ -21,36 +22,6 @@ interface LoginPageProps {
     redirect?: string;
   }>;
 }
-
-const getSafeRedirectPath = (redirectPath?: string) => {
-  if (!redirectPath) {
-    return undefined;
-  }
-
-  try {
-    const decodedPath = decodeURIComponent(redirectPath);
-
-    if (
-      !decodedPath.startsWith('/') ||
-      decodedPath.startsWith('//') ||
-      decodedPath.startsWith('/\\') ||
-      decodedPath.includes('\\')
-    ) {
-      return undefined;
-    }
-
-    const baseUrl = new URL('http://localhost');
-    const redirectUrl = new URL(decodedPath, baseUrl);
-
-    if (redirectUrl.origin !== baseUrl.origin) {
-      return undefined;
-    }
-
-    return `${redirectUrl.pathname}${redirectUrl.search}${redirectUrl.hash}`;
-  } catch {
-    return undefined;
-  }
-};
 
 const isTeamInvitationPath = (redirectPath?: string) => {
   if (!redirectPath) {
@@ -93,7 +64,7 @@ const LoginPage = async ({ searchParams }: LoginPageProps) => {
         )}
         <LoginFormSection postLoginRedirectPath={postLoginRedirectPath} />
         <SignupPromptSection />
-        <SocialAuthSection label="간편 로그인하기" />
+        <SocialAuthSection label="간편 로그인하기" redirectPath={postLoginRedirectPath} />
       </section>
     </main>
   );
