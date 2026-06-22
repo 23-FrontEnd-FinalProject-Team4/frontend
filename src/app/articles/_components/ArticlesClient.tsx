@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
 import { getArticles } from '@/apis/article';
 import { Article } from '@/apis/article/type';
@@ -38,7 +38,9 @@ const ArticlesClient = () => {
     params.set('orderBy', value);
     params.set('page', '1');
 
-    router.push(`${pathname}?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`, {
+      scroll: false,
+    });
   };
 
   const debouncedKeyword = useDebounce(searchValue, 500);
@@ -69,6 +71,7 @@ const ArticlesClient = () => {
         orderBy: sortType,
         keyword: debouncedKeyword || undefined,
       }),
+    placeholderData: keepPreviousData,
   });
 
   const { data: bestData } = useQuery({
@@ -79,6 +82,7 @@ const ArticlesClient = () => {
         pageSize: 30,
         orderBy: 'like',
       }),
+    placeholderData: keepPreviousData,
   });
 
   const articleList = data?.list ?? [];
@@ -162,7 +166,9 @@ const ArticlesClient = () => {
               const nextPage = page - 1;
               const params = new URLSearchParams(searchParams.toString());
               params.set('page', String(nextPage));
-              router.push(`${pathname}?${params.toString()}`);
+              router.push(`${pathname}?${params.toString()}`, {
+                scroll: false,
+              });
             }}
           >
             <ArrowLeftIcon className="size-4" />
@@ -182,7 +188,9 @@ const ArticlesClient = () => {
                 onClick={() => {
                   const params = new URLSearchParams(searchParams.toString());
                   params.set('page', String(pageNumber));
-                  router.push(`${pathname}?${params.toString()}`);
+                  router.push(`${pathname}?${params.toString()}`, {
+                    scroll: false,
+                  });
                 }}
               >
                 {pageNumber}
@@ -200,7 +208,9 @@ const ArticlesClient = () => {
               const nextPage = page + 1;
               const params = new URLSearchParams(searchParams.toString());
               params.set('page', String(nextPage));
-              router.push(`${pathname}?${params.toString()}`);
+              router.push(`${pathname}?${params.toString()}`, {
+                scroll: false,
+              });
             }}
           >
             <ArrowRightIcon className="size-4" />
