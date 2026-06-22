@@ -22,6 +22,7 @@ export interface TaskListItem {
   id: number;
   title: string;
   status: TaskStatus;
+  date?: string;
   doneCount: number;
   totalCount: number;
   tasks: TeamPageTask[];

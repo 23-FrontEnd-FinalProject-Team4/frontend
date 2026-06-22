@@ -8,7 +8,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { overlay } from 'overlay-kit';
 import { toast } from 'react-hot-toast';
 
-import type { Member, TaskList } from '@/apis/group/type';
+import type { Member } from '@/apis/group/type';
 import type { TeamCardSize } from '@/components/team/type';
 import useMediaQuery, { MEDIA_QUERY } from '@/hooks/useMediaQuery';
 import { useCreateTeamTaskListMutation, useDeleteTeamMutation } from '@/queries/teams/queries';
@@ -16,8 +16,9 @@ import { teamKeys } from '@/queries/teams/queryKeys';
 
 import { getTeamPageDataAction } from '../_actions/team-page.action';
 import { TASK_LISTS, TASK_STATUS_SECTIONS, TEAM_PAGE_MEMBERS } from '../_constants/mockData';
-import { getTaskListStatus, isTaskDone } from '../_utils/taskStatus';
-import type { TaskListItem, TeamPageMember, TeamPageRole } from '../type';
+import { createTaskItemsByStatus } from '../_utils/taskSections';
+import { isTaskDone } from '../_utils/taskStatus';
+import type { TeamPageMember, TeamPageRole } from '../type';
 import TeamPageHeader from './header/TeamPageHeader';
 import MemberSection from './member/MemberSection';
 import DeleteTeamModal from './modals/DeleteTeamModal';
@@ -52,26 +53,6 @@ const mapMembers = (members: Member[]): TeamPageMember[] =>
     email: member.userEmail,
     imageUrl: member.userImage ?? undefined,
   }));
-
-const mapTaskLists = (taskLists: TaskList[] = [], today: string): TaskListItem[] =>
-  taskLists.map((taskList) => {
-    const tasks = taskList.tasks ?? [];
-    const doneCount = tasks.filter(isTaskDone).length;
-    const totalCount = tasks.length;
-
-    return {
-      id: taskList.id,
-      title: taskList.name,
-      status: getTaskListStatus(tasks, today),
-      doneCount,
-      totalCount,
-      tasks: tasks.slice(0, 3).map((task) => ({
-        id: task.id,
-        title: task.name,
-        done: isTaskDone(task),
-      })),
-    };
-  });
 
 const TeamPageStatus = ({ message }: { message: string }) => (
   <div className="bg-background-primary text-text-default text-md flex min-h-60 items-center justify-center rounded-xl font-medium shadow-sm">
@@ -115,24 +96,33 @@ const TeamPageClient = ({ teamId, initialDate }: TeamPageClientProps) => {
     () => (group?.members ? mapMembers(group.members) : TEAM_PAGE_MEMBERS),
     [group],
   );
-  const taskLists = useMemo(
-    () => (group?.taskLists ? mapTaskLists(group.taskLists, today) : TASK_LISTS),
-    [group, today],
-  );
+  const taskItemsByStatus = useMemo(() => {
+    if (group?.taskLists) {
+      return createTaskItemsByStatus(group.taskLists, today);
+    }
+
+    return {
+      today: TASK_LISTS.filter((item) => item.status === 'today'),
+      scheduled: TASK_LISTS.filter((item) => item.status === 'scheduled'),
+      done: TASK_LISTS.filter((item) => item.status === 'done'),
+    };
+  }, [group, today]);
+  const fallbackTaskLists = Object.values(taskItemsByStatus).flat();
   const totalTaskCount =
-    todayTasks?.length ?? taskLists.reduce((total, taskList) => total + taskList.totalCount, 0);
+    todayTasks?.length ??
+    fallbackTaskLists.reduce((total, taskList) => total + taskList.totalCount, 0);
   const completedTaskCount =
     todayTasks?.filter(isTaskDone).length ??
-    taskLists.reduce((total, taskList) => total + taskList.doneCount, 0);
+    fallbackTaskLists.reduce((total, taskList) => total + taskList.doneCount, 0);
   const progressValue = getProgressValue(completedTaskCount, totalTaskCount);
 
   const groupedTaskLists = useMemo(
     () =>
       TASK_STATUS_SECTIONS.map((section) => ({
         ...section,
-        items: taskLists.filter((item) => item.status === section.status),
+        items: taskItemsByStatus[section.status],
       })),
-    [taskLists],
+    [taskItemsByStatus],
   );
 
   const openInviteModal = () => {
@@ -251,7 +241,7 @@ const TeamPageClient = ({ teamId, initialDate }: TeamPageClientProps) => {
           <>
             <TaskListSection
               teamId={String(selectedGroupId ?? teamId)}
-              taskListsCount={taskLists.length}
+              taskListsCount={group?.taskLists.length ?? TASK_LISTS.length}
               sections={groupedTaskLists}
               onCreateTaskList={openCreateListModal}
             />

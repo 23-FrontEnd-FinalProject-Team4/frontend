@@ -8,7 +8,7 @@ const DATE_ONLY_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
 export const isTaskDone = (task: TaskStatusSource) => Boolean(task.doneAt || task.doneBy?.user);
 
-const getTaskDate = (task: TaskStatusSource) => {
+export const getTaskDate = (task: TaskStatusSource) => {
   const taskDate = task.date ?? task.startDate;
 
   if (!taskDate) {
