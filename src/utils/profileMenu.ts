@@ -14,23 +14,30 @@ type ProfileMenuRouter = {
   replace: (href: string) => void;
 };
 
+export const ROUTES = {
+  JOIN_TEAM: '/jointeam',
+  SETTINGS: '/settings',
+  MY_HISTORY: '/my-history',
+  LOGIN: '/login',
+} as const;
+
 export const handleProfileMenuSelect = async (
   value: ProfileMenuValue,
   router: ProfileMenuRouter,
 ) => {
   switch (value) {
     case 'history':
-      router.push('/my-history');
+      router.push(ROUTES.MY_HISTORY);
       break;
     case 'account':
-      router.push('/settings');
+      router.push(ROUTES.SETTINGS);
       break;
     case 'team':
-      router.push('/jointeam');
+      router.push(ROUTES.JOIN_TEAM);
       break;
     case 'logout':
       await logoutAction();
-      router.replace('/login');
+      router.replace(ROUTES.LOGIN);
       break;
     default:
       break;
