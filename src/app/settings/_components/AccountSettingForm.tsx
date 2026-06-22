@@ -62,9 +62,7 @@ const AccountSettingForm = ({ initialProfile }: AccountSettingFormProps) => {
         <h1 className="text-medium font-semibold">계정 설정</h1>
         <ProfileUpdateForm
           email={initialProfile?.email ?? ''}
-          onImageFileSelect={(file) => {
-            setSelectedImageFile(file);
-          }}
+          onImageFileSelect={setSelectedImageFile}
         />
         <PasswordChangeForm />
         <DeleteAccountSection />

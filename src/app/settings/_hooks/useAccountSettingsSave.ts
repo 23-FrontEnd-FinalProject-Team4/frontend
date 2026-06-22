@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useRef } from 'react';
 
 import type { UseFormHandleSubmit, UseFormReset } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
@@ -30,12 +30,17 @@ export const useAccountSettingsSave = ({
 }: UseAccountSettingsSaveParams) => {
   const updateProfileMutation = useUpdateMyProfileMutation();
   const changePasswordMutation = useChangePasswordMutation();
-  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
+
+  const selectedImageFileRef = useRef<File | null>(null);
+  const setSelectedImageFile = useCallback((file: File | null) => {
+    selectedImageFileRef.current = file;
+  }, []);
 
   const isSaving = updateProfileMutation.isPending || changePasswordMutation.isPending;
 
   const saveProfile = async (values: AccountSettingsFormValues) => {
-    let image = values.image;
+    const selectedImageFile = selectedImageFileRef.current;
+    let savedImage = values.image;
 
     if (selectedImageFile) {
       const formData = new FormData();
@@ -47,7 +52,7 @@ export const useAccountSettingsSave = ({
         throw new Error(uploadResult.error);
       }
 
-      image = uploadResult.data.url;
+      savedImage = uploadResult.data.url;
     }
 
     const payload: UpdateProfileRequest = {};
@@ -57,12 +62,16 @@ export const useAccountSettingsSave = ({
     }
 
     if (selectedImageFile || isImageChanged) {
-      payload.image = image;
+      payload.image = savedImage;
     }
 
-    await updateProfileMutation.mutateAsync(payload);
+    const shouldUpdateProfile = isNicknameChanged || isImageChanged || Boolean(selectedImageFile);
 
-    return image;
+    if (shouldUpdateProfile) {
+      await updateProfileMutation.mutateAsync(payload);
+    }
+
+    return savedImage;
   };
 
   const changePassword = async (values: AccountSettingsFormValues) => {
@@ -72,35 +81,30 @@ export const useAccountSettingsSave = ({
     });
   };
 
-  const handleSave = handleSubmit(async (values) => {
-    try {
-      let savedImage = values.image;
+  const handleSave = () => {
+    void handleSubmit(async (values) => {
+      try {
+        const savedImage = isProfileChanged ? await saveProfile(values) : values.image;
 
-      if (isProfileChanged) {
-        savedImage = await saveProfile(values);
-        setSelectedImageFile(null);
+        if (hasPasswordValue) {
+          await changePassword(values);
+        }
+
+        selectedImageFileRef.current = null;
+
         reset({
-          ...values,
+          nickname: values.nickname,
           image: savedImage,
+          password: '',
+          passwordConfirmation: '',
         });
+
+        toast.success('계정 설정이 저장되었어요.');
+      } catch (error) {
+        toast.error(getErrorMessage(error, '계정 설정 저장 중 오류가 발생했어요.'));
       }
-
-      if (hasPasswordValue) {
-        await changePassword(values);
-      }
-
-      reset({
-        nickname: values.nickname,
-        image: savedImage,
-        password: '',
-        passwordConfirmation: '',
-      });
-
-      toast.success('계정 설정이 저장되었어요.');
-    } catch (error) {
-      toast.error(getErrorMessage(error, '계정 설정 저장 중 오류가 발생했어요.'));
-    }
-  });
+    })();
+  };
 
   return {
     handleSave,
