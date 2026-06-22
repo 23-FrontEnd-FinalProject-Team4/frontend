@@ -1,11 +1,12 @@
-import { redirect } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 
-import { taskListKeys } from '@/queries/taskList/queryKey';
+import { TaskList } from '@/apis/group/type';
+import { groupKeys } from '@/queries/group/queryKey';
 import { formatISODate } from '@/utils/date';
 
-import { getTaskListsAction } from './_action/taskList';
+import { getGroupAction } from './_action/group';
 import TaskListPageClient from './_components/TaskListPageClient';
 
 interface TaskListPageProps {
@@ -17,23 +18,45 @@ const TaskListPage = async ({ params, searchParams }: TaskListPageProps) => {
   const { teamId } = await params;
   const { taskListId, date } = await searchParams;
 
-  if (!date) {
-    const params = new URLSearchParams();
-    params.set('date', formatISODate(new Date()));
-    if (taskListId) params.set('taskListId', taskListId);
-    redirect(`?${params.toString()}`);
-  }
+  // 예외 처리
+  const groupId = Number(teamId);
+  if (Number.isNaN(groupId)) return notFound();
 
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery({
-    queryKey: taskListKeys.all({ groupId: Number(teamId) }),
-    queryFn: () => getTaskListsAction({ groupId: Number(teamId) }),
-  });
+  let groupData;
+  try {
+    groupData = await queryClient.fetchQuery({
+      queryKey: groupKeys.detail({ groupId }),
+      queryFn: () => getGroupAction({ groupId }),
+    });
+  } catch {
+    return notFound();
+  }
+
+  const hasTaskLists = groupData && groupData.taskLists.length > 0;
+  const isValidTaskListId = taskListId
+    ? groupData.taskLists.some((list: TaskList) => list.id.toString() === taskListId)
+    : false;
+
+  if (taskListId && !isValidTaskListId) return notFound();
+
+  const targetDate = date || formatISODate(new Date());
+  const targetTaskListId =
+    taskListId || (hasTaskLists ? groupData.taskLists[0].id.toString() : undefined);
+
+  if (date !== targetDate || taskListId !== targetTaskListId) {
+    const params = new URLSearchParams();
+    params.set('date', targetDate);
+    if (targetTaskListId) {
+      params.set('taskListId', targetTaskListId);
+    }
+    redirect(`?${params.toString()}`);
+  }
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <TaskListPageClient groupId={Number(teamId)} taskListId={taskListId} />
+      <TaskListPageClient groupId={groupId} taskListId={taskListId} />
     </HydrationBoundary>
   );
 };

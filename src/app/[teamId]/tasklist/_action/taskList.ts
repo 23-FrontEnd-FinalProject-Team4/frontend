@@ -1,6 +1,6 @@
 'use server';
 
-import { GroupDetail, TaskList } from '@/apis/group/type';
+import { TaskList } from '@/apis/group/type';
 import {
   CreateTaskListParams,
   DeleteTaskListParams,
@@ -11,8 +11,10 @@ import {
 } from '@/apis/taskList/type';
 import { serverFetcher } from '@/lib/serverFetcher';
 
+import { getGroupAction } from './group';
+
 export const getTaskListsAction = async ({ groupId }: { groupId: number }) => {
-  return (await serverFetcher<GroupDetail>(`/groups/${groupId}`)).taskLists;
+  return (await getGroupAction({ groupId })).taskLists;
 };
 
 export const getTaskListAction = async ({ groupId, id, date }: GetTaskListsParams) => {

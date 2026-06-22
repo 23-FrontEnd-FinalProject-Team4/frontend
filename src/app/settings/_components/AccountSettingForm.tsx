@@ -40,11 +40,15 @@ const AccountSettingForm = ({ initialProfile }: AccountSettingFormProps) => {
   const password = useWatch({ control, name: 'password' });
   const passwordConfirmation = useWatch({ control, name: 'passwordConfirmation' });
 
-  const isProfileChanged = Boolean(dirtyFields.nickname || dirtyFields.image);
+  const isNicknameChanged = Boolean(dirtyFields.nickname);
+  const isImageChanged = Boolean(dirtyFields.image);
+  const isProfileChanged = isNicknameChanged || isImageChanged;
   const hasPasswordValue = Boolean(password || passwordConfirmation);
 
   const { handleSave, isSaving, setSelectedImageFile } = useAccountSettingsSave({
     isProfileChanged,
+    isNicknameChanged,
+    isImageChanged,
     hasPasswordValue,
     handleSubmit,
     reset,
@@ -58,9 +62,7 @@ const AccountSettingForm = ({ initialProfile }: AccountSettingFormProps) => {
         <h1 className="text-medium font-semibold">계정 설정</h1>
         <ProfileUpdateForm
           email={initialProfile?.email ?? ''}
-          onImageFileSelect={(file) => {
-            setSelectedImageFile(file);
-          }}
+          onImageFileSelect={setSelectedImageFile}
         />
         <PasswordChangeForm />
         <DeleteAccountSection />

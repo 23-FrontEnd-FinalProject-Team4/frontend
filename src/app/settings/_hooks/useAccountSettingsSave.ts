@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useRef } from 'react';
 
 import type { UseFormHandleSubmit, UseFormReset } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 
+import type { UpdateProfileRequest } from '@/apis/user/type';
 import { uploadSettingsImageAction } from '@/app/settings/_actions/settings.action';
 import { getErrorMessage } from '@/lib/error';
 import { useChangePasswordMutation, useUpdateMyProfileMutation } from '@/queries/user/queries';
@@ -12,6 +13,8 @@ import type { AccountSettingsFormValues } from '@/schemas/auth.schema';
 
 type UseAccountSettingsSaveParams = {
   isProfileChanged: boolean;
+  isNicknameChanged: boolean;
+  isImageChanged: boolean;
   hasPasswordValue: boolean;
   handleSubmit: UseFormHandleSubmit<AccountSettingsFormValues>;
   reset: UseFormReset<AccountSettingsFormValues>;
@@ -19,18 +22,25 @@ type UseAccountSettingsSaveParams = {
 
 export const useAccountSettingsSave = ({
   isProfileChanged,
+  isNicknameChanged,
+  isImageChanged,
   hasPasswordValue,
   handleSubmit,
   reset,
 }: UseAccountSettingsSaveParams) => {
   const updateProfileMutation = useUpdateMyProfileMutation();
   const changePasswordMutation = useChangePasswordMutation();
-  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
+
+  const selectedImageFileRef = useRef<File | null>(null);
+  const setSelectedImageFile = useCallback((file: File | null) => {
+    selectedImageFileRef.current = file;
+  }, []);
 
   const isSaving = updateProfileMutation.isPending || changePasswordMutation.isPending;
 
   const saveProfile = async (values: AccountSettingsFormValues) => {
-    let image = values.image;
+    const selectedImageFile = selectedImageFileRef.current;
+    let savedImage = values.image;
 
     if (selectedImageFile) {
       const formData = new FormData();
@@ -42,15 +52,26 @@ export const useAccountSettingsSave = ({
         throw new Error(uploadResult.error);
       }
 
-      image = uploadResult.data.url;
+      savedImage = uploadResult.data.url;
     }
 
-    await updateProfileMutation.mutateAsync({
-      nickname: values.nickname,
-      image,
-    });
+    const payload: UpdateProfileRequest = {};
 
-    return image;
+    if (isNicknameChanged) {
+      payload.nickname = values.nickname;
+    }
+
+    if (selectedImageFile || isImageChanged) {
+      payload.image = savedImage;
+    }
+
+    const shouldUpdateProfile = isNicknameChanged || isImageChanged || Boolean(selectedImageFile);
+
+    if (shouldUpdateProfile) {
+      await updateProfileMutation.mutateAsync(payload);
+    }
+
+    return savedImage;
   };
 
   const changePassword = async (values: AccountSettingsFormValues) => {
@@ -60,35 +81,30 @@ export const useAccountSettingsSave = ({
     });
   };
 
-  const handleSave = handleSubmit(async (values) => {
-    try {
-      let savedImage = values.image;
+  const handleSave = () => {
+    void handleSubmit(async (values) => {
+      try {
+        const savedImage = isProfileChanged ? await saveProfile(values) : values.image;
 
-      if (isProfileChanged) {
-        savedImage = await saveProfile(values);
-        setSelectedImageFile(null);
+        if (hasPasswordValue) {
+          await changePassword(values);
+        }
+
+        selectedImageFileRef.current = null;
+
         reset({
-          ...values,
+          nickname: values.nickname,
           image: savedImage,
+          password: '',
+          passwordConfirmation: '',
         });
+
+        toast.success('계정 설정이 저장되었어요.');
+      } catch (error) {
+        toast.error(getErrorMessage(error, '계정 설정 저장 중 오류가 발생했어요.'));
       }
-
-      if (hasPasswordValue) {
-        await changePassword(values);
-      }
-
-      reset({
-        nickname: values.nickname,
-        image: savedImage,
-        password: '',
-        passwordConfirmation: '',
-      });
-
-      toast.success('계정 설정이 저장되었어요.');
-    } catch (error) {
-      toast.error(getErrorMessage(error, '계정 설정 저장 중 오류가 발생했어요.'));
-    }
-  });
+    })();
+  };
 
   return {
     handleSave,

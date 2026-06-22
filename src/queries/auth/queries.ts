@@ -15,10 +15,12 @@ import { USER_QUERY_KEY } from '@/queries/user/queryKey';
 
 type LoginSuccessResult = Extract<LoginActionResult, { success: true }>;
 
+type LoginMutationVariables = SignInRequest & { redirectPath?: string };
+
 export const useLoginMutation = () => {
-  return useMutation<LoginSuccessResult, Error, SignInRequest>({
-    mutationFn: async (data) => {
-      const result = await loginAction(data);
+  return useMutation<LoginSuccessResult, Error, LoginMutationVariables>({
+    mutationFn: async ({ redirectPath, ...data }) => {
+      const result = await loginAction(data, redirectPath);
 
       if (!result.success) {
         throw new BusinessError(result.error);
