@@ -10,6 +10,7 @@ export interface TeamPageMember extends TeamMember {
   name: string;
   email: string;
   imageUrl?: string | StaticImageData;
+  role: TeamPageRole;
 }
 
 export interface TeamPageTask {

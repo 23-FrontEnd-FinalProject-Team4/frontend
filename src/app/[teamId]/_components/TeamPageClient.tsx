@@ -11,7 +11,11 @@ import { toast } from 'react-hot-toast';
 import type { Member } from '@/apis/group/type';
 import type { TeamCardSize } from '@/components/team/type';
 import useMediaQuery, { MEDIA_QUERY } from '@/hooks/useMediaQuery';
-import { useCreateTeamTaskListMutation, useDeleteTeamMutation } from '@/queries/teams/queries';
+import {
+  useCreateTeamTaskListMutation,
+  useDeleteTeamMemberMutation,
+  useDeleteTeamMutation,
+} from '@/queries/teams/queries';
 import { teamKeys } from '@/queries/teams/queryKeys';
 
 import { getTeamPageDataAction } from '../_actions/team-page.action';
@@ -23,6 +27,7 @@ import TeamPageHeader from './header/TeamPageHeader';
 import MemberSection from './member/MemberSection';
 import DeleteTeamModal from './modals/DeleteTeamModal';
 import InviteMemberModal from './modals/InviteMemberModal';
+import RemoveMemberModal from './modals/RemoveMemberModal';
 import CreateTaskListModal from './task-list/CreateTaskListModal';
 import TaskListSection from './task-list/TaskListSection';
 
@@ -58,6 +63,7 @@ const mapMembers = (members: Member[]): TeamPageMember[] =>
     name: member.userName,
     email: member.userEmail,
     imageUrl: member.userImage ?? undefined,
+    role: member.role,
   }));
 
 const TeamPageStatus = ({ message }: { message: string }) => (
@@ -71,6 +77,7 @@ const TeamPageClient = ({ teamId, initialDate }: TeamPageClientProps) => {
   const queryClient = useQueryClient();
   const { mutateAsync: createTeamTaskList } = useCreateTeamTaskListMutation();
   const { mutateAsync: deleteTeam } = useDeleteTeamMutation();
+  const { mutateAsync: deleteTeamMember } = useDeleteTeamMemberMutation();
   const isDesktop = useMediaQuery(MEDIA_QUERY.desktop);
   const isTablet = useMediaQuery(MEDIA_QUERY.tablet);
   const today = initialDate;
@@ -177,6 +184,44 @@ const TeamPageClient = ({ teamId, initialDate }: TeamPageClientProps) => {
     });
   };
 
+  const openRemoveMemberModal = (member: TeamPageMember) => {
+    if (!selectedGroupId) {
+      toast.error('팀 정보를 찾을 수 없습니다.');
+      return;
+    }
+
+    if (role !== 'ADMIN' || member.role === 'ADMIN') {
+      toast.error('멤버를 관리할 권한이 없습니다.');
+      return;
+    }
+
+    overlay.open(({ isOpen, close }) => {
+      const handleRemoveMember = async () => {
+        try {
+          await deleteTeamMember({
+            groupId: selectedGroupId,
+            memberUserId: member.id,
+          });
+        } catch (error) {
+          toast.error(error instanceof Error ? error.message : '멤버를 내보내지 못했습니다.');
+          return false;
+        }
+
+        toast.success(`${member.name}님을 팀에서 내보냈습니다.`);
+        return true;
+      };
+
+      return (
+        <RemoveMemberModal
+          isOpen={isOpen}
+          memberName={member.name}
+          onClose={close}
+          onRemove={handleRemoveMember}
+        />
+      );
+    });
+  };
+
   const openCreateListModal = () => {
     overlay.open(({ isOpen, close }) => {
       return (
@@ -242,7 +287,12 @@ const TeamPageClient = ({ teamId, initialDate }: TeamPageClientProps) => {
               onCreateTaskList={openCreateListModal}
             />
 
-            <MemberSection members={members} onInviteClick={openInviteModal} />
+            <MemberSection
+              members={members}
+              viewerRole={role}
+              onInviteClick={openInviteModal}
+              onRemoveMember={openRemoveMemberModal}
+            />
           </>
         )}
       </div>

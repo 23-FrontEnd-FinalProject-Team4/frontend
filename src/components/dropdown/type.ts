@@ -8,6 +8,7 @@ export type DropdownMdProps = {
 
 export type DropdownProps = {
   size?: 'md' | 'sm';
+  className?: string;
   options: {
     label: string;
     value: string;
