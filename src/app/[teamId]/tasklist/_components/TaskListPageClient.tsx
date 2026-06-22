@@ -1,20 +1,13 @@
 'use client';
 
-import { notFound } from 'next/navigation';
-
-import { useGetTaskLists } from '@/queries/taskList/queries';
+import { useGetGroup } from '@/queries/group/queries';
 
 import TaskListHeader from './TaskListHeader';
 import TaskListMain from './TaskListMain';
 import TaskListSet from './TaskListSet';
 
 const TaskListPageClient = ({ groupId, taskListId }: { groupId: number; taskListId?: string }) => {
-  const { data: taskLists, isFetching, isPending, isError, refetch } = useGetTaskLists({ groupId });
-
-  const selectedTaskListId = taskListId || taskLists?.[0]?.id;
-  const selectedTaskList = taskLists?.find(
-    (taskList) => taskList.id === Number(selectedTaskListId),
-  );
+  const { data: groupInfo, isFetching, isPending, isError, refetch } = useGetGroup({ groupId });
 
   if (isError) {
     return (
@@ -32,7 +25,7 @@ const TaskListPageClient = ({ groupId, taskListId }: { groupId: number; taskList
     );
   }
 
-  if (!taskLists || isPending || (!selectedTaskList && isFetching)) {
+  if (isPending) {
     return (
       <div className="text-text-default flex min-h-60 items-center justify-center text-sm">
         할 일 목록을 불러오는 중입니다.
@@ -40,14 +33,19 @@ const TaskListPageClient = ({ groupId, taskListId }: { groupId: number; taskList
     );
   }
 
-  if (!selectedTaskList || !selectedTaskListId) return notFound();
+  if (!groupInfo) return null;
+
+  const selectedTaskListId = taskListId || groupInfo.taskLists[0]?.id;
+  const selectedTaskList = groupInfo.taskLists.find(
+    (taskList) => taskList.id === Number(selectedTaskListId),
+  );
 
   return (
     <div className="flex flex-col gap-5 p-4 md:gap-7 md:px-6 md:py-17.5 xl:px-30 xl:py-30">
-      <TaskListHeader name={selectedTaskList.name} />
+      <TaskListHeader groupId={groupId} />
       <div className="flex flex-col gap-6 xl:flex-row">
         <TaskListSet
-          taskLists={taskLists}
+          taskLists={groupInfo.taskLists}
           selectedTaskListId={Number(selectedTaskListId)}
           groupId={groupId}
         />
@@ -55,7 +53,7 @@ const TaskListPageClient = ({ groupId, taskListId }: { groupId: number; taskList
           <TaskListMain
             taskListId={Number(selectedTaskListId)}
             groupId={groupId}
-            taskListName={selectedTaskList.name}
+            taskListName={selectedTaskList?.name}
           />
         </div>
       </div>

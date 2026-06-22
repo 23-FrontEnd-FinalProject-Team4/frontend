@@ -21,6 +21,7 @@ import {
 } from '@/app/[teamId]/tasklist/_action/taskList';
 import { teamKeys } from '@/queries/teams/queryKeys';
 
+import { groupKeys } from '../group/queryKey';
 import { taskListKeys } from './queryKey';
 
 const invalidateTaskListOverviewQueries = (queryClient: QueryClient, groupId: number) => {
@@ -30,6 +31,9 @@ const invalidateTaskListOverviewQueries = (queryClient: QueryClient, groupId: nu
     }),
     queryClient.invalidateQueries({
       queryKey: teamKeys.group({ groupId }),
+    }),
+    queryClient.invalidateQueries({
+      queryKey: groupKeys.all(),
     }),
   ]);
 };
