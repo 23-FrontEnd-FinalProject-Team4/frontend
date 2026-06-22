@@ -22,7 +22,7 @@ export const loginAction = async (
       refreshToken,
     });
 
-    const resolvedRedirectPath = await getPostLoginRedirectPath({ accessToken, redirectPath });
+    const resolvedRedirectPath = await getPostLoginRedirectPath({ redirectPath });
 
     return { success: true, redirectPath: resolvedRedirectPath };
   } catch (error) {

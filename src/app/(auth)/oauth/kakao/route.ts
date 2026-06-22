@@ -23,10 +23,7 @@ export async function GET(request: NextRequest) {
 
     await setAuthTokens({ accessToken, refreshToken });
 
-    const postLoginRedirectPath = await getPostLoginRedirectPath({
-      accessToken,
-      redirectPath,
-    });
+    const postLoginRedirectPath = await getPostLoginRedirectPath({ redirectPath });
 
     return NextResponse.redirect(new URL(postLoginRedirectPath, request.url));
   } catch {

@@ -21,7 +21,6 @@ export const getSafeRedirectPath = (redirectPath?: string | null): string | unde
 export const getPostLoginRedirectPath = async ({
   redirectPath,
 }: {
-  accessToken: string;
   redirectPath?: string | null;
 }): Promise<string> => {
   const safeRedirectPath = getSafeRedirectPath(redirectPath);
