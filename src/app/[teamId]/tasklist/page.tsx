@@ -6,7 +6,7 @@ import { TaskList } from '@/apis/group/type';
 import { groupKeys } from '@/queries/group/queryKey';
 import { formatISODate } from '@/utils/date';
 
-import { getGroupAction } from './_action/taskList';
+import { getGroupAction } from './_action/group';
 import TaskListPageClient from './_components/TaskListPageClient';
 
 interface TaskListPageProps {
