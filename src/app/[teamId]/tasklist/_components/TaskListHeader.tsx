@@ -28,7 +28,7 @@ const TaskListHeader = ({ groupId }: TaskListHeaderProps) => {
 
   const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
   const router = useRouter();
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const { mutateAsync: deleteTeam } = useDeleteTeamMutation();
 
   if (isGroupsPending || isGroupPending) {

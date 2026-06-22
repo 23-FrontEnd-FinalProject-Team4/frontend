@@ -33,6 +33,8 @@ const TaskListPageClient = ({ groupId, taskListId }: { groupId: number; taskList
     );
   }
 
+  if (!groupInfo) return null;
+
   const selectedTaskListId = taskListId || groupInfo.taskLists[0]?.id;
   const selectedTaskList = groupInfo.taskLists.find(
     (taskList) => taskList.id === Number(selectedTaskListId),

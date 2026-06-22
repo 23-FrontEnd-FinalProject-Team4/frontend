@@ -24,10 +24,15 @@ const TaskListPage = async ({ params, searchParams }: TaskListPageProps) => {
 
   const queryClient = new QueryClient();
 
-  const groupData = await queryClient.fetchQuery({
-    queryKey: groupKeys.detail({ groupId }),
-    queryFn: () => getGroupAction({ groupId }),
-  });
+  let groupData;
+  try {
+    groupData = await queryClient.fetchQuery({
+      queryKey: groupKeys.detail({ groupId }),
+      queryFn: () => getGroupAction({ groupId }),
+    });
+  } catch {
+    return notFound();
+  }
 
   const hasTaskLists = groupData && groupData.taskLists.length > 0;
   const isValidTaskListId = taskListId
