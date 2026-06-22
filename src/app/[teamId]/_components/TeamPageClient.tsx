@@ -9,7 +9,6 @@ import { overlay } from 'overlay-kit';
 import { toast } from 'react-hot-toast';
 
 import type { Member, TaskList } from '@/apis/group/type';
-import type { Task } from '@/apis/task/type';
 import type { TeamCardSize } from '@/components/team/type';
 import useMediaQuery, { MEDIA_QUERY } from '@/hooks/useMediaQuery';
 import { useCreateTeamTaskListMutation, useDeleteTeamMutation } from '@/queries/teams/queries';
@@ -17,6 +16,7 @@ import { teamKeys } from '@/queries/teams/queryKeys';
 
 import { getTeamPageDataAction } from '../_actions/team-page.action';
 import { TASK_LISTS, TASK_STATUS_SECTIONS, TEAM_PAGE_MEMBERS } from '../_constants/mockData';
+import { getTaskListStatus, isTaskDone } from '../_utils/taskStatus';
 import type { TaskListItem, TeamPageMember, TeamPageRole } from '../type';
 import TeamPageHeader from './header/TeamPageHeader';
 import MemberSection from './member/MemberSection';
@@ -37,8 +37,6 @@ const getRouteGroupId = (teamId: string) => {
   return Number.isSafeInteger(groupId) && groupId > 0 ? groupId : undefined;
 };
 
-const isTaskDone = (task: Task) => Boolean(task.doneAt || task.doneBy?.user);
-
 const getProgressValue = (completedTaskCount: number, totalTaskCount: number) => {
   if (totalTaskCount <= 0) {
     return 0;
@@ -55,7 +53,7 @@ const mapMembers = (members: Member[]): TeamPageMember[] =>
     imageUrl: member.userImage ?? undefined,
   }));
 
-const mapTaskLists = (taskLists: TaskList[] = []): TaskListItem[] =>
+const mapTaskLists = (taskLists: TaskList[] = [], today: string): TaskListItem[] =>
   taskLists.map((taskList) => {
     const tasks = taskList.tasks ?? [];
     const doneCount = tasks.filter(isTaskDone).length;
@@ -64,7 +62,7 @@ const mapTaskLists = (taskLists: TaskList[] = []): TaskListItem[] =>
     return {
       id: taskList.id,
       title: taskList.name,
-      status: totalCount > 0 && doneCount === totalCount ? 'done' : 'today',
+      status: getTaskListStatus(tasks, today),
       doneCount,
       totalCount,
       tasks: tasks.slice(0, 3).map((task) => ({
@@ -118,8 +116,8 @@ const TeamPageClient = ({ teamId, initialDate }: TeamPageClientProps) => {
     [group],
   );
   const taskLists = useMemo(
-    () => (group?.taskLists ? mapTaskLists(group.taskLists) : TASK_LISTS),
-    [group],
+    () => (group?.taskLists ? mapTaskLists(group.taskLists, today) : TASK_LISTS),
+    [group, today],
   );
   const totalTaskCount =
     todayTasks?.length ?? taskLists.reduce((total, taskList) => total + taskList.totalCount, 0);
