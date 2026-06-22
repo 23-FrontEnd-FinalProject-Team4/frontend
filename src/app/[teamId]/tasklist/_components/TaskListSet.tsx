@@ -2,12 +2,15 @@
 
 import { useRef, useState } from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import { overlay } from 'overlay-kit';
 
 import { TaskList } from '@/apis/group/type';
 import KebabIcon from '@/assets/icons/kebab.svg?react';
 import PlusIcon from '@/assets/icons/plus.svg?react';
 import BadgeDone from '@/components/badgeDone/BadgeDone';
+import { BadgeStatus } from '@/components/badgeDone/type';
 import Button from '@/components/button/Button';
 import Dropdown from '@/components/dropdown/Dropdown';
 import DropdownMd from '@/components/dropdown/DropdownMd';
@@ -72,7 +75,7 @@ const TaskListSet = ({ taskLists, selectedTaskListId, groupId }: TaskListSetProp
       overlay.open(({ isOpen, close }) => (
         <DeleteTaskListModal
           isOpen={isOpen}
-          onClose={close}
+          onClose={() => handleDeleteSuccess(close, dropdownSelectedTaskList.id)}
           groupId={groupId}
           taskListId={dropdownSelectedTaskList.id}
           taskListName={dropdownSelectedTaskList.name}
@@ -85,6 +88,30 @@ const TaskListSet = ({ taskLists, selectedTaskListId, groupId }: TaskListSetProp
     overlay.open(({ isOpen, close }) => (
       <AddTaskListModal isOpen={isOpen} onClose={close} groupId={groupId} />
     ));
+  };
+
+  const router = useRouter();
+  const handleDeleteSuccess = (close: () => void, deletedId: number) => {
+    if (selectedTaskListId && selectedTaskListId === deletedId) {
+      const remainingLists = taskLists.filter((list) => list.id !== deletedId);
+      const params = new URLSearchParams(window.location.search);
+
+      if (remainingLists.length > 0) {
+        params.set('taskListId', remainingLists[0].id.toString());
+      } else {
+        params.delete('taskListId');
+      }
+
+      router.push(`?${params.toString()}`);
+    }
+    close();
+  };
+
+  const getTaskListBadgeStatus = (taskList: TaskList): BadgeStatus => {
+    const doneTasks = taskList.tasks.filter((task) => task.doneAt).length;
+    if (taskList.tasks.length === 0 || doneTasks === 0) return 'none';
+    if (doneTasks === taskList.tasks.length) return 'done';
+    return 'progress';
   };
 
   return (
@@ -127,10 +154,10 @@ const TaskListSet = ({ taskLists, selectedTaskListId, groupId }: TaskListSetProp
                 {taskList.name}
                 <div className="flex items-center justify-center">
                   <BadgeDone
-                    className="border-0 shadow-none"
+                    className="min-w-10 overflow-visible border-0 bg-transparent p-0 shadow-none [&_svg]:size-4.5 [&_svg]:overflow-visible"
                     total={taskList.tasks.length}
                     current={taskList.tasks.filter((task) => task.doneAt).length}
-                    status="progress"
+                    status={getTaskListBadgeStatus(taskList)}
                   />
                   <button
                     type="button"
