@@ -14,7 +14,7 @@ export default function Dropdown({ options, size = 'md', onSelect, onClose }: Dr
 
   return (
     <div
-      className={`border-border-primary bg-background-primary absolute top-full left-0 z-10 mt-1 rounded-xl border ${current.menu} `}
+      className={`border-border-primary bg-background-primary absolute top-full left-0 z-10 mt-1 overflow-hidden rounded-xl border ${current.menu} `}
     >
       {options.map((option) => (
         <button
