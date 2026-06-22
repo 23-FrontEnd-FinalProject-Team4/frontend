@@ -14,5 +14,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     name: 'Team Name',
+    groupId: 1,
+    taskListId: 1,
   },
 };
