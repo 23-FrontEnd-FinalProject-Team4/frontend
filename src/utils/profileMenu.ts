@@ -26,7 +26,7 @@ export const handleProfileMenuSelect = async (
       router.push('/settings');
       break;
     case 'team':
-      router.push('/addteam');
+      router.push('/jointeam');
       break;
     case 'logout':
       await logoutAction();
