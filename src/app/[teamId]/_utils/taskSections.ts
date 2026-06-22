@@ -6,6 +6,9 @@ import { getTaskDate, isTaskDone } from './taskStatus';
 
 type TaskItemsByStatus = Record<TaskStatus, TaskListItem[]>;
 
+const sortTasksByDate = (tasks: Task[]) =>
+  [...tasks].sort((a, b) => (getTaskDate(a) ?? '').localeCompare(getTaskDate(b) ?? ''));
+
 const createTaskListItem = (
   taskList: TaskList,
   tasks: Task[],
@@ -33,13 +36,13 @@ export const createTaskItemsByStatus = (
     (sections, taskList) => {
       const tasks = taskList.tasks ?? [];
       const todayTasks = tasks.filter((task) => getTaskDate(task) === today);
-      const scheduledTasks = tasks
-        .filter((task) => {
+      const scheduledTasks = sortTasksByDate(
+        tasks.filter((task) => {
           const taskDate = getTaskDate(task);
           return !isTaskDone(task) && taskDate !== undefined && taskDate > today;
-        })
-        .sort((a, b) => (getTaskDate(a) ?? '').localeCompare(getTaskDate(b) ?? ''));
-      const completedTasks = tasks.filter(isTaskDone);
+        }),
+      );
+      const completedTasks = sortTasksByDate(tasks.filter(isTaskDone));
       const isTodayDone = todayTasks.length > 0 && todayTasks.every(isTaskDone);
 
       if (!isTodayDone) {
@@ -53,7 +56,9 @@ export const createTaskItemsByStatus = (
       }
 
       if (completedTasks.length > 0) {
-        sections.done.push(createTaskListItem(taskList, completedTasks, 'done'));
+        sections.done.push(
+          createTaskListItem(taskList, completedTasks, 'done', getTaskDate(completedTasks[0])),
+        );
       }
 
       return sections;

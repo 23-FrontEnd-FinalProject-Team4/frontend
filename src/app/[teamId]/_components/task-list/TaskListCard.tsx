@@ -25,6 +25,14 @@ interface TaskListCardProps {
   teamId: string;
 }
 
+const createTaskListHref = (teamId: string, item: TaskListItem) => {
+  const searchParams = new URLSearchParams({ taskListId: String(item.id) });
+
+  if (item.date) searchParams.set('date', item.date);
+
+  return `/${teamId}/tasklist?${searchParams.toString()}`;
+};
+
 export default function TaskListCard({ item, teamId }: TaskListCardProps) {
   const groupId = Number(teamId);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -38,7 +46,7 @@ export default function TaskListCard({ item, teamId }: TaskListCardProps) {
   const badgeStatus =
     item.totalCount === 0 ? 'none' : item.doneCount >= item.totalCount ? 'done' : 'progress';
   const canToggleTask = Number.isSafeInteger(groupId) && groupId > 0;
-  const taskListHref = `/${teamId}/tasklist?taskListId=${item.id}${item.date ? `&date=${item.date}` : ''}`;
+  const taskListHref = createTaskListHref(teamId, item);
 
   const handleCloseMenu = useCallback(() => {
     setIsMenuOpen(false);

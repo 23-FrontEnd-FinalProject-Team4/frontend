@@ -25,7 +25,7 @@ const createTaskList = (tasks: Task[]): TaskList =>
   }) as TaskList;
 
 describe('createTaskItemsByStatus', () => {
-  it('keeps the list in today and also creates a scheduled card for future tasks', () => {
+  it('오늘 카드와 미래 할 일이 담긴 예정 카드를 함께 만든다', () => {
     const futureTask = createTask(26, 'Future task', '2026-06-26');
 
     const sections = createTaskItemsByStatus([createTaskList([futureTask])], TODAY);
@@ -44,7 +44,7 @@ describe('createTaskItemsByStatus', () => {
     ]);
   });
 
-  it('shows only today tasks inside the today card and future tasks inside the scheduled card', () => {
+  it('오늘 카드와 예정 카드에 해당 날짜의 할 일만 담는다', () => {
     const todayTask = createTask(22, 'Today task', TODAY);
     const futureTask = createTask(26, 'Future task', '2026-06-26');
 
@@ -54,7 +54,7 @@ describe('createTaskItemsByStatus', () => {
     expect(sections.scheduled[0]?.tasks).toEqual([{ id: 26, title: 'Future task', done: false }]);
   });
 
-  it('moves a list with only completed today tasks to done', () => {
+  it('오늘 할 일을 모두 완료하면 완료 카드로 이동한다', () => {
     const doneTask = createTask(22, 'Done task', TODAY, true);
 
     const sections = createTaskItemsByStatus([createTaskList([doneTask])], TODAY);
@@ -65,7 +65,7 @@ describe('createTaskItemsByStatus', () => {
     );
   });
 
-  it('moves a completed future task from scheduled to done', () => {
+  it('미래 할 일을 완료하면 예정 카드에서 완료 카드로 이동한다', () => {
     const doneFutureTask = createTask(26, 'Done future task', '2026-06-26', true);
 
     const sections = createTaskItemsByStatus([createTaskList([doneFutureTask])], TODAY);
@@ -77,6 +77,7 @@ describe('createTaskItemsByStatus', () => {
     expect(sections.done).toEqual([
       expect.objectContaining({
         id: 4,
+        date: '2026-06-26',
         doneCount: 1,
         totalCount: 1,
         tasks: [{ id: 26, title: 'Done future task', done: true }],

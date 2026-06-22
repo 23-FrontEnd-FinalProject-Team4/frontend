@@ -31,6 +31,12 @@ interface TeamPageClientProps {
   initialDate: string;
 }
 
+const FALLBACK_TASK_ITEMS_BY_STATUS = {
+  today: TASK_LISTS.filter((item) => item.status === 'today'),
+  scheduled: TASK_LISTS.filter((item) => item.status === 'scheduled'),
+  done: TASK_LISTS.filter((item) => item.status === 'done'),
+};
+
 const isMemberView = (teamId: string) => ['member', 'user'].includes(teamId.toLowerCase());
 
 const getRouteGroupId = (teamId: string) => {
@@ -76,7 +82,6 @@ const TeamPageClient = ({ teamId, initialDate }: TeamPageClientProps) => {
   const { data: teamPageResult, isPending } = useQuery({
     queryKey: teamKeys.detail({ teamId, date: today }),
     queryFn: () => getTeamPageDataAction({ teamId, date: today }),
-    enabled: Boolean(today),
   });
 
   const teamPageError = teamPageResult?.success === false ? teamPageResult.error : undefined;
@@ -96,24 +101,18 @@ const TeamPageClient = ({ teamId, initialDate }: TeamPageClientProps) => {
     () => (group?.members ? mapMembers(group.members) : TEAM_PAGE_MEMBERS),
     [group],
   );
-  const taskItemsByStatus = useMemo(() => {
-    if (group?.taskLists) {
-      return createTaskItemsByStatus(group.taskLists, today);
-    }
-
-    return {
-      today: TASK_LISTS.filter((item) => item.status === 'today'),
-      scheduled: TASK_LISTS.filter((item) => item.status === 'scheduled'),
-      done: TASK_LISTS.filter((item) => item.status === 'done'),
-    };
-  }, [group, today]);
-  const fallbackTaskLists = Object.values(taskItemsByStatus).flat();
+  const taskItemsByStatus = useMemo(
+    () =>
+      group?.taskLists
+        ? createTaskItemsByStatus(group.taskLists, today)
+        : FALLBACK_TASK_ITEMS_BY_STATUS,
+    [group, today],
+  );
   const totalTaskCount =
-    todayTasks?.length ??
-    fallbackTaskLists.reduce((total, taskList) => total + taskList.totalCount, 0);
+    todayTasks?.length ?? TASK_LISTS.reduce((total, taskList) => total + taskList.totalCount, 0);
   const completedTaskCount =
     todayTasks?.filter(isTaskDone).length ??
-    fallbackTaskLists.reduce((total, taskList) => total + taskList.doneCount, 0);
+    TASK_LISTS.reduce((total, taskList) => total + taskList.doneCount, 0);
   const progressValue = getProgressValue(completedTaskCount, totalTaskCount);
 
   const groupedTaskLists = useMemo(

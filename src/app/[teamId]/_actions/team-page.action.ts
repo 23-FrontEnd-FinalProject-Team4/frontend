@@ -43,7 +43,16 @@ const createGroupTasksPath = (groupId: number, date?: string) => {
   return `/groups/${groupId}/tasks${query}`;
 };
 
-const SCHEDULE_LOOKAHEAD_DAYS = 7;
+const createTaskListPath = (groupId: number, taskListId: number, date: string) => {
+  return `/groups/${groupId}/task-lists/${taskListId}?date=${encodeURIComponent(date)}`;
+};
+
+const mergeTasksById = (...taskGroups: Task[][]) => {
+  return Array.from(new Map(taskGroups.flat().map((task) => [task.id, task])).values());
+};
+
+// API가 날짜별 조회만 지원하므로 예정 카드에는 앞으로 일주일의 할 일을 사용한다.
+const UPCOMING_TASK_LOOKAHEAD_DAYS = 7;
 
 const addDaysToISODate = (date: string, days: number) => {
   const nextDate = new Date(`${date}T00:00:00.000Z`);
@@ -54,7 +63,7 @@ const addDaysToISODate = (date: string, days: number) => {
 const getScheduledTaskDates = async (groupId: number, today?: string) => {
   if (!today) return [];
 
-  const dates = Array.from({ length: SCHEDULE_LOOKAHEAD_DAYS }, (_, index) =>
+  const dates = Array.from({ length: UPCOMING_TASK_LOOKAHEAD_DAYS }, (_, index) =>
     addDaysToISODate(today, index + 1),
   );
   const tasksByDate = await Promise.all(
@@ -79,22 +88,32 @@ const addScheduledTasksToTaskLists = async (
   const scheduledTaskLists = await Promise.all(
     scheduledDates.flatMap((date) =>
       taskLists.map((taskList) =>
-        serverFetcher<TaskList>(
-          `/groups/${groupId}/task-lists/${taskList.id}?date=${encodeURIComponent(date)}`,
-        ),
+        serverFetcher<TaskList>(createTaskListPath(groupId, taskList.id, date)),
       ),
     ),
   );
-
   return taskLists.map((taskList) => ({
     ...taskList,
-    tasks: [
-      ...(taskList.tasks ?? []),
-      ...scheduledTaskLists
+    tasks: mergeTasksById(
+      taskList.tasks ?? [],
+      scheduledTaskLists
         .filter((scheduledTaskList) => scheduledTaskList.id === taskList.id)
         .flatMap((scheduledTaskList) => scheduledTaskList.tasks ?? []),
-    ],
+    ),
   }));
+};
+
+const getGroupPageData = async (groupId: number, date?: string) => {
+  const [groupSummary, todayTasks] = await Promise.all([
+    serverFetcher<GroupDetail>(`/groups/${groupId}`),
+    serverFetcher<Task[]>(createGroupTasksPath(groupId, date)),
+  ]);
+  const taskLists = await addScheduledTasksToTaskLists(groupId, groupSummary.taskLists, date);
+
+  return {
+    group: { ...groupSummary, taskLists },
+    todayTasks,
+  };
 };
 
 export const getTeamPageDataAction = async (
@@ -111,17 +130,11 @@ export const getTeamPageDataAction = async (
     const routeGroupId = getRouteGroupId(teamId);
 
     if (routeGroupId) {
-      const [myGroups, myProfile, groupSummary, todayTasks] = await Promise.all([
+      const [myGroups, myProfile, groupPageData] = await Promise.all([
         serverFetcher<Group[]>('/user/groups'),
         serverFetcher<Profile>('/user'),
-        serverFetcher<GroupDetail>(`/groups/${routeGroupId}`),
-        serverFetcher<Task[]>(createGroupTasksPath(routeGroupId, date)),
+        getGroupPageData(routeGroupId, date),
       ]);
-      const taskLists = await addScheduledTasksToTaskLists(
-        routeGroupId,
-        groupSummary.taskLists,
-        date,
-      );
 
       return {
         success: true,
@@ -129,8 +142,7 @@ export const getTeamPageDataAction = async (
           myGroups,
           myProfile,
           selectedGroupId: routeGroupId,
-          group: { ...groupSummary, taskLists },
-          todayTasks,
+          ...groupPageData,
         },
       };
     }
@@ -152,15 +164,7 @@ export const getTeamPageDataAction = async (
       };
     }
 
-    const [groupSummary, todayTasks] = await Promise.all([
-      serverFetcher<GroupDetail>(`/groups/${selectedGroupId}`),
-      serverFetcher<Task[]>(createGroupTasksPath(selectedGroupId, date)),
-    ]);
-    const taskLists = await addScheduledTasksToTaskLists(
-      selectedGroupId,
-      groupSummary.taskLists,
-      date,
-    );
+    const groupPageData = await getGroupPageData(selectedGroupId, date);
 
     return {
       success: true,
@@ -168,8 +172,7 @@ export const getTeamPageDataAction = async (
         myGroups,
         myProfile,
         selectedGroupId,
-        group: { ...groupSummary, taskLists },
-        todayTasks,
+        ...groupPageData,
       },
     };
   } catch (error) {

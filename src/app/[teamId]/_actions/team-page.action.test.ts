@@ -25,12 +25,12 @@ describe('getTeamPageDataAction', () => {
     vi.clearAllMocks();
   });
 
-  it('hydrates every task list from its detail endpoint', async () => {
+  it('예정된 할 일이 있는 날짜의 목록 상세를 조회해 팀 데이터에 합친다', async () => {
     const futureTask = {
       id: 10,
       name: 'Future task',
-      date: '2026-06-23',
-      startDate: '2026-06-23T00:00:00.000Z',
+      date: '2026-06-26',
+      startDate: '2026-06-26T00:00:00.000Z',
       doneAt: null,
       doneBy: null,
     } as Task;
