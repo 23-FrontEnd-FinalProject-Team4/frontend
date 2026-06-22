@@ -57,8 +57,16 @@ const getProgressValue = (completedTaskCount: number, totalTaskCount: number) =>
   return Math.round((completedTaskCount / totalTaskCount) * 100);
 };
 
+const compareMembersByRole = (firstMember: Member, secondMember: Member) => {
+  if (firstMember.role === secondMember.role) {
+    return 0;
+  }
+
+  return firstMember.role === 'ADMIN' ? -1 : 1;
+};
+
 const mapMembers = (members: Member[]): TeamPageMember[] =>
-  members.map((member) => ({
+  [...members].sort(compareMembersByRole).map((member) => ({
     id: member.userId,
     name: member.userName,
     email: member.userEmail,
