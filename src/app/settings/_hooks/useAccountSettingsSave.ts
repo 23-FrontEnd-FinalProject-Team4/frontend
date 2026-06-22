@@ -98,7 +98,6 @@ export const useAccountSettingsSave = ({
 
       toast.success('계정 설정이 저장되었어요.');
     } catch (error) {
-      console.error('[useAccountSettingsSave] failed to save account settings', error);
       toast.error(getErrorMessage(error, '계정 설정 저장 중 오류가 발생했어요.'));
     }
   });
