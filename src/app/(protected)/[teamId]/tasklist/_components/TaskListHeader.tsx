@@ -54,7 +54,7 @@ const TaskListHeader = ({ name, groupId, taskListId }: TaskListHeaderProps) => {
     <div className="text-text-primary xl:outline-border-primary flex items-center gap-2 rounded-xl bg-transparent text-center text-2xl font-bold xl:w-full xl:justify-between xl:bg-white xl:px-6 xl:py-4.5 xl:outline">
       {name}
 
-      <div className="relative" ref={dropdownRef}>
+      <div className="relative flex justify-center" ref={dropdownRef}>
         <button
           type="button"
           aria-label="설정"
