@@ -9,6 +9,7 @@ import ProfileIcon from '@/assets/icons/profile.svg?react';
 import SettingsIcon from '@/assets/icons/setting.svg?react';
 import Dropdown from '@/components/dropdown/Dropdown';
 import { normalizeImageUrl } from '@/utils/image';
+import { isAllowedImageUrl } from '@/utils/isAllowedImageUrl';
 import {
   PROFILE_MENU_OPTIONS,
   type ProfileMenuValue,
@@ -38,7 +39,7 @@ export default function LoggedInFooter({
       <div className="flex flex-row items-center gap-3">
         {/* 사용자 프로필 출력 */}
         <div className="relative h-10 w-10 overflow-hidden rounded-lg">
-          {profileImageSrc ? (
+          {isAllowedImageUrl(profileImageSrc) ? (
             <Image
               src={profileImageSrc}
               alt={`${user.nickname} 프로필 이미지`}
@@ -47,7 +48,7 @@ export default function LoggedInFooter({
               sizes="40px"
             />
           ) : (
-            <ProfileIcon className="h-8 w-8 rounded-lg" />
+            <ProfileIcon className="h-8 w-8 rounded-lg" aria-hidden="true" />
           )}
         </div>
         {!collapsed && <span>{user.nickname}</span>}
