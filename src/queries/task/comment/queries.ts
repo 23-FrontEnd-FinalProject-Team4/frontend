@@ -11,7 +11,7 @@ import {
   deleteTaskCommentAction,
   getCommentsAction,
   updateTaskCommentAction,
-} from '@/app/[teamId]/tasklist/_action/comments';
+} from '@/app/(protected)/[teamId]/tasklist/_action/comments';
 
 import { taskCommentKeys } from './queryKey';
 

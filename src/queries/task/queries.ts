@@ -20,7 +20,7 @@ import {
   toggleTaskAction,
   updateRecurringTaskAction,
   updateTaskAction,
-} from '@/app/[teamId]/tasklist/_action/task';
+} from '@/app/(protected)/[teamId]/tasklist/_action/task';
 import { teamKeys } from '@/queries/teams/queryKeys';
 
 import { groupKeys } from '../group/queryKey';

@@ -18,7 +18,7 @@ import {
   deleteTaskListAction,
   getTaskListsAction,
   updateTaskListNameAction,
-} from '@/app/[teamId]/tasklist/_action/taskList';
+} from '@/app/(protected)/[teamId]/tasklist/_action/taskList';
 import { teamKeys } from '@/queries/teams/queryKeys';
 
 import { groupKeys } from '../group/queryKey';
