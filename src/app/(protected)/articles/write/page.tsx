@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 
-import EditorClient from '@/app/articles/write/_components/EditorClient';
+import EditorClient from '@/app/(protected)/articles/write/_components/EditorClient';
 
 const WriteArticlePage = () => {
   return (

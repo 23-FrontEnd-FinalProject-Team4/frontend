@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { getGroupAction, getGroupsAction } from '@/app/[teamId]/tasklist/_action/group';
+import { getGroupAction, getGroupsAction } from '@/app/(protected)/[teamId]/tasklist/_action/group';
 
 import { groupKeys } from './queryKey';
 

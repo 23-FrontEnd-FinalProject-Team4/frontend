@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { deleteArticleAction } from '@/app/articles/_actions/article.action';
+import { deleteArticleAction } from '@/app/(protected)/articles/_actions/article.action';
 import KebabIcon from '@/assets/icons/kebab.svg';
 import Dropdown from '@/components/dropdown/Dropdown';
 import Modal from '@/components/modal/Modal';

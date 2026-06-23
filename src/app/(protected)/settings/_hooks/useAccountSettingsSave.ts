@@ -6,7 +6,7 @@ import type { UseFormHandleSubmit, UseFormReset } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 
 import type { UpdateProfileRequest } from '@/apis/user/type';
-import { uploadSettingsImageAction } from '@/app/settings/_actions/settings.action';
+import { uploadSettingsImageAction } from '@/app/(protected)/settings/_actions/settings.action';
 import { getErrorMessage } from '@/lib/error';
 import { useChangePasswordMutation, useUpdateMyProfileMutation } from '@/queries/user/queries';
 import type { AccountSettingsFormValues } from '@/schemas/auth.schema';

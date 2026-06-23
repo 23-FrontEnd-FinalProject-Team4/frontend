@@ -5,7 +5,10 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { JOIN_TEAM_ERROR_CODE, JoinTeamError } from '@/app/(team)/jointeam/join-team.error';
+import {
+  JOIN_TEAM_ERROR_CODE,
+  JoinTeamError,
+} from '@/app/(protected)/(team)/jointeam/join-team.error';
 import Button from '@/components/button/Button';
 import Input from '@/components/input/Input';
 import { getErrorMessage } from '@/lib/error';

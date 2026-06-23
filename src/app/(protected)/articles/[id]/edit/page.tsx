@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 
 import { getArticleDetailServer } from '@/apis/article/server';
 import { getMyProfileServer } from '@/apis/user/server';
-import EditorClient from '@/app/articles/write/_components/EditorClient';
+import EditorClient from '@/app/(protected)/articles/write/_components/EditorClient';
 
 const EditArticlePage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;

@@ -4,7 +4,7 @@ import type { Profile } from '@/apis/user/type';
 import {
   JOIN_TEAM_ERROR_CODE,
   type JoinTeamErrorCode,
-} from '@/app/(team)/jointeam/join-team.error';
+} from '@/app/(protected)/(team)/jointeam/join-team.error';
 import { getErrorMessage } from '@/lib/error';
 import { serverFetcher } from '@/lib/serverFetcher';
 import { teamJoinSchema } from '@/schemas/team.schema';

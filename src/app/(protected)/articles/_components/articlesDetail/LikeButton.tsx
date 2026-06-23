@@ -7,7 +7,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   createArticleLikeAction,
   deleteArticleLikeAction,
-} from '@/app/articles/_actions/like.action';
+} from '@/app/(protected)/articles/_actions/like.action';
 import HeartEmptyIcon from '@/assets/icons/heart_empty.svg';
 import HeartFillIcon from '@/assets/icons/heart_fill.svg';
 import { cn } from '@/utils/cn';

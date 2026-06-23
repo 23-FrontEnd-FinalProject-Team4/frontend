@@ -8,9 +8,9 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
 import { getArticles } from '@/apis/article';
 import { Article } from '@/apis/article/type';
-import BestSection from '@/app/articles/_components/BestSection';
-import ListSection from '@/app/articles/_components/ListSection';
-import SearchInput from '@/app/articles/_components/SearchInput';
+import BestSection from '@/app/(protected)/articles/_components/BestSection';
+import ListSection from '@/app/(protected)/articles/_components/ListSection';
+import SearchInput from '@/app/(protected)/articles/_components/SearchInput';
 import ArrowLeftIcon from '@/assets/icons/arrow_left.svg';
 import ArrowRightIcon from '@/assets/icons/arrow_right.svg';
 import WriteIcon from '@/assets/icons/pencil.svg';

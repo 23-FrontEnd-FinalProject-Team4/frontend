@@ -1,16 +1,16 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import type { GroupDetail } from '@/apis/group/type';
-import { updateTeamAction } from '@/app/(team)/[teamId]/editteam/_actions/updateTeam.action';
-import { createTeamAction } from '@/app/(team)/addteam/_actions/createTeam.action';
-import { joinTeamAction } from '@/app/(team)/jointeam/_actions/join-team.action';
-import { JoinTeamError } from '@/app/(team)/jointeam/join-team.error';
+import { updateTeamAction } from '@/app/(protected)/(team)/[teamId]/editteam/_actions/updateTeam.action';
+import { createTeamAction } from '@/app/(protected)/(team)/addteam/_actions/createTeam.action';
+import { joinTeamAction } from '@/app/(protected)/(team)/jointeam/_actions/join-team.action';
+import { JoinTeamError } from '@/app/(protected)/(team)/jointeam/join-team.error';
 import {
   createTeamTaskListAction,
   deleteTeamAction,
   deleteTeamMemberAction,
   getTeamInvitationAction,
-} from '@/app/[teamId]/_actions/team-page.action';
+} from '@/app/(protected)/[teamId]/_actions/team-page.action';
 
 import { teamKeys } from './queryKeys';
 

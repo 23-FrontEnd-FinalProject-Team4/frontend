@@ -3,10 +3,10 @@ import Link from 'next/link';
 import { getArticleDetailServer } from '@/apis/article/server';
 import { getArticleComments } from '@/apis/articleComment';
 import { getMyProfileServer } from '@/apis/user/server';
-import CommentSection from '@/app/articles/_components/articlesDetail/CommentSection';
-import ArticleContent from '@/app/articles/_components/articlesDetail/Content';
-import ArticleHeader from '@/app/articles/_components/articlesDetail/Header';
-import LikeButton from '@/app/articles/_components/articlesDetail/LikeButton';
+import CommentSection from '@/app/(protected)/articles/_components/articlesDetail/CommentSection';
+import ArticleContent from '@/app/(protected)/articles/_components/articlesDetail/Content';
+import ArticleHeader from '@/app/(protected)/articles/_components/articlesDetail/Header';
+import LikeButton from '@/app/(protected)/articles/_components/articlesDetail/LikeButton';
 import { formatDate } from '@/utils/formatDate';
 
 const ArticleDetailPage = async ({ params }: { params: Promise<{ id: string }> }) => {

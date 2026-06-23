@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import type { ArticleContentProps } from '@/app/articles/_components/articlesDetail/Detail.type';
+import type { ArticleContentProps } from '@/app/(protected)/articles/_components/articlesDetail/Detail.type';
 import { isAllowedImageUrl } from '@/utils/isAllowedImageUrl';
 
 const ArticleContent = ({ content, image }: ArticleContentProps) => {
