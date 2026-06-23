@@ -9,7 +9,7 @@ import {
   createArticleCommentAction,
   deleteArticleCommentAction,
   updateArticleCommentAction,
-} from '@/app/articles/_actions/comment.action';
+} from '@/app/(protected)/articles/_actions/comment.action';
 import Dropdown from '@/components/dropdown/Dropdown';
 import InputReply from '@/components/inputReply/InputReply';
 import Modal from '@/components/modal/Modal';

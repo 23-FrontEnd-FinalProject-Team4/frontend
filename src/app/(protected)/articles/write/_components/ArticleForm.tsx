@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 import { FieldErrors, UseFormRegister } from 'react-hook-form';
 
-import { ArticleFormData } from '@/app/articles/write/_components/schema';
+import { ArticleFormData } from '@/app/(protected)/articles/write/_components/schema';
 import UploadIcon from '@/assets/icons/img.svg';
 import Button from '@/components/button/Button';
 import InputBox from '@/components/inputBox/InputBox';

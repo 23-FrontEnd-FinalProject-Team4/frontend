@@ -10,7 +10,7 @@ import {
   changePasswordAction,
   deleteMyAccountAction,
   updateMyProfileAction,
-} from '@/app/settings/_actions/settings.action';
+} from '@/app/(protected)/settings/_actions/settings.action';
 
 import { USER_QUERY_KEY } from './queryKey';
 

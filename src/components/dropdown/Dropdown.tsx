@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+
 import { cn } from '@/utils/cn';
 
 import type { DropdownProps } from './type';
