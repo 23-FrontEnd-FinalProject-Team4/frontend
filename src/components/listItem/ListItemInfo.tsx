@@ -5,7 +5,6 @@ import { useRef, useState } from 'react';
 import CommentIcon from '@/assets/icons/comment.svg?react';
 import KebabIcon from '@/assets/icons/kebab.svg?react';
 import { OPTIONS } from '@/constants/listItem';
-
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 
 import Dropdown from '../dropdown/Dropdown';
@@ -58,6 +57,7 @@ const ListItemInfo = ({
         type="button"
         aria-label="할 일 메뉴 열기"
         aria-expanded={isDropdownOpen}
+        className="text-icon-primary hover:bg-background-secondary hover:text-brand-primary focus-visible:ring-brand-primary flex size-7 items-center justify-center rounded-md transition-colors focus-visible:ring-2 focus-visible:outline-none active:scale-95"
       >
         <KebabIcon width={16} height={16} />
       </button>
