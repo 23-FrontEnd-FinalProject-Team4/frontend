@@ -1,7 +1,5 @@
 'use client';
 
-import { useRef } from 'react';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
@@ -24,8 +22,6 @@ interface AddTaskModalProps {
 }
 
 const AddTaskModal = ({ isOpen, onClose, groupId, taskListId }: AddTaskModalProps) => {
-  const submitButtonRef = useRef<HTMLButtonElement>(null);
-
   const methods = useForm<TaskFormValues>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
@@ -35,6 +31,7 @@ const AddTaskModal = ({ isOpen, onClose, groupId, taskListId }: AddTaskModalProp
       frequency: 'ONCE',
       description: '',
     },
+    mode: 'onBlur',
   });
 
   const { mutateAsync: createTask, isPending } = useCreateTask();
@@ -64,9 +61,9 @@ const AddTaskModal = ({ isOpen, onClose, groupId, taskListId }: AddTaskModalProp
     >
       <FormProvider {...methods}>
         <form className="flex flex-col gap-6" onSubmit={methods.handleSubmit(handleSubmit)}>
-          <TaskForm submitButtonRef={submitButtonRef} />
+          <TaskForm />
 
-          <Button variant="primary-filled" fullWidth ref={submitButtonRef} disabled={isPending}>
+          <Button variant="primary-filled" fullWidth disabled={isPending}>
             만들기
           </Button>
         </form>
