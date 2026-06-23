@@ -1,7 +1,5 @@
 # <p align="center"> Coworkers </p>
 
-### <img width="1290" height="500" alt="Coworkers Landing" src="./src/assets/images/landing_img1_large.png">
-
 ### <p align="center"> 함께 만들어가는 To do list — 팀 협업 할 일 관리 서비스 </p>
 
 <br>
