@@ -1,16 +1,17 @@
 version: '3'
 
 services:
-  # 1. 기존 Next.js 서비스 (외부 포트 80을 빼고 내부 통신만 하도록 설정)
   frontend:
-    # 기존에 사용하시던 빌드 세팅이나 이미지 이름을 그대로 적어주세요.
-    # 예: image: frontend-image 또는 build: .
-    build: .
+    image: ${FRONTEND_IMAGE:-ghcr.io/23-frontend-finalproject-team4/frontend:latest}
+    pull_policy: always
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-}
     expose:
       - '3000'
     restart: always
 
-  # 2. Nginx 서비스 (새로 추가)
   nginx:
     image: nginx:1.15-alpine
     ports:
@@ -20,12 +21,10 @@ services:
       - ./data/nginx:/etc/nginx/conf.d
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
-    # frontend 컨테이너가 먼저 켜진 후 Nginx가 켜지도록 설정
     depends_on:
       - frontend
     command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
 
-  # 3. Certbot 서비스 (인증서 발급 및 갱신 봇, 새로 추가)
   certbot:
     image: certbot/certbot
     volumes:
