@@ -27,7 +27,7 @@ const CalendarTime = ({ selectedTime, setSelectedTime }: CalendarTimeProps) => {
               onClick={() => setSelectedTime({ ...selectedTime, hour })}
               aria-label={`${hour}시`}
             >
-              {hour}:00
+              {hour}:{String(selectedMinute).padStart(2, '0')}
             </button>
           );
         })}
