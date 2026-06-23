@@ -42,7 +42,8 @@ const GroupItems = ({ id, name, route, image, collapsed, selected }: GroupItemPr
           />
         ) : (
           <div className="bg-brand-primary text-text-inverse flex h-full w-full items-center justify-center text-[12px] font-semibold">
-            {name?.trim()?.charAt(0).toUpperCase()}
+            <span aria-hidden="true">{name?.trim()?.charAt(0).toUpperCase()}</span>
+            {collapsed && name && <span className="sr-only">{name}</span>}{' '}
           </div>
         )}
       </div>
