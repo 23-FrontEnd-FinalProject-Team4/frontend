@@ -9,7 +9,7 @@ import type { TaskListItem, TaskStatus, TaskStatusSection } from '../../type';
 import TaskListCard from './TaskListCard';
 
 const TASK_SECTION_HEADER_STYLE: Record<TaskStatus, string> = {
-  today: 'bg-brand-secondary',
+  today: 'bg-[#D1DFF9]',
   scheduled: 'bg-background-tertiary',
   done: 'bg-background-tertiary',
 };

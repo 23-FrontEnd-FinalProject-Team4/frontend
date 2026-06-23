@@ -2,7 +2,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import GroupIcon from '@/assets/icons/profile.svg?react';
 import type { GroupItemProps } from '@/components/sideBar/type';
 import { cn } from '@/utils/cn';
 import { normalizeImageUrl } from '@/utils/image';
@@ -42,7 +41,10 @@ const GroupItems = ({ id, name, route, image, collapsed, selected }: GroupItemPr
             sizes={collapsed ? '80px' : '56px'}
           />
         ) : (
-          <GroupIcon className="text-icon-primary h-full w-full" />
+          <div className="bg-brand-primary text-text-inverse flex h-full w-full items-center justify-center text-[12px] font-semibold">
+            <span aria-hidden="true">{name?.trim()?.charAt(0).toUpperCase()}</span>
+            {collapsed && name && <span className="sr-only">{name}</span>}{' '}
+          </div>
         )}
       </div>
       {!collapsed && <span>{name}</span>}

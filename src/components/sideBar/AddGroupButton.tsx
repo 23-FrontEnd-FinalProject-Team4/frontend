@@ -11,7 +11,7 @@ export default function AddGroupButton() {
         'border-brand-primary text-brand-primary text-md hover:bg-brand-primary hover:text-brand-secondary my-3 flex items-center justify-center gap-1 rounded-full border px-3 py-2 transition-colors',
       )}
     >
-      <PlusIcon className="h-4 w-4" />팀 추가하기
+      <PlusIcon className="h-4 w-4" />팀 생성하기
     </Link>
   );
 }
