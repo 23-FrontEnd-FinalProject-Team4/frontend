@@ -20,14 +20,14 @@ describe('taskStatus', () => {
       expect(getTaskDate(createTask({ date: '2026-06-26' }))).toBe('2026-06-26');
     });
 
-    it('date가 없으면 startDate를 사용한다', () => {
-      expect(getTaskDate(createTask({ date: null, startDate: '2026-06-26T09:00:00.000Z' }))).toBe(
-        '2026-06-26',
+    it('date가 없으면 startDate를 서비스 시간대 날짜로 변환한다', () => {
+      expect(getTaskDate(createTask({ date: null, startDate: '2026-06-24T15:00:00.000Z' }))).toBe(
+        '2026-06-25',
       );
     });
 
-    it('시간대가 포함된 ISO 문자열에서도 원본 날짜를 유지한다', () => {
-      expect(getTaskDate(createTask({ date: '2026-06-26T23:30:00.000-07:00' }))).toBe('2026-06-26');
+    it('시간대가 포함된 ISO 문자열을 서비스 시간대 기준으로 분류한다', () => {
+      expect(getTaskDate(createTask({ date: '2026-06-26T23:30:00.000-07:00' }))).toBe('2026-06-27');
     });
 
     it('유효한 날짜가 없으면 undefined를 반환한다', () => {

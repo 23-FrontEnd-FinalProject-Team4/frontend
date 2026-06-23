@@ -63,7 +63,13 @@ const TaskListMain = ({ taskListId, groupId, taskListName }: TaskListMainProps) 
 
   const handleAddModalOpen = () => {
     overlay.open(({ isOpen, close }) => (
-      <AddTaskModal isOpen={isOpen} onClose={close} groupId={groupId} taskListId={taskListId} />
+      <AddTaskModal
+        isOpen={isOpen}
+        onClose={close}
+        groupId={groupId}
+        taskListId={taskListId}
+        initialDate={selectedDate}
+      />
     ));
   };
 
