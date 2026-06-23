@@ -8,6 +8,7 @@ import { JoinTeamError } from '@/app/(protected)/(team)/jointeam/join-team.error
 import {
   createTeamTaskListAction,
   deleteTeamAction,
+  deleteTeamMemberAction,
   getTeamInvitationAction,
 } from '@/app/(protected)/[teamId]/_actions/team-page.action';
 
@@ -25,6 +26,11 @@ interface CreateTeamVariables {
 
 interface DeleteTeamVariables {
   groupId: number;
+}
+
+interface DeleteTeamMemberVariables {
+  groupId: number;
+  memberUserId: number;
 }
 
 interface GetTeamInvitationVariables {
@@ -131,6 +137,14 @@ const deleteTeam = async ({ groupId }: DeleteTeamVariables) => {
   return result.data;
 };
 
+const deleteTeamMember = async ({ groupId, memberUserId }: DeleteTeamMemberVariables) => {
+  const result = await deleteTeamMemberAction({ groupId, memberUserId });
+
+  if (!result.success) {
+    throw new Error(result.error);
+  }
+};
+
 const getTeamInvitation = async ({ groupId }: GetTeamInvitationVariables) => {
   const result = await getTeamInvitationAction({ groupId });
 
@@ -198,6 +212,20 @@ export const useDeleteTeamMutation = () => {
   return useMutation<void, Error, DeleteTeamVariables>({
     mutationFn: deleteTeam,
     retry: false,
+  });
+};
+
+export const useDeleteTeamMemberMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<void, Error, DeleteTeamMemberVariables>({
+    mutationFn: deleteTeamMember,
+    retry: false,
+    onSuccess: (_data, variables) => {
+      return queryClient.invalidateQueries({
+        queryKey: teamKeys.group({ groupId: variables.groupId }),
+      });
+    },
   });
 };
 

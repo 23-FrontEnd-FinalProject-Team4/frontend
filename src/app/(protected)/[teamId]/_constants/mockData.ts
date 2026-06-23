@@ -1,10 +1,10 @@
 import type { TaskListItem, TaskStatus, TaskStatusSection, TeamPageMember } from '../type';
 
 export const TEAM_PAGE_MEMBERS: TeamPageMember[] = [
-  { id: 1, name: '최일우', email: 'test@codeit.com' },
-  { id: 2, name: '이차현', email: 'test@codeit.com' },
-  { id: 3, name: '이수진', email: 'test@codeit.com' },
-  { id: 4, name: '정태양', email: 'test@codeit.com' },
+  { id: 1, name: '최일우', email: 'test@codeit.com', role: 'ADMIN' },
+  { id: 2, name: '이차현', email: 'test@codeit.com', role: 'MEMBER' },
+  { id: 3, name: '이수진', email: 'test@codeit.com', role: 'MEMBER' },
+  { id: 4, name: '정태양', email: 'test@codeit.com', role: 'MEMBER' },
 ];
 
 const TASK_TITLES = [
