@@ -33,16 +33,23 @@ const CalendarTime = ({ selectedTime, setSelectedTime }: CalendarTimeProps) => {
       </div>
 
       {/* Minute */}
-      <div className="flex flex-col justify-center gap-2">
+      <div className="flex flex-col gap-2">
         {minutes.map((minute) => {
+          const isSelected = selectedMinute === minute;
+
           return (
             <Button
               type="button"
               key={minute}
-              variant={selectedMinute === minute ? 'primary-filled' : 'primary-outline'}
+              variant="primary-outline"
+              className={cn(
+                'min-w-0 transition-colors',
+                isSelected &&
+                  'bg-brand-primary text-background-primary hover:bg-interaction-hover active:bg-interaction-pressed',
+              )}
               onClick={() => setSelectedTime({ ...selectedTime, minute })}
               aria-label={`${minute}분`}
-              className="min-w-0"
+              aria-pressed={isSelected}
             >
               {minute}분
             </Button>
