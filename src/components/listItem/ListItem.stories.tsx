@@ -69,7 +69,7 @@ export const DropdownTest: Story = {
   play: async ({ canvasElement, args }) => {
     // Arrange
     const canvas = within(canvasElement);
-    const kebabButton = canvas.getByRole('button', { name: '할 일 메뉴 열기' });
+    const kebabButton = canvas.getByRole('button', { name: `${args.task.name} 메뉴 열기` });
 
     // Assert 1: 열리기 전에는 dropdown button들이 없어야 함
     expect(canvas.queryByRole('menuitem', { name: '수정하기' })).not.toBeInTheDocument();
