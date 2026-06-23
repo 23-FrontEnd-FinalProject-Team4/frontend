@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import { DayPicker } from '@daypicker/react';
 import { ko } from '@daypicker/react/locale';
+import '@daypicker/react/style.css';
 
 import { CalendarDateProps } from './type';
 
