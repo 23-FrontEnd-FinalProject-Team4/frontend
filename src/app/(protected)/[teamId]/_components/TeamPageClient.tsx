@@ -23,6 +23,7 @@ import { TASK_LISTS, TASK_STATUS_SECTIONS, TEAM_PAGE_MEMBERS } from '../_constan
 import { createTaskItemsByStatus } from '../_utils/taskSections';
 import { isTaskDone } from '../_utils/taskStatus';
 import type { TeamPageMember, TeamPageRole } from '../type';
+import TeamPageSkeleton from './TeamPageSkeleton';
 import TeamPageHeader from './header/TeamPageHeader';
 import MemberSection from './member/MemberSection';
 import DeleteTeamModal from './modals/DeleteTeamModal';
@@ -267,28 +268,28 @@ const TeamPageClient = ({ teamId, initialDate }: TeamPageClientProps) => {
   return (
     <div className="bg-background-secondary relative min-h-full overflow-y-auto px-4 py-6 md:px-6 xl:px-16 xl:py-15.75">
       <div className="mx-auto flex w-full max-w-85.75 flex-col gap-8 md:max-w-155 xl:mx-0 xl:max-w-280">
-        <TeamPageHeader
-          name={group?.name ?? '경영관리팀'}
-          imageUrl={group?.image}
-          role={role}
-          size={teamCardSize}
-          members={members}
-          memberCount={members.length}
-          completedTaskCount={completedTaskCount}
-          totalTaskCount={totalTaskCount}
-          progressValue={progressValue}
-          isSettingsOpen={isTeamMenuOpen}
-          onSettingsClick={() => setIsTeamMenuOpen((prev) => !prev)}
-          onEditClick={handleEditTeam}
-          onDeleteClick={openDeleteTeamModal}
-        />
-
         {isPending ? (
-          <TeamPageStatus message="팀 페이지 정보를 불러오는 중입니다." />
+          <TeamPageSkeleton />
         ) : teamPageError ? (
           <TeamPageStatus message={teamPageError} />
         ) : (
           <>
+            <TeamPageHeader
+              name={group?.name ?? '경영관리팀'}
+              imageUrl={group?.image}
+              role={role}
+              size={teamCardSize}
+              members={members}
+              memberCount={members.length}
+              completedTaskCount={completedTaskCount}
+              totalTaskCount={totalTaskCount}
+              progressValue={progressValue}
+              isSettingsOpen={isTeamMenuOpen}
+              onSettingsClick={() => setIsTeamMenuOpen((prev) => !prev)}
+              onEditClick={handleEditTeam}
+              onDeleteClick={openDeleteTeamModal}
+            />
+
             <TaskListSection
               teamId={String(selectedGroupId ?? teamId)}
               taskListsCount={group?.taskLists.length ?? TASK_LISTS.length}
