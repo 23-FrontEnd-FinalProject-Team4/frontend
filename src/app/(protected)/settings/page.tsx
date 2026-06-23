@@ -1,5 +1,5 @@
 import type { Profile } from '@/apis/user/type';
-import { getMyProfileAction } from '@/app/settings/_actions/settings.action';
+import { getMyProfileAction } from '@/app/(protected)/settings/_actions/settings.action';
 
 import AccountSettingForm from './_components/AccountSettingForm';
 

@@ -6,7 +6,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useWatch } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 
-import { ArticleFormData, articleSchema } from '@/app/articles/write/_components/schema';
+import {
+  ArticleFormData,
+  articleSchema,
+} from '@/app/(protected)/articles/write/_components/schema';
 import {
   ARTICLE_EDITOR_MODE,
   UseArticleEditorProps,

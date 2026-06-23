@@ -7,8 +7,8 @@ import {
   createArticleAction,
   updateArticleAction,
   uploadArticleImageAction,
-} from '@/app/articles/_actions/article.action';
-import { ArticleFormData } from '@/app/articles/write/_components/schema';
+} from '@/app/(protected)/articles/_actions/article.action';
+import { ArticleFormData } from '@/app/(protected)/articles/write/_components/schema';
 
 export const ARTICLE_EDITOR_MODE = {
   WRITE: 'write',

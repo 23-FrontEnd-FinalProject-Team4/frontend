@@ -1,7 +1,7 @@
 'use client';
 
-import ArticleCard from '@/app/articles/_components/Card';
-import type { ArticleWithLike } from '@/app/articles/_components/Card.type';
+import ArticleCard from '@/app/(protected)/articles/_components/Card';
+import type { ArticleWithLike } from '@/app/(protected)/articles/_components/Card.type';
 import DropdownMd from '@/components/dropdown/DropdownMd';
 
 const SORT_OPTIONS = ['최신순', '좋아요 많은순'];
