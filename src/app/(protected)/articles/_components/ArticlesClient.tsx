@@ -18,6 +18,8 @@ import Button from '@/components/button/Button';
 import { useDebounce } from '@/hooks/useDebounce';
 import { cn } from '@/utils/cn';
 
+import { ArticleListSkeleton, BestArticlesSkeleton } from './ArticlesSkeleton';
+
 const ArticlesClient = () => {
   const [bestPage, setBestPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(3);
@@ -74,7 +76,7 @@ const ArticlesClient = () => {
     placeholderData: keepPreviousData,
   });
 
-  const { data: bestData } = useQuery({
+  const { data: bestData, isPending: isBestPending } = useQuery({
     queryKey: ['best-articles'],
     queryFn: () =>
       getArticles({
@@ -133,16 +135,18 @@ const ArticlesClient = () => {
             aria-label="검색"
           />
         </div>
-        <BestSection
-          articles={bestArticles}
-          currentPage={bestPage}
-          totalPages={bestTotalPages}
-          onPageChange={(nextPage) => setBestPage(nextPage)}
-        />
+        {isBestPending ? (
+          <BestArticlesSkeleton />
+        ) : (
+          <BestSection
+            articles={bestArticles}
+            currentPage={bestPage}
+            totalPages={bestTotalPages}
+            onPageChange={(nextPage) => setBestPage(nextPage)}
+          />
+        )}
         {isPending ? (
-          <div className="text-text-default flex min-h-40 items-center justify-center text-center">
-            게시글을 불러오는 중입니다.
-          </div>
+          <ArticleListSkeleton />
         ) : articleCards.length === 0 && searchValue ? (
           <div className="text-text-default flex min-h-40 items-center justify-center text-center">
             '{searchValue}'에 해당하는 결과가 없습니다.

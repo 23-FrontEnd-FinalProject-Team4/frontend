@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1
+
 # 1. Base image
 FROM node:24-alpine AS base
 
@@ -6,14 +8,20 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package.json package-lock.json* ./
-RUN npm ci
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci
 
 # 3. Builder
 FROM base AS builder
 WORKDIR /app
+
+ARG NEXT_PUBLIC_API_BASE_URL
+ENV NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npm run build
+RUN --mount=type=cache,target=/app/.next/cache \
+    npm run build
 
 # 4. Runner
 FROM base AS runner

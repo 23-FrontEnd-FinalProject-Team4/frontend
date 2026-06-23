@@ -34,6 +34,14 @@ describe('getTeamPageDataAction', () => {
       doneAt: null,
       doneBy: null,
     } as Task;
+    const overdueTask = {
+      id: 9,
+      name: 'Overdue task',
+      date: '2026-06-21',
+      startDate: '2026-06-21T00:00:00.000Z',
+      doneAt: null,
+      doneBy: null,
+    } as Task;
     const groupSummary = {
       id: 1,
       name: 'Test team',
@@ -44,8 +52,15 @@ describe('getTeamPageDataAction', () => {
       if (path === '/user/groups') return [] as never;
       if (path === '/user') return {} as never;
       if (path === '/groups/1') return groupSummary as never;
+      if (path === '/groups/1/tasks?date=2026-06-21') return [overdueTask] as never;
       if (path === '/groups/1/tasks?date=2026-06-26') return [futureTask] as never;
       if (path.startsWith('/groups/1/tasks?date=')) return [] as never;
+      if (path === '/groups/1/task-lists/11?date=2026-06-21') {
+        return createTaskList(11, [overdueTask]) as never;
+      }
+      if (path === '/groups/1/task-lists/12?date=2026-06-21') {
+        return createTaskList(12) as never;
+      }
       if (path === '/groups/1/task-lists/11?date=2026-06-26') {
         return createTaskList(11, [futureTask]) as never;
       }
@@ -61,7 +76,10 @@ describe('getTeamPageDataAction', () => {
     expect(result.success).toBe(true);
     if (!result.success) return;
 
-    expect(result.data.group?.taskLists[0]?.tasks).toEqual([futureTask]);
+    expect(result.data.group?.taskLists[0]?.tasks).toEqual([overdueTask, futureTask]);
+    expect(serverFetcher).toHaveBeenCalledWith('/groups/1/tasks?date=2026-06-21');
+    expect(serverFetcher).toHaveBeenCalledWith('/groups/1/task-lists/11?date=2026-06-21');
+    expect(serverFetcher).toHaveBeenCalledWith('/groups/1/task-lists/12?date=2026-06-21');
     expect(serverFetcher).toHaveBeenCalledWith('/groups/1/tasks?date=2026-06-26');
     expect(serverFetcher).toHaveBeenCalledWith('/groups/1/task-lists/11?date=2026-06-26');
     expect(serverFetcher).toHaveBeenCalledWith('/groups/1/task-lists/12?date=2026-06-26');
