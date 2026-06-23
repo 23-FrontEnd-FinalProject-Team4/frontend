@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { cn } from '@/utils/cn';
 
 import type { DropdownProps } from './type';
@@ -8,6 +9,17 @@ const DROPDOWN_SIZE_STYLES = {
 };
 
 const Dropdown = ({ options, size = 'md', className, onSelect, onClose }: DropdownProps) => {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose?.();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   return (
     <div
       role="menu"
