@@ -3,12 +3,3 @@ node_modules
 out
 build
 .git
-.github
-.gemini
-docs
-coverage
-playwright-report
-test-results
-*.md
-.env*
-!.env.example
