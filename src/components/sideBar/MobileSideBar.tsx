@@ -1,10 +1,9 @@
 import CloseIcon from '@/assets/icons/x.svg?react';
-import { cn } from '@/utils/cn';
-
 import AddGroupButton from '@/components/sideBar/AddGroupButton';
 import ArticleMenu from '@/components/sideBar/ArticleMenu';
 import GroupSection from '@/components/sideBar/GroupSection';
 import type { MobileSidebarProps } from '@/components/sideBar/type';
+import { cn } from '@/utils/cn';
 
 export default function MobileSidebar({
   mobileOpen,
@@ -30,8 +29,13 @@ export default function MobileSidebar({
           mobileOpen ? 'translate-x-0' : '-translate-x-full',
         )}
       >
-        <button type="button" onClick={onCloseMobileMenu} className="mb-4 ml-auto">
-          <CloseIcon className="h-6 w-6" />
+        <button
+          type="button"
+          aria-label="사이드바 닫기"
+          onClick={onCloseMobileMenu}
+          className="mb-4 ml-auto"
+        >
+          <CloseIcon className="h-6 w-6" aria-hidden="true" />
         </button>
 
         <div className="border-border-primary border-b pb-2">

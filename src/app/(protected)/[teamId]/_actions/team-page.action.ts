@@ -55,7 +55,7 @@ const mergeTasksById = (...taskGroups: Task[][]) => {
 
 // API가 날짜별 조회만 지원하고 그룹 할 일에는 목록 ID가 없으므로,
 // 할 일이 있는 날짜를 먼저 좁힌 뒤 목록 상세를 조회한다.
-const UPCOMING_TASK_LOOKAHEAD_DAYS = 7;
+const TASK_LOOKAROUND_DAYS = 7;
 
 const addDaysToISODate = (date: string, days: number) => {
   const nextDate = new Date(`${date}T00:00:00.000Z`);
@@ -63,12 +63,14 @@ const addDaysToISODate = (date: string, days: number) => {
   return nextDate.toISOString().slice(0, 10);
 };
 
-const getScheduledTaskDates = async (groupId: number, today?: string) => {
+const getRelatedTaskDates = async (groupId: number, today?: string) => {
   if (!today) return [];
 
-  const dates = Array.from({ length: UPCOMING_TASK_LOOKAHEAD_DAYS }, (_, index) =>
-    addDaysToISODate(today, index + 1),
-  );
+  const dateOffsets = Array.from(
+    { length: TASK_LOOKAROUND_DAYS * 2 + 1 },
+    (_, index) => index - TASK_LOOKAROUND_DAYS,
+  ).filter((offset) => offset !== 0);
+  const dates = dateOffsets.map((offset) => addDaysToISODate(today, offset));
   const tasksByDate = await Promise.all(
     dates.map(async (date) => ({
       date,
@@ -79,17 +81,17 @@ const getScheduledTaskDates = async (groupId: number, today?: string) => {
   return tasksByDate.filter(({ tasks }) => tasks.length > 0).map(({ date }) => date);
 };
 
-const addScheduledTasksToTaskLists = async (
+const addRelatedTasksToTaskLists = async (
   groupId: number,
   taskLists: TaskList[],
   today?: string,
 ) => {
-  const scheduledDates = await getScheduledTaskDates(groupId, today);
+  const relatedDates = await getRelatedTaskDates(groupId, today);
 
-  if (scheduledDates.length === 0) return taskLists;
+  if (relatedDates.length === 0) return taskLists;
 
-  const scheduledTaskLists = await Promise.all(
-    scheduledDates.flatMap((date) =>
+  const relatedTaskLists = await Promise.all(
+    relatedDates.flatMap((date) =>
       taskLists.map((taskList) =>
         serverFetcher<TaskList>(createTaskListPath(groupId, taskList.id, date)),
       ),
@@ -99,9 +101,9 @@ const addScheduledTasksToTaskLists = async (
     ...taskList,
     tasks: mergeTasksById(
       taskList.tasks ?? [],
-      scheduledTaskLists
-        .filter((scheduledTaskList) => scheduledTaskList.id === taskList.id)
-        .flatMap((scheduledTaskList) => scheduledTaskList.tasks ?? []),
+      relatedTaskLists
+        .filter((relatedTaskList) => relatedTaskList.id === taskList.id)
+        .flatMap((relatedTaskList) => relatedTaskList.tasks ?? []),
     ),
   }));
 };
@@ -111,7 +113,7 @@ const getGroupPageData = async (groupId: number, date?: string) => {
     serverFetcher<GroupDetail>(`/groups/${groupId}`),
     serverFetcher<Task[]>(createGroupTasksPath(groupId, date)),
   ]);
-  const taskLists = await addScheduledTasksToTaskLists(groupId, groupSummary.taskLists, date);
+  const taskLists = await addRelatedTasksToTaskLists(groupId, groupSummary.taskLists, date);
 
   return {
     group: { ...groupSummary, taskLists },

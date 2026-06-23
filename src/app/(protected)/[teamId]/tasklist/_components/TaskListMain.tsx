@@ -13,6 +13,7 @@ import { useGetTasks, useToggleTask } from '@/queries/task/queries';
 import { addDays, formatISODate } from '@/utils/date';
 
 import InfoOverlay from './InfoOverlay';
+import { TaskItemsSkeleton } from './TaskListPageSkeleton';
 import TaskListTitle from './TaskListTitle';
 import AddTaskModal from './modals/AddTaskModal';
 import DeleteTaskModal from './modals/DeleteTaskModal';
@@ -26,7 +27,11 @@ interface TaskListMainProps {
 
 const TaskListMain = ({ taskListId, groupId, taskListName }: TaskListMainProps) => {
   const { selectedDate, setDate } = useTaskDate();
-  const { data: tasks } = useGetTasks({ groupId, taskListId, date: formatISODate(selectedDate) });
+  const { data: tasks, isPending } = useGetTasks({
+    groupId,
+    taskListId,
+    date: formatISODate(selectedDate),
+  });
   const { mutate: toggleTask } = useToggleTask({
     onError: (error) => {
       toast.error(getErrorMessage(error, '할 일 상태를 변경하지 못했습니다.'));
@@ -105,18 +110,22 @@ const TaskListMain = ({ taskListId, groupId, taskListName }: TaskListMainProps) 
         onToday={handleToday}
         taskName={taskListName}
       />
-      <div className="flex flex-col gap-3">
-        {tasks?.map((task) => (
-          <ListItem
-            task={task}
-            key={task.id}
-            onClick={() => handleOpenOverlay(task)}
-            onToggle={() => handleToggle(task)}
-            onDelete={() => handleDeleteModalOpen(task)}
-            onEdit={() => handleEditModalOpen(task)}
-          />
-        ))}
-      </div>
+      {isPending ? (
+        <TaskItemsSkeleton />
+      ) : (
+        <div className="flex flex-col gap-3">
+          {tasks?.map((task) => (
+            <ListItem
+              task={task}
+              key={task.id}
+              onClick={() => handleOpenOverlay(task)}
+              onToggle={() => handleToggle(task)}
+              onDelete={() => handleDeleteModalOpen(task)}
+              onEdit={() => handleEditModalOpen(task)}
+            />
+          ))}
+        </div>
+      )}
       <div className="fixed right-5 bottom-5 xl:right-20 xl:bottom-20">
         <Button
           variant="icon-circle"

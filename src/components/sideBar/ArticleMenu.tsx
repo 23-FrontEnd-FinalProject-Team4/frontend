@@ -8,6 +8,7 @@ export default function ArticleMenu({ collapsed }: { collapsed: boolean }) {
   return (
     <Link
       href="/articles"
+      aria-label="자유게시판"
       className={`mt-2 flex items-center gap-2 rounded-xl ${collapsed ? 'h-10 w-10 justify-center' : 'h-14 w-full gap-2 px-4'} ${
         pathname.startsWith('/articles')
           ? 'text-brand-primary bg-blue-50'

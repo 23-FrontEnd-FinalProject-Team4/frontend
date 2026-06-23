@@ -16,6 +16,7 @@ const GroupItems = ({ id, name, route, image, collapsed, selected }: GroupItemPr
   return (
     <Link
       href={href}
+      aria-label={`${name} 팀으로 이동`}
       className={`focus-visible:ring-brand-primary flex items-center overflow-hidden rounded-xl transition-all duration-200 focus-visible:ring-2 focus-visible:outline-none active:scale-[0.98] ${
         collapsed ? 'h-10 w-10' : 'h-14 w-full gap-2 px-4'
       } ${
