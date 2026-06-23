@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 
@@ -14,8 +15,13 @@ import { type LoginFormValues, loginSchema } from '@/schemas/auth.schema';
 
 import ResetPasswordEmailSection from './ResetPasswordEmailSection';
 
-const LoginFormSection = () => {
+interface LoginFormSectionProps {
+  postLoginRedirectPath?: string;
+}
+
+const LoginFormSection = ({ postLoginRedirectPath }: LoginFormSectionProps) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { mutateAsync, isPending } = useLoginMutation();
 
@@ -31,9 +37,10 @@ const LoginFormSection = () => {
     if (isPending) return;
 
     try {
-      await mutateAsync(data);
+      const result = await mutateAsync({ ...data, redirectPath: postLoginRedirectPath });
+      queryClient.clear();
       toast.success('로그인에 성공했어요.');
-      router.push('/');
+      router.push(result.redirectPath);
     } catch (error) {
       toast.error(getErrorMessage(error, '로그인 중 오류가 발생했어요.'));
     }

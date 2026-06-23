@@ -9,7 +9,7 @@ function CoworkersLogo() {
       aria-label="Coworkers 홈"
       className="hover:text-interaction-hover flex items-center transition-colors"
     >
-      <LogoLargeIcon className="h-4.5 w-auto shrink-0" aria-hidden="true" />
+      <LogoLargeIcon className="h-7 w-auto shrink-0" aria-hidden="true" />
     </Link>
   );
 }

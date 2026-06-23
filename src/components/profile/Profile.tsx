@@ -4,6 +4,7 @@ import Image from 'next/image';
 
 import ProfileDefaultIcon from '@/assets/icons/profile.svg?react';
 import { cn } from '@/utils/cn';
+import { isAllowedImageUrl } from '@/utils/isAllowedImageUrl';
 
 import { ProfileElement, ProfileProps, ProfileSize } from './type';
 
@@ -13,9 +14,9 @@ const Profile = React.forwardRef<ProfileElement, ProfileProps>(
       'inline-flex items-center justify-center overflow-hidden object-cover select-none shrink-0';
 
     const sizeStyles: Record<ProfileSize, string> = {
-      lg: 'w-10 h-10 rounded-3',
-      md: 'w-8 h-8 rounded-2',
-      sm: 'w-6 h-6 rounded-1.5',
+      lg: 'w-10 h-10 rounded-xl',
+      md: 'w-8 h-8 rounded-lg',
+      sm: 'w-6 h-6 rounded-md',
     };
 
     const pixelSizes: Record<ProfileSize, number> = {
@@ -24,7 +25,7 @@ const Profile = React.forwardRef<ProfileElement, ProfileProps>(
       sm: 24,
     };
 
-    if (!src) {
+    if (!isAllowedImageUrl(src)) {
       return (
         <span
           ref={ref as React.Ref<HTMLSpanElement>}

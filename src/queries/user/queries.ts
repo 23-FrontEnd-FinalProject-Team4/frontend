@@ -8,8 +8,9 @@ import type {
 } from '@/apis/user/type';
 import {
   changePasswordAction,
+  deleteMyAccountAction,
   updateMyProfileAction,
-} from '@/app/settings/_actions/settings.action';
+} from '@/app/(protected)/settings/_actions/settings.action';
 
 import { USER_QUERY_KEY } from './queryKey';
 
@@ -55,6 +56,25 @@ export const useChangePasswordMutation = () => {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: USER_QUERY_KEY.me });
+    },
+  });
+};
+
+export const useDeleteMyAccountMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<MessageResponse, Error>({
+    mutationFn: async () => {
+      const result = await deleteMyAccountAction();
+
+      if (!result.success) {
+        throw new Error(result.error);
+      }
+
+      return result.data;
+    },
+    onSuccess: async () => {
+      await queryClient.removeQueries({ queryKey: USER_QUERY_KEY.me });
     },
   });
 };

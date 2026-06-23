@@ -2,6 +2,7 @@ import type {
   ChangePasswordRequest,
   MessageResponse,
   Profile,
+  TaskHistory,
   UpdateProfileRequest,
 } from '@/apis/user/type';
 import { serverFetcher } from '@/lib/serverFetcher';
@@ -22,4 +23,14 @@ export const changePasswordServer = async (body: ChangePasswordRequest) => {
     method: 'PATCH',
     body: JSON.stringify(body),
   });
+};
+
+export const deleteMyAccountServer = async () => {
+  return serverFetcher<MessageResponse>('/user', {
+    method: 'DELETE',
+  });
+};
+
+export const getMyTaskHistoryServer = async () => {
+  return await serverFetcher<{ tasksDone: TaskHistory[] }>('/user/history');
 };

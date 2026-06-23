@@ -2,21 +2,16 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import GroupIcon from '@/assets/icons/profile.svg?react';
 import type { GroupItemProps } from '@/components/sideBar/type';
 import { cn } from '@/utils/cn';
+import { normalizeImageUrl } from '@/utils/image';
+import { isAllowedImageUrl } from '@/utils/isAllowedImageUrl';
 
-export default function GroupItems({
-  id,
-  name,
-  route,
-  image,
-  collapsed,
-  selected,
-}: GroupItemProps) {
+const GroupItems = ({ id, name, route, image, collapsed, selected }: GroupItemProps) => {
   const pathname = usePathname() ?? '';
   const href = route ?? `/groups/${id}`;
   const isSelected = selected ?? pathname.startsWith(href);
+  const imageSrc = normalizeImageUrl(image);
 
   return (
     <Link
@@ -37,19 +32,24 @@ export default function GroupItems({
           collapsed ? 'h-10 w-10' : 'h-7 w-7',
         )}
       >
-        {image ? (
+        {isAllowedImageUrl(imageSrc) ? (
           <Image
-            src={image}
+            src={imageSrc}
             alt={`${name} 팀 이미지`}
             fill
             className="object-cover"
-            sizes={collapsed ? '40px' : '28px'}
+            sizes={collapsed ? '80px' : '56px'}
           />
         ) : (
-          <GroupIcon className="text-icon-primary h-full w-full" />
+          <div className="bg-brand-primary text-text-inverse flex h-full w-full items-center justify-center text-[12px] font-semibold">
+            <span aria-hidden="true">{name?.trim()?.charAt(0).toUpperCase()}</span>
+            {collapsed && name && <span className="sr-only">{name}</span>}{' '}
+          </div>
         )}
       </div>
       {!collapsed && <span>{name}</span>}
     </Link>
   );
-}
+};
+
+export default GroupItems;

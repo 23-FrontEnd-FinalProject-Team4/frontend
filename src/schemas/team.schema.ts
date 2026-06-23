@@ -30,6 +30,13 @@ export const teamDeleteSchema = z.object({
 
 export type TeamDeleteValues = z.infer<typeof teamDeleteSchema>;
 
+export const teamMemberDeleteSchema = z.object({
+  groupId: groupIdSchema,
+  memberUserId: z.coerce.number().int().positive(),
+});
+
+export type TeamMemberDeleteValues = z.infer<typeof teamMemberDeleteSchema>;
+
 export const teamInvitationSchema = z.object({
   groupId: groupIdSchema,
 });

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { usePathname } from 'next/navigation';
 
@@ -8,58 +8,89 @@ import MobileHeader from '@/components/sideBar/MobileHeader';
 import MobileSideBar from '@/components/sideBar/MobileSideBar';
 import SideBarView from '@/components/sideBar/SideBarView';
 import type { SideBarProps } from '@/components/sideBar/type';
-
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { MEDIA_QUERY } from '@/hooks/useMediaQuery';
 
-export default function Sidebar({ isLoggedIn, groups }: SideBarProps) {
-  const isDesktop = useMediaQuery(MEDIA_QUERY.desktop);
-  const [userCollapsed, setUserCollapsed] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+export default function Sidebar({ isLoggedIn, isAuthLoading, groups, user }: SideBarProps) {
   const pathname = usePathname();
+  const isTablet = useMediaQuery(MEDIA_QUERY.tablet);
+  const isDesktop = useMediaQuery(MEDIA_QUERY.desktop);
+  const [desktopCollapsed, setDesktopCollapsed] = useState(false);
 
-  // Mobile/Tablet 에서는 항상 접힌 상태를 사용하고,
-  // Desktop 에서는 사용자가 선택한 상태를 유지
-  const collapsed = isDesktop ? userCollapsed : true;
-
-  useEffect(() => {
-    // 페이지 이동 시 모바일 사이드바를 닫음
-    // ESlint 예외처리
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMobileOpen(false);
-  }, [pathname]);
-
-  const handleToggleCollapse = () => {
-    setUserCollapsed((prev) => !prev);
-  };
-
-  const handleOpenMobileMenu = () => {
-    setMobileOpen(true);
-  };
-
-  const handleCloseMobileMenu = () => {
-    setMobileOpen(false);
-  };
-
-  return (
-    <>
-      <div className="md:hidden">
-        <MobileHeader isLoggedIn={isLoggedIn} onOpenSideBar={handleOpenMobileMenu} />
-        <MobileSideBar
-          mobileOpen={mobileOpen}
-          groups={groups}
-          onCloseMobileMenu={handleCloseMobileMenu}
-        />
-      </div>
-
+  if (isDesktop) {
+    return (
       <div className="hidden md:block">
         <SideBarView
           isLoggedIn={isLoggedIn}
-          collapsed={collapsed}
-          onToggleCollapse={handleToggleCollapse}
+          isAuthLoading={isAuthLoading}
+          collapsed={desktopCollapsed}
           groups={groups}
+          user={user}
+          onToggleCollapse={() => setDesktopCollapsed((prev) => !prev)}
         />
       </div>
+    );
+  }
+
+  if (isTablet) {
+    return (
+      <div className="hidden md:block">
+        <TabletSidebar
+          key={pathname}
+          isLoggedIn={isLoggedIn}
+          isAuthLoading={isAuthLoading}
+          groups={groups}
+          user={user}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="md:hidden">
+      <MobileSidebar
+        key={pathname}
+        isLoggedIn={isLoggedIn}
+        isAuthLoading={isAuthLoading}
+        groups={groups}
+        user={user}
+      />
+    </div>
+  );
+}
+
+function TabletSidebar({ isLoggedIn, isAuthLoading, groups, user }: SideBarProps) {
+  const [collapsed, setCollapsed] = useState(true);
+
+  return (
+    <SideBarView
+      isLoggedIn={isLoggedIn}
+      isAuthLoading={isAuthLoading}
+      collapsed={collapsed}
+      groups={groups}
+      user={user}
+      onToggleCollapse={() => setCollapsed((prev) => !prev)}
+    />
+  );
+}
+
+function MobileSidebar({ isLoggedIn, isAuthLoading, groups, user }: SideBarProps) {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  return (
+    <>
+      <MobileHeader
+        isLoggedIn={isLoggedIn}
+        isAuthLoading={isAuthLoading}
+        user={user}
+        onOpenSideBar={() => setMobileOpen(true)}
+        groups={groups}
+      />
+      <MobileSideBar
+        mobileOpen={mobileOpen}
+        groups={groups}
+        onCloseMobileMenu={() => setMobileOpen(false)}
+      />
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { signUp } from '@/apis/auth';
 import type { AuthResponse, SignInRequest, SignUpRequest } from '@/apis/auth/type';
@@ -8,19 +8,45 @@ import type {
   ResetPasswordRequest,
   SendPasswordResetEmailRequest,
 } from '@/apis/user/type';
+import { type LogoutActionResult, logoutAction } from '@/app/(auth)/_actions/logout.action';
 import { type LoginActionResult, loginAction } from '@/app/(auth)/login/_actions/login.action';
 import { BusinessError } from '@/lib/error';
+import { USER_QUERY_KEY } from '@/queries/user/queryKey';
+
+type LoginSuccessResult = Extract<LoginActionResult, { success: true }>;
+
+type LoginMutationVariables = SignInRequest & { redirectPath?: string };
 
 export const useLoginMutation = () => {
-  return useMutation<LoginActionResult, Error, SignInRequest>({
-    mutationFn: async (data) => {
-      const result = await loginAction(data);
+  return useMutation<LoginSuccessResult, Error, LoginMutationVariables>({
+    mutationFn: async ({ redirectPath, ...data }) => {
+      const result = await loginAction(data, redirectPath);
 
       if (!result.success) {
         throw new BusinessError(result.error);
       }
 
       return result;
+    },
+    retry: false,
+  });
+};
+
+export const useLogoutMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<LogoutActionResult, Error>({
+    mutationFn: async () => {
+      const result = await logoutAction();
+
+      if (!result.success) {
+        throw new BusinessError(result.error);
+      }
+
+      return result;
+    },
+    onSuccess: async () => {
+      await queryClient.removeQueries({ queryKey: USER_QUERY_KEY.me });
     },
     retry: false,
   });

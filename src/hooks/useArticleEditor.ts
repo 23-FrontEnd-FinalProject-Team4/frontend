@@ -1,11 +1,14 @@
 'use client';
 
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { createArticle, updateArticle } from '@/apis/article';
 import { CreateArticleRequest, UpdateArticleRequest } from '@/apis/article/type';
-import { uploadImage } from '@/apis/image';
-import { ArticleFormData } from '@/app/articles/write/_components/schema';
+import {
+  createArticleAction,
+  updateArticleAction,
+  uploadArticleImageAction,
+} from '@/app/(protected)/articles/_actions/article.action';
+import { ArticleFormData } from '@/app/(protected)/articles/write/_components/schema';
 
 export const ARTICLE_EDITOR_MODE = {
   WRITE: 'write',
@@ -17,21 +20,35 @@ export type UseArticleEditorProps = {
   defaultValues: ArticleFormData;
 };
 export const useArticleEditor = ({ mode, defaultValues }: UseArticleEditorProps) => {
+  const queryClient = useQueryClient();
+
   const uploadImageMutation = useMutation({
     mutationFn: async (file: File) => {
       const formData = new FormData();
       formData.append('image', file);
-      return uploadImage(formData);
+      return uploadArticleImageAction(formData);
     },
   });
 
   const createArticleMutation = useMutation({
-    mutationFn: createArticle,
+    mutationFn: createArticleAction,
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['articles'] }),
+        queryClient.invalidateQueries({ queryKey: ['best-articles'] }),
+      ]);
+    },
   });
 
   const updateArticleMutation = useMutation({
     mutationFn: ({ id, payload }: { id: string; payload: UpdateArticleRequest }) =>
-      updateArticle(id, payload),
+      updateArticleAction(id, payload),
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['articles'] }),
+        queryClient.invalidateQueries({ queryKey: ['best-articles'] }),
+      ]);
+    },
   });
 
   const handleFormSubmit = async (values: ArticleFormData) => {

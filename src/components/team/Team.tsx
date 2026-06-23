@@ -3,6 +3,8 @@ import Image from 'next/image';
 import SettingIcon from '@/assets/icons/setting.svg?react';
 import Profile from '@/components/profile/Profile';
 import { cn } from '@/utils/cn';
+import { normalizeImageUrl } from '@/utils/image';
+import { isAllowedImageUrl } from '@/utils/isAllowedImageUrl';
 
 import ProgressBar from '../progressBar/ProgressBar';
 import type { TeamCardSize, TeamMember, TeamProps } from './type';
@@ -77,7 +79,7 @@ const TEAM_FALLBACK_IMAGE_CLASS =
   'bg-brand-primary text-background-inverse shadow-sm shadow-brand-primary/30';
 
 const getProfileSrc = (imageUrl: TeamMember['imageUrl']) =>
-  typeof imageUrl === 'string' ? imageUrl : (imageUrl?.src ?? null);
+  typeof imageUrl === 'string' ? (normalizeImageUrl(imageUrl) ?? null) : (imageUrl?.src ?? null);
 
 const getProgressValue = ({
   completedTaskCount,
@@ -101,23 +103,28 @@ const TeamImage = ({
   imageUrl,
   name,
   size,
-}: Pick<TeamProps, 'imageUrl' | 'name'> & { size: TeamCardSize }) => (
-  <div
-    className={cn(
-      !imageUrl && TEAM_FALLBACK_IMAGE_CLASS,
-      'ring-background-primary/70 relative shrink-0 overflow-hidden rounded-md ring-1',
-      TEAM_IMAGE_SIZE_CLASS[size],
-    )}
-  >
-    {imageUrl ? (
-      <Image src={imageUrl} alt="" fill className="object-cover" sizes="36px" aria-hidden />
-    ) : (
-      <span className="flex h-full items-center justify-center text-xs font-semibold">
-        {name.slice(0, 1)}
-      </span>
-    )}
-  </div>
-);
+}: Pick<TeamProps, 'imageUrl' | 'name'> & { size: TeamCardSize }) => {
+  const imageSrc = typeof imageUrl === 'string' ? normalizeImageUrl(imageUrl) : imageUrl;
+  const showImage = imageSrc && (typeof imageSrc !== 'string' || isAllowedImageUrl(imageSrc));
+
+  return (
+    <div
+      className={cn(
+        !showImage && TEAM_FALLBACK_IMAGE_CLASS,
+        'ring-background-primary/70 relative shrink-0 overflow-hidden rounded-md ring-1',
+        TEAM_IMAGE_SIZE_CLASS[size],
+      )}
+    >
+      {showImage ? (
+        <Image src={imageSrc} alt="" fill className="object-cover" sizes="72px" aria-hidden />
+      ) : (
+        <span className="flex h-full items-center justify-center text-xs font-semibold">
+          {name.slice(0, 1)}
+        </span>
+      )}
+    </div>
+  );
+};
 
 const MemberAvatar = ({ member }: { member: TeamMember }) => (
   <Profile

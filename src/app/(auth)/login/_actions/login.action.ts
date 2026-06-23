@@ -2,12 +2,18 @@
 
 import { signIn } from '@/apis/auth';
 import type { SignInRequest } from '@/apis/auth/type';
+import { getPostLoginRedirectPath } from '@/lib/auth/postLoginRedirect';
 import { getErrorMessage } from '@/lib/error';
 import { setAuthTokens } from '@/utils/auth/token';
 
-export type LoginActionResult = { success: true } | { success: false; error: string };
+export type LoginActionResult =
+  | { success: true; redirectPath: string }
+  | { success: false; error: string };
 
-export const loginAction = async (payload: SignInRequest): Promise<LoginActionResult> => {
+export const loginAction = async (
+  payload: SignInRequest,
+  redirectPath?: string,
+): Promise<LoginActionResult> => {
   try {
     const { accessToken, refreshToken } = await signIn(payload);
 
@@ -16,7 +22,9 @@ export const loginAction = async (payload: SignInRequest): Promise<LoginActionRe
       refreshToken,
     });
 
-    return { success: true };
+    const resolvedRedirectPath = await getPostLoginRedirectPath({ redirectPath });
+
+    return { success: true, redirectPath: resolvedRedirectPath };
   } catch (error) {
     return {
       success: false,
