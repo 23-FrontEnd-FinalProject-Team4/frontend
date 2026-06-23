@@ -38,6 +38,7 @@ export default function SideBarView({
       <div className="flex h-full flex-col">
         <Link
           href={logoHref}
+          aria-label="Coworkers 홈으로 이동"
           className={cn(
             'flex h-8 w-full items-center',
             collapsed ? 'justify-center' : 'justify-start',
@@ -62,9 +63,14 @@ export default function SideBarView({
               ? 'border-brand-secondary bg-background-inverse -right-4 h-8 w-8 rounded-full border pl-1'
               : 'right-4 h-6 w-6',
           )}
+          aria-label={collapsed ? '사이드바 열기' : '사이드바 닫기'}
           onClick={onToggleCollapse}
         >
-          {collapsed ? <FoldRightIcon className="h-6 w-6" /> : <FoldLeftIcon className="h-6 w-6" />}
+          {collapsed ? (
+            <FoldRightIcon className="h-6 w-6" aria-hidden="true" />
+          ) : (
+            <FoldLeftIcon className="h-6 w-6" aria-hidden="true" />
+          )}
         </button>
 
         <nav className={cn('flex w-full flex-1 flex-col gap-2 pt-6')}>
