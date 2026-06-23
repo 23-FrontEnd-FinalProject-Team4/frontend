@@ -1,12 +1,7 @@
+import { loadEnvConfig } from '@next/env';
 import { defineConfig, devices } from '@playwright/test';
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+loadEnvConfig(process.cwd());
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -33,7 +28,11 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: './playwright/.auth/user.json',
+      },
+      dependencies: ['setup'],
     },
 
     // {
@@ -65,6 +64,10 @@ export default defineConfig({
     //   name: 'Google Chrome',
     //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     // },
+    {
+      name: 'setup',
+      testMatch: '/auth/auth.setup.ts',
+    },
   ],
 
   /* Run your local dev server before starting the tests */
