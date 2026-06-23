@@ -9,11 +9,13 @@ import {
   type TaskListCreateValues,
   type TeamDeleteValues,
   type TeamInvitationValues,
+  type TeamMemberDeleteValues,
   type TeamPageQueryValues,
   type TeamUpdateValues,
   taskListCreateSchema,
   teamDeleteSchema,
   teamInvitationSchema,
+  teamMemberDeleteSchema,
   teamPageQuerySchema,
   teamUpdateSchema,
 } from '@/schemas/team.schema';
@@ -277,6 +279,31 @@ export const deleteTeamAction = async (
     return {
       success: false,
       error: getErrorMessage(error, '팀을 삭제하지 못했습니다.'),
+    };
+  }
+};
+
+export const deleteTeamMemberAction = async (
+  payload: TeamMemberDeleteValues,
+): Promise<TeamPageActionResult<void>> => {
+  const parsedPayload = teamMemberDeleteSchema.safeParse(payload);
+
+  if (!parsedPayload.success) {
+    return toValidationError(parsedPayload.error.issues[0]?.message);
+  }
+
+  try {
+    const { groupId, memberUserId } = parsedPayload.data;
+
+    await serverFetcher(`/groups/${groupId}/member/${memberUserId}`, {
+      method: 'DELETE',
+    });
+
+    return { success: true, data: undefined };
+  } catch (error) {
+    return {
+      success: false,
+      error: getErrorMessage(error, '멤버를 내보내지 못했습니다.'),
     };
   }
 };
