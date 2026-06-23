@@ -1,6 +1,5 @@
 import Button from '@/components/button/Button';
 import type { TimeState } from '@/types/time';
-import { cn } from '@/utils/cn';
 import { generateHoursByInterval, generateMinutesByInterval } from '@/utils/date';
 
 const hours = generateHoursByInterval();
