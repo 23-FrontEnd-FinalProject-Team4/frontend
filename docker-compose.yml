@@ -4,6 +4,8 @@ services:
   frontend:
     image: ${FRONTEND_IMAGE:-ghcr.io/23-frontend-finalproject-team4/frontend:latest}
     pull_policy: if_not_present
+    env_file:
+      - .env
     expose:
       - '3000'
     restart: always
