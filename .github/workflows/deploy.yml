@@ -65,16 +65,11 @@ jobs:
     steps:
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.2.0
-        env:
-          FRONTEND_IMAGE: ${{ needs.build-and-push.outputs.image }}:${{ github.sha }}
-          GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
-          GHCR_USER: ${{ secrets.GHCR_USER }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           command_timeout: 10m
-          envs: FRONTEND_IMAGE,GHCR_TOKEN,GHCR_USER
           script: |
             set -e
 
@@ -83,9 +78,9 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
 
-            echo "$GHCR_TOKEN" | sudo docker login ghcr.io -u "$GHCR_USER" --password-stdin
+            echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u "${{ secrets.GHCR_USER }}" --password-stdin
 
-            export FRONTEND_IMAGE
+            export FRONTEND_IMAGE="${{ needs.build-and-push.outputs.image }}:${{ github.sha }}"
             sudo -E docker compose pull frontend
             sudo -E docker compose up -d
             sudo docker image prune -f
