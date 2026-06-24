@@ -16,15 +16,13 @@ type AccountSettingFormProps = {
   initialProfile: Profile | null;
 };
 
-const DEFAULT_PROFILE_IMAGE = '/images/default-profile.png';
-
 const AccountSettingForm = ({ initialProfile }: AccountSettingFormProps) => {
   const form = useForm<AccountSettingsFormValues>({
     resolver: zodResolver(accountSettingsSchema),
     mode: 'onChange',
     defaultValues: {
       nickname: initialProfile?.nickname ?? '',
-      image: initialProfile?.image ?? DEFAULT_PROFILE_IMAGE,
+      image: initialProfile?.image ?? '',
       password: '',
       passwordConfirmation: '',
     },

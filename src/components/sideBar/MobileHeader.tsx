@@ -13,6 +13,7 @@ import ProfileIcon from '@/assets/icons/profile.svg?react';
 import type { MobileHeaderProps } from '@/components/sideBar/type';
 import { cn } from '@/utils/cn';
 import { normalizeImageUrl } from '@/utils/image';
+import { isAllowedImageUrl } from '@/utils/isAllowedImageUrl';
 import {
   PROFILE_MENU_OPTIONS,
   type ProfileMenuValue,
@@ -41,28 +42,28 @@ export default function MobileHeader({
     >
       <div className={cn('flex items-center gap-4')}>
         {isLoggedIn ? (
-          <button type="button" onClick={onOpenSideBar}>
-            <MenuIcon className="h-6 w-6" />
+          <button type="button" aria-label="사이드바 열기" onClick={onOpenSideBar}>
+            <MenuIcon className="h-6 w-6" aria-hidden="true" />
           </button>
         ) : (
           ''
         )}
         {isLoggedIn ? (
-          <Link href={logoHref}>
-            <LogoSmall className="h-6 w-6" />
+          <Link href={logoHref} aria-label="Coworkers 홈으로 이동">
+            <LogoSmall className="h-6 w-6" aria-hidden="true" />
           </Link>
         ) : (
-          <Link href="/">
-            <LogoLarge className="h-6" />
+          <Link href="/" aria-label="Coworkers 홈으로 이동">
+            <LogoLarge className="h-6" aria-hidden="true" />
           </Link>
         )}
       </div>
 
       {user ? (
         <div className="relative z-10">
-          <button type="button" onClick={toggleOpen}>
+          <button type="button" aria-label="프로필 메뉴 열기" onClick={toggleOpen}>
             <div className="relative h-8 w-8 overflow-hidden rounded-lg">
-              {profileImageSrc ? (
+              {isAllowedImageUrl(profileImageSrc) ? (
                 <Image
                   src={profileImageSrc}
                   alt={`${user.nickname} 프로필 이미지`}
@@ -71,7 +72,7 @@ export default function MobileHeader({
                   sizes="32px"
                 />
               ) : (
-                <ProfileIcon className="h-8 w-8 rounded-lg" />
+                <ProfileIcon className="h-8 w-8 rounded-lg" aria-hidden="true" />
               )}
             </div>
           </button>
