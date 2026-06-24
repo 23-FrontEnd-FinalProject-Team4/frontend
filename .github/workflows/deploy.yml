@@ -87,7 +87,7 @@ jobs:
           printf '%s' "${GHCR_TOKEN}" | sudo docker login ghcr.io -u "${GHCR_USER}" --password-stdin
           export FRONTEND_IMAGE="${FRONTEND_IMAGE}"
           sudo docker pull "${FRONTEND_IMAGE}"
-          sudo -E docker compose up -d
+          sudo -E docker compose up -d --pull never
           sudo docker image prune -f
           sudo docker compose ps
           EOF
