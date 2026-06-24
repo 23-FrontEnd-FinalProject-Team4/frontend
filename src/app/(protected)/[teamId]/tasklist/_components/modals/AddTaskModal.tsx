@@ -19,14 +19,15 @@ interface AddTaskModalProps {
   onClose: () => void;
   groupId: number;
   taskListId: number;
+  initialDate: Date;
 }
 
-const AddTaskModal = ({ isOpen, onClose, groupId, taskListId }: AddTaskModalProps) => {
+const AddTaskModal = ({ isOpen, onClose, groupId, taskListId, initialDate }: AddTaskModalProps) => {
   const methods = useForm<TaskFormValues>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
       name: '',
-      date: new Date(),
+      date: new Date(initialDate),
       time: { hour: 0, minute: 0 },
       frequency: 'ONCE',
       description: '',

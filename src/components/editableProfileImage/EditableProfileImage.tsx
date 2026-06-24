@@ -5,6 +5,7 @@ import type { ChangeEvent } from 'react';
 import Image from 'next/image';
 
 import PencilIcon from '@/assets/icons/pencil.svg?react';
+import ProfileIcon from '@/assets/icons/profile.svg?react';
 import { isAllowedImageUrl } from '@/utils/isAllowedImageUrl';
 
 import type { EditableProfileImageProps } from './type';
@@ -57,9 +58,9 @@ const EditableProfileImage = ({
         <div
           role="img"
           aria-label={alt}
-          className={`${style.image} border-background-primary bg-background-secondary text-text-disabled flex items-center justify-center border-2 text-sm font-medium`}
+          className={`${style.image} border-background-primary bg-background-secondary flex items-center justify-center border-2`}
         >
-          ?
+          <ProfileIcon className="text-icon-primary h-full w-full" aria-hidden="true" />
         </div>
       )}
 

@@ -1,12 +1,9 @@
-@import 'pretendard/dist/web/static/pretendard.css';
-@import '@daypicker/react/style.css';
-
 @import 'tailwindcss';
 
 @theme {
   --breakpoint-mobile: 375px;
 
-  --font-sans: 'Pretendard', system-ui, sans-serif;
+  --font-sans: var(--font-pretendard), system-ui, sans-serif;
 
   --color-brand-primary: #5189fa;
   --color-brand-secondary: #eef3ff;

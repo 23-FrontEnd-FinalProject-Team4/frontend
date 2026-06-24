@@ -147,7 +147,7 @@ const MemberPreview = ({
   }
 
   return (
-    <div className="border-border-primary bg-background-inverse/90 shadow-background-primary/5 hover:border-brand-primary/20 hover:bg-background-inverse flex h-8 items-center rounded-lg border px-2 shadow-sm transition-colors duration-200">
+    <div className="border-border-primary bg-background-inverse/90 shadow-background-primary/5 hover:border-brand-primary/20 hover:bg-background-inverse flex h-8 shrink-0 items-center rounded-lg border px-2 shadow-sm transition-colors duration-200">
       <span className="sr-only">팀 멤버 {totalMemberCount}명</span>
 
       {visibleMembers.map((member) => (
@@ -163,7 +163,7 @@ const MemberPreview = ({
       <span
         className={cn(
           'border-background-inverse bg-background-inverse text-text-default flex h-5 min-w-5 items-center justify-center rounded-full border px-1 text-[10px] font-medium',
-          visibleMembers.length > 0 && '-ml-1',
+          visibleMembers.length > 0 && 'ml-1',
         )}
         aria-hidden="true"
       >

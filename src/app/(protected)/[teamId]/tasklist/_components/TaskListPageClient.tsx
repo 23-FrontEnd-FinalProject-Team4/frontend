@@ -4,6 +4,7 @@ import { useGetGroup } from '@/queries/group/queries';
 
 import TaskListHeader from './TaskListHeader';
 import TaskListMain from './TaskListMain';
+import TaskListPageSkeleton from './TaskListPageSkeleton';
 import TaskListSet from './TaskListSet';
 
 const TaskListPageClient = ({ groupId, taskListId }: { groupId: number; taskListId?: string }) => {
@@ -26,11 +27,7 @@ const TaskListPageClient = ({ groupId, taskListId }: { groupId: number; taskList
   }
 
   if (isPending) {
-    return (
-      <div className="text-text-default flex min-h-60 items-center justify-center text-sm">
-        할 일 목록을 불러오는 중입니다.
-      </div>
-    );
+    return <TaskListPageSkeleton />;
   }
 
   if (!groupInfo) return null;
