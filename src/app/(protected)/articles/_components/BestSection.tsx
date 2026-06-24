@@ -22,7 +22,10 @@ const BestSection = ({ articles, currentPage, totalPages, onPageChange }: BestSe
           <ArticleCard key={article.id} article={article} variant="best" />
         ))}
       </div>
-      <div className={cn('relative flex w-full flex-col items-center gap-4')}>
+      <nav
+        aria-label="베스트 게시글 페이지"
+        className={cn('relative flex w-full flex-col items-center gap-4')}
+      >
         <PageIndicator
           currentPage={currentPage}
           totalPages={totalPages}
@@ -31,26 +34,28 @@ const BestSection = ({ articles, currentPage, totalPages, onPageChange }: BestSe
         <div className="absolute right-0 -bottom-3 flex flex-row items-center gap-1">
           <button
             type="button"
+            aria-label="이전 페이지"
             disabled={currentPage === 1}
             onClick={() => onPageChange(currentPage - 1)}
             className={cn(
-              'border-border-primary bg-background-primary hover:bg-background-tertiary hover:text-text-primary flex h-8 w-8 items-center justify-center gap-1 rounded-full border',
+              'border-border-primary bg-background-primary hover:bg-background-tertiary hover:text-text-primary focus-visible:ring-brand-primary flex h-8 w-8 items-center justify-center gap-1 rounded-full border focus-visible:ring-2 focus-visible:outline-none disabled:pointer-events-none',
             )}
           >
-            <ArrowLeftIcon className="h-4 w-4" />
+            <ArrowLeftIcon className="h-4 w-4" aria-hidden="true" />
           </button>
           <button
             type="button"
+            aria-label="다음 페이지"
             disabled={currentPage === totalPages}
             onClick={() => onPageChange(currentPage + 1)}
             className={cn(
-              'border-border-primary bg-background-primary hover:bg-background-tertiary hover:text-text-primary flex h-8 w-8 items-center justify-center gap-1 rounded-full border',
+              'border-border-primary bg-background-primary hover:bg-background-tertiary hover:text-text-primary focus-visible:ring-brand-primary flex h-8 w-8 items-center justify-center gap-1 rounded-full border focus-visible:ring-2 focus-visible:outline-none disabled:pointer-events-none',
             )}
           >
-            <ArrowRightIcon className="h-4 w-4" />
+            <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
           </button>
         </div>
-      </div>
+      </nav>
     </div>
   );
 };
