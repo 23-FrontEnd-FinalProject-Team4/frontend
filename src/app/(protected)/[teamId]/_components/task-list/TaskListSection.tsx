@@ -46,7 +46,7 @@ const TaskStatusSectionRow = ({ teamId, section }: TaskStatusSectionRowProps) =>
           <div className="hidden items-center gap-1 xl:flex">
             <button
               type="button"
-              className="text-icon-primary hover:bg-background-primary hover:text-brand-primary focus-visible:ring-brand-primary disabled:text-text-disabled flex size-6 items-center justify-center rounded-full transition-colors focus-visible:ring-2 focus-visible:outline-none disabled:pointer-events-none"
+              className="text-icon-primary hover:bg-background-primary hover:text-brand-primary focus-visible:ring-brand-primary disabled:text-text-disabled flex size-6 items-center justify-center rounded-full transition-colors focus-visible:ring-2 focus-visible:outline-none disabled:cursor-not-allowed"
               aria-label={`${section.label} 왼쪽으로 스크롤`}
               disabled={!canScrollLeft}
               onClick={() => scrollByDirection('left')}
@@ -56,7 +56,7 @@ const TaskStatusSectionRow = ({ teamId, section }: TaskStatusSectionRowProps) =>
 
             <button
               type="button"
-              className="text-icon-primary hover:bg-background-primary hover:text-brand-primary focus-visible:ring-brand-primary disabled:text-text-disabled flex size-6 items-center justify-center rounded-full transition-colors focus-visible:ring-2 focus-visible:outline-none disabled:pointer-events-none"
+              className="text-icon-primary hover:bg-background-primary hover:text-brand-primary focus-visible:ring-brand-primary disabled:text-text-disabled flex size-6 items-center justify-center rounded-full transition-colors focus-visible:ring-2 focus-visible:outline-none disabled:cursor-not-allowed"
               aria-label={`${section.label} 오른쪽으로 스크롤`}
               disabled={!canScrollRight}
               onClick={() => scrollByDirection('right')}

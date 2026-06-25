@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
+import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
@@ -14,7 +15,6 @@ import SearchInput from '@/app/(protected)/articles/_components/SearchInput';
 import ArrowLeftIcon from '@/assets/icons/arrow_left.svg';
 import ArrowRightIcon from '@/assets/icons/arrow_right.svg';
 import WriteIcon from '@/assets/icons/pencil.svg';
-import Button from '@/components/button/Button';
 import { useDebounce } from '@/hooks/useDebounce';
 import { cn } from '@/utils/cn';
 
@@ -158,11 +158,12 @@ const ArticlesClient = () => {
         ) : (
           <ListSection articles={articleCards} onSortChange={onSortChange} sortType={sortType} />
         )}
-        <div className="mt-8 flex justify-center gap-2">
+        <nav aria-label="게시글 목록 페이지" className="mt-8 flex justify-center gap-2">
           <button
             type="button"
+            aria-label="이전 페이지"
             className={cn(
-              'hover:bg-background-tertiary hover:text-text-primary text-md disabled:text-text-disabled flex items-center justify-center gap-1 rounded-md px-2 py-1 font-medium',
+              'hover:bg-background-tertiary hover:text-text-primary text-md disabled:text-text-disabled focus-visible:ring-brand-primary flex items-center justify-center gap-1 rounded-md px-2 py-1 font-medium focus-visible:ring-2 focus-visible:outline-none disabled:cursor-not-allowed',
             )}
             disabled={page === 1}
             onClick={() => {
@@ -174,17 +175,21 @@ const ArticlesClient = () => {
               });
             }}
           >
-            <ArrowLeftIcon className="size-4" />
+            <ArrowLeftIcon className="size-4" aria-hidden="true" />
           </button>
 
           {visiblePages.map((pageNumber) => {
+            const isCurrentPage = page === pageNumber;
+
             return (
               <button
                 type="button"
                 key={pageNumber}
+                aria-label={isCurrentPage ? `${pageNumber}페이지` : `${pageNumber}페이지로 이동`}
+                aria-current={isCurrentPage ? 'page' : undefined}
                 className={cn(
-                  'flex h-8 w-8 items-center justify-center gap-1 rounded-full',
-                  page === pageNumber
+                  'focus-visible:ring-brand-primary flex h-8 w-8 items-center justify-center gap-1 rounded-full focus-visible:ring-2 focus-visible:outline-none',
+                  isCurrentPage
                     ? 'bg-brand-primary text-text-inverse'
                     : 'hover:bg-background-tertiary hover:text-text-primary',
                 )}
@@ -203,8 +208,9 @@ const ArticlesClient = () => {
 
           <button
             type="button"
+            aria-label="다음 페이지"
             className={cn(
-              'hover:bg-background-tertiary hover:text-text-primary text-md disabled:text-text-disabled font-mediu flex items-center justify-center gap-1 rounded-md px-2 py-1',
+              'hover:bg-background-tertiary hover:text-text-primary text-md disabled:text-text-disabled focus-visible:ring-brand-primary flex items-center justify-center gap-1 rounded-md px-2 py-1 font-medium focus-visible:ring-2 focus-visible:outline-none disabled:cursor-not-allowed',
             )}
             disabled={page === totalPages}
             onClick={() => {
@@ -216,16 +222,19 @@ const ArticlesClient = () => {
               });
             }}
           >
-            <ArrowRightIcon className="size-4" />
+            <ArrowRightIcon className="size-4" aria-hidden="true" />
           </button>
-        </div>
-        <Button
-          className="shadow-brand-tertiary-30 fixed right-10 bottom-10 shadow-md md:right-20 md:bottom-20"
-          variant="icon-circle"
-          icon={<WriteIcon className="size-6" aria-hidden="true" />}
+        </nav>
+        <Link
+          href="/articles/write"
           aria-label="글쓰기"
-          onClick={() => router.push('/articles/write')}
-        ></Button>
+          className={cn(
+            'bg-brand-primary text-background-primary hover:bg-interaction-hover active:bg-interaction-pressed inline-flex size-12 items-center justify-center rounded-full p-0 shadow-sm transition-all duration-200 ease-in-out focus:outline-none',
+            'shadow-brand-tertiary-30 fixed right-10 bottom-10 shadow-md md:right-20 md:bottom-20',
+          )}
+        >
+          <WriteIcon className="size-6" aria-hidden="true" />
+        </Link>
       </main>
     </div>
   );
