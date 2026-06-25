@@ -131,6 +131,7 @@ const TaskListMain = ({ taskListId, groupId, taskListName }: TaskListMainProps) 
           variant="icon-circle"
           icon={<PlusIcon className="size-6" />}
           onClick={handleAddModalOpen}
+          aria-label="할 일 추가하기"
         />
       </div>
     </div>

@@ -55,7 +55,7 @@ const ListItemInfo = ({
       <button
         onClick={handleToggleDropdown}
         type="button"
-        aria-label="할 일 메뉴 열기"
+        aria-label={`${name} 메뉴 열기`}
         aria-expanded={isDropdownOpen}
         className="text-icon-primary hover:bg-background-secondary hover:text-brand-primary focus-visible:ring-brand-primary flex size-7 items-center justify-center rounded-md transition-colors focus-visible:ring-2 focus-visible:outline-none active:scale-95"
       >

@@ -18,6 +18,7 @@ const ListItem = ({ task, onEdit, onDelete, onToggle, onClick }: ListItemProps) 
           : 'bg-background-primary hover:bg-background-secondary/50',
       )}
       onClick={onClick}
+      aria-label={`${name} 할 일 상세 보기`}
     >
       <ListItemInfo
         name={name}
