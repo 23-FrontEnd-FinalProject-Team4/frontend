@@ -49,9 +49,11 @@ export const createTaskItemsByStatus = (
         }),
       );
       const completedTasks = sortTasksByDate(tasks.filter(isTaskDone));
-      const isTodayDone = todayTasks.length > 0 && todayTasks.every(isTaskDone);
+      const isTaskListEmpty = tasks.length === 0;
+      const hasTodayTasks = todayTasks.length > 0;
+      const isTodayDone = hasTodayTasks && todayTasks.every(isTaskDone);
 
-      if (!isTodayDone) {
+      if (isTaskListEmpty || (hasTodayTasks && !isTodayDone)) {
         sections.today.push(createTaskListItem(taskList, todayTasks, 'today', today));
       }
 

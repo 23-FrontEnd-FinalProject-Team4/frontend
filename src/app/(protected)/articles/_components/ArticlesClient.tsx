@@ -222,7 +222,8 @@ const ArticlesClient = () => {
         <Button
           className="shadow-brand-tertiary-30 fixed right-10 bottom-10 shadow-md md:right-20 md:bottom-20"
           variant="icon-circle"
-          icon={<WriteIcon className="size-6" />}
+          icon={<WriteIcon className="size-6" aria-hidden="true" />}
+          aria-label="글쓰기"
           onClick={() => router.push('/articles/write')}
         ></Button>
       </main>
