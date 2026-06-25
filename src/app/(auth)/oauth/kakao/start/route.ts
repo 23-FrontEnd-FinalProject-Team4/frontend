@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { getSafeRedirectPath } from '@/lib/auth/postLoginRedirect';
+import { getSiteUrl } from '@/utils/url';
 
 export async function GET(request: NextRequest) {
   const kakaoApiKey = process.env.KAKAO_REST_API_KEY;
   const kakaoRedirectUri = process.env.KAKAO_REDIRECT_URI;
   const redirectPath = getSafeRedirectPath(request.nextUrl.searchParams.get('redirect'));
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim() || request.nextUrl.origin;
+  const siteUrl = getSiteUrl(request);
 
   if (!kakaoApiKey || !kakaoRedirectUri) {
     return NextResponse.redirect(new URL('/login?error=config_error', siteUrl));

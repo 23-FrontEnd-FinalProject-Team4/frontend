@@ -3,12 +3,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { signInWithOAuth } from '@/apis/auth/server';
 import { getPostLoginRedirectPath } from '@/lib/auth/postLoginRedirect';
 import { setAuthTokens } from '@/utils/auth/token';
+import { getSiteUrl } from '@/utils/url';
 
 export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get('code');
   const error = request.nextUrl.searchParams.get('error');
   const redirectPath = request.nextUrl.searchParams.get('state');
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim() || request.nextUrl.origin;
+  const siteUrl = getSiteUrl(request);
 
   const redirectUri = process.env.KAKAO_REDIRECT_URI;
 
