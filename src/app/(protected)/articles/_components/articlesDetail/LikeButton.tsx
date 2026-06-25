@@ -66,7 +66,7 @@ const LikeButton = ({ articleId, initialIsLiked, initialLikeCount }: LikeButtonP
         disabled={isPending}
         aria-label="좋아요"
         className={cn(
-          'text-md flex flex-row items-center gap-1 font-light',
+          'text-md flex flex-row items-center gap-1 font-normal',
           isLiked ? 'text-brand-primary' : 'text-text-disabled',
           isPending && 'cursor-not-allowed opacity-50',
         )}

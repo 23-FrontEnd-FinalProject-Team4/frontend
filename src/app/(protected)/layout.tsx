@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 
 import { redirect } from 'next/navigation';
 
+import AppShell from '@/components/AppShell';
 import { hasAuthTokens } from '@/utils/auth/token';
 
 interface ProtectedLayoutProps {
@@ -15,7 +16,7 @@ const ProtectedLayout = async ({ children }: ProtectedLayoutProps) => {
     redirect('/login');
   }
 
-  return <>{children}</>;
+  return <AppShell>{children}</AppShell>;
 };
 
 export default ProtectedLayout;

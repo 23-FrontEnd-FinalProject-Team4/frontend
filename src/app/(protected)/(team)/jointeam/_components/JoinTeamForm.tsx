@@ -70,7 +70,7 @@ const JoinTeamForm = ({ initialTeamLink = '', onSuccess }: JoinTeamFormProps) =>
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-[400px] md:max-w-[460px]">
       <div className="flex flex-col gap-8 md:gap-10">
-        <h1 className="text-text-primary text-xl font-bold md:text-2xl">팀 참여하기</h1>
+        <h1 className="text-text-primary text-xl font-semibold md:text-2xl">팀 참여하기</h1>
 
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-2 md:gap-3">

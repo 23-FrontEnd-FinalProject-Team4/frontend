@@ -55,7 +55,7 @@ const ArticleForm = ({
       <div className="mb-8 flex w-full">
         <label className="flex w-full flex-col items-start gap-2">
           <div className="flex items-center gap-1">
-            <span className="text-md font-bold md:text-lg">제목</span>
+            <span className="text-md font-semibold md:text-lg">제목</span>
             <span className="text-point-rose">*</span>
           </div>
 
@@ -73,7 +73,7 @@ const ArticleForm = ({
       <div className="mb-8 flex flex-col gap-2">
         <label className="flex w-full flex-col items-start gap-2">
           <div className="flex items-center gap-1">
-            <span className="text-md font-bold md:text-lg">내용</span>
+            <span className="text-md font-semibold md:text-lg">내용</span>
             <span className="text-point-rose">*</span>
           </div>
 
@@ -89,7 +89,7 @@ const ArticleForm = ({
       </div>
 
       <div className="mb-8 flex flex-col gap-2">
-        <span className="text-md font-bold md:text-lg">이미지</span>
+        <span className="text-md font-semibold md:text-lg">이미지</span>
 
         {previewUrl ? (
           <div className="border-border-primary relative h-24 w-24 overflow-hidden rounded-xl border">

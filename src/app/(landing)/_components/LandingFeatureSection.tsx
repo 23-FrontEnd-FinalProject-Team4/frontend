@@ -64,7 +64,7 @@ const LandingFeatureSection = ({
           <FeatureIcon icon={icon} />
 
           <h2
-            className={`text-3xl leading-tight font-bold whitespace-pre-line transition-all duration-300 group-hover:-translate-y-1 ${
+            className={`text-3xl leading-tight font-semibold whitespace-pre-line transition-all duration-300 group-hover:-translate-y-1 ${
               isBrandTone ? 'text-white' : 'text-brand-primary'
             }`}
           >

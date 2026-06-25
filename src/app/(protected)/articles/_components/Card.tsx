@@ -25,7 +25,7 @@ export const ArticleCard = ({ article, variant = 'normal' }: ArticleCardProps) =
       )}
     >
       {isBest && (
-        <span className="bg-background-secondary text-brand-primary flex w-18 flex-row items-center justify-center gap-1 rounded-full py-1.5 text-sm font-bold">
+        <span className="bg-background-secondary text-brand-primary flex w-18 flex-row items-center justify-center gap-1 rounded-full py-1.5 text-sm font-semibold">
           <BestIcon className="h-6 w-4" />
           인기
         </span>
@@ -33,10 +33,10 @@ export const ArticleCard = ({ article, variant = 'normal' }: ArticleCardProps) =
       <div className="flex flex-1 flex-col justify-between gap-4">
         <div className="flex flex-row items-center gap-4">
           <div className="flex min-w-0 flex-1 flex-col gap-2">
-            <span className="text-text-primary text-2lg--line-height-24 line-clamp-1 font-bold">
+            <span className="text-text-primary text-2lg--line-height-24 line-clamp-1 font-semibold">
               {title}
             </span>
-            <p className="text-text-disabled text-md--line-height-17 line-clamp-2 font-light">
+            <p className="text-text-disabled text-md--line-height-17 line-clamp-2 font-normal">
               {content}
             </p>
           </div>
@@ -59,7 +59,7 @@ export const ArticleCard = ({ article, variant = 'normal' }: ArticleCardProps) =
           </div>
           <span
             className={cn(
-              'text-md flex flex-row items-center gap-1 font-light',
+              'text-md flex flex-row items-center gap-1 font-normal',
               isLiked ? 'text-brand-primary' : 'text-text-disabled',
             )}
           >
