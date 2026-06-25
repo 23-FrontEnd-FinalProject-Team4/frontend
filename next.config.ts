@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
   output: 'standalone',
   reactCompiler: true,
   images: {
+    // default: [640, 750, 828, 1080, 1200, 1920, 2048, 3840]
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    qualities: [75, 85, 90, 100],
     remotePatterns: [
       {
         protocol: 'https',

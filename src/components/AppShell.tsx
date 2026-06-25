@@ -1,7 +1,6 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { usePathname } from 'next/navigation';
 
 import { useQuery } from '@tanstack/react-query';
 
@@ -17,12 +16,7 @@ const SIDEBAR_QUERY_KEY = {
   user: ['sidebar', 'user'] as const,
 };
 
-const PUBLIC_PAGE_PATHS = new Set(['/', '/login', '/signup', '/reset-password']);
-
 export default function AppShell({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  const isPublicPage = PUBLIC_PAGE_PATHS.has(pathname);
-
   const {
     data: myGroups,
     isSuccess,
@@ -38,7 +32,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
       return result.data;
     },
-    enabled: !isPublicPage,
   });
   const isLoggedIn = isSuccess;
   const { data: user, isLoading: isUserLoading } = useQuery({
@@ -57,10 +50,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       route: `/${group.id}`,
       image: group.image,
     })) ?? [];
-
-  if (isPublicPage) {
-    return <>{children}</>;
-  }
 
   const isAuthLoading = isGroupsLoading || (isLoggedIn && isUserLoading);
 

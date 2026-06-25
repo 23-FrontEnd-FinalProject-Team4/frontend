@@ -87,7 +87,7 @@ const CommentSection = ({
 
   return (
     <>
-      <div className="text-m mb-5 flex gap-1 font-bold">
+      <div className="text-m mb-5 flex gap-1 font-semibold">
         댓글
         <span className="text-brand-primary">{comments?.length || 0}</span>
       </div>

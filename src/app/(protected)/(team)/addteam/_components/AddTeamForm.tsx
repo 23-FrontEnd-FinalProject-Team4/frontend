@@ -64,7 +64,7 @@ const AddTeamForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-8 md:gap-10">
-        <span className="text-text-primary text-xl font-bold md:text-2xl">팀 생성하기</span>
+        <span className="text-text-primary text-xl font-semibold md:text-2xl">팀 생성하기</span>
         <div className="flex flex-col gap-6">
           <div className="flex justify-center">
             <EditableProfileImage src={imagePreview} alt="팀 프로필 이미지" onChange={setImage} />

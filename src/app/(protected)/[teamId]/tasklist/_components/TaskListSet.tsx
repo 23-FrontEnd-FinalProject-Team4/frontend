@@ -137,7 +137,7 @@ const TaskListSet = ({ taskLists, selectedTaskListId, groupId }: TaskListSetProp
 
       {/* desktop */}
       <div className="hidden flex-col gap-8 xl:flex">
-        <div className="text-xl font-bold">할 일 목록</div>
+        <div className="text-xl font-semibold">할 일 목록</div>
         <div className="flex flex-col items-center gap-1">
           {taskLists.map((taskList) => {
             const isSelected = taskList.id === selectedTaskList?.id;

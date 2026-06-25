@@ -25,7 +25,7 @@ const EditArticlePage = async ({ params }: { params: Promise<{ id: string }> }) 
     <div className="mx-auto flex min-h-screen px-4 pt-5 md:p-20">
       <main className="min-h-screen w-full">
         <div className="bg-background-primary mx-auto flex w-full flex-col gap-4 rounded-2xl px-5 py-10 md:px-10 md:py-14 lg:max-w-[900px]">
-          <h1 className="mb-8 text-xl font-bold md:text-2xl">게시글 수정</h1>
+          <h1 className="mb-8 text-xl font-semibold md:text-2xl">게시글 수정</h1>
           <EditorClient
             mode="edit"
             defaultValues={{
