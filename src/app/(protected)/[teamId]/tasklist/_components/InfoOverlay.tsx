@@ -97,12 +97,12 @@ const InfoOverlay = ({ taskId, isOpen, onClose, taskListId, groupId }: InfoOverl
         <div className="text-text-primary flex items-center justify-between pb-4">
           <div className="flex gap-4">
             <span
-              className={`text-xl font-bold md:text-2xl ${isDone && 'text-text-default line-through'}`}
+              className={`text-xl font-semibold md:text-2xl ${isDone && 'text-text-default line-through'}`}
             >
               {task.name}
             </span>
             {isDone && (
-              <span className="bg-brand-secondary text-brand-primary rounded-lg px-2.5 py-1.5 text-lg font-bold">
+              <span className="bg-brand-secondary text-brand-primary rounded-lg px-2.5 py-1.5 text-lg font-semibold">
                 완료
               </span>
             )}
@@ -165,8 +165,8 @@ const InfoOverlay = ({ taskId, isOpen, onClose, taskListId, groupId }: InfoOverl
 
       <div>
         <div className="mb-4 flex gap-1">
-          <span className="text-text-primary text-lg font-bold">댓글</span>
-          <span className="text-brand-primary text-lg font-bold">{comments?.length ?? 0}</span>
+          <span className="text-text-primary text-lg font-semibold">댓글</span>
+          <span className="text-brand-primary text-lg font-semibold">{comments?.length ?? 0}</span>
         </div>
 
         {/* Comment Input */}

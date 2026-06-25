@@ -10,12 +10,12 @@ const ErrorPage = () => {
       <div className="flex w-full max-w-120 flex-col items-center text-center">
         <LogoIcon className="h-12 w-12 shrink-0 overflow-visible" aria-hidden="true" />
 
-        <strong className="text-brand-primary mt-10 text-7xl leading-none font-bold md:text-8xl">
+        <strong className="text-brand-primary mt-10 text-7xl leading-none font-semibold md:text-8xl">
           500
         </strong>
 
         <div className="mt-6 flex flex-col gap-2">
-          <h1 className="text-text-primary text-xl font-bold md:text-2xl">
+          <h1 className="text-text-primary text-xl font-semibold md:text-2xl">
             서비스에 문제가 발생했습니다
           </h1>
           <p className="text-text-default text-sm leading-6 md:text-base">

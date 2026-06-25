@@ -23,7 +23,7 @@ export default function LandingHero({ startHref }: LandingHeroProps) {
             함께 만들어가는 To do list
           </p>
 
-          <h1 className="text-brand-primary text-4xl leading-tight font-bold transition-all duration-300 group-hover:-translate-y-1 md:text-5xl">
+          <h1 className="text-brand-primary text-4xl leading-tight font-semibold transition-all duration-300 group-hover:-translate-y-1 md:text-5xl">
             Coworkers
           </h1>
         </div>

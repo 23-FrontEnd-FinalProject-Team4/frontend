@@ -16,7 +16,7 @@ const ListSection = ({ articles, onSortChange, sortType }: ListSectionProps) => 
   return (
     <div className="flex flex-col gap-5 p-7 xl:p-0">
       <div className="flex flex-row justify-between">
-        <h1 className="text-text-primary text-2xl font-bold">전체 게시글</h1>
+        <h1 className="text-text-primary text-2xl font-semibold">전체 게시글</h1>
         <DropdownMd
           options={SORT_OPTIONS}
           onSelect={(value) => onSortChange(value === '최신순' ? 'recent' : 'like')}

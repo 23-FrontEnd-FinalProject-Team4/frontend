@@ -122,7 +122,7 @@ const ArticlesClient = () => {
     <div className="bg-background-primary mx-auto flex min-h-screen p-0 md:p-22">
       <main className="min-h-screen w-full">
         <div className="mb-7 flex w-full flex-col gap-4 p-5 px-6 md:flex-row md:items-center md:justify-between xl:px-0">
-          <h1 className="text-text-primary text-2xl font-bold">자유게시판</h1>
+          <h1 className="text-text-primary text-2xl font-semibold">자유게시판</h1>
           <SearchInput
             value={searchValue}
             onChange={(e) => {

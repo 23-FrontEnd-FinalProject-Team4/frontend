@@ -16,7 +16,7 @@ type BestSectionProps = {
 const BestSection = ({ articles, currentPage, totalPages, onPageChange }: BestSectionProps) => {
   return (
     <div className="bg-background-secondary mb-10 flex w-full flex-col items-center gap-6 px-6 py-10 md:rounded-2xl">
-      <h1 className="text-text-primary text-xl font-bold">베스트 게시글</h1>
+      <h1 className="text-text-primary text-xl font-semibold">베스트 게시글</h1>
       <div className="grid w-full grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
         {articles.map((article) => (
           <ArticleCard key={article.id} article={article} variant="best" />
