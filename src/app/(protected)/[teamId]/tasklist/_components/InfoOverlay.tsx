@@ -20,6 +20,7 @@ import {
   useUpdateTaskComment,
 } from '@/queries/task/comment/queries';
 import { useGetTask, useToggleTask } from '@/queries/task/queries';
+import { cn } from '@/utils/cn';
 import { formatYearMonthDay } from '@/utils/date';
 
 import CommentForm from './CommentForm';
@@ -97,7 +98,10 @@ const InfoOverlay = ({ taskId, isOpen, onClose, taskListId, groupId }: InfoOverl
         <div className="text-text-primary flex items-center justify-between pb-4">
           <div className="flex gap-4">
             <span
-              className={`text-xl font-semibold md:text-2xl ${isDone && 'text-text-default line-through'}`}
+              className={cn(
+                'text-xl font-semibold md:text-2xl',
+                isDone && 'text-text-default line-through',
+              )}
             >
               {task.name}
             </span>

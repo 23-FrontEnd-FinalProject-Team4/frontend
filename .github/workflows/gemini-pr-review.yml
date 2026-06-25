@@ -42,6 +42,11 @@ jobs:
             Skip generated/build artifacts (storybook-static/, .next/, out/, build/, coverage/, playwright-report/, test-results/, blob-report/).
             Use the repository style guide at .gemini/styleguide.md as the highest-priority review standard.
 
+            Before reviewing, read package.json to confirm dependency versions (especially `next`).
+            Review framework APIs against the project's installed Next.js major version (currently 16.x), not older Next.js docs.
+            Do not flag Next.js 16 config options (for example `images.qualities`) as invalid without verifying package.json and the style guide.
+            If a config option appears in next.config.ts and the PR indicates build success, do not claim it causes validation errors unless you verify against Next.js 16 docs.
+
             Write review feedback in Korean.
             Prioritize bugs, maintainability, performance, accessibility, TypeScript safety, API handling, and team conventions.
             Avoid subjective style comments unless they affect consistency or maintainability.

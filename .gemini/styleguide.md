@@ -13,6 +13,7 @@
 - 프로젝트명은 Coworkers입니다.
 - 업무 배정, 할 일 관리, 팀 현황 공유, 자유게시판 기능을 제공하는 협업 웹 애플리케이션입니다.
 - Next.js App Router 기반 프로젝트입니다.
+- **Next.js 16.x** (`package.json`의 `next` 버전)를 사용합니다. Next.js 13~14 문서 기준으로 API 유효성을 판단하지 마세요.
 - 기술 스택은 Next.js, React, TypeScript입니다.
 - Styling은 Tailwind CSS를 사용합니다.
 - 서버 상태 관리는 TanStack Query를 사용합니다.
@@ -22,6 +23,16 @@
 - 코드 품질 관리는 ESLint, Prettier를 사용합니다.
 - 패키지 매니저는 npm을 사용합니다.
 - 배포는 AWS 또는 팀에서 합의한 배포 환경을 기준으로 검토합니다.
+
+## Next.js 16 Review Notes
+
+리뷰 전 `package.json`의 `next` 버전을 확인하고, 아래는 **Next.js 16에서 유효한 API**입니다. 존재하지 않는 옵션이라고 단정하지 마세요.
+
+- `next.config.ts` → `images.qualities`: 허용할 image quality 목록 (기본 `[75]`). `quality` prop은 이 allowlist 값으로 보정됩니다.
+- `next.config.ts` → `images.deviceSizes`, `images.imageSizes`: `next/image` srcset width 후보 제어
+- `next/image` → `getImageProps()`, `<picture>` art direction, `fetchPriority`, `priority`
+- 설정/API 유효성을 지적할 때는 **공식 Next.js 16 문서** 또는 `package.json` 버전과 일치하는지 먼저 확인하세요.
+- `npm run build`로 확인된 설정이 diff에 포함된 경우, 구버전 Next.js 기준의 validation error 주장은 blocking issue로 올리지 마세요.
 
 ## Review Priority
 
