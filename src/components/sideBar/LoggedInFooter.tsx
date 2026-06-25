@@ -56,7 +56,9 @@ export default function LoggedInFooter({
 
       {!collapsed && isLoggedIn && (
         <div className="relative">
-          <SettingsIcon className="h-6 w-6 cursor-pointer" onClick={toggleOpen} />
+          <button type="button" aria-label="프로필 메뉴" onClick={toggleOpen}>
+            <SettingsIcon className="h-6 w-6" aria-hidden="true" />
+          </button>
 
           {isOpen && (
             <div className="absolute right-[112px] bottom-[200px] z-20 mb-2">

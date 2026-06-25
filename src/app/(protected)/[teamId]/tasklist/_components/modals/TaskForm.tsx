@@ -1,6 +1,12 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
-import { Controller, useFormContext, useWatch } from 'react-hook-form';
+import {
+  Controller,
+  ControllerRenderProps,
+  useFormContext,
+  useFormState,
+  useWatch,
+} from 'react-hook-form';
 
 import CalendarDate from '@/components/calendar/date/CalendarDate';
 import CalendarTime from '@/components/calendar/time/CalendarTime';
@@ -8,7 +14,7 @@ import DropdownMd from '@/components/dropdown/DropdownMd';
 import Input from '@/components/input/Input';
 import InputBox from '@/components/inputBox/InputBox';
 import { FREQUENCY_TEXT } from '@/constants/listItem';
-import { useOutsideClick } from '@/hooks/useOutsideClick';
+import { TimeState } from '@/types/time';
 import { formatISODate } from '@/utils/date';
 
 import { FREQUENCY_OPTIONS } from '../../_constants/options';
@@ -16,28 +22,35 @@ import { TaskFormValues } from '../../_schemas/task.schema';
 import { getFrequencyEnumValue } from '../../_utils/task';
 import WeekdayPicker from './WeekdayPicker';
 
-const TaskForm = ({
-  submitButtonRef,
-}: {
-  submitButtonRef: React.RefObject<HTMLButtonElement | null>;
-}) => {
+const TaskForm = () => {
   const [focusedInput, setFocusedInput] = useState<'date' | 'time' | null>(null);
-  const focusRef = useRef(null);
-  useOutsideClick(focusRef, (e) => {
-    if (submitButtonRef.current?.contains(e.target as Node)) return;
-    setFocusedInput(null);
-  });
 
-  const {
-    register,
-    control,
-    formState: { errors },
-  } = useFormContext<TaskFormValues>();
+  // const {
+  //   register,
+  //   control,
+  //   formState: { errors },
+  // } = useFormContext<TaskFormValues>();
+
+  const { register, control } = useFormContext<TaskFormValues>();
+  const { errors } = useFormState<TaskFormValues>({ control });
 
   const [selectedDate, selectedTime, selectedFrequency] = useWatch({
     control,
     name: ['date', 'time', 'frequency'],
   });
+
+  const handleDateChange = (field: ControllerRenderProps<TaskFormValues, 'date'>, date: Date) => {
+    field.onChange(date);
+    setFocusedInput(null);
+  };
+
+  const handleTimeChange = (
+    field: ControllerRenderProps<TaskFormValues, 'time'>,
+    time: TimeState,
+  ) => {
+    field.onChange(time);
+    setFocusedInput(null);
+  };
 
   const formattedTime = `${selectedTime.hour}:${selectedTime.minute.toString().padStart(2, '0')}`;
 
@@ -49,17 +62,17 @@ const TaskForm = ({
           <span className="text-status-danger ml-1">*</span>
         </label>
         <Input
+          {...register('name')}
           id="task-name"
           type="text"
           placeholder="할 일 제목을 입력해 주세요"
           className="min-w-0"
           isError={!!errors.name}
           errorMessage={errors.name?.message}
-          {...register('name')}
         />
       </div>
 
-      <div className="flex flex-col gap-4" ref={focusRef}>
+      <div className="flex flex-col gap-4">
         <label htmlFor="task-start-date" className="text-text-primary text-lg font-medium">
           시작 날짜 및 시간
           <span className="text-status-danger ml-1">*</span>
@@ -70,7 +83,7 @@ const TaskForm = ({
             type="text"
             value={formatISODate(selectedDate)}
             placeholder="YYYY년 MM월 DD일"
-            onClick={() => setFocusedInput('date')}
+            onClick={() => setFocusedInput((prev) => (prev === 'date' ? null : 'date'))}
             readOnly
           />
           <Input
@@ -78,7 +91,7 @@ const TaskForm = ({
             type="text"
             value={formattedTime}
             placeholder="0:00"
-            onClick={() => setFocusedInput('time')}
+            onClick={() => setFocusedInput((prev) => (prev === 'time' ? null : 'time'))}
             readOnly
           />
         </div>
@@ -88,7 +101,10 @@ const TaskForm = ({
             control={control}
             name="date"
             render={({ field }) => (
-              <CalendarDate selectedDate={field.value} setSelectedDate={field.onChange} />
+              <CalendarDate
+                selectedDate={field.value}
+                setSelectedDate={(date) => handleDateChange(field, date)}
+              />
             )}
           />
         )}
@@ -97,7 +113,10 @@ const TaskForm = ({
             control={control}
             name="time"
             render={({ field }) => (
-              <CalendarTime selectedTime={field.value} setSelectedTime={field.onChange} />
+              <CalendarTime
+                selectedTime={field.value}
+                setSelectedTime={(time) => handleTimeChange(field, time)}
+              />
             )}
           />
         )}

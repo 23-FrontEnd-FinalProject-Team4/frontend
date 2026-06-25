@@ -64,6 +64,7 @@ const LikeButton = ({ articleId, initialIsLiked, initialLikeCount }: LikeButtonP
       <button
         type="button"
         disabled={isPending}
+        aria-label="좋아요"
         className={cn(
           'text-md flex flex-row items-center gap-1 font-light',
           isLiked ? 'text-brand-primary' : 'text-text-disabled',
@@ -71,7 +72,11 @@ const LikeButton = ({ articleId, initialIsLiked, initialLikeCount }: LikeButtonP
         )}
         onClick={handleClick}
       >
-        {isLiked ? <HeartFillIcon className="h-6 w-4" /> : <HeartEmptyIcon className="h-6 w-4" />}
+        {isLiked ? (
+          <HeartFillIcon className="h-6 w-4" aria-hidden="true" />
+        ) : (
+          <HeartEmptyIcon className="h-6 w-4" aria-hidden="true" />
+        )}
         {(likeCount || 0) > 999 ? '999+' : likeCount || 0}
       </button>
     </div>

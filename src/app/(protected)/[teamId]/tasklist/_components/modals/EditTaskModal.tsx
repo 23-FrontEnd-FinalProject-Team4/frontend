@@ -1,7 +1,5 @@
 'use client';
 
-import { useRef } from 'react';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
@@ -26,8 +24,6 @@ interface EditTaskModalProps {
 }
 
 const EditTaskModal = ({ isOpen, onClose, task, groupId, taskListId }: EditTaskModalProps) => {
-  const submitButtonRef = useRef<HTMLButtonElement>(null);
-
   const localDate = task.date ? new Date(task.date) : new Date();
   const hour = localDate.getHours();
   const minute = localDate.getMinutes();
@@ -41,6 +37,7 @@ const EditTaskModal = ({ isOpen, onClose, task, groupId, taskListId }: EditTaskM
       frequency: task.frequency,
       description: task.description ?? '',
     },
+    mode: 'onBlur',
   });
 
   const { mutateAsync: updateRecurringTask, isPending: isPendingRecurringTask } =
@@ -87,12 +84,11 @@ const EditTaskModal = ({ isOpen, onClose, task, groupId, taskListId }: EditTaskM
     >
       <FormProvider {...methods}>
         <form className="flex flex-col gap-6" onSubmit={methods.handleSubmit(handleSubmit)}>
-          <TaskForm submitButtonRef={submitButtonRef} />
+          <TaskForm />
 
           <Button
             variant="primary-filled"
             fullWidth
-            ref={submitButtonRef}
             disabled={isPendingRecurringTask || isPendingTask}
           >
             수정하기

@@ -25,14 +25,12 @@ const createTaskList = (tasks: Task[]): TaskList =>
   }) as TaskList;
 
 describe('createTaskItemsByStatus', () => {
-  it('오늘 카드와 미래 할 일이 담긴 예정 카드를 함께 만든다', () => {
+  it('미래 할 일만 있으면 예정 카드만 만든다', () => {
     const futureTask = createTask(26, 'Future task', '2026-06-26');
 
     const sections = createTaskItemsByStatus([createTaskList([futureTask])], TODAY);
 
-    expect(sections.today).toEqual([
-      expect.objectContaining({ id: 4, title: 'test 4', totalCount: 0, tasks: [] }),
-    ]);
+    expect(sections.today).toEqual([]);
     expect(sections.scheduled).toEqual([
       expect.objectContaining({
         id: 4,
@@ -42,6 +40,16 @@ describe('createTaskItemsByStatus', () => {
         tasks: [{ id: 26, title: 'Future task', done: false }],
       }),
     ]);
+  });
+
+  it('새로 생성한 빈 할 일 목록은 진입할 수 있도록 오늘 카드를 만든다', () => {
+    const sections = createTaskItemsByStatus([createTaskList([])], TODAY);
+
+    expect(sections.today).toEqual([
+      expect.objectContaining({ id: 4, title: 'test 4', totalCount: 0, tasks: [] }),
+    ]);
+    expect(sections.scheduled).toEqual([]);
+    expect(sections.done).toEqual([]);
   });
 
   it('오늘 카드와 예정 카드에 해당 날짜의 할 일만 담는다', () => {
@@ -80,9 +88,7 @@ describe('createTaskItemsByStatus', () => {
 
     const sections = createTaskItemsByStatus([createTaskList([doneFutureTask])], TODAY);
 
-    expect(sections.today).toEqual([
-      expect.objectContaining({ id: 4, title: 'test 4', totalCount: 0, tasks: [] }),
-    ]);
+    expect(sections.today).toEqual([]);
     expect(sections.scheduled).toEqual([]);
     expect(sections.done).toEqual([
       expect.objectContaining({
