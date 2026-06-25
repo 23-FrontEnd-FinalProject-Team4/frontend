@@ -38,7 +38,7 @@ const BestSection = ({ articles, currentPage, totalPages, onPageChange }: BestSe
             disabled={currentPage === 1}
             onClick={() => onPageChange(currentPage - 1)}
             className={cn(
-              'border-border-primary bg-background-primary hover:bg-background-tertiary hover:text-text-primary focus-visible:ring-brand-primary flex h-8 w-8 items-center justify-center gap-1 rounded-full border focus-visible:ring-2 focus-visible:outline-none disabled:pointer-events-none',
+              'border-border-primary bg-background-primary hover:bg-background-tertiary hover:text-text-primary focus-visible:ring-brand-primary flex h-8 w-8 items-center justify-center gap-1 rounded-full border focus-visible:ring-2 focus-visible:outline-none disabled:cursor-not-allowed',
             )}
           >
             <ArrowLeftIcon className="h-4 w-4" aria-hidden="true" />
@@ -49,7 +49,7 @@ const BestSection = ({ articles, currentPage, totalPages, onPageChange }: BestSe
             disabled={currentPage === totalPages}
             onClick={() => onPageChange(currentPage + 1)}
             className={cn(
-              'border-border-primary bg-background-primary hover:bg-background-tertiary hover:text-text-primary focus-visible:ring-brand-primary flex h-8 w-8 items-center justify-center gap-1 rounded-full border focus-visible:ring-2 focus-visible:outline-none disabled:pointer-events-none',
+              'border-border-primary bg-background-primary hover:bg-background-tertiary hover:text-text-primary focus-visible:ring-brand-primary flex h-8 w-8 items-center justify-center gap-1 rounded-full border focus-visible:ring-2 focus-visible:outline-none disabled:cursor-not-allowed',
             )}
           >
             <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />

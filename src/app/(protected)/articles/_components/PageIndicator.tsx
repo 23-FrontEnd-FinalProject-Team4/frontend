@@ -17,7 +17,7 @@ const PageIndicator = ({ currentPage, totalPages, onPageChange }: PageIndicatorP
           <button
             type="button"
             key={pageNumber}
-            aria-label={`${pageNumber}페이지로 이동`}
+            aria-label={isActive ? `${pageNumber}페이지` : `${pageNumber}페이지로 이동`}
             aria-current={isActive ? 'page' : undefined}
             className={
               isActive
