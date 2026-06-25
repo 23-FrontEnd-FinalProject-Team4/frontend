@@ -34,7 +34,6 @@ export default function LandingHero({ startHref }: LandingHeroProps) {
           tablet={LandingHeroMedium}
           mobile={LandingHeroSmall}
           priority
-          quality={100}
           className="relative z-0 mt-8 w-full transition-transform duration-300 hover:scale-[1.01] md:mt-14 xl:absolute xl:-top-8 xl:-right-50 xl:mt-0 xl:w-3/4"
         />
 
